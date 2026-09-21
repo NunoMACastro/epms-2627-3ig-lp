@@ -1,0 +1,22 @@
+# O Git ignora os caminhos listados aqui. Ficheiros gerados pela máquina,
+# configuração pessoal do editor e segredos não pertencem ao histórico.
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuração pessoal de editores
+.vscode/
+.idea/
+*.swp
+
+# JavaScript e Node: instalado e gerado pela máquina, nunca versionado.
+# node_modules/ reconstrói-se com npm install a partir do package.json
+node_modules/
+dist/
+build/
+
+# Segredos: nunca versionar credenciais; versionar apenas o exemplo
+.env
+.env.*
+!.env.example
