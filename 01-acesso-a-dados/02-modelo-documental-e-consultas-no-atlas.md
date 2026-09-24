@@ -2,7 +2,7 @@
 
 # Modelo documental e primeiras consultas no Atlas
 
-Módulo M14, Acesso a Bases de Dados. Três aulas de 60 minutos: a primeira é de teoria e as outras duas são de laboratório no MongoDB Atlas, que se usa no browser. Não precisas de instalar nada.
+Módulo M14, Acesso a Bases de Dados. Três aulas de 60 minutos. A primeira é de teoria, com este guia. As outras duas são de laboratório no MongoDB Atlas, que se usa no browser, e seguem o [guia do laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md). Não precisas de instalar nada.
 
 ## O que vais aprender
 
@@ -270,115 +270,47 @@ O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada proje
 
 Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster vai servir para o teu projeto final. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto.
 
-O Atlas muda o aspeto das páginas de vez em quando. Os nomes dos botões deste guia foram confirmados na documentação da MongoDB em setembro de 2026. Se um botão não tiver exatamente o mesmo nome no teu ecrã, procura o que tem a mesma função: os passos são os mesmos.
 
-## Laboratório, parte 1: criar a conta, o cluster e dar acesso ao professor
+Os passos para criar a conta, o cluster e dar acesso ao professor estão na parte 1 do [guia do laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
-### Criar a conta
+## Como se pergunta ao MongoDB
 
-Abre a página de registo do Atlas, em `https://www.mongodb.com/cloud/atlas/register`, e cria a conta. Confirma o endereço de email na mensagem que vais receber. Se o Atlas fizer perguntas de boas-vindas sobre o que vais construir, responde como quiseres: não mudam nada do que se segue.
+Pedir informação a uma base de dados chama-se fazer uma **consulta**. No MongoDB, uma consulta descreve os documentos que queres com um documento chamado filtro, escrito com a mesma forma de um objeto JavaScript. No laboratório vais escrever estas consultas na barra de consulta do Atlas. Aqui fica o que cada uma quer dizer e porque se escreve assim.
 
-Se o Atlas te pedir para criar uma organização e um projeto, dá-lhes um nome que te identifique, por exemplo o teu primeiro nome seguido de `lp12`. Se já os tiver criado por ti, usa esses.
+### As quatro partes de uma consulta
 
-### Criar o cluster gratuito
+Uma consulta pode ter até quatro partes. O **filtro** diz que documentos queres. A **projeção** diz que campos de cada documento queres ver. A **ordenação** diz por que ordem os queres. O **limite** diz quantos queres no máximo. Só o filtro é sempre usado. As outras três são opcionais.
 
-1. No menu lateral, abre a visão geral do projeto, "Project Overview".
-2. Carrega em "Create" para criar um cluster.
-3. Escolhe o plano gratuito, identificado como "M0" ou "Free".
-4. Escolhe o fornecedor de cloud (qualquer um serve) e uma região na Europa.
-5. Dá um nome ao cluster, só com letras, algarismos e hífenes, por exemplo `cluster-lp12`. O nome não se pode mudar depois.
-6. Carrega em "Create". O cluster fica pronto em poucos segundos.
+Estas partes fazem na base de dados o que já fazias com arrays em JavaScript:
 
-### Os dois passos de segurança que o Atlas pede a seguir
-
-Logo depois de criar o cluster, o Atlas mostra um assistente de segurança com dois passos. Nenhum dos dois é preciso para o laboratório de hoje, porque o browser acede aos dados pela página do Atlas. Mas vão ser precisos quando o teu programa se ligar à base de dados, por isso faz os dois agora.
-
-O primeiro é criar um **utilizador da base de dados**. Não é a tua conta do Atlas: é um nome e uma palavra-passe que o teu programa vai usar para entrar na base de dados. Escolhe um nome de utilizador, aceita a palavra-passe que o Atlas sugere ou escolhe uma longa, e carrega em "Create Database User". Guarda a palavra-passe num gestor de palavras-passe ou noutro sítio seguro. Nunca a escrevas num ficheiro de código nem num ficheiro que vá para o GitHub. Mais à frente vais aprender a forma certa de a entregar ao programa.
-
-O segundo é dizer ao Atlas de onde é permitido ligar. Por defeito, o Atlas recusa ligações de qualquer lado. Carrega em "Add My Current IP Address" para autorizar o endereço de onde estás agora, que é o da escola, e depois em "Finish and Close". Quando quiseres trabalhar em casa, acrescentas o endereço de casa da mesma forma. Não autorizes o acesso de qualquer endereço (`0.0.0.0/0`). A palavra-passe continuaria a ser precisa, mas tirarias uma das duas proteções: é como deixar o portão da escola aberto a toda a gente e confiar só na chave da sala.
-
-### Dar acesso ao professor
-
-1. No menu lateral, na secção de segurança, abre "Project Identity & Access".
-2. No separador "Users", carrega em "Invite to Project".
-3. Escreve o email que o professor indicar na aula.
-4. Escolhe o papel "Project Data Access Read Only" e retira o "Project Read Only", que o Atlas escolhe por defeito. Com o papel por defeito, o professor via o projeto mas não conseguia ver os teus documentos.
-5. Carrega em "Grant Access".
-
-O professor recebe um email e só tem acesso depois de aceitar o convite.
-
-## Laboratório, parte 2: criar a base de dados e inserir os artigos
-
-### Criar a base de dados e a primeira coleção
-
-No menu lateral, na secção da base de dados, abre o "Data Explorer". Passa o rato por cima do nome do teu cluster e carrega no botão que abre a janela "Create Database". Preenche os dois campos obrigatórios:
-
-- Database Name: `papelaria`
-- Collection Name: `artigos`
-
-Carrega em "Create Database". A base de dados e a coleção aparecem na lista do lado esquerdo.
-
-Os nomes das bases de dados e das coleções seguem a mesma regra dos nomes de ficheiros que usas: minúsculas, sem espaços e sem acentos. O MongoDB recusa alguns carateres, como o espaço, o ponto e o `$`, e distingue maiúsculas de minúsculas de forma traiçoeira: não deixa ter ao mesmo tempo `Papelaria` e `papelaria`. Com minúsculas sempre, nunca tens o problema.
-
-### Inserir os oito artigos
-
-Com a coleção `artigos` aberta, carrega em "Add Data" e escolhe "Insert Document". Na janela que se abre, o modo de escrita por defeito aceita a sintaxe do JavaScript: nomes de campos sem aspas e vários documentos de uma vez, dentro de um array. Apaga o que lá estiver, copia este array e carrega em "Insert":
-
-```js
-[
-  { nome: "Caderno A4 quadriculado", categoria: "Papel", stock: 12, stockMinimo: 5, precoCentimos: 250, localizacao: { corredor: "A", prateleira: 1 } },
-  { nome: "Esferográfica azul", categoria: "Escrita", stock: 3, stockMinimo: 10, precoCentimos: 60, localizacao: { corredor: "B", prateleira: 1 } },
-  { nome: "Bloco de notas A5", categoria: "Papel", stock: 0, stockMinimo: 4, precoCentimos: 180, localizacao: { corredor: "A", prateleira: 2 } },
-  { nome: "Lápis HB", categoria: "Escrita", stock: 25, stockMinimo: 10, precoCentimos: 35, localizacao: { corredor: "B", prateleira: 1 } },
-  { nome: "Resma de papel A4", categoria: "Papel", stock: 4, stockMinimo: 3, precoCentimos: 520, localizacao: { corredor: "A", prateleira: 3 } },
-  { nome: "Marcador fluorescente", categoria: "Escrita", stock: 8, stockMinimo: 10, precoCentimos: 95, localizacao: { corredor: "B", prateleira: 2 } },
-  { nome: "Régua de 30 cm", categoria: "Desenho", stock: 6, stockMinimo: 3, precoCentimos: 120, localizacao: { corredor: "C", prateleira: 1 } },
-  { nome: "Compasso escolar", categoria: "Desenho", stock: 1, stockMinimo: 2, precoCentimos: 450, localizacao: { corredor: "C", prateleira: 1 } }
-]
-```
-
-Repara que nenhum documento tem `_id`. Depois de inserir, abre um deles e confirma que o MongoDB lhe deu um `_id` do tipo ObjectId. Confirma também que a coleção tem exatamente oito documentos. Se tiver dezasseis, carregaste em "Insert" duas vezes: apaga os repetidos antes de continuar, porque as consultas seguintes contam com oito.
-
-## Laboratório, parte 3: primeiras consultas
-
-### A barra de consulta
-
-Por cima da lista de documentos há uma barra de consulta. O campo principal é o **filtro** ("Filter"), onde escreves a condição que os documentos têm de cumprir. Carregas em "Find" para executar a consulta e em "Reset" para voltar a ver todos os documentos.
-
-Ao lado do filtro há mais campos: "Project", para escolher que campos aparecem, "Sort", para ordenar, e "Limit", para limitar o número de documentos. Se não estiverem visíveis, abre as opções da barra de consulta.
-
-Estes campos fazem na base de dados o que já fazias com arrays em JavaScript:
-
-| Barra de consulta do Atlas | Em JavaScript, com um array |
+| Parte da consulta | Em JavaScript, com um array |
 | --- | --- |
-| Filter | `filter` |
-| Project | `map`, a escolher só alguns campos |
-| Sort | `sort` |
-| Limit | `slice(0, n)` |
+| Filtro | `filter` |
+| Projeção | `map`, a escolher só alguns campos |
+| Ordenação | `sort` |
+| Limite | `slice(0, n)` |
 
 A diferença é quem faz o trabalho. Com um array, é o teu programa que percorre os dados. Com a base de dados, é ela que procura e devolve só o resultado. Com oito artigos não se nota. Com cem mil, é a diferença entre esperar um instante e esperar minutos.
 
-Em cada consulta, antes de carregares em "Find", escreve no caderno o resultado que esperas. Depois compara. Quando o resultado for diferente do que previste, a explicação dessa diferença é o que mais te ensina.
+### Igualdade
 
-### Consulta 1: artigos de uma categoria
+O filtro mais simples pede documentos em que um campo tem um valor exato:
 
 ```js
 { categoria: "Papel" }
 ```
 
-O filtro lê-se "documentos cujo campo `categoria` é igual a `Papel`". Resultado: o Caderno A4 quadriculado, o Bloco de notas A5 e a Resma de papel A4, três documentos.
+Lê-se "documentos cujo campo `categoria` é igual a `Papel`". O MongoDB compara o texto exatamente como está escrito. Por isso `{ categoria: "papel" }`, com minúscula, não encontra nenhum dos artigos de papel, e não dá nenhum erro: para a base de dados, `papel` e `Papel` são textos diferentes.
 
-Experimenta agora `{ categoria: "papel" }`, com minúscula. Não aparece nada, e não há erro. O MongoDB compara o texto exatamente como está escrito, e `papel` não é igual a `Papel`.
+### Operadores de comparação
 
-### Consulta 2: artigos com pouco stock
-
-Para comparar com "menor do que", "maior do que" e semelhantes, usa-se um **operador**. Os operadores começam sempre por `$` e escrevem-se como um documento dentro do filtro:
+Para perguntar "menor do que", "maior do que" e semelhantes, usa-se um **operador**. Os operadores começam sempre por `$` e escrevem-se como um documento dentro do filtro:
 
 ```js
 { stock: { $lt: 5 } }
 ```
 
-Lê-se "documentos cujo campo `stock` é menor do que 5". Resultado: a Esferográfica azul (3), o Bloco de notas A5 (0), a Resma de papel A4 (4) e o Compasso escolar (1), quatro documentos.
+Lê-se "documentos cujo campo `stock` é menor do que 5". O `$` é o que diz ao MongoDB que `lt` é um operador e não o nome de um campo.
 
 Os operadores de comparação mais usados são estes:
 
@@ -394,101 +326,61 @@ Os operadores de comparação mais usados são estes:
 
 O `$eq` raramente se escreve, porque `{ stock: 0 }` quer dizer o mesmo que `{ stock: { $eq: 0 } }`.
 
-### Consulta 3: duas condições ao mesmo tempo
+### Várias condições ao mesmo tempo
+
+Quando o filtro tem vários campos, o documento tem de cumprir todos:
 
 ```js
 { categoria: "Escrita", stock: { $lt: 10 } }
 ```
 
-Quando o filtro tem vários campos, o documento tem de cumprir todos. Lê-se "categoria é Escrita e stock é menor do que 10". Resultado: a Esferográfica azul (3) e o Marcador fluorescente (8), dois documentos. O Lápis HB é da categoria Escrita, mas tem 25 de stock e fica de fora.
+Lê-se "categoria é Escrita e stock é menor do que 10". Um artigo da categoria Escrita com 25 unidades fica de fora, porque cumpre a primeira condição mas não a segunda.
 
-### Consulta 4: um intervalo de valores
+Dois operadores no mesmo campo também têm de se cumprir os dois. É assim que se pede um intervalo:
 
 ```js
 { precoCentimos: { $gte: 100, $lte: 300 } }
 ```
 
-Dois operadores no mesmo campo também têm de se cumprir os dois: "preço maior ou igual a 100 cêntimos e menor ou igual a 300 cêntimos", ou seja, entre 1,00 € e 3,00 €. Resultado: o Caderno A4 quadriculado (250), o Bloco de notas A5 (180) e a Régua de 30 cm (120), três documentos.
+Lê-se "preço maior ou igual a 100 cêntimos e menor ou igual a 300 cêntimos", ou seja, entre 1,00 € e 3,00 €.
 
-### Consulta 5: um campo de um documento embutido
+### Campos de um documento embutido
+
+Para chegar a um campo que está dentro de um documento embutido, junta-se o nome dos dois campos com um ponto, como em JavaScript:
 
 ```js
 { "localizacao.corredor": "C" }
 ```
 
-Para chegar a um campo dentro de um documento embutido, junta-se o nome dos dois campos com um ponto, como em JavaScript. Neste caso o nome tem de ficar entre aspas, porque tem um ponto no meio. Resultado: a Régua de 30 cm e o Compasso escolar, dois documentos.
+O nome tem de ficar entre aspas, porque tem um ponto no meio. Sem as aspas, o filtro não é aceite.
 
-### Consulta 6: escolher os campos que aparecem
+### Escolher os campos: a projeção
 
-Escreve no filtro a consulta 2, `{ stock: { $lt: 5 } }`, e no campo "Project" escreve:
+A projeção é um documento em que cada campo recebe `1`, para aparecer, ou `0`, para ficar escondido:
 
 ```js
 { nome: 1, stock: 1, _id: 0 }
 ```
 
-O `1` quer dizer "mostrar este campo" e o `0` quer dizer "esconder este campo". A isto chama-se **projeção**. Os documentos são os mesmos quatro da consulta 2, mas cada um mostra só o nome e o stock.
+Com esta projeção, cada documento do resultado mostra só o nome e o stock. O `_id` aparece sempre, a não ser que o escondas com `_id: 0`. Numa projeção não se podem misturar campos a mostrar e campos a esconder, com uma única exceção, que é precisamente o `_id`. A projeção `{ nome: 1, stock: 0 }` dá erro.
 
-O `_id` aparece sempre, a não ser que o escondas com `_id: 0`. Numa projeção não se podem misturar campos a mostrar e campos a esconder, com uma única exceção, que é precisamente o `_id`. Se escreveres `{ nome: 1, stock: 0 }`, o Atlas dá erro.
+A projeção não muda que documentos aparecem. Isso é trabalho do filtro. Muda só o que se vê de cada um.
 
-### Consulta 7: ordenar e limitar
+### Ordenar e limitar
 
-Deixa o filtro vazio, para considerar todos os artigos. No campo "Sort" escreve:
+A ordenação é um documento em que cada campo recebe `1`, para ordem crescente, ou `-1`, para ordem decrescente:
 
 ```js
 { precoCentimos: -1 }
 ```
 
-e no campo "Limit" escreve `3`. O `-1` quer dizer ordem decrescente, do maior para o menor, e o `1` quer dizer ordem crescente. O limite fica só com os três primeiros. Resultado: os três artigos mais caros, por esta ordem: Resma de papel A4 (520), Compasso escolar (450) e Caderno A4 quadriculado (250).
+Ordena do preço maior para o menor. Com um limite de 3, ficam só os três primeiros dessa ordem, ou seja, os três artigos mais caros. A ordem importa: o limite aplica-se depois de ordenar, e é isso que garante que os três que ficam são os mais caros e não três quaisquer.
 
-### A pergunta que a barra de consulta não faz
+### O que uma consulta simples não consegue perguntar
 
-A pergunta 3 do exemplo guiado era "que artigos estão abaixo do stock mínimo?". Tenta escrevê-la com o que já sabes. Não consegues com os operadores da tabela, porque eles comparam um campo com um valor fixo, e esta pergunta compara dois campos do mesmo documento: `stock` com `stockMinimo`. No MongoDB isso faz-se com o operador `$expr`, e a documentação do Atlas diz que a barra de consulta não o aceita.
+A pergunta 3 do exemplo guiado era "que artigos estão abaixo do stock mínimo?". Os operadores da tabela não chegam para ela, porque comparam um campo com um valor fixo, e esta pergunta compara dois campos do mesmo documento: `stock` com `stockMinimo`. No MongoDB isso faz-se com o operador `$expr`, e a barra de consulta do Atlas não o aceita. Esta pergunta vai ser respondida mais à frente, no código da tua aplicação. No laboratório vais responder-lhe à mão, para veres porque é que o stock mínimo tinha de ficar guardado em cada artigo.
 
-Esta pergunta vai ser respondida mais à frente, no código da tua aplicação. Por agora, responde-lhe à mão, olhando para os oito artigos: devem aparecer a Esferográfica azul (3 de 10), o Bloco de notas A5 (0 de 4), o Marcador fluorescente (8 de 10) e o Compasso escolar (1 de 2).
-
-Compara esta lista com o resultado da consulta 2. A Resma de papel A4 tem pouco stock (4), mas está acima do mínimo (3), por isso ainda não é preciso encomendar. O Marcador fluorescente tem 8 unidades, o que não parece pouco, mas o mínimo é 10. É esta diferença que justifica ter guardado o stock mínimo em cada artigo.
-
-## Laboratório, parte 4: guardar uma referência
-
-### Criar o fornecedor e ligar-lhe um artigo
-
-Cria uma segunda coleção, `fornecedores`, na base `papelaria`. No Data Explorer, passa o rato sobre o nome da base de dados e usa o botão que cria uma coleção nova.
-
-Na coleção `fornecedores`, insere este documento, sem `_id`:
-
-```js
-{ nome: "Fornecedor Exemplo, Lda.", telefone: "210000000", email: "encomendas@fornecedor.example" }
-```
-
-Abre o documento inserido e copia o valor do `_id` que o MongoDB lhe deu: os 24 carateres entre as aspas.
-
-Volta à coleção `artigos` e insere mais um artigo, já com a referência ao fornecedor. Substitui `COLA_AQUI_O_ID` pelos 24 carateres que copiaste, mantendo as aspas:
-
-```js
-{ nome: "Cola em bastão", categoria: "Escrita", stock: 15, stockMinimo: 5, precoCentimos: 140, localizacao: { corredor: "B", prateleira: 3 }, fornecedorId: ObjectId('COLA_AQUI_O_ID') }
-```
-
-Agora encontra os artigos desse fornecedor, com o mesmo `ObjectId` no filtro:
-
-```js
-{ fornecedorId: ObjectId('COLA_AQUI_O_ID') }
-```
-
-Deve aparecer só a Cola em bastão. Os outros oito artigos não têm o campo `fornecedorId`, e por isso não cumprem a condição. É mais um exemplo do esquema flexível: numa aplicação a sério, todos os artigos teriam fornecedor.
-
-### Ver que o MongoDB não verifica as referências
-
-Insere na coleção `artigos` um artigo com uma referência a um fornecedor que não existe:
-
-```js
-{ nome: "Artigo de teste", categoria: "Escrita", stock: 1, stockMinimo: 1, precoCentimos: 100, localizacao: { corredor: "B", prateleira: 3 }, fornecedorId: ObjectId('000000000000000000000000') }
-```
-
-O MongoDB aceita o documento sem nenhum aviso, embora nenhum fornecedor tenha aquele `_id`. É a demonstração do que se explicou na teoria: a base de dados guarda a referência, mas não confirma que ela leva a algum lado. Essa verificação vai ser trabalho da tua aplicação.
-
-Apaga agora o "Artigo de teste": passa o rato sobre o documento, carrega no botão de apagar e confirma. A coleção `artigos` deve ficar com nove documentos: os oito do início e a Cola em bastão.
-
-## Erros frequentes
+## Erros frequentes nas consultas
 
 ### Uma consulta que não devolve nada, sem erro
 
@@ -506,14 +398,6 @@ Apaga agora o "Artigo de teste": passa o rato sobre o documento, carrega no bot�
 
 `{ nome: 1, stock: 0 }` dá erro. Ou escolhes os campos que queres ver, ou os que queres esconder. A única exceção é `_id: 0`.
 
-### Documentos inseridos duas vezes
-
-Carregar duas vezes em "Insert" duplica os documentos, cada cópia com um `_id` diferente. Para o MongoDB não são repetidos: são documentos diferentes que por acaso têm os mesmos campos. Confirma sempre o número de documentos depois de inserir.
-
-### A palavra-passe da base de dados no sítio errado
-
-Quem tiver essa palavra-passe e um endereço autorizado entra na tua base de dados. Nunca a escrevas no código, num ficheiro do projeto ou numa mensagem.
-
 ## Verificar o que aprendeste
 
 Consegues fazer cada uma destas coisas sem olhar para o guia? Se não, volta à secção indicada.
@@ -522,13 +406,12 @@ Consegues fazer cada uma destas coisas sem olhar para o guia? Se não, volta à 
 - Explicar o que é o `_id` e quem o cria (secção "O campo _id e o ObjectId").
 - Num problema novo, dizer se uma informação se embute ou se referencia, e justificar com as duas regras (secção "Embutir ou referenciar").
 - Explicar porque é que as linhas de uma venda guardam uma cópia do preço (secção "Copiar de propósito").
-- Prever o resultado de um filtro com um operador de comparação antes de o executar, e explicar porque é que cada documento aparece ou não (laboratório, parte 3).
-- Explicar porque é que "abaixo do mínimo" não se pergunta na barra de consulta, e porque é que o resultado difere de "pouco stock" (laboratório, parte 3).
-
+- Prever o resultado de um filtro com um operador de comparação antes de o executar, e explicar porque é que cada documento aparece ou não (secção "Como se pergunta ao MongoDB").
+- Explicar porque é que "abaixo do mínimo" não se pergunta na barra de consulta (secção "O que uma consulta simples não consegue perguntar").
 
 ## O que vem a seguir
 
-No próximo tema vais preparar o Node.js e perceber o papel de um servidor: é o programa que recebe os pedidos da aplicação e fala com a base de dados. Depois vais escrever uma API com Express. Só então ligas o servidor à base de dados que criaste hoje, com o utilizador e a palavra-passe que guardaste.
+No próximo tema vais preparar o Node.js e perceber o papel de um servidor: é o programa que recebe os pedidos da aplicação e fala com a base de dados. Depois vais escrever uma API com Express. Só então ligas o servidor à base de dados que criaste no laboratório, com o utilizador e a palavra-passe que guardaste.
 
 Quando lá chegares, as consultas vão ser quase iguais às da barra de consulta. O filtro `{ stock: { $lt: 5 } }` escreve-se no código da mesma forma. A diferença é que o código espera pela resposta com `await`, como no `fetch` do 11.º ano.
 
