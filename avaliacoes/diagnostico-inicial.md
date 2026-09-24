@@ -6,7 +6,7 @@
 
 ## Para que serve este diagnóstico
 
-Este ano vais construir, peça a peça, uma aplicação de gestão completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, uma parte que o utilizador vê e usa no browser, relatórios com números úteis para quem gere, testes e documentação. No fim do ano, cada um de vocês faz a sua própria aplicação, para um problema de gestão combinado com o professor.
+Este ano vais construir, peça a peça, uma aplicação completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, uma parte que o utilizador vê e usa no browser, relatórios com números úteis para quem gere, testes e documentação. No fim do ano, cada um de vocês faz a sua própria aplicação, sobre um tema que escolhe e combina com o professor.
 
 Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que o ano começa por ver em que ponto está cada um.
 

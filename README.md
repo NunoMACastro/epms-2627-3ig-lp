@@ -19,7 +19,7 @@ para quem precisar do código oficial.
 | `01-acesso-a-dados/` | Acesso a dados: servidor, API e base de dados | M14 |
 | `02-reporting-e-documentacao/` | Relatórios de gestão e documentação técnica | M15 |
 | `03-distribuicao-e-suporte/` | Qualidade, distribuição e apoio ao utilizador | M16 |
-| `04-aplicacao-de-gestao/` | Aplicação de gestão: projeto final | M17 |
+| `04-projeto-final/` | Projeto final: a tua aplicação | M17 |
 
 Cada pasta de área tem um `README.md` com o índice dos guias publicados.
 
