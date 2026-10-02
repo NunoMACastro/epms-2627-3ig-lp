@@ -41,6 +41,8 @@ Uma **base de dados** é um programa especializado em guardar dados de forma seg
 
 O MongoDB é uma dessas bases de dados. O **MongoDB Atlas** é o MongoDB a funcionar na cloud, em servidores geridos pela empresa que o faz. Tu crias a tua base de dados numa página web, e a empresa trata de a manter ligada, protegida e com cópias de segurança. É o que vais usar este ano.
 
+Um **servidor** é um computador que está sempre ligado e que presta um serviço a outros computadores através da rede. Neste caso, o serviço é guardar dados e responder a perguntas sobre eles. Dizer que o MongoDB Atlas está na cloud quer dizer que esses servidores não estão na escola nem em tua casa, mas num centro de dados da empresa, e que lhes chegas pela internet, a partir de qualquer computador com um browser.
+
 ## O modelo documental
 
 Cada base de dados tem uma forma de organizar a informação, a que se chama o seu modelo. O MongoDB usa o **modelo documental**: a informação guarda-se em documentos.
@@ -55,17 +57,21 @@ Uma **base de dados** é um conjunto de coleções que pertencem à mesma aplica
 
 Uma forma de fixar as três ideias é pensar num arquivo em papel. Cada documento é uma ficha preenchida. Cada coleção é uma gaveta onde se guardam as fichas do mesmo tipo: a gaveta dos artigos e a gaveta dos fornecedores. A base de dados é o armário com as gavetas todas da papelaria.
 
-No Atlas há ainda dois níveis por cima destes, que vais encontrar ao criar a conta. Um **cluster** é o conjunto de servidores onde o MongoDB está a correr e onde vivem as tuas bases de dados. Um **projeto** agrupa clusters, e uma **organização** agrupa projetos. Do maior para o mais pequeno:
+No Atlas há ainda três níveis por cima destes, que vais encontrar ao criar a conta. Um **cluster** é o conjunto de servidores onde o MongoDB está a correr e onde vivem as tuas bases de dados. Um **projeto** agrupa clusters, e uma **organização** agrupa projetos. Do maior para o mais pequeno:
 
 ```text
 organização → projeto → cluster → base de dados → coleção → documento
 ```
 
+A palavra cluster quer dizer agrupamento, e o nome explica-se porque um cluster não é um servidor só. No plano gratuito que vais usar, o Atlas guarda os mesmos dados em três servidores ao mesmo tempo, com cópias iguais. Se um deles avariar, os outros continuam a responder e não se perde nada. Para ti, que vais usar o cluster pela página do Atlas, isto não se vê: o cluster funciona como se fosse uma única base de dados.
+
 ### Um documento parece um objeto JavaScript, mas não é bem igual
 
-Quando escreves um documento no Atlas, escreves-o com a mesma forma de um objeto JavaScript ou de um JSON. Mas o MongoDB não o guarda como texto. Guarda-o num formato binário chamado **BSON**, que tem mais tipos de valores do que o JSON.
+Quando escreves um documento no Atlas, escreves-o com a mesma forma de um objeto JavaScript ou de um JSON. Mas o MongoDB não o guarda como texto. Guarda-o num formato binário chamado **BSON**, que tem mais tipos de valores do que o JSON. Binário quer dizer que o documento fica guardado numa forma pensada para o computador ler e escrever depressa, e não para uma pessoa ler: se abrisses o ficheiro onde ele está guardado, não reconhecerias o texto que escreveste. É o Atlas que o volta a mostrar com a forma de um objeto, para tu o leres.
 
 A diferença que mais interessa agora é esta. Em JSON, uma data é apenas texto, como `"2026-10-01"`. Para o computador, isso é uma sequência de carateres, e não uma data: não sabe que outubro vem depois de setembro. No BSON existe um tipo de data a sério, que se pode comparar e ordenar corretamente. No Atlas escreve-se assim: `ISODate('2026-10-01T10:15:00Z')`. O mesmo acontece com o identificador de cada documento, que tem um tipo próprio, o ObjectId, explicado já a seguir.
+
+O texto dentro de `ISODate(...)` segue uma norma internacional para escrever datas e horas, a ISO 8601, que dá nome ao `ISODate`. Lê-se da esquerda para a direita, do maior para o mais pequeno. Primeiro vêm o ano, o mês e o dia, separados por hífenes: `2026-10-01` é 1 de outubro de 2026. Depois vem a letra `T`, que só serve para separar a data da hora. Depois vêm as horas, os minutos e os segundos: `10:15:00`. No fim, a letra `Z` diz que a hora está em tempo universal coordenado, conhecido pela sigla UTC, que é a hora de referência usada no mundo inteiro, e não na hora de Portugal. A 1 de outubro, Portugal continental está na hora de verão, uma hora à frente do UTC, por isso `10:15` em UTC são 11:15 em Lisboa. No inverno, a hora de Portugal continental coincide com o UTC. Guardam-se as horas em UTC para que não haja confusões quando a hora muda entre o verão e o inverno, ou quando a aplicação é usada noutro país. É a aplicação que converte para a hora local quando a mostra.
 
 Por isso, quando neste guia vires um documento escrito com `ISODate(...)` ou `ObjectId(...)`, é a forma de dizer ao MongoDB que aquele valor tem um tipo especial, e não é um simples texto.
 
@@ -74,6 +80,8 @@ Por isso, quando neste guia vires um documento escrito com `ISODate(...)` ou `Ob
 Cada documento de uma coleção tem obrigatoriamente um campo chamado `_id`, com um valor diferente do de todos os outros documentos da mesma coleção. É o que permite dizer "este documento e não outro", mesmo que haja dois artigos com o mesmo nome.
 
 Se inserires um documento sem `_id`, o MongoDB cria um automaticamente, do tipo **ObjectId**. Um ObjectId aparece escrito como 24 carateres, com algarismos e letras de `a` a `f`, por exemplo `ObjectId('66fb1c2a9d3e4f5a6b7c8d01')`. Por dentro são 12 bytes com três partes: os primeiros 4 guardam o momento em que foi criado, em segundos, os 5 seguintes são um valor aleatório gerado pelo programa que o criou, e os últimos 3 são um contador que sobe de cada vez. Esta combinação torna praticamente impossível que dois ObjectId saiam iguais, mesmo criados ao mesmo tempo em computadores diferentes.
+
+Os 12 bytes aparecem escritos como 24 carateres porque cada byte se escreve com dois carateres no sistema hexadecimal, também chamado base 16. Na base 10, que usas no dia a dia, há dez algarismos, de 0 a 9. Na base 16 são precisos dezasseis símbolos, por isso aos algarismos de 0 a 9 juntam-se as letras de `a` a `f`, que valem de 10 a 15. É por isso que num ObjectId só aparecem algarismos e as letras de `a` a `f`, e nunca um `g` ou um `z`. Doze bytes, a dois carateres cada um, dão os 24 carateres.
 
 Na prática, não inventas valores de `_id` à mão. Deixas o MongoDB criá-los e usas o que ele criou.
 
@@ -114,7 +122,7 @@ Quando uma informação está relacionada com outra, o MongoDB deixa-te escolher
 }
 ```
 
-A um documento guardado dentro de outro chama-se **documento embutido**. Também se pode embutir um array, por exemplo a lista das linhas de uma venda.
+A um documento guardado dentro de outro chama-se **documento embutido**. Também se pode embutir um array, por exemplo a lista das linhas de uma venda. Uma linha de uma venda é o que aparece numa linha do talão de compra: que artigo se vendeu, quantas unidades e a que preço. Uma venda de três artigos diferentes tem três linhas, e cada linha é ela própria um pequeno documento dentro do array.
 
 **Referenciar** é guardar a informação num documento separado, noutra coleção, e guardar no primeiro documento apenas o `_id` do segundo. O fornecedor de um artigo pode ficar na coleção `fornecedores`, e o artigo guarda só o identificador do fornecedor:
 
@@ -125,6 +133,10 @@ A um documento guardado dentro de outro chama-se **documento embutido**. Também
   fornecedorId: ObjectId('66fb1c2a9d3e4f5a6b7c8d01')
 }
 ```
+
+O nome do campo, `fornecedorId`, segue uma convenção que vais ver muitas vezes: o nome da coisa referida, seguido de `Id`. Não é uma regra do MongoDB, que aceitaria qualquer outro nome. É uma ajuda para quem lê o documento: percebe logo que aquele valor é o `_id` de um fornecedor, e que é na coleção `fornecedores` que o deve procurar.
+
+Ler uma referência obriga a um passo a mais. Para mostrar um artigo com o nome e o telefone do fornecedor, a aplicação faz duas perguntas à base de dados. Primeiro lê o artigo, e encontra nele o `fornecedorId`. Depois procura, na coleção `fornecedores`, o documento cujo `_id` é igual a esse valor. A isto chama-se seguir a referência. A pergunta também se pode fazer no sentido contrário: para saber que artigos tem um fornecedor, procuram-se na coleção `artigos` os documentos cujo `fornecedorId` é igual ao `_id` desse fornecedor. É esta segunda pergunta que vais fazer no laboratório.
 
 ### Como decidir
 
@@ -251,6 +263,8 @@ Os valores de `_id` são exemplos para leres o modelo. Na base de dados verdadei
 
 O total da venda confere: duas vezes 250 cêntimos dá 500, três vezes 60 dá 180, e 500 mais 180 dá 680 cêntimos, ou seja, 6,80 €.
 
+Repara que o total podia ser calculado a partir das linhas sempre que fosse preciso, e mesmo assim ficou guardado na venda. Guardar um valor que se pode calcular traz uma vantagem e uma obrigação. A vantagem é que quem lê a venda tem logo o valor que o cliente pagou, sem fazer contas. A obrigação é que o valor guardado tem de bater sempre certo com aquilo de onde se calcula. Se as linhas disserem uma coisa e o total disser outra, o documento contradiz-se, e quem o ler não sabe qual das duas informações está certa. Neste modelo, uma venda registada não volta a ser alterada, por isso a obrigação cumpre-se uma só vez, no momento em que a venda é guardada. É por isso que vale a pena conferir o total, como acabámos de fazer.
+
 Agora, a confirmação pergunta a pergunta:
 
 | Pergunta | Onde está a resposta |
@@ -266,7 +280,7 @@ Todas as perguntas têm resposta. O modelo serve.
 
 ## O MongoDB Atlas
 
-O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada projeto um cluster gratuito. Os limites deste cluster chegam folgadamente para o que vais fazer: 0,5 GB de dados, até 500 ligações ao mesmo tempo e até 100 operações por segundo. Há uma regra a lembrar: se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
+O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada projeto um cluster gratuito. Os limites deste cluster chegam folgadamente para o que vais fazer: 0,5 GB de dados, até 500 ligações ao mesmo tempo e até 100 operações por segundo. Uma ligação é um programa ligado à base de dados, como a tua aplicação quando estiver a correr. Uma operação é cada pedido que esse programa lhe faz, por exemplo inserir um documento ou fazer uma consulta. Há uma regra a lembrar: se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
 
 Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster vai servir para o teu projeto final. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto.
 
@@ -280,6 +294,8 @@ Pedir informação a uma base de dados chama-se fazer uma **consulta**. No Mongo
 ### As quatro partes de uma consulta
 
 Uma consulta pode ter até quatro partes. O **filtro** diz que documentos queres. A **projeção** diz que campos de cada documento queres ver. A **ordenação** diz por que ordem os queres. O **limite** diz quantos queres no máximo. Só o filtro é sempre usado. As outras três são opcionais.
+
+O filtro mais simples de todos é o filtro vazio, `{}`. Não impõe nenhuma condição, e por isso todos os documentos da coleção o cumprem. Usa-se quando não queres escolher documentos, mas queres fazer alguma coisa a todos eles, por exemplo ordená-los. Na barra de consulta do Atlas, deixar o campo do filtro vazio tem o mesmo efeito que escrever `{}`.
 
 Estas partes fazem na base de dados o que já fazias com arrays em JavaScript:
 
@@ -326,6 +342,12 @@ Os operadores de comparação mais usados são estes:
 
 O `$eq` raramente se escreve, porque `{ stock: 0 }` quer dizer o mesmo que `{ stock: { $eq: 0 } }`.
 
+Os nomes dos operadores são abreviaturas de palavras inglesas, e saber de onde vêm ajuda a não os trocar. `eq` vem de *equal*, igual. `ne` vem de *not equal*, diferente. `gt` vem de *greater than*, maior do que. `lt` vem de *less than*, menor do que. O `e` que aparece no fim de `gte` e de `lte` vem de *or equal*, ou igual. Assim, `$gte` lê-se "maior ou igual" e `$lt` lê-se "menor do que", sem o igual.
+
+A diferença entre ter ou não ter o igual só se nota na fronteira, mas é aí que nascem muitos erros. `{ stock: { $lt: 5 } }` deixa de fora um artigo que tenha exatamente 5 unidades, e `{ stock: { $lte: 5 } }` inclui-o. Antes de escolheres o operador, pergunta-te se o valor da fronteira deve aparecer no resultado ou não.
+
+O `$in` é o único operador da tabela que recebe uma lista, escrita entre parênteses retos, como um array de JavaScript. O filtro `{ categoria: { $in: ["Papel", "Desenho"] } }` lê-se "categoria é Papel ou é Desenho". Um documento fica no resultado se o valor desse campo for igual a qualquer um dos valores da lista. Com os artigos da papelaria, aparecem os de papel e os de desenho, e ficam de fora os de escrita.
+
 ### Várias condições ao mesmo tempo
 
 Quando o filtro tem vários campos, o documento tem de cumprir todos:
@@ -354,6 +376,8 @@ Para chegar a um campo que está dentro de um documento embutido, junta-se o nom
 
 O nome tem de ficar entre aspas, porque tem um ponto no meio. Sem as aspas, o filtro não é aceite.
 
+A razão vem do JavaScript, cuja forma o filtro segue. Num objeto, um nome de propriedade escrito sem aspas só pode ter letras, algarismos e os sinais `_` e `$`, e não pode começar por um algarismo. Um ponto no meio do nome faz com que o filtro deixe de ser um objeto bem escrito, e a barra de consulta não o aceita. Entre aspas, o nome passa a ser um texto como outro qualquer, e um texto pode ter pontos.
+
 ### Escolher os campos: a projeção
 
 A projeção é um documento em que cada campo recebe `1`, para aparecer, ou `0`, para ficar escondido:
@@ -363,6 +387,8 @@ A projeção é um documento em que cada campo recebe `1`, para aparecer, ou `0`
 ```
 
 Com esta projeção, cada documento do resultado mostra só o nome e o stock. O `_id` aparece sempre, a não ser que o escondas com `_id: 0`. Numa projeção não se podem misturar campos a mostrar e campos a esconder, com uma única exceção, que é precisamente o `_id`. A projeção `{ nome: 1, stock: 0 }` dá erro.
+
+A razão é que os dois modos dizem coisas opostas sobre os campos que não escreveste. Com `1`, a projeção diz "mostra só estes", e todos os outros ficam escondidos. Com `0`, diz "mostra tudo menos estes", e todos os outros aparecem. Se misturasses os dois, o MongoDB não saberia o que fazer a um campo como `categoria`, que não está na projeção: escondê-lo, como manda o `1`, ou mostrá-lo, como manda o `0`? Em vez de adivinhar, recusa a projeção. O `_id` é a exceção porque aparece sempre, mesmo quando não o escreves, e escondê-lo numa projeção de campos a mostrar é tão frequente que o MongoDB o permite.
 
 A projeção não muda que documentos aparecem. Isso é trabalho do filtro. Muda só o que se vê de cada um.
 

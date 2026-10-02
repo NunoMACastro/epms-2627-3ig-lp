@@ -60,7 +60,7 @@ No menu lateral, na secção da base de dados, abre o "Data Explorer". Passa o r
 
 Carrega em "Create Database". A base de dados e a coleção aparecem na lista do lado esquerdo.
 
-Os nomes das bases de dados e das coleções seguem a mesma regra dos nomes de ficheiros que usas: minúsculas, sem espaços e sem acentos. O MongoDB recusa alguns carateres, como o espaço, o ponto e o `$`, e distingue maiúsculas de minúsculas de forma traiçoeira: não deixa ter ao mesmo tempo `Papelaria` e `papelaria`. Com minúsculas sempre, nunca tens o problema.
+Os nomes das bases de dados e das coleções seguem a mesma regra dos nomes de ficheiros que usas: minúsculas, sem espaços e sem acentos. Nos nomes das bases de dados, o MongoDB recusa alguns carateres, como o espaço, o ponto e o `$`; nos nomes das coleções aceita o espaço e o ponto, mas recusa o `$`. Além disso, distingue maiúsculas de minúsculas de forma traiçoeira: não deixa ter ao mesmo tempo `Papelaria` e `papelaria`. Com minúsculas sempre, nunca tens o problema.
 
 ### Inserir os oito artigos
 
@@ -161,20 +161,20 @@ Depois, compara a tua lista com o resultado da consulta 2. São iguais? Se não,
 
 ### Os resultados que deves obter
 
-Compara com o que anotaste. Se algum resultado for diferente, procura a causa antes de passares à frente: os erros mais comuns estão no guia, na secção "Erros frequentes nas consultas".
+Compara com o que anotaste. Se o número de documentos de alguma consulta for diferente, procura a causa antes de passares à frente: os erros mais comuns estão no guia, na secção "Erros frequentes nas consultas".
 
-| Consulta | Resultado |
+| Consulta | Número de documentos |
 | --- | --- |
-| 1 | Caderno A4 quadriculado, Bloco de notas A5 e Resma de papel A4: três documentos. Com `"papel"`, em minúscula, não aparece nenhum, e não há erro |
-| 2 | Esferográfica azul (3), Bloco de notas A5 (0), Resma de papel A4 (4) e Compasso escolar (1): quatro documentos |
-| 3 | Esferográfica azul (3) e Marcador fluorescente (8): dois documentos. O Lápis HB é de Escrita, mas tem 25 e fica de fora |
-| 4 | Caderno A4 quadriculado (250), Bloco de notas A5 (180) e Régua de 30 cm (120): três documentos |
-| 5 | Régua de 30 cm e Compasso escolar: dois documentos |
-| 6 | Os mesmos quatro documentos da consulta 2, cada um só com o nome e o stock |
-| 7 | Resma de papel A4 (520), Compasso escolar (450) e Caderno A4 quadriculado (250), por esta ordem |
-| À mão | Esferográfica azul (3 de 10), Bloco de notas A5 (0 de 4), Marcador fluorescente (8 de 10) e Compasso escolar (1 de 2) |
+| 1 | 3 (e 0 com `"papel"` em minúscula, sem nenhum erro) |
+| 2 | 4 |
+| 3 | 2 |
+| 4 | 3 |
+| 5 | 2 |
+| 6 | 4, cada um só com o nome e o stock |
+| 7 | 3 |
+| À mão | 4 |
 
-A lista feita à mão e a consulta 2 têm quatro artigos cada, mas não os mesmos. A Resma de papel A4 tem pouco stock (4), mas está acima do mínimo (3), por isso ainda não é preciso encomendar. O Marcador fluorescente tem 8 unidades, o que não parece pouco, mas o mínimo é 10. É esta diferença que justifica ter guardado o stock mínimo em cada artigo.
+A tua lista feita à mão e a consulta 2 têm o mesmo número de artigos. Compara-as nome a nome: são os mesmos? Escreve no caderno o que descobriste e porquê.
 
 ## Parte 4: guardar uma referência
 

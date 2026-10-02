@@ -52,7 +52,7 @@ Este é um documento da coleção `jogos`, tal como a aplicação o guardaria:
 }
 ```
 
-Responde às quatro alíneas. Cada uma tem uma pista, que diz onde procurar a ideia no guia, e não a resposta.
+Responde às cinco alíneas. Cada uma tem uma pista, que diz onde procurar a ideia no guia, e não a resposta.
 
 a) Que valor identifica este jogo? Quem terá criado esse valor, e em que momento?
 
@@ -66,9 +66,13 @@ c) O que está embutido neste documento? Usa as duas regras do guia para explica
 
 Pista: secção "Como decidir". Pergunta-te que ecrã da aplicação vai mostrar estes dados, e se a lista pode crescer sem limite.
 
-d) O documento não diz de que equipa é o jogador que marcou ao minuto 17. Como é que a aplicação o descobre? E há um segundo problema: o resultado está guardado duas vezes, nos campos `golosCasa` e `golosFora` e na lista `golos`. O que pode correr mal por estar guardado duas vezes?
+d) O documento não diz de que equipa é o jogador que marcou ao minuto 17. Como é que a aplicação o descobre?
 
-Pista: para a primeira parte, segue a referência `jogadorId`. Para a segunda, imagina que um golo foi mal registado e alguém o corrige no dia seguinte.
+Pista: segue a referência `jogadorId`. O guia explica o que é seguir uma referência na secção "Embutir ou referenciar".
+
+e) O resultado do jogo está guardado duas vezes: nos campos `golosCasa` e `golosFora`, e na lista `golos`. O que pode correr mal por estar guardado duas vezes?
+
+Pista: imagina que um golo foi mal registado e alguém o corrige no dia seguinte. No guia, o passo 5 do exemplo guiado fala de um caso parecido: o total de uma venda.
 
 ## Exercícios de consolidação: modelar o torneio
 
