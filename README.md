@@ -5,8 +5,9 @@
 Materiais da disciplina de Linguagens de Programação do 12.º ano do Curso
 Profissional de Técnico/a de Informática de Gestão.
 
-Este repositório contém apenas o que já foi disponibilizado nas aulas. Se um
-guia ainda não está aqui, é porque ainda não foi dado.
+Este repositório contém os materiais já preparados para as aulas. Um guia pode
+ser publicado antes de ser dado nas aulas: podes lê-lo à frente. Se um guia
+ainda não está aqui, é porque ainda não foi preparado.
 
 ## Organização
 

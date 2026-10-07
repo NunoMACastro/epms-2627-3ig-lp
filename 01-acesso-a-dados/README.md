@@ -11,5 +11,13 @@ Os guias estão numerados pela ordem em que são dados. Um número que falta é 
 | [02-modelo-documental-e-consultas-no-atlas.md](02-modelo-documental-e-consultas-no-atlas.md) | Documentos, coleções, embutir ou referenciar, e primeiras consultas no MongoDB Atlas |
 | [02-modelo-documental-e-consultas-no-atlas-laboratorio.md](02-modelo-documental-e-consultas-no-atlas-laboratorio.md) | Laboratório do mesmo tema: conta e cluster no Atlas, inserir documentos, consultas e referências |
 | [02-modelo-documental-e-consultas-no-atlas-exercicios.md](02-modelo-documental-e-consultas-no-atlas-exercicios.md) | Ficha de exercícios do mesmo tema, com o torneio de futsal da escola |
+| [03-arquitetura-e-setup-node.md](03-arquitetura-e-setup-node.md) | As três partes da aplicação, o papel do servidor e o segredo só no servidor, as camadas da API, e a preparação de um projeto Node: scripts, .env, .gitignore e Git |
+| [03-arquitetura-e-setup-node-laboratorio.md](03-arquitetura-e-setup-node-laboratorio.md) | Laboratório do mesmo tema: o diagrama de camadas e o esqueleto da API da papelaria, até ao primeiro commit |
+| [03-arquitetura-e-setup-node-exercicios.md](03-arquitetura-e-setup-node-exercicios.md) | Ficha de exercícios do mesmo tema, com a API do torneio de futsal |
+| [04-api-express-e-contratos.md](04-api-express-e-contratos.md) | O contrato de uma API, um formato único para os erros, a verificação à entrada no controller, e as rotas, o controller e o service em ficheiros separados, com um router |
+| [04-api-express-e-contratos-laboratorio.md](04-api-express-e-contratos-laboratorio.md) | Laboratório do mesmo tema: o contrato e as camadas da API da papelaria, verificados pedido a pedido |
+| [04-api-express-e-contratos-exercicios.md](04-api-express-e-contratos-exercicios.md) | Ficha de exercícios do mesmo tema, com as equipas, os jogos e os pontos do torneio de futsal |
+
+A API da papelaria, pronta a correr, está nos exemplos em duas versões: o [esqueleto](../exemplos/acesso-a-dados/papelaria-api/README.md) do tema 3 e a [versão com as camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) do tema 4.
 
 ![Rodapé](../imagens/rodape.png)
