@@ -6,17 +6,17 @@ Quarto tema de Acesso a dados. Esta ficha é para fazeres sozinho, depois de ler
 
 ## Objetivo e contexto
 
-Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Pelo caminho, tomas decisões que a papelaria não tomou: um parâmetro de pesquisa com um limite diferente, e uma regra que precisa de juntar dados de duas listas.
+Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Não começas do zero: o projeto parte de uma cópia do esqueleto da papelaria, que já tem o `package.json`, os scripts e a rota de estado a funcionar. Assim, o teu trabalho vai todo para o contrato e para as camadas. Pelo caminho, tomas decisões que a papelaria não tomou: um parâmetro de pesquisa com um limite diferente, e um router com dois recursos, as equipas e os jogos. Na parte opcional, no fim, há mais duas: uma regra que precisa de juntar dados de duas listas, e uma forma nova de devolver os jogos.
 
 ## Como trabalhar
 
 Nos exercícios em papel, responde antes de experimentar. Nos de computador, escreve primeiro o contrato e as respostas que esperas, e só depois o código. Verifica cada resposta no browser, com o separador Rede aberto.
 
-Tempo previsto: 90 minutos para os exercícios 1 a 5.
+Tempo previsto: 90 minutos para os exercícios 1 a 4, incluindo os cinco minutos de preparar o projeto. O exercício 4 é o mais longo: conta com cerca de metade desse tempo. O exercício 5 e o desafio dos jogos com os nomes, no fim, são opcionais e não contam para os 90 minutos.
 
 ## Os dados do torneio
 
-Os exercícios 4 e 5 usam estes dados, fictícios, num ficheiro `src/dados/torneio.dados.js`. Nos jogos, `casa` e `fora` são os `id` das equipas.
+O exercício 4 usa estes dados, fictícios, num ficheiro `src/dados/torneio.dados.js`, e os exercícios opcionais também. Nos jogos, `casa` e `fora` são os `id` das equipas.
 
 ```js
 // src/dados/torneio.dados.js: as equipas e os jogos do torneio, em memória.
@@ -92,11 +92,24 @@ export function equipa(req, res) {
 
 Há três problemas, cada um de um tipo diferente. Para cada um, diz qual é, o que acontece por causa dele e como se corrige.
 
+## O projeto de partida, para os exercícios 3 e 4
+
+Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria, que já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`. Conta com cinco minutos.
+
+1. Copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para fora do repositório e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório: esse já tem os ficheiros dos artigos, que aqui não servem.
+2. No `package.json`, muda o `name` para `torneio-api` e escreve na `description` uma frase tua sobre a API do torneio.
+3. No `src/server.js`, troca a papelaria pelo torneio no comentário do início e no texto da rota de estado, que passa a ser `API do torneio de futsal`.
+4. Num terminal dentro da pasta `torneio-api`, corre `npm install`, cria o `.env` a partir do `.env.example`, como no laboratório do tema anterior, e arranca a API com `npm run dev`. Se a API do laboratório estiver ligada, para-a primeiro com Ctrl+C, ou muda a porta no `.env` da `torneio-api`: as duas não podem usar a porta 3000 ao mesmo tempo.
+5. No browser, `/api/estado` deve responder com o texto novo, e `/api/equipas` deve dar 404, porque essa rota ainda não existe. É o que vais escrever.
+6. Cria o ficheiro `src/dados/torneio.dados.js` com os dados desta ficha, copiados da secção "Os dados do torneio".
+
+O resto do esqueleto não muda. O `src/server.js` que copiaste é o ponto de partida do exercício 4, que lhe acrescenta a montagem das rotas e o middleware final.
+
 ## Exercício 3: o contrato da torneio-api
 
 Guia: secção "O contrato da API da papelaria" e laboratório, parte 1.
 
-Num projeto novo, `torneio-api`, preparado como no laboratório do tema anterior, escreve o ficheiro `contrato-da-api.md` com:
+No projeto `torneio-api`, escreve o ficheiro `contrato-da-api.md` com:
 
 - `GET /api/equipas`, a lista das equipas;
 - `GET /api/equipas/:id`, uma equipa;
@@ -105,17 +118,20 @@ Num projeto novo, `torneio-api`, preparado como no laboratório do tema anterior
 
 Para cada pedido, as duas tabelas do guia: os parâmetros e as respostas. Escreve também a forma de uma equipa e de um jogo, em JSON, como o guia faz para o artigo.
 
+As tabelas de `GET /api/jogos` já as tens: são as do exercício 1, e podes partir delas. O que escreves de novo são os pedidos das equipas e a forma de uma equipa e de um jogo.
+
 ## Exercício 4: as camadas do torneio
 
 Guia: secção "As camadas em código".
 
-Escreve, no projeto `torneio-api`, os ficheiros que cumprem o contrato do exercício 3:
+Escreve, no projeto `torneio-api`, os ficheiros que cumprem o contrato do exercício 3. O ficheiro dos dados já o criaste ao preparar o projeto. Faltam:
 
-- `src/dados/torneio.dados.js`, com os dados desta ficha;
 - `src/services/torneio.service.js`;
 - `src/controllers/torneio.controller.js`;
 - `src/rotas/torneio.rotas.js`;
-- no `src/server.js`, a montagem das rotas e o middleware final.
+- no `src/server.js` que copiaste, a montagem das rotas e o middleware final.
+
+A função `paraInteiro` do controller é a do guia, e podes copiá-la de lá. O resto escreve-lo tu, com os ficheiros dos artigos do guia como modelo e o teu contrato ao lado.
 
 Uma decisão que o guia não tomou por ti: o router da papelaria era montado em `/api/artigos`, porque só tinha artigos. Este tem equipas e jogos. Onde o montas, e como ficam os caminhos dentro dele?
 
@@ -132,7 +148,9 @@ Para verificar, com o contrato ao lado:
 | `/api/jogos?jornada=0` | 400 |
 | `/api/jornadas` | 404, `Rota não encontrada` |
 
-## Exercício 5: os pontos de uma equipa
+## Exercício 5 (desafio, opcional): os pontos de uma equipa
+
+Este exercício e o desafio que vem a seguir são opcionais e não contam para os 90 minutos. Fazem-se no projeto `torneio-api`, depois do exercício 4, e o desafio não depende deste.
 
 Guia: secções "O que faz cada camada", do tema anterior, e "O service".
 
@@ -160,7 +178,7 @@ A interface React vai mostrar os jogos assim: "12.º IG 3 - 1 11.º IG". Com o c
 
 ## Entrega e autoavaliação
 
-Entrega as respostas dos exercícios 1 e 2 e o projeto `torneio-api` com o `contrato-da-api.md` e os ficheiros dos exercícios 4 e 5 (e do desafio, se o fizeste). Não entregues a `node_modules` nem o `.env`.
+Entrega as respostas dos exercícios 1 e 2 e o projeto `torneio-api` com o `contrato-da-api.md` e os ficheiros do exercício 4 (e os do exercício 5 e do desafio, se os fizeste). Não entregues a `node_modules` nem o `.env`.
 
 No fim, responde por escrito:
 

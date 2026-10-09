@@ -16,7 +16,7 @@ Os guias estão numerados pela ordem em que são dados. Um número que falta é 
 | [03-arquitetura-e-setup-node-exercicios.md](03-arquitetura-e-setup-node-exercicios.md) | Ficha de exercícios do mesmo tema, com a API do torneio de futsal |
 | [04-api-express-e-contratos.md](04-api-express-e-contratos.md) | O contrato de uma API, um formato único para os erros, a verificação à entrada no controller, e as rotas, o controller e o service em ficheiros separados, com um router |
 | [04-api-express-e-contratos-laboratorio.md](04-api-express-e-contratos-laboratorio.md) | Laboratório do mesmo tema: o contrato e as camadas da API da papelaria, verificados pedido a pedido |
-| [04-api-express-e-contratos-exercicios.md](04-api-express-e-contratos-exercicios.md) | Ficha de exercícios do mesmo tema, com as equipas, os jogos e os pontos do torneio de futsal |
+| [04-api-express-e-contratos-exercicios.md](04-api-express-e-contratos-exercicios.md) | Ficha de exercícios do mesmo tema, com as equipas e os jogos do torneio de futsal, a partir do esqueleto da papelaria; os pontos ficam num desafio opcional |
 
 A API da papelaria, pronta a correr, está nos exemplos em duas versões: o [esqueleto](../exemplos/acesso-a-dados/papelaria-api/README.md) do tema 3 e a [versão com as camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) do tema 4.
 

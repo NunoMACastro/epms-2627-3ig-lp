@@ -4,15 +4,23 @@
 
 ## Objetivo e contexto
 
-Esta ficha é do tema [Modelo documental e primeiras consultas no Atlas](02-modelo-documental-e-consultas-no-atlas.md). É para praticares sozinho, em casa ou quando acabares o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md). Conta com cerca de hora e meia.
+Esta ficha é do tema [Modelo documental e primeiras consultas no Atlas](02-modelo-documental-e-consultas-no-atlas.md). É para praticares sozinho, em casa ou quando acabares o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md). A parte obrigatória conta com cerca de hora e meia.
 
 No guia e no laboratório trabalhaste com uma papelaria. Esta ficha usa outro domínio, de propósito: o torneio de futsal entre turmas da escola. As decisões que tomaste para a papelaria não servem todas aqui, e vais ter de voltar a pensar nelas com as mesmas regras. É assim que se percebe se uma regra foi compreendida ou só decorada.
 
 Vais praticar três coisas: ler um documento e reconhecer o que está embutido e o que é referência; decidir e justificar o modelo de um problema novo; e escrever consultas no Atlas, prevendo o resultado antes de as executar.
 
+## Como está organizada a ficha
+
+A parte obrigatória tem oito exercícios, e faz-se por esta ordem: o exercício 1, acompanhado, em que lês um documento com a ajuda de pistas; os exercícios 2, 3 e 5, em que modelas o torneio; e os exercícios 8, 9, 10 e 13, em que fazes consultas no Atlas. Cada um traz uma só coisa nova em relação aos anteriores. É esta parte que conta com cerca de hora e meia.
+
+Os outros seis exercícios, o 4, o 6, o 7, o 11, o 12 e o 14, estão no fim, na secção "Para ires mais longe", e são opcionais. Não contam para a hora e meia. Servem para treinar mais, se tiveres tempo ou se sentires que alguma coisa ainda não assentou.
+
+Por isso, na parte obrigatória os números saltam: do 3 para o 5, do 5 para o 8 e do 10 para o 13. Não falta nada. Cada exercício ficou com o número que já tinha quando a ficha foi publicada, para que o exercício 9 seja o mesmo exercício no teu caderno, no de um colega e na aula.
+
 ## Pré-requisitos e preparação
 
-Antes de começares, deves ter lido o guia, sobretudo as secções "O modelo documental", "Embutir ou referenciar", "Modelar a partir das perguntas" e "Como se pergunta ao MongoDB". Para os exercícios 6 a 13 precisas do teu cluster no Atlas, criado no laboratório.
+Antes de começares, deves ter lido o guia, sobretudo as secções "O modelo documental", "Embutir ou referenciar", "Modelar a partir das perguntas" e "Como se pergunta ao MongoDB". Para os exercícios de consultas (o 8, o 9, o 10 e o 13, e os opcionais 6, 7, 11 e 12) precisas do teu cluster no Atlas, criado no laboratório.
 
 Responde no caderno ou num ficheiro de texto teu, com o número de cada exercício. Nas perguntas que pedem uma justificação, a justificação é a parte mais importante da resposta: uma decisão certa sem razão escrita vale pouco, e uma decisão discutível bem justificada mostra que percebeste as regras.
 
@@ -107,13 +115,11 @@ c) No guia, as linhas de uma venda guardavam uma cópia do preço, e isso estava
 
 d) Qual das duas opções escolhias para este torneio, e porquê?
 
-### Exercício 4
-
-Escreve um documento de exemplo de cada coleção do teu modelo, com base nas decisões do exercício 2. Nos valores de `_id` e das referências podes escrever `ObjectId('...')`, com reticências. O que interessa é que se perceba que campo aponta para que documento.
-
 ### Exercício 5
 
-Faz uma tabela com duas colunas, como a do passo 5 do exemplo guiado do guia. Na primeira coluna estão as cinco perguntas da comissão. Na segunda, escreve onde está, no teu modelo, a informação que responde a cada uma. Se uma pergunta não tiver resposta no teu modelo, o modelo está errado: volta ao exercício 2 e corrige-o.
+Faz uma tabela com duas colunas, como a do passo 5 do exemplo guiado do guia. Na primeira coluna estão as cinco perguntas da comissão. Na segunda, escreve onde está, no modelo que decidiste no exercício 2, a informação que responde a cada uma: em que coleção, e em que campo ou lista dentro dela. Se uma pergunta não tiver resposta no teu modelo, o modelo está errado: volta ao exercício 2 e corrige-o.
+
+Os nomes que dás aos campos são escolha tua. O que interessa é que se perceba onde está cada informação e, quando a resposta precisa de duas coleções, que campo liga uma à outra.
 
 ## Exercícios de consolidação: consultas no Atlas
 
@@ -141,14 +147,6 @@ Repara numa simplificação: nestes documentos as equipas aparecem pelo nome da 
 
 Em cada exercício, escreve primeiro no caderno a consulta e os jogos que esperas que apareçam. Só depois a executas. No fim desta ficha, em "Resultados verificáveis", está quantos documentos cada consulta deve devolver, para confirmares.
 
-### Exercício 6
-
-Os jogos da jornada 2.
-
-### Exercício 7
-
-Os jogos em que a equipa da casa marcou 3 golos ou mais.
-
 ### Exercício 8
 
 Os jogos da jornada 1 que se disputaram num recinto coberto.
@@ -161,21 +159,41 @@ Os jogos que acabaram empatados. Antes de escreveres a consulta, pensa no que es
 
 Os jogos em que a equipa da casa foi o 10.º A ou o 11.º B. Escreve-o com um só operador.
 
-### Exercício 11
+### Exercício 13
 
-Os jogos da jornada 3, mostrando só as duas equipas e os golos de cada uma, sem o `_id`.
-
-### Exercício 12
-
-Os três jogos em que a equipa de fora marcou mais golos, do que marcou mais para o que marcou menos.
-
-## Desafio autónomo e extensão opcional
-
-### Exercício 13 (desafio)
+É o último exercício obrigatório, e o único em que vais aprender sozinho um operador que o guia não ensina.
 
 Todos os jogos do 10.º A, tanto em casa como fora. Com os operadores do guia não consegues. O operador `$in` do exercício 10 também não serve: explica porquê. Depois lê a página do operador `$or` na documentação oficial, indicada nas fontes, e escreve o filtro. Executa-o e confirma o número de documentos.
 
-### Exercício 14 (extensão)
+A página está em inglês. Não precisas de a ler toda: procura nela a forma do filtro e um exemplo, e compara-os com os filtros que já escreveste.
+
+## Para ires mais longe (opcional)
+
+Os exercícios desta secção são opcionais e não contam para a hora e meia da parte obrigatória. Faz-os depois dela, pela ordem que quiseres.
+
+O exercício 4 leva o teu modelo até ao fim: escreves os documentos tal como a aplicação os guardaria. Os exercícios 6, 7, 11 e 12 são consultas do mesmo tipo das do laboratório, agora com os jogos do torneio: o 6 é uma igualdade, como a consulta 1; o 7 obriga a decidir se o valor da fronteira entra ou não no resultado; o 11 escolhe os campos que aparecem, como a consulta 6; e o 12 ordena e limita, como a consulta 7. São bons para treinar se alguma dessas consultas te correu mal no laboratório. Usam a mesma coleção `jogos` da base `torneio`, e a regra é a mesma: escreve primeiro a consulta e os jogos que esperas, e só depois executa. O exercício 14 é uma extensão mais longa, sobre uma pergunta que nenhuma consulta da barra responde.
+
+### Exercício 4 (opcional)
+
+Escreve um documento de exemplo de cada coleção do teu modelo, com base nas decisões do exercício 2 e com os nomes de campos que usaste na tabela do exercício 5. Nos valores de `_id` e das referências podes escrever `ObjectId('...')`, com reticências. O que interessa é que se perceba que campo aponta para que documento.
+
+### Exercício 6 (opcional)
+
+Os jogos da jornada 2.
+
+### Exercício 7 (opcional)
+
+Os jogos em que a equipa da casa marcou 3 golos ou mais.
+
+### Exercício 11 (opcional)
+
+Os jogos da jornada 3, mostrando só as duas equipas e os golos de cada uma, sem o `_id`.
+
+### Exercício 12 (opcional)
+
+Os três jogos em que a equipa de fora marcou mais golos, do que marcou mais para o que marcou menos.
+
+### Exercício 14 (opcional, extensão)
 
 A comissão quer a classificação do torneio: cada vitória vale 3 pontos, cada empate vale 1 ponto e cada derrota vale 0. Com os nove jogos da coleção, calcula à mão os pontos de cada uma das seis equipas e faz a tabela da classificação. Depois explica porque é que esta pergunta não se responde com uma consulta na barra do Atlas. Mais à frente no módulo vais aprender a fazer este tipo de cálculo no código.
 
@@ -185,21 +203,21 @@ Para as consultas, este é o número de documentos que cada uma deve devolver. S
 
 | Exercício | Documentos |
 | --- | ---: |
-| 6 | 3 |
-| 7 | 4 |
+| 6 (opcional) | 3 |
+| 7 (opcional) | 4 |
 | 8 | 2 |
 | 9 | 3 jogos, contados à mão |
 | 10 | 4 |
-| 11 | 3, cada um só com quatro campos |
-| 12 | 3, e o primeiro tem 5 golos da equipa de fora |
+| 11 (opcional) | 3, cada um só com quatro campos |
+| 12 (opcional) | 3, e o primeiro tem 5 golos da equipa de fora |
 | 13 | 3 |
-| 14 | A soma dos pontos das seis equipas dá 24 |
+| 14 (opcional) | A soma dos pontos das seis equipas dá 24 |
 
 Para os exercícios de modelação não há um número a confirmar. Confirma antes que o teu modelo responde às cinco perguntas da comissão (exercício 5), e que cada decisão do exercício 2 tem uma justificação escrita com as regras do guia.
 
 ## Entrega e evidência
 
-Guarda as respostas no caderno ou num ficheiro teu. O professor pode pedir-te para explicares em voz alta uma das decisões do exercício 2, ou para preveres o resultado de uma consulta parecida com as desta ficha, com outros valores. É assim que se confirma que o trabalho é teu e que o percebeste.
+Guarda as respostas no caderno ou num ficheiro teu, incluindo as dos exercícios opcionais que fizeres. O professor pode pedir-te para explicares em voz alta uma das decisões do exercício 2, ou para preveres o resultado de uma consulta parecida com as desta ficha, com outros valores. É assim que se confirma que o trabalho é teu e que o percebeste.
 
 ## Ligação ao teu projeto
 
