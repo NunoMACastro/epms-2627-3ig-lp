@@ -4,7 +4,7 @@
 
 O esqueleto da API do [tema Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md): um projeto Node com módulos ES, os scripts `start` e `dev`, a configuração num `.env` e uma só rota, a de estado. O guia explica cada ficheiro; aqui está o projeto pronto a correr, para comparares com o teu.
 
-A versão seguinte, com o contrato e as rotas, o controller e o service dos artigos, do tema 4, está em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md).
+A versão seguinte, com o contrato e as rotas, o controller e o service dos artigos, do tema 4, está em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md). Entre as duas, a primeira versão do tema 4, com as rotas do contrato escritas todas no `server.js`, está em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md).
 
 ## O que está nesta pasta
 

@@ -1,0 +1,17 @@
+{
+  "name": "papelaria-api",
+  "version": "1.0.0",
+  "description": "Primeira versão da API da papelaria do tema 4: as rotas do contrato com tudo no server.js, ainda com dados temporários.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch --env-file=.env src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

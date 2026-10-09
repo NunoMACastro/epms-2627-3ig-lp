@@ -4,7 +4,7 @@
 
 A API do [tema API Express e contratos](../../../01-acesso-a-dados/04-api-express-e-contratos.md): o esqueleto do tema anterior, com o contrato escrito e as rotas, o controller e o service dos artigos, em ficheiros separados. Os artigos ainda estão num array, em `src/dados/`; no tema da ligação segura passam a vir do MongoDB Atlas.
 
-O esqueleto do tema anterior, só com a rota de estado, continua em [papelaria-api](../papelaria-api/README.md).
+O esqueleto do tema anterior, só com a rota de estado, continua em [papelaria-api](../papelaria-api/README.md). A primeira versão deste tema, que cumpre o mesmo contrato com tudo no `server.js` e que é o ponto de partida destas camadas, está em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md).
 
 ## O que está nesta pasta
 
