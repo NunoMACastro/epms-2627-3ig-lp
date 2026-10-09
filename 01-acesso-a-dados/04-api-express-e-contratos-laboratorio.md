@@ -17,8 +17,8 @@ Liga a API com `npm run dev` e deixa-a ligada: com o `--watch`, ela reinicia soz
 Guia: secções "O que é o contrato de uma API" e "O contrato da API da papelaria".
 
 1. Na raiz do projeto, ao lado do `package.json`, cria o ficheiro `contrato-da-api.md`.
-2. Escreve nele o contrato dos três pedidos da secção 4 do guia e o formato dos erros. Usa as tabelas do guia, mas escreve-as tu, com o guia ao lado: ao escrever cada linha, pergunta-te o que ela obriga a API a fazer.
-3. Acrescenta uma secção que o guia não tem: a do pedido `GET /api/estado`, que a API já tem desde o tema anterior. Que parâmetros tem? Que respostas pode dar?
+2. Escreve nele o contrato dos três pedidos da secção 4 do guia e o formato dos erros. Usa as tabelas do guia, mas escreve-as tu, com o guia ao lado: ao escrever cada linha, pergunta-te o que ela obriga a API a fazer. Acrescenta também a secção do pedido `GET /api/estado`, que a API já tem desde o tema anterior: o contrato descreve todos os pedidos da API, e este não pode ficar de fora. O contrato do exemplo publicado tem essa secção, e podes comparar a tua com ela no fim.
+3. O contrato do guia deixa um caso por decidir, e nem o guia nem o exemplo publicado o decidem por ti: o pedido `/api/artigos?categoria=`, com o parâmetro `categoria` presente, mas sem valor. Decide o que a API deve responder a este pedido, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/artigos`. No caderno, escreve porque escolheste essa resposta e não outra. Pensa em quem pode fazer este pedido: alguém que se esqueceu de escrever a categoria, ou um formulário do React com uma opção "todas as categorias" que envia o campo vazio. Há mais do que uma decisão defensável. O que não pode acontecer é o contrato não dizer nada sobre este caso.
 
 Guarda o ficheiro. É uma das duas coisas que este tema te pede para entregar.
 
@@ -62,6 +62,7 @@ Guia: secções "Verificar à entrada, no controller" e "O controller".
 
 1. Cria a pasta `src/controllers` e, nela, o ficheiro `artigos.controller.js`, com o código do guia.
 2. Antes de continuares, responde no caderno: na função `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse `req.query` diretamente ao `listarArtigos`?
+3. Volta à decisão que tomaste na parte 1 sobre o pedido `?categoria=`. Lê a função `listar`, e a `listarArtigos` do service, e descobre o que o código do guia responde a esse pedido. Escreve-o no caderno. Se não for o que puseste no contrato, muda a `listar` para cumprir o contrato. É o código que se acerta pelo contrato, e não o contrário: o contrato foi escrito primeiro, e é com ele que vais verificar a API na parte 8.
 
 Ainda não há nada para ver no browser: nenhuma rota chama o controller.
 
@@ -69,7 +70,7 @@ Ainda não há nada para ver no browser: nenhuma rota chama o controller.
 
 Guia: secções "As rotas" e "A ordem das rotas dentro do router".
 
-1. Cria a pasta `src/rotas` e, nela, o ficheiro `artigos.rotas.js`, com o código do guia, mas com uma diferença de propósito: escreve a rota `"/:id"` **antes** da rota `"/abaixo-do-minimo"`.
+1. Cria a pasta `src/rotas` e, nela, o ficheiro `artigos.rotas.js`, com o código do guia, mas com uma diferença de propósito: escreve a rota `"/:id"` antes da rota `"/abaixo-do-minimo"`, ao contrário do que o guia faz.
 2. No `src/server.js`, acrescenta o `import` do router e o `app.use("/api/artigos", artigosRotas)`, como no guia. Ainda não acrescentes o middleware final.
 3. Guarda e confirma no terminal que a API reiniciou sem erros.
 4. Abre `http://localhost:3000/api/artigos/2`. Deve aparecer a esferográfica.
@@ -108,7 +109,7 @@ Esta é a parte que conta como evidência.
 1. Copia para o caderno a tabela do passo 7 do guia, só com a coluna dos pedidos, e acrescenta três colunas: "código previsto", "código obtido" e "corpo confere com o contrato".
 2. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md`.
 3. Faz cada pedido no browser, com o separador Rede aberto, e preenche as outras duas colunas.
-4. Acrescenta uma linha para o `GET /api/estado` que puseste no contrato na parte 1.
+4. Acrescenta duas linhas, para os dois pedidos que puseste no contrato na parte 1 e que não estão na tabela do guia: o `GET /api/estado` e o `/api/artigos?categoria=`, com a resposta que decidiste.
 5. Se alguma linha não conferir, há um erro no código ou no contrato. Descobre qual, corrige-o e volta a verificar a linha.
 
 No fim, a tabela tem de ter pelo menos um 200, um 400 e um 404 verificados.
@@ -150,9 +151,9 @@ As aspas simples do comando do passo 3 do guia não funcionam na linha de comand
 
 ## O que fica no teu caderno
 
-1. O ficheiro `contrato-da-api.md`, no projeto, com a secção da rota de estado.
+1. O ficheiro `contrato-da-api.md`, no projeto, com a secção da rota de estado e a tua decisão sobre o pedido `?categoria=`; no caderno, a razão dessa decisão.
 2. As previsões e os resultados do teste do service, na parte 3, e a explicação do marcador fluorescente.
-3. As respostas das partes 4 e 7.
+3. As respostas das partes 4 e 7, incluindo o que o código do guia respondia ao pedido `?categoria=` e o que mudaste, se mudaste.
 4. O resultado da parte 5, com a rota pela ordem errada.
 5. A tabela da parte 8, verificada, com pelo menos um 200, um 400 e um 404.
 

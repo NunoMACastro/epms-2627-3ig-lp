@@ -20,6 +20,6 @@ Os guias estão numerados pela ordem em que são dados. Um número que falta é 
 
 A API da papelaria, pronta a correr, está nos exemplos em duas versões: o [esqueleto](../exemplos/acesso-a-dados/papelaria-api/README.md) do tema 3 e a [versão com as camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) do tema 4.
 
-Os documentos mostrados na aula de embutir ou referenciar, do tema 2, também estão nos [exemplos](../exemplos/acesso-a-dados/embutir-ou-referenciar/README.md).
+Os documentos preparados para a aula de embutir ou referenciar, do tema 2, também estão nos [exemplos](../exemplos/acesso-a-dados/embutir-ou-referenciar/README.md).
 
 ![Rodapé](../imagens/rodape.png)

@@ -95,15 +95,15 @@ As duas formas são usadas no mundo real, e a mesma tecnologia, o Express, serve
 
 Parece mais simples o React pedir os dados diretamente ao Atlas: há menos uma peça. Não se faz, e as razões são as que tornam o servidor indispensável.
 
-**O segredo.** Para se ligar ao Atlas, um programa precisa da cadeia de ligação, um endereço que começa por `mongodb+srv://` e leva lá dentro o utilizador e a palavra-passe da base de dados. Ora, o código do React é descarregado para o browser de cada utilizador: quem quiser, abre as ferramentas de programador e lê-o. Uma palavra-passe que esteja no código do React deixou de ser secreta no momento em que alguém abriu a aplicação. Quem a tivesse podia ler, alterar ou apagar a base de dados inteira. Por isso a regra é absoluta: **o segredo fica só no servidor.** O browser nunca o recebe.
+A primeira razão é o segredo. Para se ligar ao Atlas, um programa precisa da cadeia de ligação, um endereço que começa por `mongodb+srv://` e leva lá dentro o utilizador e a palavra-passe da base de dados. Ora, o código do React é descarregado para o browser de cada utilizador: quem quiser, abre as ferramentas de programador e lê-o. Uma palavra-passe que esteja no código do React deixou de ser secreta no momento em que alguém abriu a aplicação. Quem a tivesse podia ler, alterar ou apagar a base de dados inteira. Por isso a regra é absoluta: o segredo fica só no servidor, e o browser nunca o recebe.
 
 Há uma armadilha em que é fácil cair. No React feito com o Vite, as variáveis de um ficheiro `.env` cujo nome começa por `VITE_` são copiadas para o código que vai para o browser. É de propósito, para configurações públicas, como o endereço da API. Uma `VITE_MONGODB_URI` seria, portanto, publicada. O endereço do Atlas vai para o `.env` do servidor, e só para esse.
 
-**As regras.** A papelaria não pode vender mais cadernos do que tem em stock. Se esta regra estiver no React, quem quiser contorna-a: o browser está nas mãos do utilizador, e qualquer pessoa pode enviar um pedido sem passar pelo formulário, ou alterar o código que corre no seu browser. As regras têm de ser verificadas num sítio que o utilizador não controla, e esse sítio é o servidor. O React pode ajudar, avisando antes de enviar, mas essa ajuda é conforto e não proteção.
+A segunda razão são as regras da aplicação. A papelaria não pode vender mais cadernos do que tem em stock. Se esta regra estiver no React, quem quiser contorna-a: o browser está nas mãos do utilizador, e qualquer pessoa pode enviar um pedido sem passar pelo formulário, ou alterar o código que corre no seu browser. As regras têm de ser verificadas num sítio que o utilizador não controla, e esse sítio é o servidor. O React pode ajudar, avisando antes de enviar, mas essa ajuda é conforto e não proteção.
 
-**A persistência.** Os dados de uma aplicação têm de sobreviver: ao fecho do browser, ao reinício do servidor, à troca de computador. O estado do React desaparece quando se fecha o separador. Um array na memória do servidor desaparece quando o servidor para, como viste em Sistemas de Informação. É a base de dados que guarda os dados de forma permanente, e é o servidor que lhe pede para os guardar.
+A terceira razão é a persistência. Os dados de uma aplicação têm de sobreviver: ao fecho do browser, ao reinício do servidor, à troca de computador. O estado do React desaparece quando se fecha o separador. Um array na memória do servidor desaparece quando o servidor para, como viste em Sistemas de Informação. É a base de dados que guarda os dados de forma permanente, e é o servidor que lhe pede para os guardar.
 
-**Um só sítio para vários clientes.** Hoje o cliente é a tua interface React. Amanhã pode ser uma aplicação de telemóvel, ou um relatório gerado por outro programa. Todos usam a mesma API, com as mesmas regras, sem cada um ter de as repetir.
+A quarta razão é ter um só sítio para vários clientes. Hoje o cliente é a tua interface React. Amanhã pode ser uma aplicação de telemóvel, ou um relatório gerado por outro programa. Todos usam a mesma API, com as mesmas regras, sem cada um ter de as repetir.
 
 ### Para confirmar
 
@@ -175,11 +175,11 @@ A consulta `{ stock: { $lte: 5 } }` é a do guia do tema anterior, com o `$lte`,
 
 ### Porque vale a pena
 
-**Cada mudança tem um sítio.** Se a papelaria decidir encomendar um artigo quando o stock chega ao mínimo, e não só quando fica abaixo dele, muda-se uma linha no service. Se a papelaria trocar o MongoDB por outra base de dados, muda-se o repository, e as rotas, os controllers e os services ficam iguais.
+Cada mudança tem um sítio. Se a papelaria decidir encomendar um artigo quando o stock chega ao mínimo, e não só quando fica abaixo dele, muda-se uma linha no service. Se a papelaria trocar o MongoDB por outra base de dados, muda-se o repository, e as rotas, os controllers e os services ficam iguais.
 
-**Cada camada testa-se sozinha.** O service não precisa de HTTP nem de base de dados para se verificar se aplica bem a regra do stock. Vais aproveitar isto no tema da robustez e dos testes.
+Cada camada testa-se sozinha. O service não precisa de HTTP nem de base de dados para se verificar se aplica bem a regra do stock. Vais aproveitar isto no tema da robustez e dos testes.
 
-**Encontra-se o código.** Um erro na resposta, como um código 200 em vez de 404, está no controller. Um resultado errado da regra está no service. Uma consulta que não encontra nada está no repository. As camadas são também um mapa para procurar erros.
+É mais fácil encontrar o código de que se anda à procura. Um erro na resposta, como um código 200 em vez de 404, está no controller. Um resultado errado da regra está no service. Uma consulta que não encontra nada está no repository. As camadas são também um mapa para procurar erros.
 
 Uma nota de proporção. Esta arquitetura existe para organizar uma aplicação pequena ou média, como a tua, e não para a tornar complicada. Cada camada é um ficheiro com algumas funções simples, por recurso da API: um ficheiro de rotas para os artigos, um controller, um service e um repository. Não precisas de classes, de bibliotecas especiais nem de mais camadas do que estas quatro.
 

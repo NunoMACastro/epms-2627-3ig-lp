@@ -2,7 +2,7 @@
 
 # Documentos da aula de embutir ou referenciar
 
-Estes são os documentos mostrados na aula do [modelo documental](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas.md), na parte de embutir ou referenciar. A matéria está explicada no guia, nas secções "Embutir ou referenciar", "Como decidir", "Copiar de propósito" e "O MongoDB não verifica as referências".
+Estes são os documentos preparados para a aula de embutir ou referenciar, no tema do [modelo documental](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas.md). A matéria está explicada no guia, nas secções "Embutir ou referenciar", "Como decidir", "Copiar de propósito" e "O MongoDB não verifica as referências".
 
 São versões mais curtas dos documentos do guia: cada artigo tem só os campos de que o exemplo precisa, e cada ficheiro mostra uma ideia só. Os artigos, o fornecedor e os telefones são fictícios.
 

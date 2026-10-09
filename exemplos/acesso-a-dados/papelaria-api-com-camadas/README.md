@@ -32,6 +32,6 @@ Precisas do Node.js 22 ou 24 e de internet para o primeiro passo.
 
 ## Versões com que foi testado
 
-Node.js 24.17.0, npm 11.13.0 e Express 5.2.1, em macOS, a 7 de outubro de 2026.
+Node.js 24.17.0, npm 11.13.0 e Express 5.2.1, em macOS, a 9 de outubro de 2026.
 
 ![Rodapé](../../../imagens/rodape.png)

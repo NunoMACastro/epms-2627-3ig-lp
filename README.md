@@ -40,22 +40,31 @@ Os nomes seguem sempre a mesma regra, para que seja possível encontrar um
 material sem procurar:
 
 - Em português, tudo em minúsculas, sem acentos, com hífen entre as palavras.
-- O número no início é o número do bloco dentro da área. O guia
-  `03-api-express-e-contratos.md` é o terceiro bloco dessa área.
-- Os números não são contínuos: se faltar um número, é porque esse bloco ainda
+- O número no início é o número do tema dentro da área, pela ordem em que é
+  dado. O guia `04-api-express-e-contratos.md` é o quarto tema dessa área.
+- Os números não são contínuos: se faltar um número, é porque esse tema ainda
   não tem guia publicado.
-- A ficha de exercícios de um guia fica ao lado dele, com o mesmo nome e o
-  sufixo `-exercicios`.
+- Cada tema pode ter até três documentos com o mesmo número: o guia, para ler e
+  estudar; o laboratório, ao lado dele, com o mesmo nome e o sufixo
+  `-laboratorio`, para seguir passo a passo no computador; e a ficha de
+  exercícios, também ao lado, com o mesmo nome e o sufixo `-exercicios`, para
+  praticares sozinho.
 
-Exemplo da estrutura de uma área:
+Exemplo da estrutura de uma área, com os ficheiros que a primeira tinha quando
+este exemplo foi escrito:
 
 ```text
 01-acesso-a-dados/
 ├── README.md
-├── 01-diagnostico-e-revisao.md
-├── 01-diagnostico-e-revisao-exercicios.md
-├── 03-api-express-e-contratos.md
-└── 03-api-express-e-contratos-exercicios.md
+├── 02-modelo-documental-e-consultas-no-atlas.md
+├── 02-modelo-documental-e-consultas-no-atlas-laboratorio.md
+├── 02-modelo-documental-e-consultas-no-atlas-exercicios.md
+├── 03-arquitetura-e-setup-node.md
+├── 03-arquitetura-e-setup-node-laboratorio.md
+├── 03-arquitetura-e-setup-node-exercicios.md
+├── 04-api-express-e-contratos.md
+├── 04-api-express-e-contratos-laboratorio.md
+└── 04-api-express-e-contratos-exercicios.md
 ```
 
 ## Como usar

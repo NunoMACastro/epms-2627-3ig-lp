@@ -119,7 +119,7 @@ Escreve, no projeto `torneio-api`, os ficheiros que cumprem o contrato do exerc�
 
 Uma decisão que o guia não tomou por ti: o router da papelaria era montado em `/api/artigos`, porque só tinha artigos. Este tem equipas e jogos. Onde o montas, e como ficam os caminhos dentro dele?
 
-**Para verificar**, com o contrato ao lado:
+Para verificar, com o contrato ao lado:
 
 | Pedido | Resultado esperado |
 | --- | --- |
@@ -143,9 +143,9 @@ A comissão do torneio quer saber os pontos de cada equipa. Uma vitória vale 3 
 
 As decisões novas: em que camada fica a regra dos pontos? E a regra precisa de duas listas, as equipas (para saber se a equipa existe) e os jogos (para contar). Que camada as junta?
 
-**Para verificar:** com os dados desta ficha, as equipas 1 a 4 têm 3, 3, 4 e 1 pontos. A equipa 9 dá 404.
+Para verificar: com os dados desta ficha, as equipas 1 a 4 têm 3, 3, 4 e 1 pontos. A equipa 9 dá 404.
 
-**Pistas,** só se precisares, uma de cada vez:
+Pistas, só se precisares, uma de cada vez:
 
 1. Para cada jogo, a equipa pode ser a da casa, a de fora, ou nenhuma das duas. Só os dois primeiros casos contam.
 2. Num jogo em que a equipa é a da casa, os golos marcados são os `golosCasa`; se for a de fora, são os `golosFora`.

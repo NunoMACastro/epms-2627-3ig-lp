@@ -49,7 +49,7 @@ Lista os artigos.
 | Código | Quando | Corpo |
 | --- | --- | --- |
 | 200 | os parâmetros são válidos | lista de artigos, possivelmente vazia |
-| 400 | `stockMaximo` não é um inteiro, ou é negativo | erro |
+| 400 | `stockMaximo` vem vazio (`?stockMaximo=`), não é um inteiro, ou é negativo | erro |
 
 ## GET /api/artigos/abaixo-do-minimo
 
@@ -81,6 +81,6 @@ Mostra um artigo.
 
 ## Verificação
 
-Todas as linhas deste contrato foram verificadas com a API ligada, a 7 de outubro de 2026, com os oito artigos dos dados temporários. A tabela dos pedidos e das respostas está no passo 7 do exemplo guiado do guia.
+Todas as linhas deste contrato foram verificadas com a API ligada, a 9 de outubro de 2026, com os oito artigos dos dados temporários. A tabela dos pedidos e das respostas está no passo 7 do exemplo guiado do guia.
 
 ![Rodapé](../../../imagens/rodape.png)

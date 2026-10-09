@@ -24,7 +24,7 @@ Módulo M14, Acesso a Bases de Dados. Três aulas de 60 minutos. A primeira é d
 
 No tema anterior desenhaste as camadas da API da papelaria e preparaste o projeto, com uma só rota, a de estado. Neste tema a API começa a responder a pedidos a sério: a lista dos artigos, com filtros, um artigo de cada vez e os artigos que é preciso encomendar. Os artigos ainda estão num array, dentro do servidor, e só passam para o MongoDB Atlas no tema seguinte. Mas a API já se comporta como uma API a sério: responde sempre em JSON, recusa os pedidos mal feitos com o código certo e cumpre um contrato escrito.
 
-O contrato é a ideia central do tema. Uma API não é usada por pessoas, é usada por programas, como a tua interface em React. Um programa não consegue adivinhar o que a API quis dizer: precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. Escrever isso antes de escrever o código é o que permite construir as duas partes da aplicação sem se desencontrarem.
+O contrato é a ideia central do tema. Uma API é usada por programas, como a tua interface em React. Um programa não consegue adivinhar o que a API quis dizer: precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. Escrever isso antes de escrever o código é o que permite construir as duas partes da aplicação sem se desencontrarem.
 
 No fim deste guia deves conseguir:
 
@@ -78,7 +78,7 @@ A interface React da papelaria vai precisar, por agora, de três pedidos. O cont
 | Código | Quando | Corpo |
 | --- | --- | --- |
 | 200 | sempre que os parâmetros são válidos | lista de artigos, possivelmente vazia |
-| 400 | `stockMaximo` não é um inteiro, ou é negativo | erro |
+| 400 | `stockMaximo` vem vazio (`?stockMaximo=`), não é um inteiro, ou é negativo | erro |
 
 Cada artigo da lista tem esta forma:
 
@@ -151,9 +151,9 @@ As mensagens de erro são para quem usa a aplicação, ou para quem programa o c
 
 Tudo o que chega num pedido chega como texto e pode chegar errado: `?stockMaximo=abc`, `/api/artigos/-3`, ou com parâmetros que a API não conhece, como `?ordem=preco`. A regra deste módulo é verificar à entrada, no controller, antes de chamar o service:
 
-1. **Só se leem os parâmetros que o contrato prevê.** O controller lê `req.query.categoria` e `req.query.stockMaximo`, um a um, e constrói com eles os filtros que passa ao service. Um parâmetro que o contrato não prevê é ignorado. Nunca se passa o `req.query` inteiro ao service: no tema seguinte, esses filtros vão chegar ao MongoDB, e um parâmetro que ninguém previu pode transformar-se numa consulta que ninguém quis.
-2. **Os números convertem-se e verificam-se.** `stockMaximo` tem de ser um inteiro, zero ou mais; o `id`, um inteiro, um ou mais. Se não for, a resposta é 400 e o pedido acaba ali.
-3. **O service recebe valores já verificados e do tipo certo.** Recebe o número 5, e não o texto `"5"`. Não tem de desconfiar do que recebe, e por isso pode concentrar-se nas regras da papelaria.
+1. Só se leem os parâmetros que o contrato prevê. O controller lê `req.query.categoria` e `req.query.stockMaximo`, um a um, e constrói com eles os filtros que passa ao service. Um parâmetro que o contrato não prevê é ignorado. Nunca se passa o `req.query` inteiro ao service: no tema seguinte, esses filtros vão chegar ao MongoDB, e um parâmetro que ninguém previu pode transformar-se numa consulta que ninguém quis.
+2. Os números convertem-se e verificam-se. `stockMaximo` tem de ser um inteiro, zero ou mais; o `id`, um inteiro, um ou mais. Um valor vazio, como em `?stockMaximo=`, também não é um inteiro, e a secção do controller mostra porque é que este caso precisa de cuidado. Se o valor não servir, a resposta é 400 e o pedido acaba ali.
+3. O service recebe valores já verificados e do tipo certo. Recebe o número 5, e não o texto `"5"`. Não tem de desconfiar do que recebe, e por isso pode concentrar-se nas regras da papelaria.
 
 Repara na fronteira entre as duas camadas. Saber se `"abc"` é um número é um problema do pedido HTTP, e é do controller. Saber se um artigo tem de ser encomendado é uma regra da papelaria, e é do service.
 
@@ -267,6 +267,13 @@ import { listarArtigos, obterArtigo, artigosAbaixoDoMinimo } from "../services/a
  * @returns {number | null}
  */
 function paraInteiro(texto) {
+  // Number("") e Number("  ") dão 0, e não NaN. Sem esta verificação,
+  // ?stockMaximo= (o parâmetro sem valor) seria tratado como ?stockMaximo=0.
+  // Um parâmetro repetido, como ?stockMaximo=1&stockMaximo=2, chega como
+  // um array, que não é texto: também não é um inteiro.
+  if (typeof texto !== "string" || texto.trim() === "") {
+    return null;
+  }
   const numero = Number(texto);
   return Number.isInteger(numero) ? numero : null;
 }
@@ -313,6 +320,16 @@ export function obter(req, res) {
 ```
 
 Cada função exportada trata um pedido do contrato, e o comentário diz qual. A função `paraInteiro` não é exportada: é uma ajuda interna, usada duas vezes, que converte um texto num inteiro ou devolve `null`. A `listar` constrói o objeto `filtros` só com os parâmetros que vieram e que o contrato prevê, e responde 400 se o `stockMaximo` não servir. A `obter` faz as duas verificações do tema de Sistemas de Informação: primeiro se o `id` faz sentido (400), depois se o artigo existe (404). Todas as respostas, de sucesso e de erro, são JSON.
+
+Na `paraInteiro` há uma verificação antes do `Number`, e está lá por causa de uma regra do JavaScript que apanha muita gente. Quando o `Number` recebe um texto, tira primeiro os espaços do princípio e do fim. Se o que sobra é um número bem escrito, devolve esse número: `Number("5")` dá 5, e `Number(" 5 ")` também. Se sobra outra coisa, devolve `NaN`, que quer dizer "não é um número": `Number("abc")` dá `NaN`. Mas se não sobra nada, o resultado não é `NaN`, é 0. `Number("")` e `Number("   ")` dão os dois 0. É uma regra da especificação do JavaScript desde as primeiras versões, e não muda, porque há código antigo que conta com ela.
+
+Para a API, esta regra é uma armadilha. No pedido `/api/artigos?stockMaximo=`, o parâmetro está lá, mas sem valor. O `req.query.stockMaximo` não é `undefined`, porque o parâmetro veio: é o texto vazio, `""`. Sem a verificação, o `Number` transformava-o em 0, que é um inteiro e não é negativo, e a API respondia 200 com os artigos sem stock, que são só o bloco de notas A5. Quem fez o pedido esqueceu-se de escrever o número, e a API inventou-lhe um. O contrato diz que o `stockMaximo` tem de ser um inteiro, e um texto vazio não é um inteiro, por isso a resposta certa é 400.
+
+É por isso que a `paraInteiro` recusa o texto vazio, ou só com espaços, antes de chamar o `Number`. O `trim()` devolve o texto sem os espaços das pontas; se o que fica é `""`, não há número nenhum para converter, e a função devolve `null`. O controller recebe `null` e responde 400, como para `?stockMaximo=abc`.
+
+A primeira metade da condição, `typeof texto !== "string"`, protege de um caso mais raro. Se o mesmo parâmetro vier duas vezes, como em `?stockMaximo=1&stockMaximo=2`, o Express não escolhe um dos valores: entrega um array com os dois textos, `["1", "2"]`. Um array não tem o método `trim`, e chamá-lo fazia o servidor falhar: a resposta era um erro 500, numa página HTML do Express, em vez de um 400 com o formato de erro do contrato. O `typeof` confirma primeiro que o valor é mesmo um texto. Se não for, a `paraInteiro` devolve `null`, como para qualquer outro valor que não é um inteiro. Como a condição usa `||`, se a primeira metade for verdadeira a segunda nem chega a ser avaliada, e o `trim` nunca é chamado sobre um array.
+
+Uma armadilha como esta só se encontra a pensar nos casos de fronteira de cada parâmetro: o pedido sem o parâmetro, com o parâmetro vazio, com um valor que não é um número e com um número fora dos limites. Cada um destes casos tem uma resposta no contrato, e cada um tem uma linha na verificação do passo 7.
 
 ### As rotas
 
@@ -384,7 +401,7 @@ Dentro de um router, como no servidor, as rotas são experimentadas pela ordem e
 
 O caminho `"/:id"` corresponde a `/api/artigos/2`, mas também a `/api/artigos/abaixo-do-minimo`: para o Express, `abaixo-do-minimo` é só mais um valor possível do `:id`. Se a rota `"/:id"` estiver registada antes de `"/abaixo-do-minimo"`, o pedido dos artigos a encomendar vai parar à função `obter`, que tenta converter `"abaixo-do-minimo"` num número, não consegue, e responde 400. A rota certa nunca chega a correr.
 
-A regra: **num router, as rotas com caminho fixo registam-se antes das rotas com parâmetros.** O comentário no ficheiro das rotas está lá para que ninguém, mais tarde, mude a ordem sem saber porquê.
+A regra é esta: num router, as rotas com caminho fixo registam-se antes das rotas com parâmetros. O comentário no ficheiro das rotas está lá para que ninguém, mais tarde, mude a ordem sem saber porquê.
 
 ## Exemplo guiado: do contrato às respostas verificadas
 
@@ -396,7 +413,9 @@ Antes de qualquer código, o ficheiro `contrato-da-api.md`, na raiz do projeto, 
 
 ### Passo 2: os dados
 
-O ficheiro `src/dados/artigos.dados.js`, com o array.
+O ficheiro `src/dados/artigos.dados.js`, com o array dos oito artigos. A decisão deste passo é que campos entram em cada artigo, e o critério é o contrato: entra o que algum pedido usa ou devolve. O `id` entra porque o pedido de um artigo o procura pelo caminho. O `nome` e a `categoria` entram porque a lista os mostra, e a categoria é também um filtro. O `stock` e o `stockMinimo` entram porque o filtro `stockMaximo` e a regra dos artigos a encomendar dependem deles. O `precoCentimos` entra porque faz parte da forma do artigo no contrato. A `localizacao`, que os artigos têm no Atlas, fica de fora, porque nenhum pedido a usa. E o `_id` do Atlas dá lugar a um `id` inteiro, de 1 a 8, porque os dados ainda não vêm do Atlas e um inteiro é fácil de escrever num endereço.
+
+O que se confirma antes de avançar: que os nomes, as categorias, os stocks, os stocks mínimos e os preços são os mesmos dos artigos do Atlas, porque no tema seguinte os artigos passam a vir de lá, e a verificação do passo 7 tem de continuar a dar os mesmos resultados. E que o ficheiro exporta o array com o nome `artigos`, que é o nome que o service vai importar.
 
 ### Passo 3: o service, e um teste sem servidor
 
@@ -410,15 +429,23 @@ O comando corre um pequeno programa escrito ali mesmo: importa duas funções do
 
 ### Passo 4: o controller
 
-O ficheiro `src/controllers/artigos.controller.js`.
+O ficheiro `src/controllers/artigos.controller.js`, com uma função exportada por cada pedido do contrato: `listar`, `abaixoDoMinimo` e `obter`. As decisões deste passo são as da secção "Verificar à entrada, no controller". Os parâmetros leem-se um a um, e o objeto `filtros` só recebe a `categoria` e o `stockMaximo` quando vierem no pedido; um parâmetro que o contrato não prevê, como `?ordem=preco`, nunca chega ao service. O `stockMaximo` e o `id` passam pela `paraInteiro`, que devolve `null` para tudo o que não é um inteiro, incluindo o texto vazio. Quando o valor é `null` ou está fora dos limites do contrato, o controller responde 400 com o formato de erro, e o `return` a seguir acaba ali o pedido. Na `obter`, a ordem das verificações também é uma decisão: primeiro confirma-se que o `id` faz sentido (400), e só depois se pergunta ao service se o artigo existe. O `null` que o service devolve quando não encontra o artigo é traduzido aqui, e só aqui, num 404.
+
+Ainda não há rotas, por isso o controller não se experimenta no browser, e os erros de `import` deste ficheiro só aparecem no passo 6, quando o `server.js` o carregar. A confirmação deste passo faz-se pela leitura, com o contrato ao lado: cada mensagem de erro é a que está na tabela do passo 7; cada `res.status(...).json(...)` de erro tem o `return` a seguir; e nenhuma função passa o `req.query` inteiro ao service.
 
 ### Passo 5: as rotas
 
-O ficheiro `src/rotas/artigos.rotas.js`, com as rotas pela ordem certa.
+O ficheiro `src/rotas/artigos.rotas.js`, com um router e três rotas. Há duas decisões neste passo. A primeira são os caminhos: como o router vai ser montado em `/api/artigos`, os caminhos lá dentro são relativos a esse sítio, `"/"`, `"/abaixo-do-minimo"` e `"/:id"`, e não os caminhos completos. A segunda é a ordem: a rota fixa, `"/abaixo-do-minimo"`, vem antes de `"/:id"`, pela regra da secção "A ordem das rotas dentro do router", e o comentário no ficheiro diz porquê. Cada rota recebe o nome da função do controller, sem parênteses, porque é o Express que a chama quando o pedido chega.
+
+O que se confirma: que cada pedido do contrato tem uma rota, com o método `get` e a função certa (`listar` para a lista, `abaixoDoMinimo` para os artigos a encomendar e `obter` para um artigo), e que o ficheiro termina com o `export default router`. Este ficheiro ainda não é importado por ninguém, por isso a API continua a responder como antes. É no passo seguinte que as rotas passam a funcionar.
 
 ### Passo 6: montar as rotas e o middleware final
 
-O `src/server.js`, com o `import` do router, o `app.use("/api/artigos", ...)` e o middleware final.
+O `src/server.js` do tema anterior, com três acrescentos. O `import artigosRotas from "./rotas/artigos.rotas.js"`, sem chavetas, porque o ficheiro das rotas tem um `export default`. O `app.use("/api/artigos", artigosRotas)`, que manda para o router todos os pedidos começados por `/api/artigos`. E o middleware final, que responde 404 com `{ "erro": "Rota não encontrada" }`, no formato de erro do contrato.
+
+A decisão deste passo é a ordem dentro do `server.js`. O Express experimenta as rotas e os middlewares pela ordem em que foram registados, e o middleware final responde a tudo o que lhe chega. Por isso a rota de estado e o `app.use` das rotas vêm primeiro, e o middleware final vem depois de todos, logo antes do `app.listen`. Se estivesse antes do `app.use` das rotas, responderia `Rota não encontrada` a todos os pedidos dos artigos, mesmo aos que existem.
+
+O que se confirma: ao guardar, o `--watch` reinicia a API e o terminal volta a mostrar `API a correr em http://localhost:3000`. Se houver um erro de `import` em algum dos ficheiros novos, é agora que aparece, porque é a primeira vez que o `server.js` carrega as rotas, que carregam o controller, que carrega o service. A mensagem diz que ficheiro faltou e quem o pediu, como na secção "Erros frequentes". Depois, dois pedidos rápidos, antes da verificação completa: `/api/estado` tem de continuar a responder como no tema anterior, e `/api/artigos` tem de mostrar os oito artigos. Se os dois funcionarem, a montagem está certa, e o passo 7 verifica o resto.
 
 ### Passo 7: verificar o contrato
 
@@ -432,6 +459,7 @@ Com a API ligada (`npm run dev`), cada pedido no browser, com o separador Rede a
 | `/api/artigos?categoria=Papel&stockMaximo=4` | 200 | o bloco de notas (0) e a resma (4) |
 | `/api/artigos?categoria=Cola` | 200 | `[]` |
 | `/api/artigos?stockMaximo=abc` | 400 | `{"erro":"O parâmetro stockMaximo tem de ser um número inteiro, zero ou maior"}` |
+| `/api/artigos?stockMaximo=` | 400 | o mesmo erro |
 | `/api/artigos?stockMaximo=-1` | 400 | o mesmo erro |
 | `/api/artigos/2` | 200 | a esferográfica azul |
 | `/api/artigos/abc` | 400 | `{"erro":"O identificador do artigo tem de ser um número inteiro positivo"}` |

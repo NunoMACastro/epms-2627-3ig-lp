@@ -24,11 +24,11 @@ Guia: secções "A tua aplicação tem três partes" e "As camadas dentro do ser
 
 1. Desenha as três partes da aplicação da papelaria (React, API e MongoDB Atlas). Em cada seta, escreve o que viaja: "HTTP com JSON" ou "driver do MongoDB". Assinala com um círculo o único sítio onde a cadeia de ligação ao Atlas existe.
 2. Desenha as quatro camadas da API para o pedido `GET /api/artigos?stockMaximo=5`, como no guia, e escreve ao lado de cada uma o que faz neste pedido.
-3. Agora, um pedido que o guia só menciona: `POST /api/vendas`, que regista a venda de três cadernos (o artigo e a quantidade vão no corpo do pedido). Desenha as mesmas quatro camadas e responde, ao lado do desenho:
-   - Em que camada se lê a quantidade do corpo do pedido e se confirma que é um número inteiro positivo?
-   - Em que camada se verifica que o stock chega para a venda?
-   - Em que camada se escreve no Atlas o stock novo?
-   - Se o stock não chegar, que camada escolhe o código da resposta, e que família de código é?
+3. Agora, um pedido que o guia não tem: `GET /api/artigos/valor-do-stock`. A interface quer mostrar quanto vale, em dinheiro, tudo o que a papelaria tem em loja: para cada artigo, o stock vezes o preço, e no fim a soma de todos. Desenha as mesmas quatro camadas para este pedido e responde, ao lado do desenho:
+   - Em que camada se faz a conta? O que é que a camada de baixo lhe entrega para a poder fazer?
+   - Os preços estão guardados em cêntimos. A API responde com o valor em cêntimos ou em euros? E, se o ecrã tiver de mostrar o valor escrito como "80,65 €", em que parte da aplicação se faz essa transformação: na API ou no React?
+   - Se a papelaria ainda não tiver nenhum artigo, que código e que valor deve ter a resposta? Que camada chega a esse valor, e que camada escolhe o código?
+   - Este pedido não tem parâmetros. Há algum caso em que deva responder 400? Porquê?
 
 Mostra o desenho ao professor antes de passares à parte 2. É uma das duas coisas que este tema te pede para entregar.
 
@@ -221,7 +221,7 @@ Tens outro servidor ligado, por exemplo o catálogo de equipamentos de Sistemas 
 
 ## O que fica no teu caderno
 
-1. O diagrama de três partes e os dois diagramas de camadas da parte 1, com as respostas sobre a venda.
+1. O diagrama de três partes e os dois diagramas de camadas da parte 1, com as respostas sobre o valor do stock.
 2. O registo dos comandos das partes 2 a 6 e do que aconteceu, incluindo os dois erros provocados: o `.env` em falta e a variável com o nome errado.
 3. As respostas às perguntas das partes 3 e 6.
 4. A tabela do pedido da parte 7, com as observações.

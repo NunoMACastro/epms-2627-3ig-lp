@@ -9,6 +9,13 @@ import { listarArtigos, obterArtigo, artigosAbaixoDoMinimo } from "../services/a
  * @returns {number | null}
  */
 function paraInteiro(texto) {
+  // Number("") e Number("  ") dão 0, e não NaN. Sem esta verificação,
+  // ?stockMaximo= (o parâmetro sem valor) seria tratado como ?stockMaximo=0.
+  // Um parâmetro repetido, como ?stockMaximo=1&stockMaximo=2, chega como
+  // um array, que não é texto: também não é um inteiro.
+  if (typeof texto !== "string" || texto.trim() === "") {
+    return null;
+  }
   const numero = Number(texto);
   return Number.isInteger(numero) ? numero : null;
 }

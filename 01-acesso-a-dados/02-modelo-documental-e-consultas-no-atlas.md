@@ -152,7 +152,7 @@ A regra do crescimento tem uma razão concreta: cada documento tem um tamanho m�
 
 Há um caso em que se guarda uma cópia de propósito, e percebê-lo evita um erro frequente. Numa venda, cada linha diz que artigo se vendeu. Podias guardar só a referência ao artigo. Mas se em janeiro o preço do caderno subir de 2,50 € para 2,80 €, as vendas de outubro passariam a mostrar o preço novo, e a faturação de outubro deixaria de bater certo.
 
-Por isso, cada linha da venda guarda a referência ao artigo e também uma cópia do nome e do preço no momento da venda. Não é uma repetição descuidada: é o registo do que aconteceu naquele dia, e esse registo não deve mudar quando o artigo mudar.
+Por isso, cada linha da venda guarda a referência ao artigo e também uma cópia do nome e do preço no momento da venda. Esta cópia é o registo do que aconteceu naquele dia, e esse registo não deve mudar quando o artigo mudar.
 
 ### O MongoDB não verifica as referências
 
