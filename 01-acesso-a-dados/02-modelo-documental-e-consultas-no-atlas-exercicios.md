@@ -157,7 +157,7 @@ Os jogos que acabaram empatados. Antes de escreveres a consulta, pensa no que es
 
 ### Exercício 10
 
-Os jogos em que a equipa da casa foi o 10.º A ou o 11.º B. Escreve-o com um só operador.
+Os jogos em que a equipa da casa foi uma turma do 10.º ano. Escreve-o com um só operador.
 
 ### Exercício 13
 
@@ -207,7 +207,7 @@ Para as consultas, este é o número de documentos que cada uma deve devolver. S
 | 7 (opcional) | 4 |
 | 8 | 2 |
 | 9 | 3 jogos, contados à mão |
-| 10 | 4 |
+| 10 | 3 |
 | 11 (opcional) | 3, cada um só com quatro campos |
 | 12 (opcional) | 3, e o primeiro tem 5 golos da equipa de fora |
 | 13 | 3 |

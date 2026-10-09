@@ -6,13 +6,13 @@ Quarto tema de Acesso a dados. Esta ficha é para fazeres sozinho, depois de ler
 
 ## Objetivo e contexto
 
-Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Não começas do zero: o projeto parte de uma cópia do esqueleto da papelaria, que já tem o `package.json`, os scripts e a rota de estado a funcionar. Assim, o teu trabalho vai todo para o contrato e para as camadas. Pelo caminho, tomas decisões que a papelaria não tomou: um parâmetro de pesquisa com um limite diferente, e um router com dois recursos, as equipas e os jogos. Na parte opcional, no fim, há mais duas: uma regra que precisa de juntar dados de duas listas, e uma forma nova de devolver os jogos.
+Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Não começas do zero: o projeto parte de uma cópia do esqueleto da papelaria, que já tem o `package.json`, os scripts e a rota de estado a funcionar. Assim, o teu trabalho vai todo para o contrato e para as camadas. Pelo caminho, tomas decisões que a papelaria não tomou: um parâmetro de pesquisa com um limite diferente, um filtro novo, os jogos de uma equipa, e um router com dois recursos, as equipas e os jogos. Na parte opcional, no fim, há mais duas: uma regra que precisa de juntar dados de duas listas, e uma forma nova de devolver os jogos.
 
 ## Como trabalhar
 
 Nos exercícios em papel, responde antes de experimentar. Nos de computador, escreve primeiro o contrato e as respostas que esperas, e só depois o código. Verifica cada resposta no browser, com o separador Rede aberto.
 
-Tempo previsto: 90 minutos para os exercícios 1 a 4, incluindo os cinco minutos de preparar o projeto. O exercício 4 é o mais longo: conta com cerca de metade desse tempo. O exercício 5 e o desafio dos jogos com os nomes, no fim, são opcionais e não contam para os 90 minutos.
+Tempo previsto: 100 minutos para os exercícios 1 a 4, incluindo os cinco minutos de preparar o projeto. O exercício 4 é o mais longo: conta com cerca de metade desse tempo. O exercício 5 e o desafio dos jogos com os nomes, no fim, são opcionais e não contam para os 100 minutos.
 
 ## Os dados do torneio
 
@@ -113,12 +113,16 @@ No projeto `torneio-api`, escreve o ficheiro `contrato-da-api.md` com:
 
 - `GET /api/equipas`, a lista das equipas;
 - `GET /api/equipas/:id`, uma equipa;
-- `GET /api/jogos`, com o filtro do exercício 1;
+- `GET /api/jogos`, com o filtro do exercício 1 e um filtro novo, `equipa`;
 - o formato dos erros e a resposta a qualquer outro pedido.
 
 Para cada pedido, as duas tabelas do guia: os parâmetros e as respostas. Escreve também a forma de uma equipa e de um jogo, em JSON, como o guia faz para o artigo.
 
-As tabelas de `GET /api/jogos` já as tens: são as do exercício 1, e podes partir delas. O que escreves de novo são os pedidos das equipas e a forma de uma equipa e de um jogo.
+As tabelas de `GET /api/jogos` já as tens: são as do exercício 1, e podes partir delas. O que escreves de novo são os pedidos das equipas, o filtro `equipa` e a forma de uma equipa e de um jogo.
+
+O filtro `equipa` é um pedido da comissão do torneio, que quer ver os jogos de uma equipa: `GET /api/jogos?equipa=3` dá os jogos da equipa 3. O contrato do exercício 1 ainda não o tinha. Acrescenta-o à tabela dos parâmetros de `GET /api/jogos`, com o tipo, os valores válidos e o que quer dizer, e acerta a linha do 400 na tabela das respostas.
+
+Este filtro obriga a uma decisão que o contrato da papelaria nunca teve de tomar: o que responde a API a `GET /api/jogos?equipa=9`, se não existe nenhuma equipa 9? Escreve a resposta no contrato, com o código e o corpo, e justifica-a numa frase por baixo da tabela.
 
 ## Exercício 4: as camadas do torneio
 
@@ -146,11 +150,14 @@ Para verificar, com o contrato ao lado:
 | `/api/jogos?jornada=2` | 200, os jogos 3 e 4 |
 | `/api/jogos?jornada=7` | 200, lista vazia |
 | `/api/jogos?jornada=0` | 400 |
+| `/api/jogos?equipa=3` | 200, os jogos 2 e 3 |
+| `/api/jogos?equipa=3&jornada=2` | 200, só o jogo 3 |
+| `/api/jogos?equipa=9` | o que decidiste no contrato do exercício 3 |
 | `/api/jornadas` | 404, `Rota não encontrada` |
 
 ## Exercício 5 (desafio, opcional): os pontos de uma equipa
 
-Este exercício e o desafio que vem a seguir são opcionais e não contam para os 90 minutos. Fazem-se no projeto `torneio-api`, depois do exercício 4, e o desafio não depende deste.
+Este exercício e o desafio que vem a seguir são opcionais e não contam para os 100 minutos. Fazem-se no projeto `torneio-api`, depois do exercício 4, e o desafio não depende deste.
 
 Guia: secções "O que faz cada camada", do tema anterior, e "O service".
 
@@ -165,7 +172,7 @@ Para verificar: com os dados desta ficha, as equipas 1 a 4 têm 3, 3, 4 e 1 pont
 
 Pistas, só se precisares, uma de cada vez:
 
-1. Para cada jogo, a equipa pode ser a da casa, a de fora, ou nenhuma das duas. Só os dois primeiros casos contam.
+1. Os jogos que contam para os pontos de uma equipa já os sabes escolher: são os do filtro `equipa` do exercício 4. O service pode partir da função que o aplica.
 2. Num jogo em que a equipa é a da casa, os golos marcados são os `golosCasa`; se for a de fora, são os `golosFora`.
 3. O service pode chamar outra função do próprio service, como a que procura uma equipa.
 
