@@ -6,13 +6,13 @@
 
 ## Para que serve este diagnóstico
 
-Este ano vais construir, peça a peça, uma aplicação completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, uma parte que o utilizador vê e usa no browser, relatórios com números úteis para quem gere, testes e documentação. No fim do ano, cada um de vocês faz a sua própria aplicação, sobre um tema que escolhe e combina com o professor.
+Este ano vais construir, peça a peça, uma aplicação completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, uma parte que o utilizador vê e usa no browser, relatórios com números úteis para quem gere, testes e documentação. No fim do ano, fazes a tua própria aplicação, sobre um tema que escolhes e combinas com o professor.
 
-Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que o ano começa por ver em que ponto está cada um.
+Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que, antes de começar a parte de programação, se faz este diagnóstico.
 
-Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que cada um de vocês ainda domina, o que consegue fazer com alguma ajuda e o que precisa de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes: quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te: faz com que revejas o que não precisavas e que saltes o que precisavas.
+Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes: quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te: faz com que revejas o que não precisavas e que saltes o que precisavas.
 
-Também é normal não te lembrares de tudo. Passaram três meses de férias, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada: quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
+Também é normal não te lembrares de tudo. Passaram as férias de verão, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada: quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
 
 ## Como vai funcionar
 
