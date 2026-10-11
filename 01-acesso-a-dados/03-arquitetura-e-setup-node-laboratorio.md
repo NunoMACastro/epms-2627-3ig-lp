@@ -6,6 +6,8 @@ Laboratório do terceiro tema de Acesso a dados. Duas aulas de 60 minutos. Come�
 
 Cada passo diz o que fazer e o que deves ver. As ideias estão explicadas no [guia do tema](03-arquitetura-e-setup-node.md), e cada parte diz em que secção. Quando o que vês não bater certo com o que está escrito, para e tenta perceber porquê antes de avançar: a maior parte destas partes tem um erro de propósito, para o veres acontecer num sítio controlado.
 
+Se, em Sistemas de Informação, fizeste o laboratório "a API da papelaria", não crias um projeto novo: continuas a pasta que lá criaste. Lê primeiro a secção [Se já tens a API da papelaria de Sistemas de Informação](#se-já-tens-a-api-da-papelaria-de-sistemas-de-informação), que diz o que muda nas partes 2 a 7.
+
 ## Antes de começar
 
 Precisas de:
@@ -17,6 +19,62 @@ Precisas de:
 - o browser com as ferramentas de programador.
 
 Ao longo do laboratório, regista no caderno, ou num ficheiro de texto fora do projeto, os comandos que corres e o que aconteceu. No fim vais precisar desse registo, do diagrama da parte 1 e da tabela da parte 7.
+
+## Se já tens a API da papelaria de Sistemas de Informação
+
+Em Sistemas de Informação, no laboratório "a API da papelaria", criaste uma pasta `papelaria-api` com o `package.json`, o Express instalado e um `server.js` com os oito artigos, a rota da lista com o filtro por categoria, a rota de detalhe, o middleware de registo e o middleware final. É o servidor de um só ficheiro de que fala a secção "O que já fizeste e o que muda agora" do guia. Este laboratório transforma-o num projeto, sem lhe mudar nenhuma resposta.
+
+A parte 1 faz-se como está, em papel. As partes 2 e 3 fazem-se pelos passos desta secção, em vez dos que estão nelas, porque o projeto já existe. As partes 4 a 7 fazem-se como estão, com as diferenças que esta secção indica no fim.
+
+### Parte 2, no teu projeto: a pasta src e os scripts
+
+Guia: secções "A estrutura de pastas" e "Os scripts do package.json".
+
+1. Abre no editor a pasta `papelaria-api` de Sistemas de Informação. Confirma que tem o `package.json`, o `package-lock.json`, a pasta `node_modules` e o `server.js`. Se a trouxeste de outro computador sem a `node_modules`, corre `npm install` dentro da pasta: o npm lê o `package.json` e volta a instalar o Express.
+2. Cria a pasta `src` na raiz do projeto, ao lado do `package.json`, e muda o `server.js` para dentro dela. No Visual Studio Code, basta arrastá-lo para a pasta `src`. A partir daqui, o código vive em `src`, e a configuração e os ficheiros do npm ficam na raiz, como na secção "A estrutura de pastas" do guia.
+3. No `package.json`, o `"type"` já está em `module`, desde Sistemas de Informação. Substitui a secção `"scripts"`, que tem o `"test"`, pela mesma do passo 2 da parte 2:
+
+   ```json
+   {
+     "scripts": {
+       "start": "node src/server.js",
+       "dev": "node --watch --env-file=.env src/server.js"
+     }
+   }
+   ```
+
+   (Copias só a parte de dentro das chavetas de fora, a partir de `"scripts"`, e a vírgula no fim da secção mantém-se.)
+
+4. Guarda e, no terminal, escreve `npm run`, sem mais nada.
+
+O que deves ver: a lista dos scripts, com o `start` e o `dev`, como na parte 2. Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos: a mensagem diz a linha e a coluna.
+
+Pergunta para o caderno: em Sistemas de Informação arrancavas o servidor com `node --watch server.js`. Se agora escreveres esse mesmo comando na raiz do projeto, o que acontece, e porquê?
+
+### Parte 3, no teu projeto: a porta e a rota de estado
+
+Guia: secção "Exemplo guiado", passo 4.
+
+1. Abre o `src/server.js`. A porta está escrita no código, na linha `const PORTA = 3000;`. Substitui essa linha pelas três do passo 4 do exemplo guiado: os dois comentários e `const PORTA = process.env.PORT || 3000;`. O resto do ficheiro fica como estava.
+2. Acrescenta a rota de estado do passo 4, `GET /api/estado`, logo a seguir ao middleware de registo e antes das rotas dos artigos. Antes de a escreveres, responde no caderno: o que aconteceria se a escrevesses no fim do ficheiro, depois do middleware final? A resposta está na ordem da fila do middleware, que viste em Sistemas de Informação.
+3. Arranca a API com o script `start`:
+
+   ```text
+   npm start
+   ```
+
+   O terminal mostra as duas linhas do npm (`> papelaria-api@1.0.0 start` e o comando) e depois `API a correr em http://localhost:3000`.
+
+4. No browser, abre `http://localhost:3000/api/estado` e depois `http://localhost:3000/api/artigos?categoria=Papel`. Deves ver o objeto com `"estado": "ok"` e, a seguir, os três artigos da categoria Papel, como em Sistemas de Informação. No terminal, o middleware de registo escreve uma linha por pedido.
+5. Para a API com Ctrl+C.
+
+Pergunta para o caderno: não há nenhum ficheiro `.env`, e a API arrancou na porta 3000. De onde veio o 3000?
+
+### As partes 4 a 7 no teu projeto
+
+- **Partes 4 e 5:** fazem-se como estão. No terminal aparecem também as linhas do middleware de registo, uma por pedido.
+- **Parte 6:** faz-se como está. No passo 6, a mensagem do commit diz o que o teu projeto tem: por exemplo, `API da papelaria organizada como projeto, com a rota /api/estado`.
+- **Parte 7:** os passos 1 a 4 fazem-se como estão. O passo 5 muda, porque no teu projeto a rota `/api/artigos` já existe. Em vez dele, abre `http://localhost:3000/api/artigos/abc`, regista o código e a mensagem, e escreve, numa frase, que linha do `src/server.js` escolheu esse código.
 
 ## Parte 1: o diagrama de camadas
 
