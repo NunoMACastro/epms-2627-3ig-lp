@@ -14,6 +14,57 @@ Precisas do projeto `papelaria-api` do laboratório do tema anterior, com o `.en
 
 Liga a API com `npm run dev` e deixa-a ligada: com o `--watch`, ela reinicia sozinha sempre que guardas um ficheiro. Mantém o terminal à vista, porque é lá que os erros aparecem.
 
+Se a tua API veio de Sistemas de Informação, do laboratório "a API da papelaria", lê também a secção seguinte antes de começares.
+
+## Se a tua API veio de Sistemas de Informação
+
+Em Sistemas de Informação construíste a API da papelaria num só ficheiro, e no tema anterior transformaste-a num projeto. O teu `src/server.js` já tem boa parte da primeira versão deste tema: os oito artigos, a rota `GET /api/artigos` com o filtro por categoria, a rota `GET /api/artigos/:id` com o 400 e o 404, com as mensagens do contrato, o middleware de registo, a rota de estado e o middleware final, que responde em JSON. Faltam-lhe a função `paraInteiro`, o filtro `stockMaximo` e a rota dos artigos a encomendar. Este laboratório completa esse ficheiro, em vez de o escrever de novo, e depois separa-o em camadas como no caminho normal.
+
+Antes de começares, confirma que o teu `src/server.js` tem, por esta ordem: o `import` do Express, a `PORTA` lida do ambiente, a `app`, o array dos artigos, o middleware de registo, a rota de estado, as duas rotas dos artigos, o middleware final e o `app.listen`. Confirma também que o `git log --oneline` mostra o primeiro commit, do tema anterior. Se faltar alguma destas peças, chama o professor: quem não tiver a API de Sistemas de Informação faz o laboratório pelo caminho normal, a partir do esqueleto.
+
+As partes 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que vêm a seguir. Como a tua primeira versão já vem quase feita, é provável que acabes a parte 3 antes do fim da primeira aula: nesse caso, começa logo a parte 4.
+
+### Parte 2, no teu projeto: o que falta à primeira versão
+
+Guia: secção "Primeira versão: tudo no server.js", com as subsecções "O texto vazio e a função paraInteiro" e "A ordem das rotas".
+
+1. O array dos artigos já está no teu `server.js`, desde Sistemas de Informação. Não o copies outra vez. Faz só o passo 2 da parte 2: confirma que os artigos são os mesmos que tens no Atlas.
+2. A seguir ao array, acrescenta a função `paraInteiro` do guia, com o comentário de documentação que a acompanha.
+3. Na rota de detalhe, troca a verificação que escreveste em Sistemas de Informação pela do guia: `const id = paraInteiro(req.params.id);` e, na condição do 400, `id === null || id < 1`. Lê o último parágrafo da subsecção "O texto vazio e a função paraInteiro" e escreve no caderno, numa frase, porque mudas uma verificação que já funcionava.
+4. Agora a rota da lista. A tua aplica um filtro e acaba logo ali, com `res.json` e `return`. O contrato acrescenta-lhe um segundo filtro, o `stockMaximo`, e um pedido pode trazer os dois ao mesmo tempo, como `/api/artigos?categoria=Papel&stockMaximo=4`. Antes de mudares o código, responde no caderno: se acrescentasses o `stockMaximo` noutro `if`, igual ao da categoria e a seguir a ele, com o seu próprio `res.json` e `return`, que artigos responderia a tua rota a esse pedido? E quais deviam ser, pelo contrato?
+5. Reescreve a rota da lista como a do guia: o resultado começa com todos os artigos, num `let`, e cada filtro que veio no pedido vai-o reduzindo, um a seguir ao outro; só no fim há um `res.json`. A verificação do `stockMaximo` com a `paraInteiro` e o 400 vêm do guia.
+6. Faz os passos 5 a 9 da parte 2: a rota `GET /api/artigos/abaixo-do-minimo` primeiro depois da rota de detalhe, para veres o 400, e depois antes dela. As duas ficam entre a rota da lista e o middleware final, que continua no fim do ficheiro.
+
+### Parte 3, no teu projeto: uma diferença na verificação
+
+Faz a parte 3 como está, com uma diferença no passo 4: o teu `/api/artigo` não mostra a página do Express. O teu servidor tem o middleware final desde Sistemas de Informação, e por isso responde `{"erro":"Rota não encontrada"}`, com 404, que é o que o contrato pede. A tua primeira versão cumpre todas as linhas do contrato, incluindo essa. Regista-o na tabela.
+
+No passo 5, repara no que a rota da lista que reescreveste responde ao `?categoria=`, e compara com o que a tua rota de Sistemas de Informação respondia, com o `if (categoria)`. Se forem diferentes, escreve no caderno porquê. O que conta é o teu contrato: se a rota não o cumpre, muda a rota.
+
+### Parte 5, no teu projeto: o passo 3
+
+No passo 3, compara a `listar` do guia com a rota da lista do teu `server.js` no fim da parte 3, que já cumpria o teu contrato. Se as duas responderem de forma diferente ao `?categoria=`, muda a `listar`, para o controller cumprir o mesmo contrato.
+
+### Parte 6, no teu projeto: o que fica no server.js
+
+No passo 2, apaga do `server.js` o array, a `paraInteiro` e as três rotas dos artigos, como no caminho normal, mas deixa ficar o middleware de registo e o middleware final, além da rota de estado. O `import` do router fica a seguir ao `import` do Express. O `app.use("/api/artigos", artigosRotas)` fica depois da rota de estado e antes do middleware final. No fim desta parte, o teu `server.js` tem: os dois `import`, a `PORTA`, a `app`, o middleware de registo, a rota de estado, o `app.use` das rotas, o middleware final e o `app.listen`. No passo 4, o terminal continua a mostrar uma linha por pedido, com o endereço completo, porque o middleware de registo está antes do router.
+
+### Parte 8, no teu projeto: a ordem do middleware final
+
+O teu middleware final já existe, e a parte 3 mostrou que o `/api/artigo` já responde em JSON. Em vez dos passos da parte 8:
+
+1. Lê a secção "Um formato único para os erros" do guia, que explica porque é que todas as respostas de erro têm a mesma forma.
+2. Confirma que o middleware final está depois do `app.use` das rotas.
+3. Um erro de propósito. Muda o `app.use("/api/artigos", artigosRotas)` para depois do middleware final, logo antes do `app.listen`. Prevê o que respondem `/api/estado` e `/api/artigos/2`. Guarda e abre os dois.
+
+O que deves ver: `/api/estado` responde como sempre, porque a rota de estado está acima do middleware final. `/api/artigos/2` dá `{"erro":"Rota não encontrada"}`, com 404: o middleware final responde a todos os pedidos que lhe chegam, e o router, abaixo dele, nunca é usado. É a regra de Sistemas de Informação, aplicada agora a um router.
+
+4. Repõe o `app.use` das rotas antes do middleware final e confirma que `/api/artigos/2` volta a responder.
+
+### Parte 9, no teu projeto: o passo 5
+
+No passo 5, todas as linhas que estão nas tabelas das partes 3 e 9 têm de dar as mesmas respostas, incluindo o `/api/artigo`, que já vinha em JSON na primeira versão.
+
 ## Parte 1: o contrato, antes do código
 
 Guia: secções "O que é o contrato de uma API" e "O contrato da API da papelaria".
