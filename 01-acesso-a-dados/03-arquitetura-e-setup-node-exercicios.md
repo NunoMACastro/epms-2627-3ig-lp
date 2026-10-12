@@ -63,7 +63,7 @@ Um colega preparou assim o `package.json` da `torneio-api`. O ficheiro do servid
     "dev": "node --watch --env-file=.env server.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.3.0"
   }
 }
 ```
