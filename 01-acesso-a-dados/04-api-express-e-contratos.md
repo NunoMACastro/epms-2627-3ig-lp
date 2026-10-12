@@ -274,7 +274,7 @@ No servidor, as rotas são experimentadas pela ordem em que foram registadas, e 
 
 O caminho `"/api/artigos/:id"` corresponde a `/api/artigos/2`, mas também a `/api/artigos/abaixo-do-minimo`: para o Express, `abaixo-do-minimo` é só mais um valor possível do `:id`. Se a rota `"/api/artigos/:id"` estiver registada antes de `"/api/artigos/abaixo-do-minimo"`, o pedido dos artigos a encomendar vai parar à rota de um artigo, que tenta converter `"abaixo-do-minimo"` num número, não consegue, e responde 400. A rota certa nunca chega a correr.
 
-A regra é esta: as rotas com caminho fixo registam-se antes das rotas com parâmetros. É a mesma regra do tema de Sistemas de Informação, onde `/reservas/nova` fica acima de `/reservas/:id`. O comentário no ficheiro está lá para que ninguém, mais tarde, mude a ordem sem saber porquê. Quando as rotas passarem para um router, na secção seguinte, a regra continua a valer lá dentro.
+A regra é esta: as rotas com caminho fixo registam-se antes das rotas com parâmetros. É a mesma regra do tema "HTTP, rotas e middleware" de Sistemas de Informação, onde `/equipamentos/salas` fica acima de `/equipamentos/:id`. O comentário no ficheiro está lá para que ninguém, mais tarde, mude a ordem sem saber porquê. Quando as rotas passarem para um router, na secção seguinte, a regra continua a valer lá dentro.
 
 ## As camadas em código
 
