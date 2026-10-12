@@ -18,7 +18,7 @@ Os guias estão numerados pela ordem em que são dados. Um número que falta é 
 | [04-api-express-e-contratos-laboratorio.md](04-api-express-e-contratos-laboratorio.md) | Laboratório do mesmo tema: o contrato da API da papelaria, a primeira versão num só ficheiro e depois as camadas, verificados pedido a pedido |
 | [04-api-express-e-contratos-exercicios.md](04-api-express-e-contratos-exercicios.md) | Ficha de exercícios do mesmo tema, com as equipas e os jogos do torneio de futsal, a partir do esqueleto da papelaria; os pontos ficam num desafio opcional |
 
-A API da papelaria, pronta a correr, está nos exemplos em três versões: o [esqueleto](../exemplos/acesso-a-dados/papelaria-api/README.md) do tema 3, e as duas do tema 4, a [primeira versão, num só ficheiro](../exemplos/acesso-a-dados/papelaria-api-sem-camadas/README.md), e a [versão com as camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md).
+A API da papelaria, pronta a correr, está nos exemplos em quatro versões: o [esqueleto](../exemplos/acesso-a-dados/papelaria-api/README.md) do tema 3, as duas do tema 4, a [primeira versão, num só ficheiro](../exemplos/acesso-a-dados/papelaria-api-sem-camadas/README.md), e a [versão com as camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md), e a [versão ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md), feita a partir do servidor de Sistemas de Informação, em que a lista dos artigos já vem da base de dados, com o Mongoose.
 
 Os documentos preparados para a aula de embutir ou referenciar, do tema 2, também estão nos [exemplos](../exemplos/acesso-a-dados/embutir-ou-referenciar/README.md).
 
