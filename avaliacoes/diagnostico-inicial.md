@@ -10,9 +10,9 @@ Este ano, nas aulas, vais construir peça a peça uma aplicação completa, a da
 
 Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que se faz este diagnóstico: para saber que bases precisam de revisão antes de a matéria nova as usar.
 
-Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes. Quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te: faz com que revejas o que não precisavas e que saltes o que precisavas.
+Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes. Quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te. Faz com que revejas o que não precisavas e que saltes o que precisavas.
 
-Também é normal não te lembrares de tudo. Passaram as férias de verão, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada: quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
+Também é normal não te lembrares de tudo. Passaram as férias de verão, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada. Quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
 
 ## O que precisas de saber antes
 
@@ -251,7 +251,7 @@ export default function NovoArtigo() {
 
 ### Pergunta 9: a caixa de texto que não deixa escrever
 
-Na página, clica-se na caixa de texto e escreve-se, mas nada aparece: a caixa fica sempre vazia. Explica porque é que isto acontece e reescreve a linha do `input` corrigida.
+Na página, clica-se na caixa de texto e escreve-se, mas nada aparece. A caixa fica sempre vazia. Explica porque é que isto acontece e reescreve a linha do `input` corrigida.
 
 ### Pergunta 10: a lista que não se atualiza
 

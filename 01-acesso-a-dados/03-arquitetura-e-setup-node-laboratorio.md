@@ -46,7 +46,7 @@ No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de
 - `.env.example`: o ficheiro com os nomes das variáveis, sem segredos; vai para o Git.
 - `.gitignore`: o ficheiro que diz ao Git o que ignorar.
 - Git e commit: o Git guarda o histórico do projeto; um commit é uma fotografia dos ficheiros, guardada com uma mensagem e a data. Para saber mais, vê a secção "O mínimo de Git" do [guia](03-arquitetura-e-setup-node.md).
-- Repositório: a pasta de um projeto com o histórico do Git, guardado na pasta escondida `.git`; em inglês, repository, a palavra que o Git escreve no ecrã. Não é a camada repository do servidor: a palavra é a mesma, as coisas são diferentes.
+- Repositório: a pasta de um projeto com o histórico do Git, guardado na pasta escondida `.git`; em inglês, repository, a palavra que o Git escreve no ecrã. Não é a camada repository do servidor. A palavra é a mesma, as coisas são diferentes.
 
 ## O que precisas
 
@@ -63,7 +63,7 @@ No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de
 1. Estás na pasta certa? No terminal, `pwd` mostra a pasta atual (no Windows, na linha de comandos clássica, `cd`, sem mais nada). Tem de ser a `papelaria-api`, onde está o `package.json`. Se não for, entra nela com `cd papelaria-api`.
 2. Guardaste o ficheiro? O editor só grava quando guardas, e o `--watch` só reinicia a API depois de guardares.
 3. A API está ligada? O terminal tem de mostrar `API a correr em http://localhost:3000`. Se a paraste com Ctrl+C, arranca-a outra vez.
-4. O que diz a mensagem de erro? Lê-a como em Sistemas de Informação: procura primeiro a linha que diz o tipo do erro, como `Error` ou `SyntaxError`, ou a que começa por `node:` ou por `npm error`. A última linha é muitas vezes só a versão do Node, ou o aviso do `--watch` de que está à espera. Os casos mais comuns estão nos [problemas frequentes](#problemas-frequentes).
+4. O que diz a mensagem de erro? Lê-a como em Sistemas de Informação. Procura primeiro a linha que diz o tipo do erro, como `Error` ou `SyntaxError`, ou a que começa por `node:` ou por `npm error`. A última linha é muitas vezes só a versão do Node, ou o aviso do `--watch` de que está à espera. Os casos mais comuns estão nos [problemas frequentes](#problemas-frequentes).
 
 ## Se vens da API da papelaria de Sistemas de Informação
 
@@ -73,7 +73,7 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
 
 ### Fase 2, no teu projeto: a pasta src e os scripts
 
-1. Abre no editor a pasta `papelaria-api` de Sistemas de Informação. Confirma que tem o `package.json`, o `package-lock.json`, a pasta `node_modules` e o `server.js`. Se a trouxeste de outro computador sem a `node_modules`, corre `npm install` dentro da pasta: o npm lê o `package.json` e volta a instalar o Express.
+1. Abre no editor a pasta `papelaria-api` de Sistemas de Informação. Confirma que tem o `package.json`, o `package-lock.json`, a pasta `node_modules` e o `server.js`. Se a trouxeste de outro computador sem a `node_modules`, corre `npm install` dentro da pasta. O npm lê o `package.json` e volta a instalar o Express.
 
 2. Cria a pasta `src` na raiz do projeto, ao lado do `package.json`, e muda o `server.js` para dentro dela. No Visual Studio Code, basta arrastá-lo para a pasta `src`. A partir daqui, o código vive em `src`, e a configuração e os ficheiros do npm ficam na raiz.
 
@@ -88,11 +88,11 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
 
    A vírgula no fim mantém-se, porque há outras secções a seguir. O `start` arranca a API; o `dev` arranca-a para desenvolver, como explica a fase 2.
 
-4. Guarda e, no terminal, escreve `npm run`, sem mais nada. O que deves ver: a lista dos scripts, com o `start` e o `dev`, como na fase 2. Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos: a mensagem diz a linha e a coluna.
+4. Guarda e, no terminal, escreve `npm run`, sem mais nada. O que deves ver: a lista dos scripts, com o `start` e o `dev`, como na fase 2. Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos. A mensagem diz a linha e a coluna.
 
 5. Em Sistemas de Informação arrancavas o servidor com `node --watch server.js`. Prevê: se escreveres esse mesmo comando agora, na raiz do projeto, o que acontece? Experimenta, e depois sai com Ctrl+C.
 
-   O que deves ver: `Error: Cannot find module` seguido do caminho de um `server.js` na raiz, que já não existe, porque o ficheiro passou para `src`. Com o `--watch`, o Node não termina: escreve `Failed running 'server.js'. Waiting for file changes before restarting...` e fica à espera. É para isto que servem os scripts: o caminho do arranque fica escrito uma vez, no `package.json`, e ninguém tem de o saber de cor.
+   O que deves ver: `Error: Cannot find module` seguido do caminho de um `server.js` na raiz, que já não existe, porque o ficheiro passou para `src`. Com o `--watch`, o Node não termina. Escreve `Failed running 'server.js'. Waiting for file changes before restarting...` e fica à espera. É para isto que servem os scripts: o caminho do arranque fica escrito uma vez, no `package.json`, e ninguém tem de o saber de cor.
 
 ### Fase 3, no teu projeto: a porta e a rota de estado
 
@@ -118,7 +118,7 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
 
    Antes de a escreveres, responde no caderno: o que aconteceria se a escrevesses no fim do ficheiro, depois do middleware final?
 
-   A resposta: a rota nunca respondia. O middleware final responde a todos os pedidos que lhe chegam e não chama `next()`, por isso `/api/estado` dava 404, com `{"erro":"Rota não encontrada"}`. É a regra da ordem do middleware, que viste em Sistemas de Informação: os pedidos passam pela fila de cima para baixo.
+   A resposta: a rota nunca respondia. O middleware final responde a todos os pedidos que lhe chegam e não chama `next()`, por isso `/api/estado` dava 404, com `{"erro":"Rota não encontrada"}`. É a regra da ordem do middleware, que viste em Sistemas de Informação. Os pedidos passam pela fila de cima para baixo.
 
 3. Arranca a API com o script `start`:
 
@@ -142,9 +142,9 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
 
 ## Fase 1: o plano do servidor, em papel (15 minutos)
 
-A aplicação da papelaria vai ter três partes, e cada uma corre num sítio diferente. O cliente, em React, corre no browser: mostra os dados e, quando precisa deles, pede-os à API com `fetch`. A API, em Node.js com Express, corre num servidor, que enquanto desenvolves é o teu computador. Recebe os pedidos, aplica as regras da papelaria, fala com a base de dados e responde em JSON. A base de dados é o MongoDB Atlas, que já conheces.
+A aplicação da papelaria vai ter três partes, e cada uma corre num sítio diferente. O cliente, em React, corre no browser. Mostra os dados e, quando precisa deles, pede-os à API com `fetch`. A API, em Node.js com Express, corre num servidor, que enquanto desenvolves é o teu computador. Recebe os pedidos, aplica as regras da papelaria, fala com a base de dados e responde em JSON. A base de dados é o MongoDB Atlas, que já conheces.
 
-Entre o React e a API, a conversa é em HTTP, com JSON. Entre a API e o Atlas, é feita pelo Mongoose, que precisa da cadeia de ligação, com a palavra-passe da base de dados. Essa cadeia fica só na API: tudo o que vai para o browser pode ser lido por quem abrir as ferramentas de programador.
+Entre o React e a API, a conversa é em HTTP, com JSON. Entre a API e o Atlas, é feita pelo Mongoose, que precisa da cadeia de ligação, com a palavra-passe da base de dados. Essa cadeia fica só na API. Tudo o que vai para o browser pode ser lido por quem abrir as ferramentas de programador.
 
 Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As rotas dizem que método e que caminho vão para que função. O controller lê o pedido, converte o que chega como texto, chama o service, escolhe o código de estado e responde. O service tem as regras da papelaria e não sabe nada de HTTP. O repository é o único que fala com o MongoDB. Dividir assim põe cada mudança num sítio só. Para saber mais, lê as secções "A tua aplicação tem três partes" e "As camadas dentro do servidor" do [guia](03-arquitetura-e-setup-node.md).
 
@@ -173,11 +173,11 @@ Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As
 
    - Os preços estão guardados em cêntimos. A API responde com o valor em cêntimos ou em euros? E, se o ecrã tiver de mostrar o valor escrito como "80,65 €", em que parte da aplicação se faz essa transformação: na API ou no React?
 
-     A resposta: a API responde em cêntimos, um número inteiro, como todos os preços da aplicação. A transformação no texto do ecrã é do React: a API entrega dados, e quem os mostra é o cliente. Assim, o React também pode usar o valor em cêntimos noutras contas.
+     A resposta: a API responde em cêntimos, um número inteiro, como todos os preços da aplicação. A transformação no texto do ecrã é do React. A API entrega dados, e quem os mostra é o cliente. Assim, o React também pode usar o valor em cêntimos noutras contas.
 
    - Se a papelaria ainda não tiver nenhum artigo, que código e que valor deve ter a resposta? Que camada chega a esse valor, e que camada escolhe o código?
 
-     A resposta: 200, com o valor 0. O service chega ao 0, porque a soma de nenhum artigo é 0. O controller responde 200, porque o pedido estava certo e a resposta existe. Não é 404: o valor do stock existe, e é zero, tal como uma lista sem resultados é uma lista vazia, e não uma coisa que não existe.
+     A resposta: 200, com o valor 0. O service chega ao 0, porque a soma de nenhum artigo é 0. O controller responde 200, porque o pedido estava certo e a resposta existe. Não é 404. O valor do stock existe, e é zero, tal como uma lista sem resultados é uma lista vazia, e não uma coisa que não existe.
 
    - Este pedido não tem parâmetros. Há algum caso em que deva responder 400? Porquê?
 
@@ -185,7 +185,7 @@ Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As
 
 ### Paragem 1
 
-Tens o diagrama das três partes e os dois diagramas de camadas. Mostra-os ao professor antes de passares à fase 2: são uma das duas coisas que este tema te pede para entregar.
+Tens o diagrama das três partes e os dois diagramas de camadas. Mostra-os ao professor antes de passares à fase 2. São uma das duas coisas que este tema te pede para entregar.
 
 Pensa antes de continuares: porque é que o repository é a única camada que fala com o MongoDB? A resposta: para a base de dados ficar num sítio só. Se a papelaria trocar o MongoDB por outra base de dados, muda-se o repository, e as rotas, os controllers e os services ficam iguais. E uma consulta que não encontra nada procura-se num sítio só.
 
@@ -193,7 +193,7 @@ Pensa antes de continuares: porque é que o repository é a única camada que fa
 
 Em Sistemas de Informação, um servidor de aula começava com `npm init -y`, a troca do `"type"` e `npm install express`. Um projeto que vai crescer durante o ano, e que vais entregar e instalar noutro computador, precisa de mais arrumação. O código fica numa pasta `src` (de *source*, código-fonte). E o `package.json` ganha scripts: nomes curtos para os comandos que arrancam a API, para ninguém ter de os saber de cor. Para saber mais, lê a secção "Preparar um projeto Node" do [guia](03-arquitetura-e-setup-node.md).
 
-1. Na tua pasta de trabalho de Linguagens de Programação, cria o projeto e instala o Express. Cria-o fora da pasta dos materiais da disciplina, se a tiveres no computador: essa pasta já tem o seu próprio histórico do Git.
+1. Na tua pasta de trabalho de Linguagens de Programação, cria o projeto e instala o Express. Cria-o fora da pasta dos materiais da disciplina, se a tiveres no computador. Essa pasta já tem o seu próprio histórico do Git.
 
    ```bash
    mkdir papelaria-api
@@ -234,7 +234,7 @@ Em Sistemas de Informação, um servidor de aula começava com `npm init -y`, a 
        node --watch --env-file=.env src/server.js
    ```
 
-   Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos no `package.json`: a mensagem diz a linha e a coluna.
+   Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos no `package.json`. A mensagem diz a linha e a coluna.
 
 ### Paragem 2
 
@@ -244,7 +244,7 @@ Pensa antes de continuares: porque é que o `start` aparece numa parte da lista 
 
 ## Fase 3: o servidor e o primeiro arranque (10 minutos)
 
-Há valores de que a API precisa que não são código, como a porta onde escuta. Se a porta estiver escrita no código, mudá-la obriga a mudar o código. Por isso o servidor lê-a do ambiente, com um valor por omissão, se não a encontrar. E a primeira rota é uma rota de estado, que só diz que a API está viva: é a forma mais rápida de confirmar que o servidor está ligado. Para saber mais, lê o passo 4 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
+Há valores de que a API precisa que não são código, como a porta onde escuta. Se a porta estiver escrita no código, mudá-la obriga a mudar o código. Por isso o servidor lê-a do ambiente, com um valor por omissão, se não a encontrar. E a primeira rota é uma rota de estado, que só diz que a API está viva. É a forma mais rápida de confirmar que o servidor está ligado. Para saber mais, lê o passo 4 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
 
 1. Cria o ficheiro `src/server.js`, dentro da pasta `src`, com este conteúdo. Escreve-o em vez de o copiar, e lê cada linha:
 
@@ -306,7 +306,7 @@ Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as vari
 
    O que deves ver: `node: .env: not found`, e a API não arranca. O `--env-file=.env` procura o ficheiro e não o encontra.
 
-2. Na raiz do projeto, ao lado do `package.json` e não dentro de `src`, cria o ficheiro `.env.example` com este conteúdo. Cria-o no editor de código: no Windows, o Bloco de Notas pode acrescentar `.txt` ao nome sem o mostrar.
+2. Na raiz do projeto, ao lado do `package.json` e não dentro de `src`, cria o ficheiro `.env.example` com este conteúdo. Cria-o no editor de código. No Windows, o Bloco de Notas pode acrescentar `.txt` ao nome sem o mostrar.
 
    ```text
    # Porta onde a API escuta. Muda-a se a 3000 estiver ocupada.
@@ -317,7 +317,7 @@ Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as vari
    MONGODB_URI=
    ```
 
-   Leitura guiada: as linhas que começam por `#` são comentários. Os nomes das variáveis escrevem-se em maiúsculas, com `_` entre palavras. A `MONGODB_URI` fica vazia: a API ainda não fala com o Atlas.
+   Leitura guiada: as linhas que começam por `#` são comentários. Os nomes das variáveis escrevem-se em maiúsculas, com `_` entre palavras. A `MONGODB_URI` fica vazia. A API ainda não fala com o Atlas.
 
 3. Cria o `.env` como cópia do `.env.example`:
 
@@ -341,7 +341,7 @@ Pensa antes de continuares: se o `.env` tiver `PORT=3001`, que valor tem `proces
 
 ## Fase 5: mudar a configuração sem mexer no código (15 minutos)
 
-A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o `--watch`, nem é preciso parar a API: o Node vê que o `.env` mudou e reinicia-a com o valor novo. Nesta fase vês também o engano mais difícil de encontrar na configuração, porque não dá erro nenhum. Para saber mais, lê o passo 6 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
+A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o `--watch`, nem é preciso parar a API. O Node vê que o `.env` mudou e reinicia-a com o valor novo. Nesta fase vês também o engano mais difícil de encontrar na configuração, porque não dá erro nenhum. Para saber mais, lê o passo 6 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
 
 1. Com a API ligada pelo `npm run dev`, abre o `.env`, muda `PORT=3000` para `PORT=3001` e guarda.
 
@@ -351,7 +351,7 @@ A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o
 
 3. Provoca um erro de propósito: no `.env`, muda o nome da variável de `PORT` para `PORTA`, para ficar `PORTA=3001`, e guarda. Antes de olhares para o terminal, prevê: em que porta fica a API?
 
-   O que deves ver: a API reinicia na porta 3000. O código lê `process.env.PORT`, e essa variável deixou de existir: a `PORTA` é outra variável, que ninguém lê. Sem `PORT`, o `||` usou o 3000. Não houve nenhuma mensagem de erro, e é isso que torna este engano difícil de encontrar.
+   O que deves ver: a API reinicia na porta 3000. O código lê `process.env.PORT`, e essa variável deixou de existir. A `PORTA` é outra variável, que ninguém lê. Sem `PORT`, o `||` usou o 3000. Não houve nenhuma mensagem de erro, e é isso que torna este engano difícil de encontrar.
 
 4. Repõe `PORT=3000` no `.env`, guarda e confirma que a API volta a responder em `http://localhost:3000/api/estado`.
 
@@ -359,11 +359,11 @@ A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o
 
 A API muda de porta quando mudas o `.env`, sem mexeres no código, e volta à 3000.
 
-Pensa antes de continuares: porque é que o engano da `PORTA` é mais perigoso do que o `.env` em falta, da fase 4? A resposta: o `.env` em falta dá um erro, e a API não arranca, por isso dás logo por ele. O nome errado não dá erro nenhum: a API arranca noutra porta, e só descobres quando alguma coisa deixa de funcionar.
+Pensa antes de continuares: porque é que o engano da `PORTA` é mais perigoso do que o `.env` em falta, da fase 4? A resposta: o `.env` em falta dá um erro, e a API não arranca, por isso dás logo por ele. O nome errado não dá erro nenhum. A API arranca noutra porta, e só descobres quando alguma coisa deixa de funcionar.
 
 ## Fase 6: guardar no Git sem guardar segredos (20 minutos)
 
-O Git guarda o histórico do projeto: cada commit é uma fotografia de todos os ficheiros, com uma mensagem e a data. Antes de guardar, o Git propõe-se guardar tudo o que está na pasta. Há duas coisas que nunca devem ir. Uma é a pasta `node_modules`, que se recria com `npm install` e tem milhares de ficheiros que não são teus. A outra é o `.env`, que pode ter segredos. O ficheiro `.gitignore` diz ao Git o que ignorar, e tem de existir antes do primeiro commit. Nesta fase vais ver o `.env` a aparecer na lista do Git antes de existir o `.gitignore`. É de propósito: segue os passos pela ordem, e não faças `git add` antes do passo 6. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](03-arquitetura-e-setup-node.md).
+O Git guarda o histórico do projeto. Cada commit é uma fotografia de todos os ficheiros, com uma mensagem e a data. Antes de guardar, o Git propõe-se guardar tudo o que está na pasta. Há duas coisas que nunca devem ir. Uma é a pasta `node_modules`, que se recria com `npm install` e tem milhares de ficheiros que não são teus. A outra é o `.env`, que pode ter segredos. O ficheiro `.gitignore` diz ao Git o que ignorar, e tem de existir antes do primeiro commit. Nesta fase vais ver o `.env` a aparecer na lista do Git antes de existir o `.gitignore`. É de propósito. Segue os passos pela ordem, e não faças `git add` antes do passo 6. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](03-arquitetura-e-setup-node.md).
 
 1. Para a API com Ctrl+C. Na pasta `papelaria-api`, começa o histórico:
 
@@ -371,7 +371,7 @@ O Git guarda o histórico do projeto: cada commit é uma fotografia de todos os 
    git init
    ```
 
-   O que deves ver: `Initialized empty Git repository in`, seguido do caminho da pasta: o Git criou nessa pasta um repositório vazio. O Git pode escrever antes umas linhas de sugestão (`hint`) sobre o nome do ramo principal, a que chama `branch`; podes ignorá-las.
+   O que deves ver: `Initialized empty Git repository in`, seguido do caminho da pasta. O Git criou nessa pasta um repositório vazio. O Git pode escrever antes umas linhas de sugestão (`hint`) sobre o nome do ramo principal, a que chama `branch`; podes ignorá-las.
 
 2. Vê o estado da pasta:
 
@@ -393,7 +393,7 @@ O Git guarda o histórico do projeto: cada commit é uma fotografia de todos os 
 
    Leitura guiada: cada linha que não é comentário é uma regra. `node_modules/` ignora a pasta inteira, e `.env` ignora esse ficheiro. O `.env.example` não é ignorado, porque o nome é outro, e é isso que se quer.
 
-4. Volta a correr `git status --short`. O que deves ver: o `.env.example`, o `.gitignore`, o `package-lock.json`, o `package.json` e `src/`. O `.env` e a `node_modules/` desapareceram. Se algum dos dois ainda aparecer, para: confirma o nome do ficheiro `.gitignore`, sem `.txt`, e a pasta onde está.
+4. Volta a correr `git status --short`. O que deves ver: o `.env.example`, o `.gitignore`, o `package-lock.json`, o `package.json` e `src/`. O `.env` e a `node_modules/` desapareceram. Se algum dos dois ainda aparecer, para. Confirma o nome do ficheiro `.gitignore`, sem `.txt`, e a pasta onde está.
 
 5. Diz ao Git quem és, só neste projeto. Nos computadores da escola, que são partilhados, a configuração fica só nesta pasta, e não passa para quem usar o computador a seguir:
 
@@ -447,7 +447,7 @@ Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaj
    | 1 | browser | Escreves `http://localhost:3000/api/estado`. O browser faz um pedido `GET /api/estado` ao computador `localhost`, porta 3000 |
    | 2 | sistema operativo | O pedido chega à porta 3000, onde o processo da API está à escuta |
    | 3 | API (Node e Express) | O Express procura uma rota para `GET /api/estado`, encontra-a e chama a sua função |
-   | 4 | API | A função responde com `res.json(...)`: o Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
+   | 4 | API | A função responde com `res.json(...)`. O Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
    | 5 | browser | Recebe a resposta e mostra o JSON. O código e o tipo veem-se no separador Rede |
 
    O que deves ter acrescentado:
@@ -464,7 +464,7 @@ Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaj
 
 ### Paragem 7
 
-Tens a tabela do pedido de estado, com as tuas observações. É a evidência do tema: vais explicá-la ao professor, passo a passo, sem a ler.
+Tens a tabela do pedido de estado, com as tuas observações. É a evidência do tema. Vais explicá-la ao professor, passo a passo, sem a ler.
 
 Pensa antes de continuares: em que passo do pedido aparece a porta 3000, e quem a escolheu? A resposta: no passo 2, quando o pedido chega à porta 3000, onde a API está à escuta. Foi o `app.listen` que ligou a API a essa porta, com o valor da variável `PORT` lido do `.env`.
 
@@ -472,7 +472,7 @@ Pensa antes de continuares: em que passo do pedido aparece a porta 3000, e quem 
 
 ### O npm não corre na PowerShell do Windows
 
-Aparece uma mensagem a dizer que o ficheiro `npm.ps1` não pode ser carregado, porque a execução de scripts está desativada. Não mudes a regra do Windows: usa a linha de comandos clássica (cmd), ou escreve `npm.cmd` em vez de `npm`.
+Aparece uma mensagem a dizer que o ficheiro `npm.ps1` não pode ser carregado, porque a execução de scripts está desativada. Não mudes a regra do Windows. Usa a linha de comandos clássica (cmd), ou escreve `npm.cmd` em vez de `npm`.
 
 ### O ficheiro ficou com .txt no fim
 
@@ -480,7 +480,7 @@ No Windows, `.env.txt` ou `.gitignore.txt`. O Node não encontra o `.env`, e o G
 
 ### cp não é reconhecido como comando
 
-Estás na linha de comandos clássica do Windows: usa `copy .env.example .env`. Na PowerShell, o `cp` funciona.
+Estás na linha de comandos clássica do Windows. Usa `copy .env.example .env`. Na PowerShell, o `cp` funciona.
 
 ### O .env está dentro da pasta src
 
@@ -488,7 +488,7 @@ O `--env-file=.env` procura o ficheiro na pasta onde corres o `npm run dev`, que
 
 ### npm dev não funciona
 
-Aparece `Unknown command: "dev"`. Falta o `run`: o comando é `npm run dev`. Se a mensagem for `Missing script: "dev"`, o script não existe no `package.json`, ou o nome está mal escrito; `npm run`, sozinho, mostra os scripts que existem.
+Aparece `Unknown command: "dev"`. Falta o `run`. O comando é `npm run dev`. Se a mensagem for `Missing script: "dev"`, o script não existe no `package.json`, ou o nome está mal escrito; `npm run`, sozinho, mostra os scripts que existem.
 
 ### A API arranca na porta errada
 
@@ -496,7 +496,7 @@ O `process.env.PORT` está vazio, e a API usou a porta 3000 por omissão. Ou arr
 
 ### Mudei a porta e a API não reiniciou
 
-Confirma que mudaste o `.env`, e não o `.env.example`: o `--watch` só reinicia a API quando muda o `.env`, o `server.js` ou um ficheiro que ele importe. Confirma também que guardaste, e que a API foi arrancada com `npm run dev`, e não com `npm start`.
+Confirma que mudaste o `.env`, e não o `.env.example`. O `--watch` só reinicia a API quando muda o `.env`, o `server.js` ou um ficheiro que ele importe. Confirma também que guardaste, e que a API foi arrancada com `npm run dev`, e não com `npm start`.
 
 ### fatal: not a git repository
 
@@ -504,20 +504,20 @@ Quer dizer "não é um repositório do Git". Correste um comando do Git fora da 
 
 ### Please tell me who you are
 
-O Git recusou o commit, porque não sabe o teu nome. Faz o passo 5 da fase 6 e repete o commit. Nalguns computadores, o Git não recusa: faz o commit com um nome inventado a partir do nome do computador e sugere um comando com `--global`. Não o uses nos computadores da escola. Faz o passo 5: os commits seguintes já levam o teu nome.
+O Git recusou o commit, porque não sabe o teu nome. Faz o passo 5 da fase 6 e repete o commit. Nalguns computadores, o Git não recusa. Faz o commit com um nome inventado a partir do nome do computador e sugere um comando com `--global`. Não o uses nos computadores da escola. Faz o passo 5. Os commits seguintes já levam o teu nome.
 
 ### O .env foi para um commit
 
-Não tentes resolver sozinho: chama o professor. Se o teu `.env` ainda tem a `MONGODB_URI` vazia, não há dano, e é o momento certo para aprender como se corrige. Se já tem a cadeia de ligação verdadeira, a palavra-passe desse utilizador tem de ser mudada no Atlas, porque fica no histórico.
+Não tentes resolver sozinho. Chama o professor. Se o teu `.env` ainda tem a `MONGODB_URI` vazia, não há dano, e é o momento certo para aprender como se corrige. Se já tem a cadeia de ligação verdadeira, a palavra-passe desse utilizador tem de ser mudada no Atlas, porque fica no histórico.
 
 ### A porta 3000 está ocupada
 
-A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address already in use :::3000`, que quer dizer que a porta já está a ser usada. Tens outro servidor ligado, por exemplo um de Sistemas de Informação. Para-o. Se já tens o `.env`, da fase 4, também podes mudar lá a porta da API e arrancá-la com `npm run dev`: é para isso que ela lá está.
+A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address already in use :::3000`, que quer dizer que a porta já está a ser usada. Tens outro servidor ligado, por exemplo um de Sistemas de Informação. Para-o. Se já tens o `.env`, da fase 4, também podes mudar lá a porta da API e arrancá-la com `npm run dev`. É para isso que ela lá está.
 
 ## Desafios
 
 1. O esqueleto de uma aplicação tua. Pensa numa aplicação que gostavas de fazer, por exemplo a da tua PAP, se tiver um servidor. Repete as fases 2 a 6 numa pasta nova, com o nome dela seguido de `-api`, e muda o texto da rota de estado para o nome da aplicação. Faz também o diagrama de camadas da fase 1 para o pedido mais importante dela.
-2. Uma porta que não é um número. Põe no `.env` a linha `PORT=abc` e arranca a API: o que acontece? Em macOS e Linux, repara também na pasta do projeto. Depois muda o `src/server.js` para a API se recusar a arrancar, com uma mensagem clara, quando a porta não for um número inteiro. Pista: o `Number(...)` converte o texto num número, e o `Number.isInteger(...)` diz se o resultado é um número inteiro.
+2. Uma porta que não é um número. Põe no `.env` a linha `PORT=abc` e arranca a API. O que acontece? Em macOS e Linux, repara também na pasta do projeto. Depois muda o `src/server.js` para a API se recusar a arrancar, com uma mensagem clara, quando a porta não for um número inteiro. Pista: o `Number(...)` converte o texto num número, e o `Number.isInteger(...)` diz se o resultado é um número inteiro.
 
 ## Antes de terminares
 
@@ -529,6 +529,6 @@ A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address alread
 - [ ] A tabela do pedido da fase 7 está no caderno, com as tuas observações.
 - [ ] Consegues explicar, por palavras tuas, o pedido `GET /api/estado`, desde que escreves o endereço no browser até veres a resposta.
 
-Mostra também ao professor o resultado do `git log --oneline` e do `git status`: são a prova de que o projeto está guardado e de que o `.env` ficou de fora.
+Mostra também ao professor o resultado do `git log --oneline` e do `git status`. São a prova de que o projeto está guardado e de que o `.env` ficou de fora.
 
 ![Rodapé](../imagens/rodape.png)

@@ -105,7 +105,7 @@ d) Qual das duas opções escolhias para este torneio, e porquê?
 
 ### Exercício 4: as perguntas da comissão no teu modelo (8 minutos)
 
-Faz uma tabela com duas colunas, como a do passo 5 do exemplo guiado do guia. Na primeira coluna estão as cinco perguntas da comissão. Na segunda, escreve onde está a informação que responde a cada uma, no modelo que decidiste nos exercícios 2 e 3. Diz em que coleção, e em que campo ou lista dentro dela. Se uma pergunta não tiver resposta no teu modelo, o modelo está errado: volta ao exercício 2 e corrige-o.
+Faz uma tabela com duas colunas, como a do passo 5 do exemplo guiado do guia. Na primeira coluna estão as cinco perguntas da comissão. Na segunda, escreve onde está a informação que responde a cada uma, no modelo que decidiste nos exercícios 2 e 3. Diz em que coleção, e em que campo ou lista dentro dela. Se uma pergunta não tiver resposta no teu modelo, o modelo está errado. Volta ao exercício 2 e corrige-o.
 
 Os nomes que dás aos campos são escolha tua. O que interessa é que se perceba onde está cada informação e, quando a resposta precisa de duas coleções, que campo liga uma à outra.
 
@@ -129,7 +129,7 @@ No teu cluster, cria uma base de dados `torneio` com uma coleção `jogos`, da m
 
 Confirma que a coleção ficou com nove documentos.
 
-Repara numa simplificação: nestes documentos, as equipas aparecem pelo nome da turma, como texto, e não por referência, e os golos aparecem só como totais. O recinto aparece embutido, que é só uma das decisões possíveis do exercício 2. Fica assim para que as consultas sejam fáceis de ler. No exercício 2 decidiste como deviam ficar numa aplicação a sério.
+Repara numa simplificação. Nestes documentos, as equipas aparecem pelo nome da turma, como texto, e não por referência, e os golos aparecem só como totais. O recinto aparece embutido, que é só uma das decisões possíveis do exercício 2. Fica assim para que as consultas sejam fáceis de ler. No exercício 2 decidiste como deviam ficar numa aplicação a sério.
 
 ### Exercício 5: os jogos da jornada 1 num recinto coberto (6 minutos)
 
@@ -147,9 +147,9 @@ Os jogos em que a equipa da casa foi uma turma do 10.º ano. Escreve-o com um s�
 
 É o último exercício obrigatório, e o único em que vais aprender sozinho um operador que o guia não ensina.
 
-Todos os jogos do 10.º A, tanto em casa como fora. Com os operadores do guia não consegues. O operador que usaste no exercício 7 também não serve: explica porquê. Depois lê a [página do operador `$or`](https://www.mongodb.com/docs/manual/reference/operator/query/or/), na documentação oficial da MongoDB, e escreve o filtro. Executa-o e confirma o número de documentos.
+Todos os jogos do 10.º A, tanto em casa como fora. Com os operadores do guia não consegues. O operador que usaste no exercício 7 também não serve. Explica porquê. Depois lê a [página do operador `$or`](https://www.mongodb.com/docs/manual/reference/operator/query/or/), na documentação oficial da MongoDB, e escreve o filtro. Executa-o e confirma o número de documentos.
 
-A página está em inglês. Não precisas de a ler toda: procura nela a forma do filtro e um exemplo, e compara-os com os filtros que já escreveste.
+A página está em inglês. Não precisas de a ler toda. Procura nela a forma do filtro e um exemplo, e compara-os com os filtros que já escreveste.
 
 ## Apoio
 
@@ -176,7 +176,7 @@ A comissão quer a classificação do torneio: cada vitória vale 3 pontos, cada
 
 Estes exercícios são opcionais e não contam para a hora e meia da parte obrigatória. Faz-os depois dela, pela ordem que quiseres.
 
-O exercício 9 leva o teu modelo até ao fim: escreves os documentos tal como a aplicação os guardaria. Os exercícios 10 a 13 são consultas do mesmo tipo das do laboratório, agora com os jogos do torneio. São bons para treinar se alguma dessas consultas te correu mal no laboratório. Usam a mesma coleção `jogos` da base `torneio`, e a regra é a mesma: escreve primeiro a consulta e os jogos que esperas, e só depois executa. O exercício 14 leva o método do guia a uma aplicação tua.
+O exercício 9 leva o teu modelo até ao fim. Escreves os documentos tal como a aplicação os guardaria. Os exercícios 10 a 13 são consultas do mesmo tipo das do laboratório, agora com os jogos do torneio. São bons para treinar se alguma dessas consultas te correu mal no laboratório. Usam a mesma coleção `jogos` da base `torneio`, e a regra é a mesma. Escreve primeiro a consulta e os jogos que esperas, e só depois executa. O exercício 14 leva o método do guia a uma aplicação tua.
 
 ### Exercício 9: os documentos do teu modelo (10 minutos)
 

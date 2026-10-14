@@ -10,7 +10,7 @@ O [guia do tema](04-api-express-e-contratos.md) e o [laboratório](04-api-expres
 
 ## Como trabalhar
 
-A parte obrigatória são os exercícios 1 a 4, por esta ordem, e conta com cerca de 100 minutos, incluindo os 5 minutos de preparar o projeto. Os exercícios 1 e 2 fazem-se em papel; o 3 e o 4, no computador. O exercício 4 é o mais longo: conta com cerca de metade desse tempo. Os dois desafios opcionais, no fim, não contam para os 100 minutos.
+A parte obrigatória são os exercícios 1 a 4, por esta ordem, e conta com cerca de 100 minutos, incluindo os 5 minutos de preparar o projeto. Os exercícios 1 e 2 fazem-se em papel; o 3 e o 4, no computador. O exercício 4 é o mais longo. Conta com cerca de metade desse tempo. Os dois desafios opcionais, no fim, não contam para os 100 minutos.
 
 Nos exercícios em papel, responde antes de experimentar. Nos do computador, escreve primeiro o contrato e as respostas que esperas, e só depois o código. Verifica cada resposta no browser, com o separador Rede aberto. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
 
@@ -18,7 +18,7 @@ Entrega as respostas dos exercícios 1 e 2 e o projeto `torneio-api`, com o `con
 
 ## O cenário: a API do torneio
 
-Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Não começas do zero: o projeto parte de uma cópia do esqueleto da papelaria, que já tem o `package.json`, os scripts e a rota de estado a funcionar. Assim, o teu trabalho vai todo para o contrato e para as camadas.
+Na ficha do tema anterior desenhaste a `torneio-api`, a API do torneio de futsal da escola. Nesta ficha escreves o contrato dela e as camadas que o cumprem, com as equipas e os jogos ainda em memória. Não começas do zero. O projeto parte de uma cópia do esqueleto da papelaria, que já tem o `package.json`, os scripts e a rota de estado a funcionar. Assim, o teu trabalho vai todo para o contrato e para as camadas.
 
 Pelo caminho, tomas decisões que a papelaria não tomou. Há um parâmetro de pesquisa com um limite diferente, um filtro novo, os jogos de uma equipa, e um router com dois recursos, as equipas e os jogos.
 
@@ -106,7 +106,7 @@ A API arranca sem nenhum erro no terminal, e mesmo assim este código tem três 
 
 Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria. Esse esqueleto já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`. Conta com cinco minutos.
 
-1. Copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho, e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório: esse já tem os ficheiros dos artigos, que aqui não servem.
+1. Copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho, e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório. Esse já tem os ficheiros dos artigos, que aqui não servem.
 2. No `package.json`, muda o `name` para `torneio-api` e escreve na `description` uma frase tua sobre a API do torneio.
 3. No `src/server.js`, troca a papelaria pelo torneio no comentário do início e no texto da rota de estado, que passa a ser `API do torneio de futsal`.
 4. Num terminal dentro da pasta `torneio-api`, corre `npm install`, cria o `.env` a partir do `.env.example`, como no laboratório do tema anterior, e arranca a API com `npm run dev`. Se a API do laboratório estiver ligada, para-a primeiro com Ctrl+C, ou muda a porta no `.env` da `torneio-api`. As duas não podem usar a porta 3000 ao mesmo tempo.
@@ -126,11 +126,11 @@ No projeto `torneio-api`, escreve o ficheiro `contrato-da-api.md` com:
 
 Para cada pedido, as tabelas do guia: a dos parâmetros, quando os há, e a das respostas. Escreve também a forma de uma equipa e de um jogo, em JSON, como o guia faz para o artigo.
 
-As tabelas de `GET /api/jogos` já as tens: são as do exercício 1, e podes partir delas. O que escreves de novo são os pedidos das equipas, o filtro `equipa` e a forma de uma equipa e de um jogo.
+As tabelas de `GET /api/jogos` já as tens. São as do exercício 1, e podes partir delas. O que escreves de novo são os pedidos das equipas, o filtro `equipa` e a forma de uma equipa e de um jogo.
 
 O filtro `equipa` é um pedido da comissão do torneio, que quer ver os jogos de uma equipa: `GET /api/jogos?equipa=3` dá os jogos da equipa 3. O contrato do exercício 1 ainda não o tinha. Acrescenta-o à tabela dos parâmetros de `GET /api/jogos`, com o tipo, os valores válidos e o que quer dizer, e acerta a linha do 400 na tabela das respostas.
 
-Este filtro obriga a uma decisão que o contrato da papelaria nunca teve de tomar: o que responde a API a `GET /api/jogos?equipa=9`, se não existe nenhuma equipa 9? Escreve a resposta no contrato, com o código e o corpo, e justifica-a numa frase por baixo da tabela.
+Este filtro obriga a uma decisão que o contrato da papelaria nunca teve de tomar. O que responde a API a `GET /api/jogos?equipa=9`, se não existe nenhuma equipa 9? Escreve a resposta no contrato, com o código e o corpo, e justifica-a numa frase por baixo da tabela.
 
 ### Exercício 4: as camadas do torneio (50 minutos)
 
@@ -187,7 +187,7 @@ Para verificar: com os dados desta ficha, as equipas 1 a 4 têm 3, 3, 4 e 1 pont
 
 Pistas, só se precisares, uma de cada vez:
 
-1. Os jogos que contam para os pontos de uma equipa já os sabes escolher: são os do filtro `equipa` do exercício 4.
+1. Os jogos que contam para os pontos de uma equipa já os sabes escolher. São os do filtro `equipa` do exercício 4.
 2. Num jogo em que a equipa é a da casa, os golos marcados são os `golosCasa`; se for a de fora, são os `golosFora`.
 3. Uma função pode chamar outra do mesmo ficheiro, como a que procura uma equipa.
 

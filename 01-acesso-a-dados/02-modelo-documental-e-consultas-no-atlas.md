@@ -44,11 +44,11 @@ Se alguma destas ideias estiver pouco firme, é normal. Vais usá-las muitas vez
 
 ## Uma aplicação guarda os dados numa base de dados
 
-Um array de objetos vive na memória do computador enquanto o programa está a correr. Quando o programa termina, ou o computador se desliga, os dados desaparecem. Para a maior parte das aplicações isso não serve: numa papelaria, o stock de ontem tem de estar lá amanhã.
+Um array de objetos vive na memória do computador enquanto o programa está a correr. Quando o programa termina, ou o computador se desliga, os dados desaparecem. Para a maior parte das aplicações isso não serve. Numa papelaria, o stock de ontem tem de estar lá amanhã.
 
 Podias guardar os dados num ficheiro JSON, e para um programa pequeno usado por uma só pessoa isso funciona. Mas imagina a papelaria da escola com três funcionários a vender ao mesmo tempo, em três computadores. Se dois programas escreverem no mesmo ficheiro ao mesmo tempo, um apaga o trabalho do outro. Se o ficheiro tiver dez mil artigos, encontrar os que têm pouco stock obriga a ler o ficheiro inteiro de cada vez. E se o computador se desligar a meio de uma escrita, o ficheiro pode ficar estragado.
 
-Para isso há programas especializados em guardar dados de forma segura e em encontrá-los depressa, mesmo com muitos utilizadores ao mesmo tempo. A tua aplicação não guarda os dados ela própria: pede a um desses programas que os guarde, e pergunta-lhe o que precisa de saber. Os dados que o programa guarda para uma aplicação formam uma **base de dados**.
+Para isso há programas especializados em guardar dados de forma segura e em encontrá-los depressa, mesmo com muitos utilizadores ao mesmo tempo. A tua aplicação não guarda os dados ela própria. Pede a um desses programas que os guarde, e pergunta-lhe o que precisa de saber. Os dados que o programa guarda para uma aplicação formam uma **base de dados**.
 
 Esse programa corre num **servidor**: um computador que está sempre ligado e que presta um serviço a outros computadores através da rede. Neste caso, o serviço é guardar dados e responder a perguntas sobre eles. A mesma palavra, servidor, serve também para o programa que, nesse computador, presta o serviço.
 
@@ -91,7 +91,7 @@ No Atlas há ainda três níveis por cima destes, que vais encontrar ao criar a 
 organização → projeto → cluster → base de dados → coleção → documento
 ```
 
-A palavra cluster quer dizer agrupamento, e o nome explica-se porque um cluster não é um servidor só. No plano gratuito que vais usar, o Atlas guarda os mesmos dados em três servidores ao mesmo tempo, com cópias iguais. Se um deles avariar, os outros continuam a responder e não se perde nada. Para ti, que vais usar o cluster pela página do Atlas, isto não se vê: o cluster funciona como se fosse um único servidor.
+A palavra cluster quer dizer agrupamento, e o nome explica-se porque um cluster não é um servidor só. No plano gratuito que vais usar, o Atlas guarda os mesmos dados em três servidores ao mesmo tempo, com cópias iguais. Se um deles avariar, os outros continuam a responder e não se perde nada. Para ti, que vais usar o cluster pela página do Atlas, isto não se vê. O cluster funciona como se fosse um único servidor.
 
 ### Um documento parece um objeto JavaScript, mas não é bem igual
 
@@ -130,7 +130,7 @@ Na prática, não inventas valores de `_id` à mão. Deixas o MongoDB criá-los 
 
 Numa folha de cálculo, todas as linhas têm as mesmas colunas. No MongoDB, dois documentos da mesma coleção podem ter campos diferentes. Um artigo pode ter um campo `cor` e outro não ter. Diz-se que o MongoDB tem um **esquema flexível**.
 
-Isto dá jeito quando os dados variam de verdade, mas também é um perigo. Se escreveres `categria` em vez de `categoria` num documento, o MongoDB aceita sem dizer nada: para ele, é só um campo com outro nome. Depois, quando procurares os artigos de uma categoria, esse documento não aparece, e não há nenhuma mensagem de erro a avisar. O mesmo acontece se guardares o stock como texto (`"12"`) num documento e como número (`12`) nos outros.
+Isto dá jeito quando os dados variam de verdade, mas também é um perigo. Se escreveres `categria` em vez de `categoria` num documento, o MongoDB aceita sem dizer nada. Para ele, é só um campo com outro nome. Depois, quando procurares os artigos de uma categoria, esse documento não aparece, e não há nenhuma mensagem de erro a avisar. O mesmo acontece se guardares o stock como texto (`"12"`) num documento e como número (`12`) nos outros.
 
 Por isso, a responsabilidade de manter os documentos coerentes é tua e da tua aplicação. Mais à frente no módulo vais escrever o código que verifica os dados antes de os guardar. Por agora, a regra é escrever os documentos de uma coleção sempre com os mesmos nomes de campos e os mesmos tipos.
 
@@ -185,7 +185,7 @@ A pergunta também se pode fazer no sentido contrário. Para saber que artigos t
 
 Há duas perguntas que ajudam a decidir: "que ecrã vai ler estes dados?" e "que dados mudam ao mesmo tempo?". A partir delas chega-se a duas regras.
 
-Embute-se quando a informação é sempre lida juntamente com o documento principal e não pode crescer sem limite. A localização de um artigo aparece sempre que se mostra o artigo, e cada artigo tem uma só localização. Embutir é a escolha natural: com uma só leitura tens tudo o que o ecrã precisa.
+Embute-se quando a informação é sempre lida juntamente com o documento principal e não pode crescer sem limite. A localização de um artigo aparece sempre que se mostra o artigo, e cada artigo tem uma só localização. Embutir é a escolha natural. Com uma só leitura tens tudo o que o ecrã precisa.
 
 Referencia-se quando a informação é reutilizada por muitos documentos ou é alterada de forma independente. O mesmo fornecedor fornece dezenas de artigos. Se o contacto do fornecedor mudar e estiver embutido em cada artigo, tens de o alterar em dezenas de sítios, e basta esquecer um para a informação ficar contraditória. Referenciado, o contacto está num só documento e altera-se uma vez.
 
@@ -201,13 +201,13 @@ Por isso, cada linha da venda guarda a referência ao artigo e também uma cópi
 
 Quando um artigo guarda `fornecedorId`, o MongoDB não confirma que existe mesmo um fornecedor com esse `_id`. Aceita qualquer ObjectId. E se um fornecedor for apagado, os artigos que o referiam continuam a apontar para um documento que já não existe.
 
-A regra simples é esta: é a tua aplicação que tem de confirmar que o documento referido existe, antes de guardar a referência. E é também a aplicação que decide o que acontece às referências quando um documento é apagado. Vais ver isto na prática no laboratório.
+A regra simples é esta. É a tua aplicação que tem de confirmar que o documento referido existe, antes de guardar a referência. E é também a aplicação que decide o que acontece às referências quando um documento é apagado. Vais ver isto na prática no laboratório.
 
 ## No Atlas, cada aluno tem o seu cluster
 
 O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada projeto um cluster gratuito. Os limites deste cluster chegam folgadamente para o que vais fazer: 0,5 GB de dados, até 500 ligações ao mesmo tempo e até 100 operações por segundo. Uma **ligação** é um programa ligado à base de dados, como a tua aplicação quando estiver a correr. Uma **operação** é cada pedido que esse programa lhe faz, por exemplo inserir um documento ou fazer uma consulta.
 
-Há uma regra a lembrar: se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
+Há uma regra a lembrar. Se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
 
 Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster serve para o resto do ano. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto. Os passos para criar a conta e o cluster e para dar acesso ao professor estão na fase 1 do [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
@@ -263,7 +263,7 @@ O filtro mais simples pede documentos em que um campo tem um valor exato. Antes 
 
 Lê-se "documentos cujo campo `categoria` é igual a `Papel`". O resultado são três artigos: o Caderno A4 quadriculado, o Bloco de notas A5 e a Resma de papel A4.
 
-O MongoDB compara o texto exatamente como está escrito. Por isso `{ categoria: "papel" }`, com minúscula, não encontra nenhum dos artigos de papel, e não dá nenhum erro: para a base de dados, `papel` e `Papel` são textos diferentes.
+O MongoDB compara o texto exatamente como está escrito. Por isso `{ categoria: "papel" }`, com minúscula, não encontra nenhum dos artigos de papel, e não dá nenhum erro. Para a base de dados, `papel` e `Papel` são textos diferentes.
 
 ### Operadores de comparação
 
@@ -303,7 +303,7 @@ Quando o filtro tem vários campos, o documento tem de cumprir todos. Antes de l
 { categoria: "Escrita", stock: { $lt: 10 } }
 ```
 
-Lê-se "categoria é Escrita e stock é menor do que 10". O resultado são dois artigos: a Esferográfica azul (3) e o Marcador fluorescente (8). O Lápis HB é da categoria Escrita, mas tem 25 unidades: cumpre a primeira condição, mas não a segunda, e fica de fora.
+Lê-se "categoria é Escrita e stock é menor do que 10". O resultado são dois artigos: a Esferográfica azul (3) e o Marcador fluorescente (8). O Lápis HB é da categoria Escrita, mas tem 25 unidades. Cumpre a primeira condição, mas não a segunda, e fica de fora.
 
 Dois operadores no mesmo campo também têm de se cumprir os dois. É assim que se pede um intervalo. Prevê: que artigos devolve este filtro?
 
@@ -355,7 +355,7 @@ A ordenação é um documento em que cada campo recebe `1`, para ordem crescente
 
 Aparecem os três artigos mais caros, do mais caro para o mais barato: a Resma de papel A4 (520), o Compasso escolar (450) e o Caderno A4 quadriculado (250). A ordenação põe os oito do preço maior para o menor, e o limite deixa ficar só os três primeiros dessa ordem.
 
-A ordem importa: o limite aplica-se depois de ordenar, e é isso que garante que os três que ficam são os mais caros e não três quaisquer.
+A ordem importa. O limite aplica-se depois de ordenar, e é isso que garante que os três que ficam são os mais caros e não três quaisquer.
 
 ### O que uma consulta simples não consegue perguntar
 
@@ -554,7 +554,7 @@ No próximo tema vais preparar o Node.js, que corre JavaScript fora do browser, 
 
 Quando lá chegares, as consultas vão ser quase iguais às da barra de consulta. O filtro `{ stock: { $lt: 5 } }` escreve-se no código da mesma forma. A diferença é que o código espera pela resposta com `await`, como no `fetch` do 11.º ano.
 
-O método deste guia serve para qualquer aplicação que venhas a desenhar: começa sempre pelas perguntas a que ela tem de responder. Se a aplicação da tua PAP vai guardar dados, vale a pena ires pensando nessas perguntas.
+O método deste guia serve para qualquer aplicação que venhas a desenhar. Começa sempre pelas perguntas a que ela tem de responder. Se a aplicação da tua PAP vai guardar dados, vale a pena ires pensando nessas perguntas.
 
 ## Para saber mais
 

@@ -2,11 +2,11 @@
 
 # API da papelaria, ligada ao Atlas
 
-A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio (CRUD, do inglês, quer dizer criar, ler, alterar e apagar). Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais: a lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
+A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio (CRUD, do inglês, quer dizer criar, ler, alterar e apagar). Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais. A lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
 Só a lista mudou. A rota de detalhe ainda lê do array, com o id de 1 a 8. Passar o resto da API para a base, com o `_id` que o MongoDB dá a cada documento, é do tema da ligação segura.
 
-Este exemplo ainda não tem as camadas nem o contrato do tema 04: reconstrói a aula em que ligaste ao Atlas a API de Sistemas de Informação. Por isso, `/api/artigos/abaixo-do-minimo` responde 400, e o `stockMaximo` não filtra. No tema da ligação segura, é a versão com camadas que passa a ler da base.
+Este exemplo ainda não tem as camadas nem o contrato do tema 04. Reconstrói a aula em que ligaste ao Atlas a API de Sistemas de Informação. Por isso, `/api/artigos/abaixo-do-minimo` responde 400, e o `stockMaximo` não filtra. No tema da ligação segura, é a versão com camadas que passa a ler da base.
 
 ## O que está nesta pasta
 
@@ -30,7 +30,7 @@ Precisas do Node.js 22 ou mais recente, e de internet. No Atlas, precisas da bas
 
    No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-3. No Atlas, carrega em "Connect" (ligar) no teu cluster e escolhe a ligação por "Drivers". Copia a cadeia de ligação, que começa por `mongodb+srv://`, para a linha `MONGODB_URI=` do `.env`. Se no teu ecrã os nomes forem outros, procura a opção que mostra a cadeia de ligação que começa por `mongodb+srv://`. Troca o marcador da palavra-passe, a parte entre `<` e `>`, pela palavra-passe do utilizador da base de dados. A partir deste momento, o `.env` tem um segredo: não o copies para mais lado nenhum.
+3. No Atlas, carrega em "Connect" (ligar) no teu cluster e escolhe a ligação por "Drivers". Copia a cadeia de ligação, que começa por `mongodb+srv://`, para a linha `MONGODB_URI=` do `.env`. Se no teu ecrã os nomes forem outros, procura a opção que mostra a cadeia de ligação que começa por `mongodb+srv://`. Troca o marcador da palavra-passe, a parte entre `<` e `>`, pela palavra-passe do utilizador da base de dados. A partir deste momento, o `.env` tem um segredo. Não o copies para mais lado nenhum.
 4. Arranca a API:
 
    ```bash
@@ -49,7 +49,7 @@ Precisas do Node.js 22 ou mais recente, e de internet. No Atlas, precisas da bas
 | `/api/artigos` | 200 | Os nove artigos da base, cada um com o `_id` que o MongoDB lhe deu e a `localizacao` embutida |
 | `/api/artigos?categoria=Papel` | 200 | Os três artigos de papel, como a consulta `{ categoria: "Papel" }` na barra do Atlas |
 | `/api/artigos?categoria=papel` | 200 | `[]`, porque a base distingue maiúsculas de minúsculas |
-| `/api/artigos/2` | 200 | A esferográfica azul, ainda do array: tem o `id` 2 e não tem `_id` nem `localizacao` |
+| `/api/artigos/2` | 200 | A esferográfica azul, ainda do array. Tem o `id` 2 e não tem `_id` nem `localizacao` |
 | `/api/artigos/9` | 404 | `{"erro":"Não existe o artigo 9"}` |
 | `/nao-existe` | 404 | `{"erro":"Rota não encontrada"}` |
 
@@ -59,11 +59,11 @@ Repara que a lista e o detalhe já não concordam. A lista tem nove artigos, por
 
 ### Não foi possível ligar à base de dados: falta a MONGODB_URI no ficheiro .env
 
-O `.env` existe, mas a linha `MONGODB_URI=` está vazia: volta ao passo 3. Se o terminal disser `node: .env: not found`, é o próprio ficheiro `.env` que falta: volta ao passo 2.
+O `.env` existe, mas a linha `MONGODB_URI=` está vazia. Volta ao passo 3. Se o terminal disser `node: .env: not found`, é o próprio ficheiro `.env` que falta. Volta ao passo 2.
 
 ### A lista vem [] e não aparece nenhum erro
 
-A API ligou-se a uma base vazia. Na primeira linha do terminal, a API diz a que base se ligou: tem de ser `papelaria`, escrita exatamente como no Atlas. Se lá estiver outro nome, corrige o `DB_NAME` no `.env`. Se o nome estiver certo, confirma no Atlas que a coleção se chama `artigos` e que tem os documentos.
+A API ligou-se a uma base vazia. Na primeira linha do terminal, a API diz a que base se ligou. Tem de ser `papelaria`, escrita exatamente como no Atlas. Se lá estiver outro nome, corrige o `DB_NAME` no `.env`. Se o nome estiver certo, confirma no Atlas que a coleção se chama `artigos` e que tem os documentos.
 
 ### A API fica parada uns 30 segundos e termina com um erro de ligação
 

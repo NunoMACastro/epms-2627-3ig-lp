@@ -43,7 +43,7 @@ Ficas a saber criar uma base de dados no Atlas, inserir documentos, escrever con
 
 ## O que precisas
 
-- Um browser, para usares o Atlas. Confirma que chegas a ele: abre `https://www.mongodb.com/cloud/atlas/register`, e deve aparecer a página de registo do Atlas.
+- Um browser, para usares o Atlas. Confirma que chegas a ele. Abre `https://www.mongodb.com/cloud/atlas/register`, e deve aparecer a página de registo do Atlas.
 - Acesso ao teu email, para confirmares a conta do Atlas.
 - O teu caderno, para escreveres as previsões antes de cada consulta.
 
@@ -52,7 +52,7 @@ Se já criaste a conta e o cluster numa aula anterior, começa na fase 2. Da fas
 ## Se alguma coisa falhar
 
 1. Estás na coleção certa? No Data Explorer, a lista do lado esquerdo mostra a base `papelaria` e, dentro dela, as coleções. A consulta corre sobre a coleção que tens aberta.
-2. A coleção tem o número certo de documentos? São oito no fim da fase 2 e nove no fim da fase 7. Se tiver mais, inseriste duas vezes: vê os [problemas frequentes](#problemas-frequentes).
+2. A coleção tem o número certo de documentos? São oito no fim da fase 2 e nove no fim da fase 7. Se tiver mais, inseriste duas vezes. Vê os [problemas frequentes](#problemas-frequentes).
 3. Escreveste o filtro no campo do filtro e carregaste em "Find"? "Reset" limpa a consulta e volta a mostrar todos os documentos.
 4. O resultado não é o que previste? Antes de mudares a consulta, abre um documento que devia aparecer e compara, campo a campo, o nome do campo, a escrita do valor e o tipo.
 
@@ -60,9 +60,9 @@ Se já criaste a conta e o cluster numa aula anterior, começa na fase 2. Da fas
 
 O MongoDB é um programa que guarda os dados de uma aplicação, organizados em documentos. O Atlas é o MongoDB a funcionar na nuvem: em servidores de um centro de dados da empresa que o faz, a que chegas pela internet. Para lá teres as tuas bases de dados, crias uma conta e, nela, um cluster gratuito, o conjunto de servidores onde vão viver as tuas bases de dados. Depois proteges a entrada com duas proteções: um utilizador com palavra-passe, para os programas, e a lista dos endereços de onde se pode ligar. Para saber mais, lê a secção "No Atlas, cada aluno tem o seu cluster" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
-Os nomes dos botões deste laboratório foram confirmados na documentação da MongoDB em setembro e a 14 de outubro de 2026. Na primeira vez, cada nome vem com a tradução, entre parênteses. O Atlas muda o aspeto das páginas de vez em quando. Se um botão não tiver exatamente o mesmo nome no teu ecrã, procura o que tem a mesma função: os passos são os mesmos.
+Os nomes dos botões deste laboratório foram confirmados na documentação da MongoDB em setembro e a 14 de outubro de 2026. Na primeira vez, cada nome vem com a tradução, entre parênteses. O Atlas muda o aspeto das páginas de vez em quando. Se um botão não tiver exatamente o mesmo nome no teu ecrã, procura o que tem a mesma função. Os passos são os mesmos.
 
-1. Cria a conta, porque é nela que vão ficar o teu projeto e o teu cluster. Abre `https://www.mongodb.com/cloud/atlas/register`, cria a conta e confirma o endereço de email na mensagem que vais receber. Se o Atlas fizer perguntas de boas-vindas sobre o que vais construir, responde como quiseres: não mudam nada do que se segue.
+1. Cria a conta, porque é nela que vão ficar o teu projeto e o teu cluster. Abre `https://www.mongodb.com/cloud/atlas/register`, cria a conta e confirma o endereço de email na mensagem que vais receber. Se o Atlas fizer perguntas de boas-vindas sobre o que vais construir, responde como quiseres. Não mudam nada do que se segue.
 
    O que deves ver: a página inicial do Atlas, já com a tua conta. Se o email de confirmação não chegar, vê os [problemas frequentes](#problemas-frequentes).
 
@@ -81,7 +81,7 @@ Os nomes dos botões deste laboratório foram confirmados na documentação da M
 
 4. Cria o utilizador da base de dados. Logo depois de criar o cluster, o Atlas mostra um assistente de segurança com dois passos. Nenhum é preciso neste laboratório, porque o browser chega aos dados pela página do Atlas. Mas vão ser precisos quando o teu programa se ligar à base de dados, por isso faz os dois agora.
 
-   O primeiro passo é o utilizador da base de dados. Não é a tua conta do Atlas: é um nome e uma palavra-passe que o teu programa vai usar para entrar na base de dados. Escolhe um nome de utilizador, aceita a palavra-passe que o Atlas sugere ou escolhe uma longa, e carrega em "Create Database User" (criar utilizador da base de dados).
+   O primeiro passo é o utilizador da base de dados. Não é a tua conta do Atlas. É um nome e uma palavra-passe que o teu programa vai usar para entrar na base de dados. Escolhe um nome de utilizador, aceita a palavra-passe que o Atlas sugere ou escolhe uma longa, e carrega em "Create Database User" (criar utilizador da base de dados).
 
    Guarda a palavra-passe num sítio seguro, que só tu vês, como um gestor de palavras-passe, o programa que as guarda por ti. Nunca a escrevas no código, no caderno, num ficheiro partilhado ou publicado na internet, nem numa mensagem. Mais à frente vais aprender a forma certa de a entregar ao programa.
 
@@ -139,7 +139,7 @@ Uma base de dados é um conjunto de coleções que pertencem à mesma aplicaçã
 
    Abre um dos documentos. O que deves ver: os seis campos que escreveste e mais um, o `_id`, com um valor como `ObjectId('...')`, de 24 carateres. Isto quer dizer que o MongoDB deu a cada documento um identificador, porque todos os documentos de uma coleção têm de ter um `_id` diferente. O ObjectId é o tipo desse identificador.
 
-   Confirma também que a coleção tem exatamente oito documentos. Se tiver dezasseis, carregaste em "Insert" duas vezes: vê os [problemas frequentes](#problemas-frequentes) antes de continuares, porque as consultas seguintes contam com oito.
+   Confirma também que a coleção tem exatamente oito documentos. Se tiver dezasseis, carregaste em "Insert" duas vezes. Vê os [problemas frequentes](#problemas-frequentes) antes de continuares, porque as consultas seguintes contam com oito.
 
 ### Paragem 2
 
@@ -182,7 +182,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
    { categoria: "papel" }
    ```
 
-   O que deves ver: nenhum documento, e nenhuma mensagem de erro. Isto acontece porque, para a base de dados, `papel` e `Papel` são textos diferentes. Um filtro que não encontra nada não é um erro: é uma resposta vazia. É o engano que mais vais encontrar, por isso lembra-te dele quando uma consulta voltar vazia.
+   O que deves ver: nenhum documento, e nenhuma mensagem de erro. Isto acontece porque, para a base de dados, `papel` e `Papel` são textos diferentes. Um filtro que não encontra nada não é um erro. É uma resposta vazia. É o engano que mais vais encontrar, por isso lembra-te dele quando uma consulta voltar vazia.
 
 4. Consulta 2, um operador: os artigos com pouco stock. Para perguntar "menor do que", usa-se um operador. Os operadores começam sempre por `$` e escrevem-se como um documento dentro do filtro. O `$lt` vem do inglês *less than*, menor do que. Prevê, e depois executa:
 
@@ -202,7 +202,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
    { categoria: "Escrita", stock: { $lt: 10 } }
    ```
 
-   O que deves ver: dois documentos, a Esferográfica azul (3) e o Marcador fluorescente (8). O Lápis HB é da categoria Escrita, mas tem 25 unidades: cumpre a primeira condição, mas não a segunda. Se esperavas sete artigos, leste o filtro como "ou", com todos os de escrita e mais todos os que têm menos de 10. O filtro com dois campos pede as duas condições ao mesmo tempo.
+   O que deves ver: dois documentos, a Esferográfica azul (3) e o Marcador fluorescente (8). O Lápis HB é da categoria Escrita, mas tem 25 unidades. Cumpre a primeira condição, mas não a segunda. Se esperavas sete artigos, leste o filtro como "ou", com todos os de escrita e mais todos os que têm menos de 10. O filtro com dois campos pede as duas condições ao mesmo tempo.
 
 6. Consulta 4, um intervalo: os artigos que custam entre 1,00 € e 3,00 €. Dois operadores no mesmo campo também têm de se cumprir os dois. Prevê, e depois executa:
 
@@ -233,7 +233,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
 
 Sabes escolher documentos por igualdade, com um operador, com duas condições, por um intervalo e por um campo embutido. No caderno, tens a previsão e o resultado das consultas 1 a 5.
 
-Pensa antes de continuares: a consulta 3 devolveu dois artigos. Quantos devolveria `{ categoria: "Escrita" }`, sozinho, e porquê? A resposta: três, a Esferográfica azul, o Lápis HB e o Marcador fluorescente. Sem a segunda condição, o Lápis HB, com 25 unidades, já não fica de fora: basta-lhe ser da categoria Escrita.
+Pensa antes de continuares: a consulta 3 devolveu dois artigos. Quantos devolveria `{ categoria: "Escrita" }`, sozinho, e porquê? A resposta: três, a Esferográfica azul, o Lápis HB e o Marcador fluorescente. Sem a segunda condição, o Lápis HB, com 25 unidades, já não fica de fora. Basta-lhe ser da categoria Escrita.
 
 ## Fase 4: a projeção escolhe os campos (10 minutos)
 
@@ -370,13 +370,13 @@ Cada artigo tem um fornecedor, e o mesmo fornecedor fornece muitos artigos. Se o
 
 A base `papelaria` tem nove artigos e um fornecedor, e a Cola em bastão aponta para o fornecedor pelo `fornecedorId`.
 
-Pensa antes de continuares: porque é que a localização ficou embutida no artigo e o fornecedor ficou numa coleção à parte? A resposta usa duas regras. A localização é sempre mostrada com o artigo, cada artigo tem uma só, e não cresce: embutida, uma só leitura dá tudo o que o ecrã do artigo precisa. O mesmo fornecedor fornece muitos artigos, e o contacto dele muda sem que os artigos mudem. Se estivesse embutido em cada artigo, mudar o telefone obrigava a alterar todos esses artigos, e bastava esquecer um para a informação ficar contraditória. Referenciado, o contacto está num só documento e altera-se uma vez. O custo é ter de seguir a referência, com uma segunda leitura, quando se quer mostrar o fornecedor com o artigo.
+Pensa antes de continuares: porque é que a localização ficou embutida no artigo e o fornecedor ficou numa coleção à parte? A resposta usa duas regras. A localização é sempre mostrada com o artigo, cada artigo tem uma só, e não cresce. Embutida, uma só leitura dá tudo o que o ecrã do artigo precisa. O mesmo fornecedor fornece muitos artigos, e o contacto dele muda sem que os artigos mudem. Se estivesse embutido em cada artigo, mudar o telefone obrigava a alterar todos esses artigos, e bastava esquecer um para a informação ficar contraditória. Referenciado, o contacto está num só documento e altera-se uma vez. O custo é ter de seguir a referência, com uma segunda leitura, quando se quer mostrar o fornecedor com o artigo.
 
 ## Problemas frequentes
 
 ### A coleção tem dezasseis documentos
 
-Carregaste duas vezes em "Insert", e os documentos ficaram duplicados, cada cópia com um `_id` diferente. Para o MongoDB não são repetidos: são documentos diferentes que, por acaso, têm os mesmos campos. Apaga as cópias antes de fazeres as consultas, porque os resultados deste laboratório contam com oito artigos. Passa o rato sobre uma das cópias, carrega no botão de apagar e confirma. Repete até ficar um documento de cada artigo, oito no total, e confere-os com a tabela da fase 3. Confirma sempre o número de documentos depois de inserir.
+Carregaste duas vezes em "Insert", e os documentos ficaram duplicados, cada cópia com um `_id` diferente. Para o MongoDB não são repetidos. São documentos diferentes que, por acaso, têm os mesmos campos. Apaga as cópias antes de fazeres as consultas, porque os resultados deste laboratório contam com oito artigos. Passa o rato sobre uma das cópias, carrega no botão de apagar e confirma. Repete até ficar um documento de cada artigo, oito no total, e confere-os com a tabela da fase 3. Confirma sempre o número de documentos depois de inserir.
 
 ### Uma consulta não devolve nada, e não dá erro
 
@@ -402,7 +402,7 @@ O valor dentro de `ObjectId('...')` tem de ter exatamente 24 carateres, só com 
 
 ### A consulta pelo fornecedorId não devolve nada
 
-Escreveste o valor só entre aspas, como `{ fornecedorId: "66fb..." }`, sem `ObjectId(...)`. O valor guardado é um ObjectId, e o filtro procura um texto: valores de tipos diferentes nunca são iguais. Escreve `{ fornecedorId: ObjectId('...') }`, com os 24 carateres do `_id` do fornecedor.
+Escreveste o valor só entre aspas, como `{ fornecedorId: "66fb..." }`, sem `ObjectId(...)`. O valor guardado é um ObjectId, e o filtro procura um texto. Valores de tipos diferentes nunca são iguais. Escreve `{ fornecedorId: ObjectId('...') }`, com os 24 carateres do `_id` do fornecedor.
 
 ### Autorizaste o acesso de qualquer endereço
 

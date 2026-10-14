@@ -11,6 +11,6 @@ Aqui constróis a API da papelaria: primeiro os dados no MongoDB Atlas, depois u
 | 04 API Express e contratos | [guia](04-api-express-e-contratos.md) | [laboratório](04-api-express-e-contratos-laboratorio.md) | [ficha](04-api-express-e-contratos-exercicios.md) | [a primeira versão, num só ficheiro](../exemplos/acesso-a-dados/papelaria-api-sem-camadas/README.md); [a versão com camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) |
 | 05 Ligação segura, CRUD e regras de domínio | | | | [a API ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md) |
 
-A turma começou pelo tema 02. O tema 01, Diagnóstico e revisão dirigida, não tem documentos nesta área: o diagnóstico está nas [avaliações](../avaliacoes/diagnostico-inicial.md). Fora isso, um número em falta, ou uma célula vazia, é de um documento planeado e ainda por publicar.
+A turma começou pelo tema 02. O tema 01, Diagnóstico e revisão dirigida, não tem documentos nesta área. O diagnóstico está nas [avaliações](../avaliacoes/diagnostico-inicial.md). Fora isso, um número em falta, ou uma célula vazia, é de um documento planeado e ainda por publicar.
 
 ![Rodapé](../imagens/rodape.png)

@@ -4,9 +4,9 @@
 
 Módulo M14, Acesso a Bases de Dados. Este guia explica como se organiza uma aplicação com um cliente, um servidor e uma base de dados. Explica também como se prepara o projeto do servidor no teu computador, o que em inglês se chama setup. Lê-se em cerca de 70 minutos. Para praticar, há o [laboratório](03-arquitetura-e-setup-node-laboratorio.md) e a [ficha de exercícios](03-arquitetura-e-setup-node-exercicios.md) deste tema.
 
-No tema anterior criaste no MongoDB Atlas a base de dados da papelaria e fizeste-lhe perguntas pelo browser. Uma aplicação não funciona assim: os utilizadores não abrem o Atlas, abrem a aplicação, e é a aplicação que fala com a base de dados por eles. Neste tema vais perceber como se organiza essa aplicação, peça a peça, e vais preparar a primeira dessas peças: o projeto do servidor, a que se chama API.
+No tema anterior criaste no MongoDB Atlas a base de dados da papelaria e fizeste-lhe perguntas pelo browser. Uma aplicação não funciona assim. Os utilizadores não abrem o Atlas, abrem a aplicação, e é a aplicação que fala com a base de dados por eles. Neste tema vais perceber como se organiza essa aplicação, peça a peça, e vais preparar a primeira dessas peças: o projeto do servidor, a que se chama API.
 
-Ainda não ligas o servidor ao Atlas nem escreves as rotas da papelaria: isso vem nos dois temas seguintes. Este tema trata da planta da casa e das fundações. São as decisões que, se ficarem mal tomadas agora, custam caro mais tarde. Onde fica a palavra-passe da base de dados? Como se arruma o código, para não ser um ficheiro de mil linhas? E o que é que nunca pode ir parar ao GitHub?
+Ainda não ligas o servidor ao Atlas nem escreves as rotas da papelaria. Isso vem nos dois temas seguintes. Este tema trata da planta da casa e das fundações. São as decisões que, se ficarem mal tomadas agora, custam caro mais tarde. Onde fica a palavra-passe da base de dados? Como se arruma o código, para não ser um ficheiro de mil linhas? E o que é que nunca pode ir parar ao GitHub?
 
 ## Neste guia
 
@@ -92,11 +92,11 @@ As duas formas são usadas no mundo real, e a mesma tecnologia, o Express, serve
 
 ## O papel do servidor
 
-Parece mais simples o React pedir os dados diretamente ao Atlas: há menos uma peça. Não se faz, e as razões são as que tornam o servidor indispensável.
+Parece mais simples o React pedir os dados diretamente ao Atlas. Há menos uma peça. Não se faz, e as razões são as que tornam o servidor indispensável.
 
-A primeira razão é o segredo. Para se ligar ao Atlas, um programa precisa da **cadeia de ligação**. É um endereço que começa por `mongodb+srv://` e leva lá dentro o utilizador e a palavra-passe da base de dados. Ora, o código do React é descarregado para o browser de cada utilizador: quem quiser, abre as ferramentas de programador e lê-o. Uma palavra-passe que esteja no código do React deixou de ser secreta no momento em que alguém abriu a aplicação. Quem a tivesse podia ler, alterar ou apagar a base de dados inteira. Por isso a regra é absoluta: o segredo fica só no servidor, e o browser nunca o recebe.
+A primeira razão é o segredo. Para se ligar ao Atlas, um programa precisa da **cadeia de ligação**. É um endereço que começa por `mongodb+srv://` e leva lá dentro o utilizador e a palavra-passe da base de dados. Ora, o código do React é descarregado para o browser de cada utilizador. Quem quiser, abre as ferramentas de programador e lê-o. Uma palavra-passe que esteja no código do React deixou de ser secreta no momento em que alguém abriu a aplicação. Quem a tivesse podia ler, alterar ou apagar a base de dados inteira. Por isso a regra é absoluta. O segredo fica só no servidor, e o browser nunca o recebe.
 
-A segunda razão são as regras da aplicação. A papelaria não pode vender mais cadernos do que tem em stock. Se esta regra estiver no React, quem quiser contorna-a. O browser está nas mãos do utilizador: qualquer pessoa pode enviar um pedido sem passar pelo formulário, ou alterar o código que corre no seu browser. As regras têm de ser verificadas num sítio que o utilizador não controla, e esse sítio é o servidor. O React pode ajudar, avisando antes de enviar, mas essa ajuda é conforto e não proteção.
+A segunda razão são as regras da aplicação. A papelaria não pode vender mais cadernos do que tem em stock. Se esta regra estiver no React, quem quiser contorna-a. O browser está nas mãos do utilizador. Qualquer pessoa pode enviar um pedido sem passar pelo formulário, ou alterar o código que corre no seu browser. As regras têm de ser verificadas num sítio que o utilizador não controla, e esse sítio é o servidor. O React pode ajudar, avisando antes de enviar, mas essa ajuda é conforto e não proteção.
 
 A terceira razão é a persistência. Os dados de uma aplicação têm de sobreviver: ao fecho do browser, ao reinício do servidor, à troca de computador. O estado do React desaparece quando se fecha o separador. Um array na memória do servidor desaparece quando o servidor para, como viste em Sistemas de Informação. É a base de dados que guarda os dados de forma permanente, e é o servidor que lhe pede para os guardar.
 
@@ -151,7 +151,7 @@ As **rotas** são o índice da API. Dizem que método e que caminho correspondem
 
 O **controller** (controlador) é a camada que conhece o HTTP. Recebe o `req` e o `res`. Lê do pedido o que interessa, como um parâmetro do endereço ou os dados do corpo, e converte-os, por exemplo de texto para número. Chama o service com esses valores. Depois, conforme o resultado, escolhe o código de estado (200, 400, 404) e envia a resposta em JSON. O controller não sabe as regras da papelaria nem fala com a base de dados.
 
-O **service** (serviço) é onde estão as regras da aplicação: "o stock não pode ficar negativo", "um artigo com o stock abaixo do seu stock mínimo tem de ser encomendado", "o preço é sempre em cêntimos inteiros". Recebe e devolve valores de JavaScript, como números, textos, objetos e listas. Não sabe o que é um pedido HTTP: não usa `req` nem `res`. É por isso que se consegue testar sozinho, sem browser e sem servidor ligado.
+O **service** (serviço) é onde estão as regras da aplicação: "o stock não pode ficar negativo", "um artigo com o stock abaixo do seu stock mínimo tem de ser encomendado", "o preço é sempre em cêntimos inteiros". Recebe e devolve valores de JavaScript, como números, textos, objetos e listas. Não sabe o que é um pedido HTTP. Não usa `req` nem `res`. É por isso que se consegue testar sozinho, sem browser e sem servidor ligado.
 
 O **repository** (repositório) é a única camada que fala com o MongoDB. Sabe o nome da coleção e escreve as consultas com o Mongoose, com funções como o `find`, que procura documentos com um filtro. Recebe e devolve objetos JavaScript. Mais ninguém no servidor sabe que a base de dados é o MongoDB.
 
@@ -213,7 +213,7 @@ papelaria-api/
     └── server.js        o arranque da API
 ```
 
-O código fica dentro de `src` (de source, código-fonte), e a configuração e os ficheiros do npm ficam na raiz do projeto. Quando as camadas chegarem, no tema seguinte, ficam também dentro de `src`, em pastas próprias. Os ficheiros que começam por ponto, como `.env` e `.gitignore`, são ficheiros normais: o ponto só faz com que alguns sistemas os escondam por omissão.
+O código fica dentro de `src` (de source, código-fonte), e a configuração e os ficheiros do npm ficam na raiz do projeto. Quando as camadas chegarem, no tema seguinte, ficam também dentro de `src`, em pastas próprias. Os ficheiros que começam por ponto, como `.env` e `.gitignore`, são ficheiros normais. O ponto só faz com que alguns sistemas os escondam por omissão.
 
 ### Os scripts do package.json
 
@@ -230,7 +230,7 @@ No ficheiro real, esta secção substitui a `scripts` que o `npm init -y` criou,
 
 O script `dev` é o que usas enquanto desenvolves. Corre-se com `npm run dev` e faz duas coisas além de arrancar a API. O `--watch` reinicia a API sempre que guardas o `server.js`, um ficheiro que ele importe, ou o `.env`, para não teres de a parar e voltar a ligar à mão. O `--env-file=.env` lê o ficheiro `.env` e põe a configuração que lá está à disposição do código, como a secção seguinte explica.
 
-O script `start` é o arranque "a sério": é o comando que se usa quando a API é instalada noutro computador para funcionar, e não para ser desenvolvida. Aí a configuração vem do computador onde a API está instalada, e não de um ficheiro `.env`, e não faz sentido reiniciar a cada alteração. Corre-se com `npm start`.
+O script `start` é o arranque "a sério". É o comando que se usa quando a API é instalada noutro computador para funcionar, e não para ser desenvolvida. Aí a configuração vem do computador onde a API está instalada, e não de um ficheiro `.env`, e não faz sentido reiniciar a cada alteração. Corre-se com `npm start`.
 
 Repara na diferença entre os dois comandos: `npm start`, sem `run`, e `npm run dev`, com `run`. O `start` é um dos poucos scripts que o npm conhece pelo nome e deixa correr sem o `run`; todos os outros precisam dele. Antes de executar o comando, o npm escreve duas linhas a dizer que script está a correr, por exemplo:
 
@@ -247,7 +247,7 @@ Há uma razão para usar scripts em vez de escrever o comando completo. Quem che
 
 ### O que é configuração
 
-Há valores de que a API precisa que não são código: a porta onde escuta, o endereço do Atlas, o nome da base de dados. Têm duas características. Mudam de computador para computador: no teu, a porta 3000 está livre; no do colega, tem lá outro servidor. E alguns são segredos: a cadeia de ligação ao Atlas tem a palavra-passe.
+Há valores de que a API precisa que não são código: a porta onde escuta, o endereço do Atlas, o nome da base de dados. Têm duas características. Mudam de computador para computador: no teu, a porta 3000 está livre; no do colega, tem lá outro servidor. E alguns são segredos. A cadeia de ligação ao Atlas tem a palavra-passe.
 
 Se estes valores estiverem escritos no código, cada mudança obriga a alterar o código. E o segredo vai para onde quer que o código vá: para o GitHub, para o colega a quem mandas o projeto, para o professor. A solução é tirá-los do código e pô-los no **ambiente** do processo.
 
@@ -259,9 +259,9 @@ Cada processo, quando arranca, recebe um conjunto de pares nome e valor, a que s
 const PORTA = process.env.PORT || 3000;
 ```
 
-`process.env.PORT` é o valor da variável de ambiente `PORT`, se existir. Se não existir, é `undefined`, e o `||` faz a constante ficar com 3000. O `||` já o conheces: devolve o valor da esquerda se ele existir e não estiver vazio, e o da direita se não.
+`process.env.PORT` é o valor da variável de ambiente `PORT`, se existir. Se não existir, é `undefined`, e o `||` faz a constante ficar com 3000. O `||` já o conheces. Devolve o valor da esquerda se ele existir e não estiver vazio, e o da direita se não.
 
-Um pormenor que vai contar mais tarde: os valores das variáveis de ambiente são sempre texto. Se o `.env` disser `PORT=3000`, o `process.env.PORT` é `"3000"`, entre aspas, e não o número 3000. Para a porta não faz diferença, porque o `app.listen` aceita as duas formas. Quando leres do ambiente um valor que tenha de ser usado como número numa conta, converte-o com `Number(...)`, como fazes com o que chega num formulário.
+Um pormenor que vai contar mais tarde. Os valores das variáveis de ambiente são sempre texto. Se o `.env` disser `PORT=3000`, o `process.env.PORT` é `"3000"`, entre aspas, e não o número 3000. Para a porta não faz diferença, porque o `app.listen` aceita as duas formas. Quando leres do ambiente um valor que tenha de ser usado como número numa conta, converte-o com `Number(...)`, como fazes com o que chega num formulário.
 
 ### O ficheiro .env
 
@@ -276,15 +276,15 @@ PORT=3000
 MONGODB_URI=
 ```
 
-As linhas que começam por `#` são comentários. Os nomes escrevem-se em maiúsculas, com `_` entre palavras: é a convenção para variáveis de ambiente. O `--env-file=.env` do script `dev` lê este ficheiro quando a API arranca e põe cada linha em `process.env`.
+As linhas que começam por `#` são comentários. Os nomes escrevem-se em maiúsculas, com `_` entre palavras. É a convenção para variáveis de ambiente. O `--env-file=.env` do script `dev` lê este ficheiro quando a API arranca e põe cada linha em `process.env`.
 
-Duas consequências do `--env-file`. Se o ficheiro `.env` não existir, a API não arranca: o Node escreve `node: .env: not found` e termina. E, com o `--watch`, se mudares o `.env` e guardares, a API reinicia sozinha e passa a usar os valores novos. Experimentas as duas coisas no laboratório.
+Duas consequências do `--env-file`. Se o ficheiro `.env` não existir, a API não arranca. O Node escreve `node: .env: not found` e termina. E, com o `--watch`, se mudares o `.env` e guardares, a API reinicia sozinha e passa a usar os valores novos. Experimentas as duas coisas no laboratório.
 
 O `.env` é teu e é deste computador. Não vai para o Git, não se envia a ninguém, não se cola numa mensagem nem numa captura de ecrã. Quando o professor precisar de ver o teu projeto, vê-o sem o `.env`.
 
 ### O ficheiro .env.example
 
-Se o `.env` não vai para o Git, como é que quem descarrega o projeto sabe que variáveis tem de definir? É para isso que serve o **`.env.example`**: tem os mesmos nomes do `.env`, com valores de exemplo ou vazios, e comentários que explicam cada um. Nunca tem segredos.
+Se o `.env` não vai para o Git, como é que quem descarrega o projeto sabe que variáveis tem de definir? É para isso que serve o **`.env.example`**. Tem os mesmos nomes do `.env`, com valores de exemplo ou vazios, e comentários que explicam cada um. Nunca tem segredos.
 
 ```text
 # Porta onde a API escuta. Muda-a se a 3000 estiver ocupada.
@@ -295,7 +295,7 @@ PORT=3000
 MONGODB_URI=
 ```
 
-Quem descarrega o projeto copia o `.env.example` para um ficheiro `.env` e preenche os valores. O `.env.example` vai para o Git, porque documenta a configuração sem a revelar. Se um dia acrescentares uma variável ao `.env`, acrescentas também o nome ao `.env.example`: é a forma de não deixares os outros, e a ti próprio noutro computador, a adivinhar.
+Quem descarrega o projeto copia o `.env.example` para um ficheiro `.env` e preenche os valores. O `.env.example` vai para o Git, porque documenta a configuração sem a revelar. Se um dia acrescentares uma variável ao `.env`, acrescentas também o nome ao `.env.example`. É a forma de não deixares os outros, e a ti próprio noutro computador, a adivinhar.
 
 ### O .env do React não guarda segredos
 
@@ -320,7 +320,7 @@ O Git é o programa que guarda o histórico do teu projeto. Cada vez que fazes u
 | `git commit -m "mensagem"` | Guarda a fotografia dos ficheiros preparados, com a mensagem |
 | `git log --oneline` | Lista os commits já feitos, um por linha |
 
-A pasta do projeto, com o histórico guardado na pasta `.git`, chama-se **repositório** (em inglês, repository, a palavra que o Git escreve no ecrã). Não tem nada a ver com a camada repository do servidor: a palavra é a mesma, as coisas são diferentes.
+A pasta do projeto, com o histórico guardado na pasta `.git`, chama-se **repositório** (em inglês, repository, a palavra que o Git escreve no ecrã). Não tem nada a ver com a camada repository do servidor. A palavra é a mesma, as coisas são diferentes.
 
 No `git status`, um ficheiro novo que o Git ainda não conhece aparece como "untracked" (não seguido); na forma curta, `git status --short`, aparece com `??` à frente.
 
@@ -365,15 +365,15 @@ No tema anterior modelaste a papelaria a partir de perguntas. A interface React 
 | --- | --- |
 | Que artigos têm pouco stock? | `GET /api/artigos?stockMaximo=5` |
 | Que informação há sobre este artigo? | `GET /api/artigos/:id` |
-| Vendi três cadernos: o stock tem de baixar | `POST /api/vendas` |
+| Vendi três cadernos. O stock tem de baixar | `POST /api/vendas` |
 
-Todos os caminhos começam por `/api`. É uma convenção que separa os endereços da API dos endereços das páginas da aplicação, e que vai dar jeito quando juntares o React ao servidor. Não precisas de programar estas rotas agora: o tema seguinte trata delas. Mas pô-las já nesta tabela mostra que o projeto tem um destino.
+Todos os caminhos começam por `/api`. É uma convenção que separa os endereços da API dos endereços das páginas da aplicação, e que vai dar jeito quando juntares o React ao servidor. Não precisas de programar estas rotas agora. O tema seguinte trata delas. Mas pô-las já nesta tabela mostra que o projeto tem um destino.
 
 ### Passo 2: o diagrama de camadas
 
 Para o primeiro pedido, o dos artigos com pouco stock, o diagrama é o da secção "Um pedido a atravessar as camadas". No caderno ou numa folha, desenha-o com as quatro camadas e o Atlas, e escreve ao lado de cada camada o que faz neste pedido. Este diagrama é o plano do servidor, e é uma das duas coisas que este tema te pede para entregar.
 
-O terceiro pedido, o da venda, é um bom teste ao diagrama: onde fica a verificação de que há stock suficiente? No service, porque é uma regra da papelaria. E a mensagem de erro, com o código 400, quando não há? No controller, porque é ele que fala HTTP. Se conseguires responder a estas duas perguntas sem hesitar, percebeste as camadas.
+O terceiro pedido, o da venda, é um bom teste ao diagrama. Onde fica a verificação de que há stock suficiente? No service, porque é uma regra da papelaria. E a mensagem de erro, com o código 400, quando não há? No controller, porque é ele que fala HTTP. Se conseguires responder a estas duas perguntas sem hesitar, percebeste as camadas.
 
 ### Passo 3: preparar a pasta
 
@@ -419,7 +419,7 @@ app.listen(PORTA, (erro) => {
 
 Leitura guiada: lê o ficheiro de cima para baixo, pela ordem em que o Node o executa. Primeiro o `import` do Express. Depois a `PORTA`, lida do ambiente, com o 3000 como valor por omissão. A seguir, a `app` e a única rota. No fim, o `app.listen`, que liga a API à porta e escreve a mensagem do arranque, ou a do erro.
 
-A única rota é uma **rota de estado**: não faz nada da papelaria, só responde que a API está viva. Muitas APIs têm uma, porque é a forma mais rápida de confirmar que o servidor está ligado e acessível, antes de procurar um erro noutro sítio.
+A única rota é uma **rota de estado**. Não faz nada da papelaria, só responde que a API está viva. Muitas APIs têm uma, porque é a forma mais rápida de confirmar que o servidor está ligado e acessível, antes de procurar um erro noutro sítio.
 
 `.env.example`, com o conteúdo da secção "O ficheiro .env.example". `.gitignore`, com o conteúdo da secção "O que vai para o Git: o .gitignore". E o `.env`, que se cria copiando o `.env.example`:
 
@@ -427,7 +427,7 @@ A única rota é uma **rota de estado**: não faz nada da papelaria, só respond
 cp .env.example .env
 ```
 
-(No Windows, na linha de comandos clássica, `copy .env.example .env`.) Com o `MONGODB_URI` vazio, por agora, chega: a API ainda não fala com o Atlas.
+(No Windows, na linha de comandos clássica, `copy .env.example .env`.) Com o `MONGODB_URI` vazio, por agora, chega. A API ainda não fala com o Atlas.
 
 O esqueleto completo, com todos estes ficheiros, está na pasta de exemplos do repositório: [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md).
 
@@ -449,7 +449,7 @@ No separador Rede das ferramentas de programador, o pedido tem o código 200 e o
 
 ### Passo 6: mudar a porta sem mexer no código
 
-Com a API ligada, muda no `.env` a linha da porta para `PORT=3001` e guarda. O `--watch` reinicia a API, que escreve `API a correr em http://localhost:3001`. O endereço antigo passa a dar "ligação recusada", e o novo responde. Não mudaste uma única linha do `server.js`: é exatamente para isto que serve a configuração fora do código. Volta a pôr `PORT=3000`.
+Com a API ligada, muda no `.env` a linha da porta para `PORT=3001` e guarda. O `--watch` reinicia a API, que escreve `API a correr em http://localhost:3001`. O endereço antigo passa a dar "ligação recusada", e o novo responde. Não mudaste uma única linha do `server.js`. É exatamente para isto que serve a configuração fora do código. Volta a pôr `PORT=3000`.
 
 ### Passo 7: guardar no Git
 
@@ -477,7 +477,7 @@ O que este tema te pede para mostrares no fim é que sabes explicar um pedido do
 | 1 | browser | Escreves `http://localhost:3000/api/estado`. O browser faz um pedido `GET /api/estado` ao computador `localhost`, porta 3000 |
 | 2 | sistema operativo | O pedido chega à porta 3000, onde o processo da API está à escuta |
 | 3 | API (Node e Express) | O Express procura uma rota para `GET /api/estado`, encontra-a e chama a sua função |
-| 4 | API | A função responde com `res.json(...)`: o Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
+| 4 | API | A função responde com `res.json(...)`. O Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
 | 5 | browser | Recebe a resposta e mostra o JSON. O código e o tipo veem-se no separador Rede |
 
 O mesmo traçado, para o pedido que a aplicação vai fazer quando estiver completa, já tem as camadas e o Atlas:
@@ -493,7 +493,7 @@ O mesmo traçado, para o pedido que a aplicação vai fazer quando estiver compl
 | 7 | API, controller | Responde 200 com a lista em JSON |
 | 8 | browser (React) | Recebe o JSON, guarda-o no estado do componente e desenha a lista |
 
-Repara no passo 5: o repository usa a ligação que a API abriu quando arrancou, com a cadeia de ligação lida do `.env`. A cadeia, com a palavra-passe, só é usada nesse arranque, dentro do servidor, e em nenhum dos oito passos viaja para o browser. É o que quer dizer "o segredo fica só no servidor", agora visto num pedido concreto.
+Repara no passo 5. O repository usa a ligação que a API abriu quando arrancou, com a cadeia de ligação lida do `.env`. A cadeia, com a palavra-passe, só é usada nesse arranque, dentro do servidor, e em nenhum dos oito passos viaja para o browser. É o que quer dizer "o segredo fica só no servidor", agora visto num pedido concreto.
 
 ## Erros frequentes
 
@@ -503,7 +503,7 @@ Repara no passo 5: o repository usa a ligação que a API abriu quando arrancou,
 node: .env: not found
 ```
 
-O script `dev` usa `--env-file=.env`, e não há `.env` na raiz do projeto. Cria-o a partir do `.env.example`. Confirma também o nome: tem de ser exatamente `.env`, sem nada antes nem depois.
+O script `dev` usa `--env-file=.env`, e não há `.env` na raiz do projeto. Cria-o a partir do `.env.example`. Confirma também o nome. Tem de ser exatamente `.env`, sem nada antes nem depois.
 
 ### O ficheiro chama-se .env.txt ou .gitignore.txt
 
@@ -523,7 +523,7 @@ O `process.env.PORT` está vazio, e a API usou a porta 3000 por omissão. Ou arr
 
 ### O git status mostra o .env ou a node_modules
 
-O `.gitignore` não existe, tem outro nome, está noutra pasta, ou a regra está mal escrita. Não faças `git add` até a lista estar certa. Se já tiveres feito um commit com o `.env`, chama o professor: tirá-lo do histórico tem passos próprios. E, se o `.env` tiver uma palavra-passe verdadeira, ela tem de ser mudada.
+O `.gitignore` não existe, tem outro nome, está noutra pasta, ou a regra está mal escrita. Não faças `git add` até a lista estar certa. Se já tiveres feito um commit com o `.env`, chama o professor. Tirá-lo do histórico tem passos próprios. E, se o `.env` tiver uma palavra-passe verdadeira, ela tem de ser mudada.
 
 ### O .env.example tem a palavra-passe verdadeira
 

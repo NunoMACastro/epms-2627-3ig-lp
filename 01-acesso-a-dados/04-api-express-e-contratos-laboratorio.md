@@ -83,17 +83,17 @@ Antes de começares, confirma que o teu `src/server.js` tem estas peças, por es
 
 Confirma também que o `git log --oneline` mostra o primeiro commit, do tema anterior. Se faltar alguma destas peças, chama o professor. Quem não tiver a API de Sistemas de Informação faz o laboratório pelo caminho normal, a partir do esqueleto.
 
-As fases 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que vêm a seguir. Como a tua primeira versão já vem quase feita, é provável que acabes a fase 3 antes do fim da primeira aula: nesse caso, começa logo a fase 4.
+As fases 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que vêm a seguir. Como a tua primeira versão já vem quase feita, é provável que acabes a fase 3 antes do fim da primeira aula. Nesse caso, começa logo a fase 4.
 
 ### Fase 2, no teu projeto: o que falta à primeira versão
 
-1. O array dos artigos já está no teu `server.js`, desde Sistemas de Informação. Não o copies outra vez: faz só o passo 2 da fase 2, que confirma que os artigos são os mesmos que tens no Atlas.
+1. O array dos artigos já está no teu `server.js`, desde Sistemas de Informação. Não o copies outra vez. Faz só o passo 2 da fase 2, que confirma que os artigos são os mesmos que tens no Atlas.
 
 2. A seguir ao array, acrescenta a função `paraInteiro` do passo 3 da fase 2, com o comentário que a acompanha.
 
 3. Na rota de detalhe, troca a verificação que escreveste em Sistemas de Informação. A linha `const id = Number(req.params.id);` passa a `const id = paraInteiro(req.params.id);`, e a condição do 400, `!Number.isInteger(id) || id < 1`, passa a `id === null || id < 1`. Escreve no caderno, numa frase, porque mudas uma verificação que já funcionava.
 
-   A resposta: para usar a mesma verificação nos dois parâmetros que são números, e porque a do `stockMaximo` tem de recusar o texto vazio. Para o `id`, a verificação de Sistemas de Informação chegava: um `id` só com espaços dava 0, que fica abaixo de 1 e dá 400 na mesma. Para o `stockMaximo` não chega, porque lá o 0 é um valor válido, e o `Number("")` daria 0 sem ninguém o ter escrito.
+   A resposta: para usar a mesma verificação nos dois parâmetros que são números, e porque a do `stockMaximo` tem de recusar o texto vazio. Para o `id`, a verificação de Sistemas de Informação chegava. Um `id` só com espaços dava 0, que fica abaixo de 1 e dá 400 na mesma. Para o `stockMaximo` não chega, porque lá o 0 é um valor válido, e o `Number("")` daria 0 sem ninguém o ter escrito.
 
 4. Agora a rota da lista. A tua aplica um filtro e acaba logo ali, com `res.json` e `return`. O contrato acrescenta-lhe um segundo filtro, o `stockMaximo`, e um pedido pode trazer os dois ao mesmo tempo, como `/api/artigos?categoria=Papel&stockMaximo=4`. Antes de mudares o código, responde no caderno. Imagina que acrescentavas o `stockMaximo` noutro `if`, igual ao da categoria e a seguir a ele, com o seu próprio `res.json` e `return`. Que artigos responderia a tua rota a esse pedido? E quais deviam ser, pelo contrato?
 
@@ -101,15 +101,15 @@ As fases 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que v�
 
 5. Reescreve a rota da lista como a do passo 4 da fase 2. O resultado começa com todos os artigos, num `let`, e cada filtro que veio no pedido vai-o reduzindo. Só no fim há um `res.json`. Não deixes ficar o `if (categoria)` antigo, com o seu `return`, acima do `let`.
 
-6. No passo 5 da fase 2, escreve só a rota dos artigos a encomendar, a seguir à tua rota de detalhe, que já existe. Depois faz os passos 6 a 9: vês o 400, e passas a rota nova para antes da de detalhe. As duas ficam entre a rota da lista e o middleware final, que continua no fim do ficheiro.
+6. No passo 5 da fase 2, escreve só a rota dos artigos a encomendar, a seguir à tua rota de detalhe, que já existe. Depois faz os passos 6 a 9. Vês o 400, e passas a rota nova para antes da de detalhe. As duas ficam entre a rota da lista e o middleware final, que continua no fim do ficheiro.
 
 ### Fase 3, no teu projeto
 
-Faz a fase 3 como está, com uma diferença no passo 4: o teu `/api/artigo` não mostra a página do Express. O teu servidor tem o middleware final desde Sistemas de Informação, e por isso responde `{"erro":"Rota não encontrada"}`, com 404, que é o que o contrato pede. A tua primeira versão cumpre todas as linhas do contrato, incluindo essa. Regista-o na tabela.
+Faz a fase 3 como está, com uma diferença no passo 4. O teu `/api/artigo` não mostra a página do Express. O teu servidor tem o middleware final desde Sistemas de Informação, e por isso responde `{"erro":"Rota não encontrada"}`, com 404, que é o que o contrato pede. A tua primeira versão cumpre todas as linhas do contrato, incluindo essa. Regista-o na tabela.
 
 No passo 5, compara o que a rota reescrita responde ao `?categoria=` com o que a tua rota de Sistemas de Informação respondia, com o `if (categoria)`. Escreve no caderno porque são diferentes.
 
-A resposta: a rota reescrita responde 200 com `[]`, e a de Sistemas de Informação respondia 200 com os oito artigos. No `if (categoria)`, o texto vazio conta como falso, e a rota não filtrava. Na rota reescrita, o texto vazio não é `undefined`, entra no filtro, e nenhum artigo tem a categoria vazia. O que conta é o teu contrato: se a rota não o cumpre, muda a rota, como no passo 5 da fase 3.
+A resposta: a rota reescrita responde 200 com `[]`, e a de Sistemas de Informação respondia 200 com os oito artigos. No `if (categoria)`, o texto vazio conta como falso, e a rota não filtrava. Na rota reescrita, o texto vazio não é `undefined`, entra no filtro, e nenhum artigo tem a categoria vazia. O que conta é o teu contrato. Se a rota não o cumpre, muda a rota, como no passo 5 da fase 3.
 
 ### Fase 5, no teu projeto
 
@@ -139,7 +139,7 @@ No passo 5, todas as linhas que estão nas duas tabelas têm de dar as mesmas re
 
 ## Fase 1: o contrato, antes do código (15 minutos)
 
-Uma API é usada por programas, como a tua interface em React, e um programa não consegue adivinhar. Precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. O contrato de uma API diz isso, pedido a pedido. Diz o método e o caminho, e os parâmetros: onde vêm, de que tipo são e que valores servem. Diz também a resposta quando corre bem, e todas as respostas de erro. Escreve-se antes do código e obriga as duas partes: a API compromete-se a responder assim, e o cliente a pedir assim. E é com ele que se verifica a API: se responde ao que o contrato diz, está certa. Para saber mais, lê a secção "O que é o contrato de uma API" do [guia](04-api-express-e-contratos.md).
+Uma API é usada por programas, como a tua interface em React, e um programa não consegue adivinhar. Precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. O contrato de uma API diz isso, pedido a pedido. Diz o método e o caminho, e os parâmetros: onde vêm, de que tipo são e que valores servem. Diz também a resposta quando corre bem, e todas as respostas de erro. Escreve-se antes do código e obriga as duas partes: a API compromete-se a responder assim, e o cliente a pedir assim. E é com ele que se verifica a API. Se responde ao que o contrato diz, está certa. Para saber mais, lê a secção "O que é o contrato de uma API" do [guia](04-api-express-e-contratos.md).
 
 1. Na raiz do projeto, ao lado do `package.json`, cria o ficheiro `contrato-da-api.md`. Escreve-o em Markdown, o formato destes documentos. Um título começa por `#`. Uma tabela escreve-se com uma linha de texto por cada linha da tabela, com `|` entre as colunas. Logo a seguir à linha dos títulos vem uma linha só com traços, como `| --- | --- | --- |`. Um bloco de JSON fica entre duas linhas de três acentos graves, a primeira com a palavra `json`.
 
@@ -217,13 +217,13 @@ Uma API é usada por programas, como a tua interface em React, e um programa nã
 
 O `contrato-da-api.md` tem o formato dos erros, a forma do artigo, os quatro pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?categoria=`. É uma das duas coisas que este tema te pede para entregar; a outra é a tabela de verificação da fase 9.
 
-Pensa antes de continuares: porque é que o contrato não diz se os artigos estão num array ou no Atlas? A resposta: porque isso é decisão de quem escreve a API, e pode mudar sem o contrato mudar. É o que vai acontecer no tema seguinte, quando os artigos passarem para o Atlas: as respostas ficam iguais.
+Pensa antes de continuares: porque é que o contrato não diz se os artigos estão num array ou no Atlas? A resposta: porque isso é decisão de quem escreve a API, e pode mudar sem o contrato mudar. É o que vai acontecer no tema seguinte, quando os artigos passarem para o Atlas. As respostas ficam iguais.
 
 ## Fase 2: tudo no server.js, com as rotas primeiro pela ordem errada (25 minutos)
 
-Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o contrato com tudo no `src/server.js`, como os servidores de Sistemas de Informação. Quase tudo já o conheces de lá: o `app.get`, o `req.query` e o `req.params`, sempre como texto, o `res.status(...).json(...)` e o `return` depois de um erro. Há duas coisas novas. A primeira é verificar à entrada: a rota só lê os parâmetros que o contrato prevê, converte os números e responde 400 se não servirem. A segunda é uma armadilha: o `Number("")` dá 0, e não `NaN`. E há uma regra que já viste em Sistemas de Informação, a ordem das rotas: o Express experimenta-as pela ordem em que foram registadas, e a primeira que corresponder responde. Para saber mais, lê a secção "Primeira versão: tudo no server.js" do [guia](04-api-express-e-contratos.md).
+Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o contrato com tudo no `src/server.js`, como os servidores de Sistemas de Informação. Quase tudo já o conheces de lá: o `app.get`, o `req.query` e o `req.params`, sempre como texto, o `res.status(...).json(...)` e o `return` depois de um erro. Há duas coisas novas. A primeira é verificar à entrada. A rota só lê os parâmetros que o contrato prevê, converte os números e responde 400 se não servirem. A segunda é uma armadilha. O `Number("")` dá 0, e não `NaN`. E há uma regra que já viste em Sistemas de Informação, a ordem das rotas. O Express experimenta-as pela ordem em que foram registadas, e a primeira que corresponder responde. Para saber mais, lê a secção "Primeira versão: tudo no server.js" do [guia](04-api-express-e-contratos.md).
 
-1. No `src/server.js`, a seguir à linha `const app = express();`, acrescenta o array dos oito artigos. Este podes copiá-lo: são dados, e escrevê-los à mão não ensina nada.
+1. No `src/server.js`, a seguir à linha `const app = express();`, acrescenta o array dos oito artigos. Este podes copiá-lo. São dados, e escrevê-los à mão não ensina nada.
 
    ```js
    // Os artigos da papelaria, em memória. São dados temporários: no tema da
@@ -241,7 +241,7 @@ Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o 
    ];
    ```
 
-2. Confirma com os artigos que tens no Atlas, do laboratório do modelo documental: os nomes, as categorias, os stocks, os stocks mínimos e os preços têm de ser os mesmos. Só o `id` é diferente, e a `localizacao` ficou de fora, porque nenhum pedido do contrato a usa.
+2. Confirma com os artigos que tens no Atlas, do laboratório do modelo documental. Os nomes, as categorias, os stocks, os stocks mínimos e os preços têm de ser os mesmos. Só o `id` é diferente, e a `localizacao` ficou de fora, porque nenhum pedido do contrato a usa.
 
 3. A seguir ao array, acrescenta a função `paraInteiro`, que converte um texto num inteiro, ou devolve `null` se o texto não for um inteiro:
 
@@ -264,7 +264,7 @@ Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o 
    }
    ```
 
-   Leitura guiada: o `Number` tira os espaços das pontas do texto e converte o que sobra: `Number("5")` dá 5, e `Number("abc")` dá `NaN`. Mas, se não sobrar nada, dá 0: `Number("")` e `Number("   ")` dão os dois 0. No pedido `/api/artigos?stockMaximo=`, o parâmetro vem vazio; sem a verificação, a API trataria o pedido como `?stockMaximo=0`, e inventava um número que ninguém escreveu. Por isso a função recusa primeiro o texto vazio, com o `trim()`, que devolve o texto sem os espaços das pontas. O `typeof` diz o tipo de um valor: para um texto, é `"string"`. O `typeof texto !== "string"` protege de outro caso: um parâmetro repetido, como `?stockMaximo=1&stockMaximo=2`, chega como um array, e um array não tem `trim`. Como a condição usa `||`, se a primeira metade for verdadeira, o JavaScript já não olha para a segunda, e o `trim` nunca é chamado sobre o array. No fim, o `Number.isInteger` confirma que o número é inteiro. A última linha usa o operador `? :`: `condição ? a : b` dá `a` se a condição for verdadeira, e `b` se não for. Aqui, se o número for inteiro, a função devolve-o; se não, devolve `null`.
+   Leitura guiada: o `Number` tira os espaços das pontas do texto e converte o que sobra: `Number("5")` dá 5, e `Number("abc")` dá `NaN`. Mas, se não sobrar nada, dá 0: `Number("")` e `Number("   ")` dão os dois 0. No pedido `/api/artigos?stockMaximo=`, o parâmetro vem vazio; sem a verificação, a API trataria o pedido como `?stockMaximo=0`, e inventava um número que ninguém escreveu. Por isso a função recusa primeiro o texto vazio, com o `trim()`, que devolve o texto sem os espaços das pontas. O `typeof` diz o tipo de um valor: para um texto, é `"string"`. O `typeof texto !== "string"` protege de outro caso. Um parâmetro repetido, como `?stockMaximo=1&stockMaximo=2`, chega como um array, e um array não tem `trim`. Como a condição usa `||`, se a primeira metade for verdadeira, o JavaScript já não olha para a segunda, e o `trim` nunca é chamado sobre o array. No fim, o `Number.isInteger` confirma que o número é inteiro. A última linha usa o operador `? :`: `condição ? a : b` dá `a` se a condição for verdadeira, e `b` se não for. Aqui, se o número for inteiro, a função devolve-o; se não, devolve `null`.
 
 4. A seguir à rota de estado, acrescenta a rota `GET /api/artigos`:
 
@@ -291,7 +291,7 @@ Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o 
    });
    ```
 
-   Leitura guiada: o resultado começa com todos os artigos, num `let`, e cada filtro que veio no pedido vai-o reduzindo, um a seguir ao outro. Só se leem os dois parâmetros que o contrato prevê: um parâmetro como `?ordem=preco` é ignorado. O `stockMaximo` passa pela `paraInteiro`, e se não servir a rota responde 400, e o `return` acaba ali o pedido. Sem filtros, a rota devolve os oito artigos.
+   Leitura guiada: o resultado começa com todos os artigos, num `let`, e cada filtro que veio no pedido vai-o reduzindo, um a seguir ao outro. Só se leem os dois parâmetros que o contrato prevê. Um parâmetro como `?ordem=preco` é ignorado. O `stockMaximo` passa pela `paraInteiro`, e se não servir a rota responde 400, e o `return` acaba ali o pedido. Sem filtros, a rota devolve os oito artigos.
 
 5. A seguir à rota da lista, e antes do `app.listen`, acrescenta as outras duas rotas do contrato, mas com uma diferença de propósito. Escreve primeiro a rota de um artigo, e só depois a dos artigos a encomendar, ao contrário do que devia ser. Primeiro, esta:
 
@@ -448,7 +448,7 @@ Pensa antes de continuares: se o mesmo parâmetro vier duas vezes, como em `?sto
 
 ## Fase 3: verificar a primeira versão (15 minutos)
 
-Cada linha do contrato diz o que a API responde a um pedido, e por isso cada linha se pode verificar: faz-se o pedido e compara-se a resposta. Antes de cada pedido, prevês o código e a resposta, só com o contrato e o código à frente. Esta primeira tabela fica de referência: na fase 4 o código começa a mudar de ficheiro, e as respostas têm de continuar as mesmas. Para saber mais, lê o passo 2 do exemplo guiado do [guia](04-api-express-e-contratos.md).
+Cada linha do contrato diz o que a API responde a um pedido, e por isso cada linha se pode verificar. Faz-se o pedido e compara-se a resposta. Antes de cada pedido, prevês o código e a resposta, só com o contrato e o código à frente. Esta primeira tabela fica de referência. Na fase 4 o código começa a mudar de ficheiro, e as respostas têm de continuar as mesmas. Para saber mais, lê o passo 2 do exemplo guiado do [guia](04-api-express-e-contratos.md).
 
 1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe duas colunas, "previsto" e "obtido": `/api/estado`, `/api/artigos`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?stockMaximo=`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
@@ -470,7 +470,7 @@ Cada linha do contrato diz o que a API responde a um pedido, e por isso cada lin
    | `/api/artigos/abaixo-do-minimo` | 200 | a esferográfica, o bloco de notas, o marcador e o compasso |
    | `/api/artigo` | 404 | a página de erro do Express, em HTML, com `Cannot GET /api/artigo` |
 
-4. Repara na última linha. O código, 404, está certo, mas o corpo é uma página HTML, e não o JSON com `erro` que o contrato promete. A página diz `Cannot GET /api/artigo` (não é possível obter `/api/artigo`). É a única linha do contrato que esta versão não cumpre, e fica assim de propósito: é o assunto da fase 8.
+4. Repara na última linha. O código, 404, está certo, mas o corpo é uma página HTML, e não o JSON com `erro` que o contrato promete. A página diz `Cannot GET /api/artigo` (não é possível obter `/api/artigo`). É a única linha do contrato que esta versão não cumpre, e fica assim de propósito. É o assunto da fase 8.
 
 5. Volta à tua decisão sobre o pedido `?categoria=`. Lê a rota de `/api/artigos` e descobre o que ela responde a esse pedido, com que código e com que corpo. Escreve-o no caderno e confirma no browser, com `http://localhost:3000/api/artigos?categoria=`.
 
@@ -479,17 +479,17 @@ Cada linha do contrato diz o que a API responde a um pedido, e por isso cada lin
    - para responder com todos os artigos, a condição do filtro da categoria passa a `req.query.categoria !== undefined && req.query.categoria !== ""`;
    - para responder 400, acrescenta, antes do filtro da categoria, um `if (req.query.categoria === "")` que responde `res.status(400).json({ erro: "O parâmetro categoria, quando vem, não pode estar vazio" })`, seguido de `return`.
 
-   É o código que se acerta pelo contrato, e não o contrário: o contrato foi escrito primeiro, e é com ele que vais verificar a API na fase 9.
+   É o código que se acerta pelo contrato, e não o contrário. O contrato foi escrito primeiro, e é com ele que vais verificar a API na fase 9.
 
 ### Paragem 3
 
 A primeira versão responde ao que o contrato diz, menos ao `/api/artigo`, e a tabela do caderno é a referência para o resto do laboratório.
 
-Pensa antes de continuares: na tabela, `/api/artigos/abc` dá 400, e `/api/artigos/99` dá 404. Porque é que não dão os dois 404? A resposta: `abc` nem sequer é um identificador válido, por isso o pedido está mal feito, e a API diz-o com um 400. O 99 é um identificador válido, mas não há nenhum artigo com ele: o pedido está bem feito, e o que se pediu não existe. Por isso a rota verifica primeiro o identificador, e só depois procura o artigo.
+Pensa antes de continuares: na tabela, `/api/artigos/abc` dá 400, e `/api/artigos/99` dá 404. Porque é que não dão os dois 404? A resposta: `abc` nem sequer é um identificador válido, por isso o pedido está mal feito, e a API diz-o com um 400. O 99 é um identificador válido, mas não há nenhum artigo com ele. O pedido está bem feito, e o que se pediu não existe. Por isso a rota verifica primeiro o identificador, e só depois procura o artigo.
 
 ## Fase 4: os dados e o service, e um teste sem servidor (12 minutos)
 
-A primeira versão funciona, mas mistura tudo: os dados, o HTTP e as regras da papelaria estão nas mesmas funções. Para experimentar a regra dos artigos a encomendar, tens de ligar a API e fazer o pedido. As camadas separam isto. A separação faz-se de dentro para fora: primeiro os dados e o service, depois o controller, por fim as rotas e o `server.js`. O código não se reescreve: cada parte muda de ficheiro. Cada ficheiro é um módulo, e os módulos ligam-se com `import` e `export`. Num projeto com `"type": "module"`, o que se declara num ficheiro fica fechado lá dentro. O `export` deixa outro ficheiro usar um nome, e o `import` pede-o, com o caminho do ficheiro. Nos teus ficheiros, o caminho começa por `./` (a mesma pasta) ou `../` (a pasta de cima) e acaba sempre em `.js`. O service fica com as regras, sem saber nada de HTTP, e por isso pode ser usado sem servidor. Para saber mais, lê as secções "Os dados temporários" e "O service" do [guia](04-api-express-e-contratos.md).
+A primeira versão funciona, mas mistura tudo. Os dados, o HTTP e as regras da papelaria estão nas mesmas funções. Para experimentar a regra dos artigos a encomendar, tens de ligar a API e fazer o pedido. As camadas separam isto. A separação faz-se de dentro para fora: primeiro os dados e o service, depois o controller, por fim as rotas e o `server.js`. O código não se reescreve. Cada parte muda de ficheiro. Cada ficheiro é um módulo, e os módulos ligam-se com `import` e `export`. Num projeto com `"type": "module"`, o que se declara num ficheiro fica fechado lá dentro. O `export` deixa outro ficheiro usar um nome, e o `import` pede-o, com o caminho do ficheiro. Nos teus ficheiros, o caminho começa por `./` (a mesma pasta) ou `../` (a pasta de cima) e acaba sempre em `.js`. O service fica com as regras, sem saber nada de HTTP, e por isso pode ser usado sem servidor. Para saber mais, lê as secções "Os dados temporários" e "O service" do [guia](04-api-express-e-contratos.md).
 
 1. Dentro de `src`, cria a pasta `dados` e, nela, o ficheiro `artigos.dados.js`, com este conteúdo. É o array do teu `server.js`, copiado, com `export` à frente do `const`:
 
@@ -510,7 +510,7 @@ A primeira versão funciona, mas mistura tudo: os dados, o HTTP e as regras da p
    ];
    ```
 
-   No `server.js`, deixa o array ficar por agora: as rotas de lá ainda precisam dele, até à fase 6. Durante as fases 4 e 5, o array fica nos dois sítios, de propósito.
+   No `server.js`, deixa o array ficar por agora. As rotas de lá ainda precisam dele, até à fase 6. Durante as fases 4 e 5, o array fica nos dois sítios, de propósito.
 
 2. Cria a pasta `src/services` e, nela, o ficheiro `artigos.service.js`, com este conteúdo:
 
@@ -560,7 +560,7 @@ A primeira versão funciona, mas mistura tudo: os dados, o HTTP e as regras da p
    }
    ```
 
-   Leitura guiada: começa pelo `import`, que se lê assim: do ficheiro `../dados/artigos.dados.js`, quero o que foi exportado com o nome `artigos`. O nome vai entre chavetas e tem de ser exatamente o do `export`. Os `..` sobem de `src/services/` para `src/`, e daí o caminho desce para `dados/artigos.dados.js`. Depois vêm três funções, cada uma com `export`, porque o controller vai precisar delas. A `listarArtigos` são os dois filtros da tua rota da lista, agora a ler um objeto `filtros`, e não o `req.query`. A `obterArtigo` é o `find` da rota de um artigo, e devolve `null` quando não encontra: não sabe o que é um 404. A `artigosAbaixoDoMinimo` é a linha da regra, tal e qual. Nenhuma usa `req` nem `res`.
+   Leitura guiada: começa pelo `import`, que se lê assim: do ficheiro `../dados/artigos.dados.js`, quero o que foi exportado com o nome `artigos`. O nome vai entre chavetas e tem de ser exatamente o do `export`. Os `..` sobem de `src/services/` para `src/`, e daí o caminho desce para `dados/artigos.dados.js`. Depois vêm três funções, cada uma com `export`, porque o controller vai precisar delas. A `listarArtigos` são os dois filtros da tua rota da lista, agora a ler um objeto `filtros`, e não o `req.query`. A `obterArtigo` é o `find` da rota de um artigo, e devolve `null` quando não encontra. Não sabe o que é um 404. A `artigosAbaixoDoMinimo` é a linha da regra, tal e qual. Nenhuma usa `req` nem `res`.
 
 3. Na raiz do projeto, cria um ficheiro `experimentar-service.js`, com este conteúdo:
 
@@ -603,7 +603,7 @@ A primeira versão funciona, mas mistura tudo: os dados, o HTTP e as regras da p
 
    Isto quer dizer que o service funciona sozinho, sem browser, sem servidor e sem HTTP. Na primeira versão, para experimentar a mesma regra, tinhas de ligar a API e fazer o pedido.
 
-6. Compara com a tua previsão. Repara no marcador fluorescente: não está na lista do stock até 3, mas está na lista a encomendar. Escreve no caderno porquê.
+6. Compara com a tua previsão. Repara no marcador fluorescente. Não está na lista do stock até 3, mas está na lista a encomendar. Escreve no caderno porquê.
 
    A resposta: tem 8 unidades, mais do que 3, por isso não entra no filtro do stock até 3. Mas o seu stock mínimo é 10, e 8 é menos do que 10, por isso tem de ser encomendado. "Pouco stock" é um número escolhido por quem faz o pedido; "abaixo do mínimo" é uma regra da papelaria, com um mínimo diferente para cada artigo.
 
@@ -613,7 +613,7 @@ A primeira versão funciona, mas mistura tudo: os dados, o HTTP e as regras da p
 
 Os ficheiros dos dados e do service existem, e o service funciona sem servidor. A API continua a responder com as rotas do `server.js`, como na fase 3.
 
-Pensa antes de continuares: porque é que o `import` do service escreve `../dados/artigos.dados.js`, com o `.js` no fim? A resposta: porque, nos módulos do Node, a extensão é obrigatória nos teus ficheiros; sem ela, o Node não encontra o ficheiro. O `import express from "express"` não tem extensão nem `./` porque não é um ficheiro teu: é um pacote, que o Node vai buscar à pasta `node_modules`.
+Pensa antes de continuares: porque é que o `import` do service escreve `../dados/artigos.dados.js`, com o `.js` no fim? A resposta: porque, nos módulos do Node, a extensão é obrigatória nos teus ficheiros; sem ela, o Node não encontra o ficheiro. O `import express from "express"` não tem extensão nem `./` porque não é um ficheiro teu. É um pacote, que o Node vai buscar à pasta `node_modules`.
 
 ## Fase 5: o controller (8 minutos)
 
@@ -685,17 +685,17 @@ O controller é a camada que conhece o HTTP. Lê do pedido o que interessa, conv
    }
    ```
 
-   Leitura guiada: começa pelo `import`, que pede três nomes ao service, dentro das mesmas chavetas. A `paraInteiro` não tem `export`: é uma ajuda interna, e um nome que não se exporta não pode ser usado por engano noutro sítio. Cada função exportada trata um pedido do contrato, e o comentário diz qual. A `listar` constrói o objeto `filtros` só com os parâmetros que vieram e que o contrato prevê. A `obter` faz as duas verificações, primeiro 400 e depois 404, e traduz o `null` do service num 404.
+   Leitura guiada: começa pelo `import`, que pede três nomes ao service, dentro das mesmas chavetas. A `paraInteiro` não tem `export`. É uma ajuda interna, e um nome que não se exporta não pode ser usado por engano noutro sítio. Cada função exportada trata um pedido do contrato, e o comentário diz qual. A `listar` constrói o objeto `filtros` só com os parâmetros que vieram e que o contrato prevê. A `obter` faz as duas verificações, primeiro 400 e depois 404, e traduz o `null` do service num 404.
 
 2. Responde no caderno: na função `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarArtigos`?
 
-   A resposta: o `filtros` só recebe os parâmetros que o contrato prevê, já convertidos e verificados. Com o `req.query` passado diretamente, o `stockMaximo` chegava ao service como texto, e `"abc"` passava sem erro, com uma lista vazia em vez de um 400. E qualquer parâmetro que alguém inventasse chegaria ao service. No tema seguinte, esse objeto vai ser um filtro do MongoDB: passá-lo inteiro seria deixar quem faz o pedido escrever a consulta.
+   A resposta: o `filtros` só recebe os parâmetros que o contrato prevê, já convertidos e verificados. Com o `req.query` passado diretamente, o `stockMaximo` chegava ao service como texto, e `"abc"` passava sem erro, com uma lista vazia em vez de um 400. E qualquer parâmetro que alguém inventasse chegaria ao service. No tema seguinte, esse objeto vai ser um filtro do MongoDB. Passá-lo inteiro seria deixar quem faz o pedido escrever a consulta.
 
 3. Volta à tua decisão sobre o pedido `?categoria=`. Lê a função `listar` e a `listarArtigos` e descobre o que este código responde a esse pedido. Se, na fase 3, mudaste a rota para cumprir o contrato, faz a mudança equivalente na `listar`.
 
    A resposta: 200, com `[]`, como a rota da primeira versão antes de qualquer mudança. O texto vazio não é `undefined`, entra no `filtros`, e a `listarArtigos` compara cada categoria com `""`. A mudança, se for precisa, é a da fase 3, agora na `listar`. É no controller que se decide o que fazer com o que chega no pedido, e não no service.
 
-Ainda não há nada para ver no browser: nenhuma rota chama o controller, e a API continua a responder com as rotas do `server.js`.
+Ainda não há nada para ver no browser. Nenhuma rota chama o controller, e a API continua a responder com as rotas do `server.js`.
 
 ### Paragem 5
 
@@ -705,9 +705,9 @@ Pensa antes de continuares: porque é que a `paraInteiro` ficou no controller, e
 
 ## Fase 6: as rotas e o server.js que as monta (10 minutos)
 
-As rotas são o índice da API: dizem que pedido vai para que função do controller. Num ficheiro próprio, ficam num router, criado com `express.Router()`: um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor. Dentro do router, os caminhos são relativos ao sítio onde ele é montado. A regra da ordem continua a valer lá dentro. E o `server.js` fica só com o arranque: a porta, a rota de estado, a montagem do router e o `app.listen`. Para saber mais, lê as secções "As rotas" e "O server.js que monta as rotas" do [guia](04-api-express-e-contratos.md).
+As rotas são o índice da API. Dizem que pedido vai para que função do controller. Num ficheiro próprio, ficam num router, criado com `express.Router()`: um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor. Dentro do router, os caminhos são relativos ao sítio onde ele é montado. A regra da ordem continua a valer lá dentro. E o `server.js` fica só com o arranque: a porta, a rota de estado, a montagem do router e o `app.listen`. Para saber mais, lê as secções "As rotas" e "O server.js que monta as rotas" do [guia](04-api-express-e-contratos.md).
 
-1. Cria a pasta `src/rotas` e, nela, o ficheiro `artigos.rotas.js`, com este conteúdo. Desta vez, a rota fixa vai logo antes da rota com o parâmetro: viste porquê na fase 2.
+1. Cria a pasta `src/rotas` e, nela, o ficheiro `artigos.rotas.js`, com este conteúdo. Desta vez, a rota fixa vai logo antes da rota com o parâmetro. Viste porquê na fase 2.
 
    ```js
    // src/rotas/artigos.rotas.js: que pedido vai para que função do controller.
@@ -771,7 +771,7 @@ As rotas são o índice da API: dizem que pedido vai para que função do contro
 
 A API responde pelas camadas. O `server.js` tem a porta, a rota de estado, o `import` e o `app.use` do router e o `app.listen`, e mais nada.
 
-Pensa antes de continuares: como sabes que as respostas vêm mesmo das camadas, e não de rotas antigas esquecidas no `server.js`? A resposta: se as rotas antigas tivessem ficado acima do `app.use`, eram elas que respondiam, com as mesmas respostas, e o router nunca era usado. Nenhum pedido mostrava a diferença. A confirmação é ler o `server.js`: depois desta fase, não pode ter o array, a `paraInteiro` nem nenhuma rota dos artigos.
+Pensa antes de continuares: como sabes que as respostas vêm mesmo das camadas, e não de rotas antigas esquecidas no `server.js`? A resposta: se as rotas antigas tivessem ficado acima do `app.use`, eram elas que respondiam, com as mesmas respostas, e o router nunca era usado. Nenhum pedido mostrava a diferença. A confirmação é ler o `server.js`. Depois desta fase, não pode ter o array, a `paraInteiro` nem nenhuma rota dos artigos.
 
 ## Fase 7: três erros de módulos (8 minutos)
 
@@ -855,7 +855,7 @@ Pensa antes de continuares: e se o middleware final ficasse antes do `app.use` d
 
 ## Fase 9: verificar o contrato (13 minutos)
 
-Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis: um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](04-api-express-e-contratos.md).
+Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](04-api-express-e-contratos.md).
 
 1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe três colunas, "código previsto", "código obtido" e "corpo confere com o contrato": `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
@@ -909,7 +909,7 @@ No fim, a tabela tem de ter pelo menos um 200, um 400 e um 404 verificados.
 
 ### A API não reinicia depois de guardar
 
-O `--watch` só vigia os ficheiros que a API já carregou. Um ficheiro novo, que ainda nenhum `import` usa, não faz reiniciar; assim que o `import` existir, passa a fazer. Nas fases 4 e 5 é isto que acontece, e está certo: os ficheiros novos só são carregados na fase 6. Se ficares na dúvida, para com Ctrl+C e volta a `npm run dev`.
+O `--watch` só vigia os ficheiros que a API já carregou. Um ficheiro novo, que ainda nenhum `import` usa, não faz reiniciar; assim que o `import` existir, passa a fazer. Nas fases 4 e 5 é isto que acontece, e está certo. Os ficheiros novos só são carregados na fase 6. Se ficares na dúvida, para com Ctrl+C e volta a `npm run dev`.
 
 ### A API reinicia em ciclo, com o mesmo erro
 
@@ -929,11 +929,11 @@ Ou o `app.use("/api/artigos", ...)` está depois do middleware final, ou, dentro
 
 ### O browser mostra a lista de artigos ao pedir um só
 
-Escreveste `router.get("/:id", listar)`: o pedido de um artigo vai parar à função da lista, que não lê o `:id` e devolve todos. Cada rota tem de passar a função certa: `listar` no `"/"`, `abaixoDoMinimo` no `"/abaixo-do-minimo"` e `obter` no `"/:id"`.
+Escreveste `router.get("/:id", listar)`. O pedido de um artigo vai parar à função da lista, que não lê o `:id` e devolve todos. Cada rota tem de passar a função certa: `listar` no `"/"`, `abaixoDoMinimo` no `"/abaixo-do-minimo"` e `obter` no `"/:id"`.
 
 ### /api/artigos responde 400 com a mensagem do identificador
 
-Escreveste `router.get("/", obter)`: o pedido da lista vai parar à função de um artigo, que não encontra nenhum `:id` no caminho e responde 400. No `"/"`, a função é a `listar`.
+Escreveste `router.get("/", obter)`. O pedido da lista vai parar à função de um artigo, que não encontra nenhum `:id` no caminho e responde 400. No `"/"`, a função é a `listar`.
 
 ## Desafios
 

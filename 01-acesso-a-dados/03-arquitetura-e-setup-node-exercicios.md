@@ -142,7 +142,7 @@ c) Onde fica a cadeia de ligação ao Atlas, e que camada fala com o Atlas neste
 - Exercício 2: a secção "O que faz cada camada" do guia. Para cada responsabilidade, pergunta-te se é HTTP, uma regra do torneio ou a base de dados.
 - Exercício 3: a secção "Os scripts do package.json" do guia, e a fase 2 do laboratório. Faz de conta que és o npm e o Node. Corre de cabeça cada script, desde o momento em que escreves o comando até à primeira linha do `server.js`. Confirma cada ficheiro que tens de ler e cada linha que tens de aceitar.
 - Exercício 4: as secções "O ficheiro .env.example" e "O que vai para o Git: o .gitignore" do guia.
-- Exercício 5: a secção "As variáveis de ambiente" do guia, e os scripts da fase 2 do laboratório: compara o que cada comando passa ao Node.
+- Exercício 5: a secção "As variáveis de ambiente" do guia, e os scripts da fase 2 do laboratório. Compara o que cada comando passa ao Node.
 - Exercício 6: a tabela da secção "Um pedido a atravessar as camadas" e o passo 2 do exemplo guiado do guia.
 
 ## Desafio opcional
@@ -151,7 +151,7 @@ Faz-se no computador, no projeto `papelaria-api` do laboratório. Cerca de 15 mi
 
 1. Acrescenta ao `.env` e ao `.env.example` uma variável `NOME_APLICACAO`, com o valor `Papelaria da escola`.
 2. Muda a rota `/api/estado` para responder com o nome que está nessa variável, em vez do texto escrito no código.
-3. Decide o que acontece quando a variável não existe: usas um valor por omissão, como fizeste com a porta? Experimenta, apagando-a do `.env`.
+3. Decide o que acontece quando a variável não existe. Usas um valor por omissão, como fizeste com a porta? Experimenta, apagando-a do `.env`.
 
 Pensa, por fim, nisto: para a porta e para o nome, um valor por omissão faz sentido. Para a `MONGODB_URI`, faria sentido escrever no código um endereço por omissão? Porquê?
 

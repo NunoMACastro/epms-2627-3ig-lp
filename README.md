@@ -20,7 +20,7 @@ Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que tem os temas pel
 
 ## Como estudar
 
-Lê o guia antes de escrever código: primeiro a explicação, depois o exemplo guiado. Antes de correres um exemplo, tenta prever o resultado: é aí que percebes se a ideia ficou entendida. As resoluções dos exercícios não estão aqui, porque se trabalham na aula.
+Lê o guia antes de escrever código: primeiro a explicação, depois o exemplo guiado. Antes de correres um exemplo, tenta prever o resultado. É aí que percebes se a ideia ficou entendida. As resoluções dos exercícios não estão aqui, porque se trabalham na aula.
 
 Se alguma coisa faltar ou estiver errada, avisa na aula.
 
