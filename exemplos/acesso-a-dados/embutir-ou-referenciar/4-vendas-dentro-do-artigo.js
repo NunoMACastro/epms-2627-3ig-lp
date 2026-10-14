@@ -1,3 +1,4 @@
+// Coleção artigos: um artigo com as suas vendas guardadas dentro dele
 [
   {
     nome: "Caderno A4 quadriculado",

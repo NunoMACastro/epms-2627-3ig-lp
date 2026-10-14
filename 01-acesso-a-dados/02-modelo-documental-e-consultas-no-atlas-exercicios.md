@@ -1,6 +1,6 @@
 ![Cabeçalho](../imagens/cabecalho.png)
 
-# Ficha de exercícios: modelo documental e consultas
+# Ficha de exercícios: modelo documental e primeiras consultas no Atlas
 
 Ficha do tema Modelo documental e primeiras consultas no Atlas, do módulo M14, Acesso a Bases de Dados. Praticas a ler um documento, a decidir e justificar o modelo de um problema novo e a escrever consultas no Atlas, prevendo o resultado. Cerca de 90 minutos, para fazeres sozinho, em casa ou quando acabares o laboratório.
 
