@@ -2,9 +2,11 @@
 
 # API da papelaria, ligada ao Atlas
 
-A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio. Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais: a lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
+A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio (CRUD, do inglês, quer dizer criar, ler, alterar e apagar). Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais: a lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
 Só a lista mudou. A rota de detalhe ainda lê do array, com o id de 1 a 8. Passar o resto da API para a base, com o `_id` que o MongoDB dá a cada documento, é do tema da ligação segura.
+
+Este exemplo ainda não tem as camadas nem o contrato do tema 04: reconstrói a aula em que ligaste ao Atlas a API de Sistemas de Informação. Por isso, `/api/artigos/abaixo-do-minimo` responde 400, e o `stockMaximo` não filtra. No tema da ligação segura, é a versão com camadas que passa a ler da base.
 
 ## O que está nesta pasta
 
@@ -26,9 +28,9 @@ Precisas do Node.js 22 ou mais recente, e de internet. No Atlas, precisas da bas
    cp .env.example .env
    ```
 
-   No Windows, na linha de comandos clássica, o segundo comando é `copy .env.example .env`.
+   No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-3. No Atlas, carrega em "Connect" (ligar) no teu cluster e escolhe a ligação por "Drivers". Copia a cadeia de ligação, que começa por `mongodb+srv://`, para a linha `MONGODB_URI=` do `.env`. Troca o marcador da palavra-passe, a parte entre `<` e `>`, pela palavra-passe do utilizador da base de dados. A partir deste momento, o `.env` tem um segredo: não o copies para mais lado nenhum.
+3. No Atlas, carrega em "Connect" (ligar) no teu cluster e escolhe a ligação por "Drivers". Copia a cadeia de ligação, que começa por `mongodb+srv://`, para a linha `MONGODB_URI=` do `.env`. Se no teu ecrã os nomes forem outros, procura a opção que mostra a cadeia de ligação que começa por `mongodb+srv://`. Troca o marcador da palavra-passe, a parte entre `<` e `>`, pela palavra-passe do utilizador da base de dados. A partir deste momento, o `.env` tem um segredo: não o copies para mais lado nenhum.
 4. Arranca a API:
 
    ```bash
@@ -37,7 +39,7 @@ Precisas do Node.js 22 ou mais recente, e de internet. No Atlas, precisas da bas
 
    O que deves ver: duas linhas, `Ligada à base de dados papelaria` e `API a correr em http://localhost:3000`.
 
-5. No browser, experimenta os pedidos da tabela seguinte. Para parar, Ctrl+C.
+5. No browser, experimenta os pedidos da tabela seguinte; o código de cada resposta vê-se no separador Rede das ferramentas de programador. Para parar, Ctrl+C.
 
 ## O que cada pedido deve responder
 

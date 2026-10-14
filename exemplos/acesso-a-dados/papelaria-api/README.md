@@ -26,9 +26,9 @@ cp .env.example .env
 npm run dev
 ```
 
-No Windows, na linha de comandos clássica, o segundo comando é `copy .env.example .env`.
+No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, `http://localhost:3000/api/estado` mostra `{"estado":"ok","aplicacao":"API da papelaria"}`, com o código 200. Qualquer outro caminho, como `/api/artigos`, dá 404, porque ainda não há essas rotas. Para parar, Ctrl+C no terminal.
+O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, `http://localhost:3000/api/estado` mostra `{"estado":"ok","aplicacao":"API da papelaria"}`, com o código 200, que vês no separador Rede das ferramentas de programador. Qualquer outro caminho, como `/api/artigos`, dá 404, porque ainda não há essas rotas. Para parar, Ctrl+C no terminal.
 
 ## Versões com que foi testado
 

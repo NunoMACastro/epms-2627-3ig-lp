@@ -27,9 +27,9 @@ cp .env.example .env
 npm run dev
 ```
 
-No Windows, na linha de comandos clássica, o segundo comando é `copy .env.example .env`.
+No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, experimenta os pedidos do contrato; a tabela do passo 7 do exemplo guiado do guia diz o que cada um deve responder. Para parar, Ctrl+C.
+O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, experimenta os pedidos do contrato, com o separador Rede das ferramentas de programador aberto, para veres o código. A tabela do [passo 7 do exemplo guiado do guia](../../../01-acesso-a-dados/04-api-express-e-contratos.md#passo-7-verificar-o-contrato) diz o que cada um deve responder. Para parar, Ctrl+C.
 
 ## Versões com que foi testado
 
