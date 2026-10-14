@@ -2,23 +2,33 @@
 
 # Ficha de exercícios: arquitetura e setup Node
 
-Terceiro tema de Acesso a dados. Esta ficha é para fazeres sozinho, depois de leres o [guia do tema](03-arquitetura-e-setup-node.md) e de fazeres o [laboratório](03-arquitetura-e-setup-node-laboratorio.md). Os exercícios 1 a 6 fazem-se em papel; o desafio, no computador.
+Ficha do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Praticas, noutro problema, as decisões do tema: onde corre cada coisa, em que camada fica cada responsabilidade e o que pode e não pode ir para o Git. Cerca de 50 minutos, para fazeres sozinho.
 
-## Objetivo e contexto
+## O que precisas de saber
 
-O guia e o laboratório trabalharam a papelaria. Esta ficha usa a aplicação do torneio de futsal da escola, que modelaste na ficha do tema anterior, e pede-te as mesmas decisões noutro problema: onde corre cada coisa, em que camada fica cada responsabilidade, e o que pode e não pode ir para o Git.
-
-A aplicação do torneio tem as três partes do guia: uma interface em React, onde os alunos veem os jogos e a classificação; uma API em Node e Express, a `torneio-api`; e uma base de dados no MongoDB Atlas, com as coleções `equipas` e `jogos`. As regras do torneio são as habituais: uma vitória vale 3 pontos, um empate 1 e uma derrota 0.
+O [guia do tema](03-arquitetura-e-setup-node.md) e o [laboratório](03-arquitetura-e-setup-node-laboratorio.md).
 
 ## Como trabalhar
 
-Responde primeiro sem abrir o guia. Quando não souberes, escreve o que achas e porquê, e só depois confirma. Em cada exercício que peça uma justificação, uma ou duas frases chegam.
+Os exercícios 1 a 6 fazem-se em papel, por esta ordem, e levam cerca de 50 minutos. O desafio opcional faz-se no computador, no projeto `papelaria-api` do laboratório.
 
-Tempo previsto: 50 minutos para os exercícios 1 a 6.
+Responde primeiro sem abrir o guia. Quando não souberes, escreve o que achas e porquê, e só depois confirma. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício. Em cada exercício que peça uma justificação, uma ou duas frases chegam.
 
-## Exercício 1: onde corre e o que viaja
+Entrega as respostas dos exercícios 1 a 6, com o diagrama do exercício 6 desenhado ou fotografado. Se fizeres o desafio, entrega o `src/server.js` e o `.env.example`, e nunca o `.env`. As resoluções são trabalhadas na aula.
 
-Guia: secções "A tua aplicação tem três partes" e "O papel do servidor".
+## O cenário: a aplicação do torneio
+
+O guia e o laboratório trabalharam a papelaria. Esta ficha usa a aplicação do torneio de futsal da escola, que modelaste na ficha do tema anterior, e pede-te as mesmas decisões noutro problema.
+
+A aplicação do torneio tem as três partes do guia:
+
+- uma interface em React, onde os alunos veem os jogos e a classificação;
+- uma API em Node e Express, a `torneio-api`;
+- uma base de dados no MongoDB Atlas, com as coleções `equipas` e `jogos`.
+
+As regras do torneio são as habituais: uma vitória vale 3 pontos, um empate 1 e uma derrota 0. Os dados desta ficha são fictícios, incluindo o endereço e a palavra-passe do exercício 4.
+
+## Exercício 1: onde corre e o que viaja (8 minutos)
 
 a) Para cada item, indica onde corre ou onde fica: no browser (React), na API ou no MongoDB Atlas.
 
@@ -26,15 +36,13 @@ a) Para cada item, indica onde corre ou onde fica: no browser (React), na API ou
 | --- | --- |
 | O componente que desenha a tabela da classificação | |
 | A função que calcula os pontos de uma equipa a partir dos resultados | |
-| A pesquisa dos jogos da equipa 3 na coleção `jogos` | |
+| A consulta que procura os jogos do 10.º A na coleção `jogos`: onde é escrita, e onde é executada | |
 | A cadeia de ligação `mongodb+srv://...` | |
 | O `fetch("/api/classificacao")` | |
 
 b) O que viaja entre o React e a API quando a classificação é pedida? E em que formato?
 
-## Exercício 2: que camada
-
-Guia: secção "O que faz cada camada".
+## Exercício 2: que camada (8 minutos)
 
 Para cada responsabilidade da `torneio-api`, indica a camada: rotas, controller, service ou repository.
 
@@ -47,9 +55,7 @@ Para cada responsabilidade da `torneio-api`, indica a camada: rotas, controller,
 
 Escolhe uma das responsabilidades que puseste no service e explica porque não pode ficar no React.
 
-## Exercício 3: ler um package.json
-
-Guia: secção "Os scripts do package.json" e "Erros frequentes".
+## Exercício 3: ler um package.json (8 minutos)
 
 Um colega preparou assim o `package.json` da `torneio-api`. O ficheiro do servidor está em `src/server.js`, e na raiz do projeto há um `.env`.
 
@@ -60,7 +66,7 @@ Um colega preparou assim o `package.json` da `torneio-api`. O ficheiro do servid
   "type": "commonjs",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch --env-file=.env server.js"
+    "dev": "node --watch --env-file=.env src/server.js",
   },
   "dependencies": {
     "express": "^5.3.0"
@@ -72,11 +78,9 @@ O `src/server.js` começa com `import express from "express";`.
 
 a) Que comando escreve o colega para usar cada um dos dois scripts?
 
-b) Este `package.json` tem dois problemas. Para cada um, diz que comando o vai revelar, que mensagem espera ver (por palavras tuas, ou a mensagem em inglês, se te lembrares dela) e como se corrige.
+b) Este `package.json` tem dois problemas. Para cada um, diz que comando o vai revelar, que mensagem esperas ver (por palavras tuas, ou a mensagem em inglês, se te lembrares dela) e como se corrige.
 
-## Exercício 4: o que vai para o Git
-
-Guia: secções "O ficheiro .env.example" e "O que vai para o Git".
+## Exercício 4: o que vai para o Git (8 minutos)
 
 O projeto de outro colega tem estes ficheiros na raiz:
 
@@ -103,28 +107,24 @@ b) O projeto tem dois problemas de segurança. Quais são?
 
 c) O colega ainda não fez nenhum commit. Diz-lhe, por ordem, o que tem de mudar antes do primeiro.
 
-## Exercício 5: prever a porta
+## Exercício 5: prever a porta (6 minutos)
 
-Guia: secção "As variáveis de ambiente".
-
-O `src/server.js` da `torneio-api` tem a linha `const PORTA = process.env.PORT || 3000;` e o `package.json` tem os scripts do guia. Para cada situação, diz em que porta fica a API, ou o que acontece se ela não arrancar.
+O `src/server.js` da `torneio-api` tem a linha `const PORTA = process.env.PORT || 3000;`, e o `package.json` tem os scripts do guia. Para cada situação, diz em que porta fica a API, ou o que acontece se ela não arrancar.
 
 | Situação | Porta, ou o que acontece |
 | --- | --- |
-| O `.env` tem `PORT=3002` e corres `npm run dev` | |
 | O `.env` tem `PORT=3002` e corres `npm start` | |
-| Não há ficheiro `.env` e corres `npm run dev` | |
-| O `.env` tem `PORTA=3002` e corres `npm run dev` | |
+| O `.env` tem `PORT=3002` e corres `node src/server.js`, sem o npm | |
+| O `.env` tem `PORT=3002` e corres `node --env-file=.env src/server.js` | |
+| Não há ficheiro `.env` e corres `node --env-file=.env src/server.js` | |
 
-Na segunda situação, explica porque é que a porta não é a do `.env`.
+Para cada situação, explica numa frase de onde vem a porta.
 
-## Exercício 6: o diagrama de uma operação
+## Exercício 6: o diagrama de uma operação (12 minutos)
 
-Guia: secção "Um pedido a atravessar as camadas" e o passo 2 do exemplo guiado.
+Depois de um jogo, o professor de Educação Física regista o resultado. O React envia `POST /api/jogos/:id/resultado`, com o identificador do jogo no endereço e os golos de cada equipa no corpo do pedido.
 
-Depois de um jogo, o professor de Educação Física regista o resultado. O React envia `POST /api/jogos/:id/resultado`, com o número do jogo no endereço e os golos de cada equipa no corpo do pedido.
-
-O exemplo do guia era um pedido que só lê dados. Este escreve, e tem regras próprias:
+O pedido traçado no guia só lia dados. Este escreve, e tem regras próprias:
 
 - os golos são números inteiros, zero ou mais;
 - o jogo tem de existir;
@@ -134,27 +134,39 @@ a) Desenha as quatro camadas e o Atlas, como no guia, e escreve ao lado de cada 
 
 b) Para cada uma das três regras, diz em que camada é verificada e que código de estado a resposta deve ter quando a regra falha. Se não souberes o código exato, indica a família (2xx, 4xx ou 5xx) e explica.
 
-c) Em que camada é usada a cadeia de ligação ao Atlas? Em algum momento ela passa pelo browser?
+c) Onde fica a cadeia de ligação ao Atlas, e que camada fala com o Atlas neste pedido? Em algum momento a cadeia passa pelo browser?
 
-## Desafio (opcional): o nome da aplicação na configuração
+## Apoio
 
-Este faz-se no computador, no projeto `papelaria-api` do laboratório.
+- Exercício 1: as secções "A tua aplicação tem três partes" e "O papel do servidor" do guia.
+- Exercício 2: a secção "O que faz cada camada" do guia. Para cada responsabilidade, pergunta-te se é HTTP, uma regra do torneio ou a base de dados.
+- Exercício 3: a secção "Os scripts do package.json" do guia, e a fase 2 do laboratório. Faz de conta que és o npm e o Node. Corre de cabeça cada script, desde o momento em que escreves o comando até à primeira linha do `server.js`. Confirma cada ficheiro que tens de ler e cada linha que tens de aceitar.
+- Exercício 4: as secções "O ficheiro .env.example" e "O que vai para o Git: o .gitignore" do guia.
+- Exercício 5: a secção "As variáveis de ambiente" do guia, e os scripts da fase 2 do laboratório: compara o que cada comando passa ao Node.
+- Exercício 6: a tabela da secção "Um pedido a atravessar as camadas" e o passo 2 do exemplo guiado do guia.
+
+## Desafio opcional
+
+Faz-se no computador, no projeto `papelaria-api` do laboratório. Cerca de 15 minutos.
 
 1. Acrescenta ao `.env` e ao `.env.example` uma variável `NOME_APLICACAO`, com o valor `Papelaria da escola`.
 2. Muda a rota `/api/estado` para responder com o nome que está nessa variável, em vez do texto escrito no código.
-3. Decide o que acontece quando a variável não existe: usa um valor por omissão, como fizeste com a porta? Experimenta, apagando-a do `.env`.
+3. Decide o que acontece quando a variável não existe: usas um valor por omissão, como fizeste com a porta? Experimenta, apagando-a do `.env`.
 
 Pensa, por fim, nisto: para a porta e para o nome, um valor por omissão faz sentido. Para a `MONGODB_URI`, faria sentido escrever no código um endereço por omissão? Porquê?
 
-## Entrega e autoavaliação
+## Critérios de conclusão
 
-Entrega as respostas dos exercícios 1 a 6, com o diagrama do exercício 6 desenhado ou fotografado. Se fizeste o desafio, entrega o `src/server.js` e o `.env.example`, nunca o `.env`.
+- Os exercícios 1 a 6 estão respondidos, com o número de cada um.
+- O diagrama do exercício 6 tem as quatro camadas e o Atlas, com o que cada camada faz neste pedido.
+- Cada resposta que pede uma justificação tem uma ou duas frases a explicá-la.
+- No exercício 5, cada situação tem uma porta, ou o que acontece.
+- Se fizeste o desafio, a API responde com o nome do `.env`, e o `.env` não está entre o que entregas.
 
-No fim, responde por escrito:
+## Autoavaliação
 
-- O que consigo explicar sem ajuda: escolhe uma das quatro camadas e explica o que faz e o que nunca deve fazer.
-- O que ainda não percebi bem: uma dúvida concreta, para levar à aula.
-
-As resoluções são trabalhadas na aula. Os dados desta ficha são fictícios, incluindo o endereço e a palavra-passe do exercício 4.
+1. Escolhe uma das quatro camadas e explica, sem ajuda, o que faz e o que nunca deve fazer.
+2. Que exercício te custou mais, e porquê?
+3. Que dúvida concreta levas para a aula?
 
 ![Rodapé](../imagens/rodape.png)
