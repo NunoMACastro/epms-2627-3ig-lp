@@ -6,15 +6,19 @@
 
 ## Para que serve este diagnóstico
 
-Este ano vais construir, peça a peça, uma aplicação completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, uma parte que o utilizador vê e usa no browser, relatórios com números úteis para quem gere, testes e documentação. No fim do ano, fazes a tua própria aplicação, sobre um tema que escolhes e combinas com o professor.
+Este ano vais construir, peça a peça, uma aplicação completa. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, e uma parte que o utilizador vê e usa no browser. Vai ter também relatórios com números úteis para quem gere, testes e documentação. No fim do ano, nas horas da PAP, fazes a tua própria aplicação, sobre um problema que escolhes.
 
 Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que, antes de começar a parte de programação, se faz este diagnóstico.
 
-Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes: quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te: faz com que revejas o que não precisavas e que saltes o que precisavas.
+Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes. Quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te: faz com que revejas o que não precisavas e que saltes o que precisavas.
 
 Também é normal não te lembrares de tudo. Passaram as férias de verão, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada: quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
 
-## Como vai funcionar
+## O que precisas de saber antes
+
+- Nada para estudar. O diagnóstico mede o que trazes do 11.º ano: o terminal e o npm, os objetos e os arrays, os módulos, os pedidos assíncronos e o React.
+
+## Como está organizada
 
 Respondes numa folha, à mão, e não precisas de computador. Escreve o teu nome e o teu número no topo da folha de respostas, e escreve o número de cada pergunta antes da resposta.
 
@@ -188,7 +192,7 @@ a) Numa destas situações, o `fetch` não lança nenhum erro e a função conti
 
 b) Acrescenta à função o código necessário para que a situação 2 também seja tratada como um erro, com uma mensagem que diga o código que o servidor enviou.
 
-c) Escreve o código que chama a função `carregarArtigos`, mostra os artigos na consola quando tudo corre bem, e mostra uma mensagem de erro compreensível quando acontece qualquer uma das duas situações.
+c) Escreve o código que chama a função `carregarArtigos` e mostra os artigos na consola quando tudo corre bem. Quando acontece qualquer uma das duas situações, o código mostra uma mensagem de erro compreensível.
 
 ## Parte E: React e formulários (15 minutos)
 
@@ -235,8 +239,12 @@ Depois da correção anterior, já se consegue escrever na caixa. Escreve-se "R�
 
 Quando ainda não há nenhum artigo, a página deve mostrar a frase "Ainda não há artigos." em vez da lista vazia. Escreve o JSX que faz isto e indica em que sítio do componente o colocas.
 
-## Antes de entregar
+## Como é avaliada
 
-Confirma que escreveste o número de cada resposta e que deste uma explicação em todas as perguntas que a pedem. Se não souberes responder a uma pergunta, escreve o que te lembras ou "não me lembro", em vez de a deixares em branco.
+Não tem nota. Cada parte é classificada com um de quatro níveis: não demonstrado, com apoio, funcional e autónomo. A explicação conta mais do que o resultado, e "não me lembro" também é uma resposta que conta. É com esses níveis que se organiza a revisão das aulas seguintes.
+
+## Entrega
+
+Entregas a folha de respostas no fim dos 60 minutos. Antes de a entregares, confirma que escreveste o número de cada resposta e que deste uma explicação em todas as perguntas que a pedem. Se não souberes responder a uma pergunta, escreve o que te lembras ou "não me lembro", em vez de a deixares em branco.
 
 ![Rodapé](../imagens/rodape.png)
