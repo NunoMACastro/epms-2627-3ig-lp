@@ -77,10 +77,10 @@ Mostra um artigo.
 
 | Código | Quando | Corpo |
 | --- | --- | --- |
-| 404 | o método e o caminho não existem na API | `{ "erro": "Rota não encontrada" }` |
+| 404 | não há nenhuma rota com esse método e esse caminho | `{ "erro": "Rota não encontrada" }` |
 
 ## Verificação
 
-Todas as linhas deste contrato foram verificadas com a API ligada, a 9 de outubro de 2026, com os oito artigos dos dados temporários. A tabela dos pedidos e das respostas está no passo 7 do exemplo guiado do guia.
+Todas as linhas deste contrato foram verificadas com a API ligada, com os oito artigos dos dados temporários. A verificação foi feita a 9 de outubro de 2026, e outra vez a 14 de outubro, no Node.js 26. A tabela dos pedidos e das respostas está no passo 7 do exemplo guiado do guia.
 
 ![Rodapé](../../../imagens/rodape.png)
