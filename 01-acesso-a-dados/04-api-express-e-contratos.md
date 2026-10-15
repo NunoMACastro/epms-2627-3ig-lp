@@ -527,7 +527,7 @@ O ficheiro tem um `export default`. Exporta uma só coisa, o router, a que quem 
 
 Repara no que este ficheiro resolve. A primeira versão escrevia `/api/artigos` no princípio de todas as rotas; aqui, o começo comum do caminho escreve-se uma só vez, no `server.js`, e as rotas só dizem o resto. E quem quiser saber que pedidos a API dos artigos aceita, lê estas três linhas, em vez de procurar os `app.get` pelo ficheiro todo.
 
-Dentro de um router, como no servidor, as rotas são experimentadas pela ordem em que foram registadas, e a primeira que corresponder responde. A regra da subsecção "A ordem das rotas" continua a valer: `"/:id"` aceita qualquer texto, incluindo `abaixo-do-minimo`, por isso `"/abaixo-do-minimo"` vem antes de `"/:id"`, e o comentário no ficheiro diz porquê.
+Dentro de um router, como no servidor, as rotas são experimentadas pela ordem em que foram registadas, e a primeira que corresponder responde. A regra da subsecção "A ordem das rotas" continua a valer. Como `"/:id"` aceita qualquer texto, incluindo `abaixo-do-minimo`, a rota `"/abaixo-do-minimo"` vem antes de `"/:id"`, e o comentário no ficheiro diz porquê.
 
 ### O server.js que monta as rotas
 
@@ -586,7 +586,7 @@ setArtigo(dados);
 
 O `resposta.ok` é verdadeiro para os códigos 2xx e falso para os outros. O componente não precisa de saber qual foi o erro para o mostrar. A API garantiu que a mensagem está sempre em `erro`. É por isso que, neste guia, até o middleware final responde em JSON. É ele que responde aos caminhos que não existem, em vez da página `Cannot GET` (não é possível obter) do Express, ou de um texto.
 
-As mensagens de erro são para quem usa a aplicação, ou para quem programa o cliente. Dizem o que estava errado no pedido, de forma que se perceba o que corrigir: "O identificador do artigo tem de ser um número inteiro positivo", e não "Erro" nem "NaN". E nunca mostram o que está dentro do servidor: nem nomes de ficheiros, nem mensagens do Node, nem pormenores da base de dados.
+As mensagens de erro são para quem usa a aplicação, ou para quem programa o cliente. Dizem o que estava errado no pedido, de forma que se perceba o que corrigir. Por exemplo, "O identificador do artigo tem de ser um número inteiro positivo", e não "Erro" nem "NaN". E nunca mostram o que está dentro do servidor: nem nomes de ficheiros, nem mensagens do Node, nem pormenores da base de dados.
 
 ### O que ainda falta: os caminhos que não existem
 

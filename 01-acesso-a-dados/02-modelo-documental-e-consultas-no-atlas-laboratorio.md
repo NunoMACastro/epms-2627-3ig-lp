@@ -116,7 +116,7 @@ Uma base de dados é um conjunto de coleções que pertencem à mesma aplicaçã
 
    Carrega em "Create Database". O que deves ver: a base de dados `papelaria` e, dentro dela, a coleção `artigos`, na lista do lado esquerdo.
 
-   Os nomes das bases de dados e das coleções seguem a mesma regra dos nomes de ficheiros que usas: minúsculas, sem espaços e sem acentos. O MongoDB recusa alguns carateres nos nomes das bases de dados, como o espaço, o ponto e o `$`. Nos nomes das coleções, aceita o espaço e o ponto, mas recusa o `$`. Além disso, trata as maiúsculas de forma traiçoeira: `Papelaria` e `papelaria` contam como nomes diferentes, e tens de escrever sempre o mesmo, mas o MongoDB não deixa ter as duas bases ao mesmo tempo. Com minúsculas sempre, nunca tens o problema.
+   Os nomes das bases de dados e das coleções seguem a mesma regra dos nomes de ficheiros que usas: minúsculas, sem espaços e sem acentos. O MongoDB recusa alguns carateres nos nomes das bases de dados, como o espaço, o ponto e o `$`. Nos nomes das coleções, aceita o espaço e o ponto, mas recusa o `$`. Além disso, trata as maiúsculas de forma traiçoeira. Os nomes `Papelaria` e `papelaria` contam como diferentes, e tens de escrever sempre o mesmo, mas o MongoDB não deixa ter as duas bases ao mesmo tempo. Com minúsculas sempre, nunca tens o problema.
 
 2. Insere os oito artigos. Com a coleção `artigos` aberta, carrega em "Add Data" (acrescentar dados) e escolhe "Insert Document" (inserir documento). Na janela que se abre, o modo de escrita por omissão aceita a sintaxe do JavaScript. Podes escrever os nomes dos campos sem aspas e inserir vários documentos de uma vez, dentro de um array. Apaga o que lá estiver, copia este array e carrega em "Insert" (inserir), uma só vez:
 
@@ -133,7 +133,7 @@ Uma base de dados é um conjunto de coleções que pertencem à mesma aplicaçã
    ]
    ```
 
-   Leitura guiada: o array tem oito documentos, um por linha e um por artigo. Todos têm os mesmos seis campos, com os mesmos nomes e os mesmos tipos. O nome e a categoria são texto. O stock, o stock mínimo e o preço são números inteiros, e o preço está em cêntimos: `250` quer dizer 2,50 €, porque os números com casas decimais nem sempre dão contas exatas no computador. O stock mínimo é a quantidade abaixo da qual a papelaria tem de encomendar mais. A `localizacao` é um documento embutido, com o corredor e a prateleira. Nenhum documento tem `_id`.
+   Leitura guiada: o array tem oito documentos, um por linha e um por artigo. Todos têm os mesmos seis campos, com os mesmos nomes e os mesmos tipos. O nome e a categoria são texto. O stock, o stock mínimo e o preço são números inteiros, e o preço está em cêntimos. Por exemplo, `250` quer dizer 2,50 €. Guarda-se assim porque os números com casas decimais nem sempre dão contas exatas no computador. O stock mínimo é a quantidade abaixo da qual a papelaria tem de encomendar mais. A `localizacao` é um documento embutido, com o corredor e a prateleira. Nenhum documento tem `_id`.
 
 3. Confirma o que o MongoDB fez. Antes de abrires um documento, prevê: que campos tem agora cada artigo, se não escreveste nenhum `_id`?
 
@@ -194,7 +194,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
 
    O que deves ver: quatro documentos, a Esferográfica azul (3), o Bloco de notas A5 (0), a Resma de papel A4 (4) e o Compasso escolar (1). Ficam de fora a Régua (6), o Marcador (8), o Caderno (12) e o Lápis (25).
 
-   Há outros operadores do mesmo género: `$lte`, menor ou igual; `$gt`, maior do que; `$gte`, maior ou igual. O `e` do fim vem de *or equal*, ou igual. A diferença entre ter ou não ter o igual só se nota num artigo com o valor exato da fronteira: `{ stock: { $lt: 5 } }` deixa de fora um artigo com 5 unidades, e `{ stock: { $lte: 5 } }` inclui-o.
+   Há outros operadores do mesmo género: `$lte`, menor ou igual; `$gt`, maior do que; `$gte`, maior ou igual. O `e` do fim vem de *or equal*, ou igual. A diferença entre ter ou não ter o igual só se nota num artigo com o valor exato da fronteira. Por exemplo, `{ stock: { $lt: 5 } }` deixa de fora um artigo com 5 unidades, e `{ stock: { $lte: 5 } }` inclui-o.
 
 5. Consulta 3, duas condições: os artigos de escrita com menos de 10 unidades. Quando o filtro tem dois campos, o documento tem de cumprir os dois. Prevê, e depois executa:
 

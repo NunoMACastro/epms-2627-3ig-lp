@@ -857,7 +857,7 @@ Pensa antes de continuares: e se o middleware final ficasse antes do `app.use` d
 
 Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](04-api-express-e-contratos.md).
 
-1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe três colunas, "código previsto", "código obtido" e "corpo confere com o contrato": `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
+1. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Os pedidos são estes: `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
 2. Acrescenta duas linhas, para os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/artigos?categoria=`, com a resposta que decidiste na fase 1.
 

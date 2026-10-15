@@ -151,7 +151,13 @@ As **rotas** são o índice da API. Dizem que método e que caminho correspondem
 
 O **controller** (controlador) é a camada que conhece o HTTP. Recebe o `req` e o `res`. Lê do pedido o que interessa, como um parâmetro do endereço ou os dados do corpo, e converte-os, por exemplo de texto para número. Chama o service com esses valores. Depois, conforme o resultado, escolhe o código de estado (200, 400, 404) e envia a resposta em JSON. O controller não sabe as regras da papelaria nem fala com a base de dados.
 
-O **service** (serviço) é onde estão as regras da aplicação: "o stock não pode ficar negativo", "um artigo com o stock abaixo do seu stock mínimo tem de ser encomendado", "o preço é sempre em cêntimos inteiros". Recebe e devolve valores de JavaScript, como números, textos, objetos e listas. Não sabe o que é um pedido HTTP. Não usa `req` nem `res`. É por isso que se consegue testar sozinho, sem browser e sem servidor ligado.
+O **service** (serviço) é onde estão as regras da aplicação, como estas:
+
+- "o stock não pode ficar negativo";
+- "um artigo com o stock abaixo do seu stock mínimo tem de ser encomendado";
+- "o preço é sempre em cêntimos inteiros".
+
+O service recebe e devolve valores de JavaScript, como números, textos, objetos e listas. Não sabe o que é um pedido HTTP. Não usa `req` nem `res`. É por isso que se consegue testar sozinho, sem browser e sem servidor ligado.
 
 O **repository** (repositório) é a única camada que fala com o MongoDB. Sabe o nome da coleção e escreve as consultas com o Mongoose, com funções como o `find`, que procura documentos com um filtro. Recebe e devolve objetos JavaScript. Mais ninguém no servidor sabe que a base de dados é o MongoDB.
 
@@ -519,7 +525,7 @@ Falta o `run`: `npm run dev`. Só o `start` (e poucos outros) dispensam o `run`.
 
 ### A API arranca na porta errada
 
-O `process.env.PORT` está vazio, e a API usou a porta 3000 por omissão. Ou arrancaste com `npm start`, que não lê o `.env`, ou o nome da variável no `.env` é diferente do que o código lê: `PORTA` no ficheiro e `PORT` no código são duas variáveis diferentes.
+O `process.env.PORT` está vazio, e a API usou a porta 3000 por omissão. Ou arrancaste com `npm start`, que não lê o `.env`, ou o nome da variável no `.env` é diferente do que o código lê. Por exemplo, `PORTA` no ficheiro e `PORT` no código são duas variáveis diferentes.
 
 ### O git status mostra o .env ou a node_modules
 
