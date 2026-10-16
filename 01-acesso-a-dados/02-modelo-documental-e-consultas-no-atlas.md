@@ -2,7 +2,7 @@
 
 # Modelo documental e primeiras consultas no Atlas
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como o MongoDB organiza a informação em documentos e como se decide o que fica dentro de cada documento. Explica também como se fazem as primeiras perguntas a uma base de dados. Lê-se em cerca de 75 minutos. Para praticar, há o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e a [ficha de exercícios](02-modelo-documental-e-consultas-no-atlas-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como o MongoDB organiza a informação em documentos e como se decide o que fica dentro de cada documento. Explica também como se fazem as primeiras perguntas a uma base de dados. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e a [ficha de exercícios](02-modelo-documental-e-consultas-no-atlas-exercicios.md) deste tema.
 
 Este ano vais construir uma aplicação que guarda os dados numa base de dados MongoDB. Antes de escreveres uma linha de código para falar com a base de dados, precisas de perceber como é que ela organiza a informação e como se lhe fazem perguntas. É isso que este guia trata, ainda sem código: só com a base de dados e o browser.
 

@@ -2,7 +2,7 @@
 
 # Ficha de exercícios: API Express e contratos
 
-Ficha do tema API Express e contratos, do módulo M14, Acesso a Bases de Dados. Escreves o contrato e as camadas da API do torneio de futsal, com decisões que a papelaria não tomou. Cerca de 100 minutos, para fazeres sozinho.
+Ficha do tema API Express e contratos, do módulo M14, Acesso a Bases de Dados. Escreves o contrato e as camadas da API do torneio de futsal, com decisões que a papelaria não tomou. Fazes sozinho, ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte.
 
 ## O que precisas de saber
 
@@ -10,7 +10,7 @@ O [guia do tema](04-api-express-e-contratos.md) e o [laboratório](04-api-expres
 
 ## Como trabalhar
 
-A parte obrigatória são os exercícios 1 a 4, por esta ordem, e conta com cerca de 100 minutos, incluindo os 5 minutos de preparar o projeto. Os exercícios 1 e 2 fazem-se em papel; o 3 e o 4, no computador. O exercício 4 é o mais longo. Conta com cerca de metade desse tempo. Os dois desafios opcionais, no fim, não contam para os 100 minutos.
+A parte obrigatória são os exercícios 1 a 4, por esta ordem. Os exercícios 1 e 2 fazem-se em papel; o 3 e o 4, no computador, num projeto que preparas antes do exercício 3. O exercício 4 é o mais longo. Os dois desafios do fim são opcionais.
 
 Nos exercícios em papel, responde antes de experimentar. Nos do computador, escreve primeiro o contrato e as respostas que esperas, e só depois o código. Verifica cada resposta no browser, com o separador Rede aberto. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
 
@@ -45,7 +45,7 @@ export const jogos = [
 
 ## Em papel
 
-### Exercício 1: ler um contrato (10 minutos)
+### Exercício 1: ler um contrato
 
 Esta é uma parte do contrato da `torneio-api`.
 
@@ -71,7 +71,7 @@ Com os dados do torneio, que código e que corpo tem cada pedido? No corpo, bast
 
 Para o pedido 6, explica a tua resposta numa frase.
 
-### Exercício 2: o que está mal neste controller (15 minutos)
+### Exercício 2: o que está mal neste controller
 
 Um colega escreveu assim a parte do controller que trata dos jogos e de uma equipa, para o contrato do exercício 1. O controller tem também a `paraInteiro` do guia. No service, a `listarJogos` recebe um objeto com os filtros, e a `obterEquipa` devolve a equipa, ou `null` se ela não existir, como a `obterArtigo` da papelaria.
 
@@ -104,7 +104,7 @@ A API arranca sem nenhum erro no terminal, e mesmo assim este código tem três 
 
 ## No computador
 
-Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria. Esse esqueleto já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`. Conta com cinco minutos.
+Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria. Esse esqueleto já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`.
 
 1. Copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho, e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório. Esse já tem os ficheiros dos artigos, que aqui não servem.
 2. No `package.json`, muda o `name` para `torneio-api` e escreve na `description` uma frase tua sobre a API do torneio.
@@ -115,7 +115,7 @@ Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero
 
 O resto do esqueleto não muda. O `src/server.js` que copiaste é o ponto de partida do exercício 4, que lhe acrescenta a montagem das rotas e o middleware final.
 
-### Exercício 3: o contrato da torneio-api (20 minutos)
+### Exercício 3: o contrato da torneio-api
 
 No projeto `torneio-api`, escreve o ficheiro `contrato-da-api.md` com:
 
@@ -132,7 +132,7 @@ O filtro `equipa` é um pedido da comissão do torneio, que quer ver os jogos de
 
 Este filtro obriga a uma decisão que o contrato da papelaria nunca teve de tomar. O que responde a API a `GET /api/jogos?equipa=9`, se não existe nenhuma equipa 9? Escreve a resposta no contrato, com o código e o corpo, e justifica-a numa frase por baixo da tabela.
 
-### Exercício 4: as camadas do torneio (50 minutos)
+### Exercício 4: as camadas do torneio
 
 Escreve, no projeto `torneio-api`, os ficheiros que cumprem o contrato do exercício 3. O ficheiro dos dados já o criaste ao preparar o projeto. Faltam:
 
@@ -174,7 +174,7 @@ Para verificar, com o contrato ao lado:
 
 Os dois desafios fazem-se no projeto `torneio-api`, depois do exercício 4, e não dependem um do outro.
 
-### Os pontos de uma equipa (cerca de 25 minutos)
+### Os pontos de uma equipa
 
 A comissão do torneio quer saber os pontos de cada equipa. Uma vitória vale 3 pontos, um empate 1 e uma derrota 0.
 
@@ -191,7 +191,7 @@ Pistas, só se precisares, uma de cada vez:
 2. Num jogo em que a equipa é a da casa, os golos marcados são os `golosCasa`; se for a de fora, são os `golosFora`.
 3. Uma função pode chamar outra do mesmo ficheiro, como a que procura uma equipa.
 
-### Os jogos com os nomes (cerca de 20 minutos)
+### Os jogos com os nomes
 
 A interface React vai mostrar os jogos assim: "12.º IG 3 - 1 11.º IG". Com o contrato atual, o React recebe os números das equipas e teria de pedir cada equipa à parte para saber o nome.
 

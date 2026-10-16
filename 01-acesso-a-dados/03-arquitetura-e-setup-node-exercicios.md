@@ -2,7 +2,7 @@
 
 # Ficha de exercícios: arquitetura e setup Node
 
-Ficha do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Praticas, noutro problema, as decisões do tema: onde corre cada coisa, em que camada fica cada responsabilidade e o que pode e não pode ir para o Git. Cerca de 50 minutos, para fazeres sozinho.
+Ficha do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Praticas, noutro problema, as decisões do tema: onde corre cada coisa, em que camada fica cada responsabilidade e o que pode e não pode ir para o Git. Fazes sozinho, ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte.
 
 ## O que precisas de saber
 
@@ -10,7 +10,7 @@ O [guia do tema](03-arquitetura-e-setup-node.md) e o [laboratório](03-arquitetu
 
 ## Como trabalhar
 
-Os exercícios 1 a 6 fazem-se em papel, por esta ordem, e levam cerca de 50 minutos. O desafio opcional faz-se no computador, no projeto `papelaria-api` do laboratório.
+Os exercícios 1 a 6 são obrigatórios e fazem-se em papel, por esta ordem. O desafio opcional faz-se no computador, no projeto `papelaria-api` do laboratório.
 
 Responde primeiro sem abrir o guia. Quando não souberes, escreve o que achas e porquê, e só depois confirma. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício. Em cada exercício que peça uma justificação, uma ou duas frases chegam.
 
@@ -28,7 +28,7 @@ A aplicação do torneio tem as três partes do guia:
 
 As regras do torneio são as habituais: uma vitória vale 3 pontos, um empate 1 e uma derrota 0. Os dados desta ficha são fictícios, incluindo o endereço e a palavra-passe do exercício 4.
 
-## Exercício 1: onde corre e o que viaja (8 minutos)
+## Exercício 1: onde corre e o que viaja
 
 a) Para cada item, indica onde corre ou onde fica: no browser (React), na API ou no MongoDB Atlas.
 
@@ -42,7 +42,7 @@ a) Para cada item, indica onde corre ou onde fica: no browser (React), na API ou
 
 b) O que viaja entre o React e a API quando a classificação é pedida? E em que formato?
 
-## Exercício 2: que camada (8 minutos)
+## Exercício 2: que camada
 
 Para cada responsabilidade da `torneio-api`, indica a camada: rotas, controller, service ou repository.
 
@@ -55,7 +55,7 @@ Para cada responsabilidade da `torneio-api`, indica a camada: rotas, controller,
 
 Escolhe uma das responsabilidades que puseste no service e explica porque não pode ficar no React.
 
-## Exercício 3: ler um package.json (8 minutos)
+## Exercício 3: ler um package.json
 
 Um colega preparou assim o `package.json` da `torneio-api`. O ficheiro do servidor está em `src/server.js`, e na raiz do projeto há um `.env`.
 
@@ -80,7 +80,7 @@ a) Que comando escreve o colega para usar cada um dos dois scripts?
 
 b) Este `package.json` tem dois problemas. Para cada um, diz que comando o vai revelar, que mensagem esperas ver (por palavras tuas, ou a mensagem em inglês, se te lembrares dela) e como se corrige.
 
-## Exercício 4: o que vai para o Git (8 minutos)
+## Exercício 4: o que vai para o Git
 
 O projeto de outro colega tem estes ficheiros na raiz:
 
@@ -107,7 +107,7 @@ b) O projeto tem dois problemas de segurança. Quais são?
 
 c) O colega ainda não fez nenhum commit. Diz-lhe, por ordem, o que tem de mudar antes do primeiro.
 
-## Exercício 5: prever a porta (6 minutos)
+## Exercício 5: prever a porta
 
 O `src/server.js` da `torneio-api` tem a linha `const PORTA = process.env.PORT || 3000;`, e o `package.json` tem os scripts do guia. Para cada situação, diz em que porta fica a API, ou o que acontece se ela não arrancar.
 
@@ -120,7 +120,7 @@ O `src/server.js` da `torneio-api` tem a linha `const PORTA = process.env.PORT |
 
 Para cada situação, explica numa frase de onde vem a porta.
 
-## Exercício 6: o diagrama de uma operação (12 minutos)
+## Exercício 6: o diagrama de uma operação
 
 Depois de um jogo, o professor de Educação Física regista o resultado. O React envia `POST /api/jogos/:id/resultado`, com o identificador do jogo no endereço e os golos de cada equipa no corpo do pedido.
 
@@ -147,7 +147,7 @@ c) Onde fica a cadeia de ligação ao Atlas, e que camada fala com o Atlas neste
 
 ## Desafio opcional
 
-Faz-se no computador, no projeto `papelaria-api` do laboratório. Cerca de 15 minutos.
+Faz-se no computador, no projeto `papelaria-api` do laboratório.
 
 1. Acrescenta ao `.env` e ao `.env.example` uma variável `NOME_APLICACAO`, com o valor `Papelaria da escola`.
 2. Muda a rota `/api/estado` para responder com o nome que está nessa variável, em vez do texto escrito no código.

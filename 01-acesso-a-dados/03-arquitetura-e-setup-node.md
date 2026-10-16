@@ -2,7 +2,7 @@
 
 # Arquitetura e setup Node
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como se organiza uma aplicação com um cliente, um servidor e uma base de dados. Explica também como se prepara o projeto do servidor no teu computador, o que em inglês se chama setup. Lê-se em cerca de 70 minutos. Para praticar, há o [laboratório](03-arquitetura-e-setup-node-laboratorio.md) e a [ficha de exercícios](03-arquitetura-e-setup-node-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como se organiza uma aplicação com um cliente, um servidor e uma base de dados. Explica também como se prepara o projeto do servidor no teu computador, o que em inglês se chama setup. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](03-arquitetura-e-setup-node-laboratorio.md) e a [ficha de exercícios](03-arquitetura-e-setup-node-exercicios.md) deste tema.
 
 No tema anterior criaste no MongoDB Atlas a base de dados da papelaria e fizeste-lhe perguntas pelo browser. Uma aplicação não funciona assim. Os utilizadores não abrem o Atlas, abrem a aplicação, e é a aplicação que fala com a base de dados por eles. Neste tema vais perceber como se organiza essa aplicação, peça a peça, e vais preparar a primeira dessas peças: o projeto do servidor, a que se chama API.
 

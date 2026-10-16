@@ -2,7 +2,7 @@
 
 # API Express e contratos
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica o que é o contrato de uma API e como se escreve uma API Express que o cumpre: primeiro num só ficheiro, depois separada em camadas. Lê-se em cerca de 110 minutos. Para praticar, há o [laboratório](04-api-express-e-contratos-laboratorio.md) e a [ficha de exercícios](04-api-express-e-contratos-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica o que é o contrato de uma API e como se escreve uma API Express que o cumpre: primeiro num só ficheiro, depois separada em camadas. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](04-api-express-e-contratos-laboratorio.md) e a [ficha de exercícios](04-api-express-e-contratos-exercicios.md) deste tema.
 
 No tema anterior desenhaste as camadas da API da papelaria e preparaste o projeto, com uma só rota, a de estado. Neste tema a API começa a responder a pedidos a sério: a lista dos artigos, com filtros, um artigo de cada vez e os artigos que é preciso encomendar. Os artigos ainda estão num array, dentro do servidor, e só passam para o MongoDB Atlas no tema seguinte. Mas a API já se comporta como uma API a sério: responde sempre em JSON, recusa os pedidos mal feitos com o código certo e cumpre um contrato escrito.
 

@@ -2,7 +2,7 @@
 
 # Laboratório: modelo documental e primeiras consultas no Atlas
 
-Laboratório do tema Modelo documental e primeiras consultas no Atlas, do módulo M14, Acesso a Bases de Dados. Cerca de 110 minutos. Vais criar no MongoDB Atlas a base de dados de uma papelaria, fazer-lhe as primeiras consultas e guardar uma referência a um fornecedor. Cada passo diz o que fazer, porquê e o que deves ver. Tudo o que precisas está aqui; o [guia do tema](02-modelo-documental-e-consultas-no-atlas.md) tem a teoria completa, para quem quiser saber mais.
+Laboratório do tema Modelo documental e primeiras consultas no Atlas, do módulo M14, Acesso a Bases de Dados. Vais criar no MongoDB Atlas a base de dados de uma papelaria, fazer-lhe as primeiras consultas e guardar uma referência a um fornecedor. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](02-modelo-documental-e-consultas-no-atlas.md) tem a teoria completa, para quem quiser saber mais.
 
 ## O que vais construir
 
@@ -56,7 +56,7 @@ Se já criaste a conta e o cluster numa aula anterior, começa na fase 2. Da fas
 3. Escreveste o filtro no campo do filtro e carregaste em "Find"? "Reset" limpa a consulta e volta a mostrar todos os documentos.
 4. O resultado não é o que previste? Antes de mudares a consulta, abre um documento que devia aparecer e compara, campo a campo, o nome do campo, a escrita do valor e o tipo.
 
-## Fase 1: o teu cluster no Atlas, protegido (25 minutos)
+## Fase 1: o teu cluster no Atlas, protegido
 
 O MongoDB é um programa que guarda os dados de uma aplicação, organizados em documentos. O Atlas é o MongoDB a funcionar na nuvem: em servidores de um centro de dados da empresa que o faz, a que chegas pela internet. Para lá teres as tuas bases de dados, crias uma conta e, nela, um cluster gratuito, o conjunto de servidores onde vão viver as tuas bases de dados. Depois proteges a entrada com duas proteções: um utilizador com palavra-passe, para os programas, e a lista dos endereços de onde se pode ligar. Para saber mais, lê a secção "No Atlas, cada aluno tem o seu cluster" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -105,7 +105,7 @@ Tens uma conta, um projeto e um cluster gratuito. Tens também um utilizador da 
 
 Pensa antes de continuares: porque é que o Atlas pede duas proteções, o utilizador com palavra-passe e a lista de endereços, se uma já devia chegar? A resposta: cada uma trava um perigo diferente. A palavra-passe trava quem não a sabe. A lista de endereços trava quem a sabe mas está noutro sítio, por exemplo alguém que a viu num ficheiro publicado por engano. Para entrar na tua base de dados, é preciso ter as duas coisas.
 
-## Fase 2: os artigos como documentos (10 minutos)
+## Fase 2: os artigos como documentos
 
 Uma base de dados é um conjunto de coleções que pertencem à mesma aplicação, e uma coleção é um conjunto de documentos do mesmo tipo. Pensa num arquivo em papel: cada documento é uma ficha preenchida, cada coleção é a gaveta das fichas do mesmo tipo, e a base de dados é o armário. Nesta fase crias o armário `papelaria`, a gaveta `artigos` e oito fichas, uma por artigo. Cada documento escreve-se como um objeto de JavaScript, com campos em vez de propriedades. Para saber mais, lê a secção "O MongoDB guarda a informação em documentos" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -147,7 +147,7 @@ A coleção `artigos` da base `papelaria` tem oito documentos, e cada um tem um 
 
 Pensa antes de continuares: dois artigos com o mesmo nome podiam viver na mesma coleção? A resposta: sim. O que distingue dois documentos é o `_id`, e não o nome. Cada documento tem um `_id` diferente, mesmo que todos os outros campos sejam iguais. É por isso que carregar duas vezes em "Insert" dá dezasseis documentos, e não oito.
 
-## Fase 3: um filtro escolhe os documentos (25 minutos)
+## Fase 3: um filtro escolhe os documentos
 
 Até agora vês todos os artigos. Na papelaria, quem lá trabalha quer só alguns: os de papel, ou os que têm pouco stock. Pedir informação a uma base de dados chama-se fazer uma consulta. No MongoDB, a consulta descreve os documentos que queres com um documento chamado filtro, escrito com a forma de um objeto de JavaScript. É a base de dados que percorre os documentos e devolve só os que cumprem o filtro, como o `filter` de um array. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -235,7 +235,7 @@ Sabes escolher documentos por igualdade, com um operador, com duas condições, 
 
 Pensa antes de continuares: a consulta 3 devolveu dois artigos. Quantos devolveria `{ categoria: "Escrita" }`, sozinho, e porquê? A resposta: três, a Esferográfica azul, o Lápis HB e o Marcador fluorescente. Sem a segunda condição, o Lápis HB, com 25 unidades, já não fica de fora. Basta-lhe ser da categoria Escrita.
 
-## Fase 4: a projeção escolhe os campos (10 minutos)
+## Fase 4: a projeção escolhe os campos
 
 Até agora, cada documento do resultado aparece com todos os campos. Às vezes só interessam alguns: para uma lista de encomendas, chegam o nome e o stock. A projeção diz que campos aparecem: cada campo recebe `1`, para aparecer, ou `0`, para ficar escondido. É como o `map` de um array, quando escolhe só alguns campos de cada objeto. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -263,7 +263,7 @@ Sabes escolher os campos que aparecem, sem mudar os documentos que o filtro esco
 
 Pensa antes de continuares: se quisesses ver todos os campos menos a localização, que projeção escrevias? A resposta: `{ localizacao: 0 }`. Com `0`, a projeção diz "mostra tudo menos estes", e todos os outros campos aparecem, incluindo o `_id`.
 
-## Fase 5: ordenar e depois limitar (10 minutos)
+## Fase 5: ordenar e depois limitar
 
 Na papelaria, quem faz o inventário quer saber os três artigos mais caros. São duas coisas: pôr os artigos por ordem de preço e ficar só com os primeiros. A ordenação diz por que ordem aparecem os documentos: cada campo recebe `1`, para ordem crescente, ou `-1`, para ordem decrescente. O limite diz quantos aparecem, no máximo. É como o `sort` de um array, seguido de ficar só com os primeiros elementos. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -289,7 +289,7 @@ Sabes ordenar os documentos e ficar só com os primeiros.
 
 Pensa antes de continuares: com a ordenação `{ precoCentimos: -1 }` e o limite 1, o que aparecia? A resposta: só a Resma de papel A4, o artigo mais caro. A ordenação põe-na em primeiro lugar, e o limite 1 deixa ficar só esse.
 
-## Fase 6: a pergunta que a barra de consulta não faz (10 minutos)
+## Fase 6: a pergunta que a barra de consulta não faz
 
 Na papelaria, a pergunta que mais importa é "que artigos estão abaixo do stock mínimo e precisam de ser encomendados?". Um artigo está abaixo do mínimo quando o seu `stock` é menor do que o seu `stockMinimo`. Parece uma pergunta como as outras, mas não é. Os operadores comparam um campo com um valor fixo, escrito no filtro, e esta pergunta compara dois campos do mesmo documento. O operador que compara dois campos, `$expr`, não é aceite na barra de consulta do Atlas. Por isso, desta vez respondes à mão. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
@@ -322,7 +322,7 @@ Sabes que artigos estão abaixo do stock mínimo, e porque é que a lista não �
 
 Pensa antes de continuares: porque é que o stock mínimo tem de estar guardado em cada artigo? A resposta: "pouco stock" usa um limite fixo, igual para todos os artigos, como os 5 da consulta 2. "Abaixo do mínimo" usa um limite diferente em cada artigo: cinco resmas de papel podem ser poucas, e cinco compassos podem ser muitos. Se o mínimo não estivesse guardado em cada artigo, ninguém sabia qual era.
 
-## Fase 7: uma referência a um fornecedor (20 minutos)
+## Fase 7: uma referência a um fornecedor
 
 Cada artigo tem um fornecedor, e o mesmo fornecedor fornece muitos artigos. Se o telefone do fornecedor estivesse copiado em cada artigo, quando mudasse terias de o alterar em todos, e bastava esquecer um para a informação ficar contraditória. Por isso, o fornecedor fica num documento à parte, noutra coleção, e o artigo guarda só o `_id` dele, num campo `fornecedorId`. A isto chama-se referenciar, e ao campo chama-se referência. A localização ficou dentro de cada artigo por outra razão: é sempre lida com o artigo, cada artigo tem uma só, e não cresce. Isso é embutir. Seguir uma referência é usar o valor guardado para chegar ao outro documento: a partir do artigo, procura-se em `fornecedores` o documento cujo `_id` é igual ao `fornecedorId`. Também se pode ir no sentido contrário: a partir do fornecedor, procuram-se em `artigos` os documentos cujo `fornecedorId` é igual ao `_id` dele. Para saber mais, lê a secção "A informação relacionada embute-se ou referencia-se" do [guia](02-modelo-documental-e-consultas-no-atlas.md).
 
