@@ -12,6 +12,20 @@ Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que tem os temas pel
 - o laboratório, para seguir passo a passo no computador, sem precisares de abrir o guia;
 - a ficha de exercícios, para praticares sozinho.
 
+Para teres os materiais no teu computador, clona este repositório uma vez, numa pasta tua:
+
+```bash
+git clone https://github.com/NunoMACastro/epms-2627-3ig-lp.git
+```
+
+Antes de cada aula, entra na pasta `epms-2627-3ig-lp` e traz os materiais novos:
+
+```bash
+git pull
+```
+
+Quando um exemplo te pedir para copiares uma pasta, copia-a para fora da pasta clonada, para o teu trabalho não se misturar com o que o `git pull` traz. Se o computador não tiver o Git, descarrega o repositório em ZIP, no botão "Code" do GitHub, e volta a descarregá-lo quando houver materiais novos.
+
 ## As áreas
 
 | Área | Módulo |
