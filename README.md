@@ -2,11 +2,11 @@
 
 # Linguagens de Programação · 12.º IG
 
-Materiais de Linguagens de Programação do 12.º ano do curso de Técnico/a de Informática de Gestão. Cada material é publicado quando fica pronto, e podes lê-lo antes de ser dado na aula.
+Materiais de Linguagens de Programação do 12.º ano do curso de Técnico/a de Informática de Gestão. Podes estudar os materiais ao teu ritmo e lê-los antes de serem dados na aula.
 
 ## Por onde começar
 
-Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que tem os temas pela ordem da planificação. Cada tema tem três tipos de documento:
+Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que apresenta a ordem de leitura dos temas. Cada tema tem três tipos de documento:
 
 - o guia, para ler e estudar;
 - o laboratório, para seguir passo a passo no computador, sem precisares de abrir o guia;
