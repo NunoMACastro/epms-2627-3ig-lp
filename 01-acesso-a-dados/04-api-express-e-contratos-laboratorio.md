@@ -51,10 +51,12 @@ No caderno, ficam duas tabelas de verificação, com o que previste e o que obti
 - Router (em português, encaminhador): um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor.
 - Camadas: as rotas dizem que pedido vai para que função; o controller trata o HTTP; o service tem as regras da papelaria; os dados guardam os artigos. Para saber mais, vê a secção "As camadas em código" do [guia](04-api-express-e-contratos.md).
 - Middleware final: a função registada com `app.use`, sem caminho, que responde aos pedidos que nenhuma rota tratou.
+- Repository: a camada que vai buscar os dados à base de dados, e a única que usa o Mongoose para isso. Só aparece neste laboratório no caminho do cinema; na papelaria, chega no tema seguinte.
 
 ## O que precisas
 
 - O projeto `papelaria-api` do laboratório do tema anterior, com o `.env`, o `npm run dev` a funcionar e o primeiro commit feito. Se não o tiveres, copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho. Dentro dela, corre `npm install`, cria o `.env` a partir do `.env.example` e faz o `git init` e o primeiro commit, como na fase 6 desse laboratório.
+- Se fizeste a ficha do cinema da escola, de Sistemas de Informação, podes fazer este laboratório no projeto `cinema-da-escola`, em vez da papelaria. Nesse caso, lê primeiro a secção "Se vens do projeto do cinema da escola".
 - O Node.js e o npm. Confirma com `node --version` e `npm --version`; devem aparecer dois números de versão, o do Node a começar por `v`.
 - Um editor de código e dois terminais: um para a API, outro para os comandos.
 - O browser, com as ferramentas de programador (F12) no separador "Rede" (ou "Network"), para veres o código de cada resposta.
@@ -136,6 +138,576 @@ O teu middleware final já existe, e a fase 3 mostrou que o `/api/artigo` já re
 ### Fase 9, no teu projeto
 
 No passo 5, todas as linhas que estão nas duas tabelas têm de dar as mesmas respostas, incluindo o `/api/artigo`, que já vinha em JSON na primeira versão.
+
+## Se vens do projeto do cinema da escola
+
+Na [ficha do cinema da escola](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md), de Sistemas de Informação, construíste uma aplicação num só ficheiro, com os filmes lidos do MongoDB Atlas. Tem a lista com os filtros, um filme de cada vez e o cartaz. Podes fazer este laboratório nesse projeto, em vez da papelaria. Escreves o contrato da API do cinema e separas o teu `server.js` em camadas, sem mudar nenhuma resposta. Como os filmes já vêm do Atlas, há uma camada a mais do que na papelaria: o repository, a camada que vai buscar os filmes à base de dados. Na papelaria, ele só chega no tema seguinte.
+
+No fim, o teu projeto fica assim. Os ficheiros que não mudam estão na ficha:
+
+```text
+cinema-da-escola/
+├── contrato-da-api.md                 o contrato: o que a API aceita e o que responde
+├── src/
+│   ├── server.js                      o arranque, que monta as rotas e o cartaz
+│   ├── seed.js                        não muda
+│   ├── db/
+│   │   └── mongoose.js                não muda
+│   ├── models/
+│   │   └── filme.model.js             não muda
+│   ├── repositories/
+│   │   └── filmes.repository.js       o acesso aos filmes na base de dados
+│   ├── services/
+│   │   └── filmes.service.js          as regras do clube de cinema
+│   ├── controllers/
+│   │   └── filmes.controller.js       o HTTP da API e do cartaz
+│   └── rotas/
+│       └── filmes.rotas.js            que pedido da API vai para que função
+└── views/
+    └── cartaz.ejs                     não muda
+```
+
+Antes de começares, confirma três coisas:
+
+- Na pasta `cinema-da-escola`, o `npm run dev` escreve `Ligada à base de dados cinema` e `Cinema da escola em http://localhost:3000`.
+- O teu `src/server.js` tem estas peças, por esta ordem. Primeiro, os três `import`: o do Express, o da ligação e o do modelo. Depois, a `app` e a `PORTA`, o `app.set` do EJS, o middleware de registo e a rota de estado. A seguir, as rotas `/api/filmes`, `/api/filmes/:numero` e `/cartaz`. No fim, o middleware final, a ligação à base e o `app.listen`.
+- O `git log --oneline` mostra o primeiro commit do cinema. Se ainda não o fizeste, faz a fase 6 do laboratório do tema anterior na pasta do cinema. O `.gitignore` já existe desde o exercício 1 da ficha, por isso o `.env` e a `node_modules` não aparecem na lista do `git status`.
+
+Este caminho precisa de internet em todas as fases, porque a aplicação só arranca depois de se ligar ao Atlas. Se a rede falhar, segue o caminho normal, com a papelaria, que funciona sem rede. Se faltar alguma das peças, chama o professor.
+
+Se fizeste os exercícios 6 e 7 da ficha, o teu código tem mais duas peças, que este laboratório não escreve por ti. São o filtro da duração máxima, na API, e a idade no cartaz. As fases 4 e 5 dizem para onde vai cada parte, e és tu que mudas o teu código de sítio. Se não os fizeste, segue só os blocos de código do laboratório.
+
+Em todas as fases, lê primeiro a introdução da fase do caminho normal, que explica a ideia nova, e depois faz os passos que estão aqui. A fase 7 faz-se como está, só com os nomes dos ficheiros do cinema.
+
+### Fase 1, no teu projeto: o contrato do cinema
+
+1. Na raiz do projeto, ao lado do `package.json`, cria o ficheiro `contrato-da-api.md`, como no passo 1 da fase 1.
+
+2. Escreve no contrato as secções que se seguem. Escreve-as tu, linha a linha, e pergunta-te, em cada linha, o que ela obriga a API a fazer.
+
+   **Formato dos erros.** Todas as respostas de erro da API têm esta forma, com uma mensagem para quem usa a aplicação:
+
+   ```json
+   { "erro": "Não existe o filme 9" }
+   ```
+
+   **O filme.** Cada filme, nas respostas, tem esta forma:
+
+   ```json
+   { "sessao": { "dia": "18 de novembro", "hora": "15:30" }, "_id": "6ae11910bf8e13468ada5528", "numero": 3, "titulo": "Os Goonies", "genero": "Aventura", "duracaoMinutos": 114, "idadeMinima": 12, "__v": 0 }
+   ```
+
+   O `_id` é o identificador que o MongoDB deu ao documento, e o teu é outro. O `__v` é o número de versão que o Mongoose acrescenta. O `numero` é o número que o clube deu ao filme, um inteiro de 1 para cima, e é por ele que se pede um filme.
+
+   **GET /api/estado.** Confirma que a API está ligada. Sem parâmetros.
+
+   | Código | Quando | Corpo |
+   | --- | --- | --- |
+   | 200 | sempre | `{ "estado": "ok", "aplicacao": "Cinema da escola" }` |
+
+   **GET /api/filmes.** Lista os filmes.
+
+   | Parâmetro | Onde | Tipo | Obrigatório | Valores válidos |
+   | --- | --- | --- | --- | --- |
+   | `genero` | pesquisa | texto | não | qualquer; só aparecem os filmes desse género |
+   | `idade` | pesquisa | inteiro | não | 1 ou mais; só aparecem os filmes que um aluno dessa idade pode ver, com a idade mínima até esse valor, incluído |
+
+   | Código | Quando | Corpo |
+   | --- | --- | --- |
+   | 200 | os parâmetros são válidos | lista de filmes, possivelmente vazia |
+   | 400 | `idade` não é um número inteiro maior do que 0 | erro |
+
+   **GET /api/filmes/:numero.** Mostra um filme.
+
+   | Parâmetro | Onde | Tipo | Obrigatório | Valores válidos |
+   | --- | --- | --- | --- | --- |
+   | `numero` | caminho | inteiro | sim | 1 ou mais |
+
+   | Código | Quando | Corpo |
+   | --- | --- | --- |
+   | 200 | o filme existe | o filme |
+   | 400 | o `numero` não é um inteiro positivo | erro |
+   | 404 | não existe nenhum filme com esse `numero` | erro |
+
+   **Qualquer outro pedido.**
+
+   | Código | Quando | Corpo |
+   | --- | --- | --- |
+   | 404 | não há nenhuma rota com esse método e esse caminho | `{ "erro": "Rota não encontrada" }` |
+
+   Se fizeste o exercício 6 da ficha, acrescenta à tabela dos parâmetros de `GET /api/filmes` a linha do `duracaoMaxima`. Vem na pesquisa, é um inteiro e não é obrigatório. Os valores válidos são 1 ou mais, e só aparecem os filmes que duram esse número de minutos ou menos. Acrescenta também, na linha do 400, o `duracaoMaxima` que não é um número inteiro maior do que 0.
+
+3. O contrato deixa um caso por decidir: o pedido `/api/filmes?idade=`, com o parâmetro `idade` presente, mas sem valor. Decide o que a API deve responder, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/filmes`. No caderno, escreve porque escolheste essa resposta. Pensa em quem pode fazer este pedido. Pode ser alguém que se esqueceu de escrever o número, ou um formulário com uma opção "qualquer idade", que envia o campo vazio. Escreve a tua decisão antes de leres a resposta.
+
+   A resposta: há duas decisões defensáveis, e qualquer uma serve, desde que esteja escrita no contrato e que o código a cumpra.
+
+   | Decisão | Argumento a favor |
+   | --- | --- |
+   | 200 com os filmes, como se a `idade` não viesse | Um formulário com a opção "qualquer idade" envia o campo vazio, e quem o usa quer os filmes todos |
+   | 400 | É o tratamento do `?stockMaximo=` vazio da papelaria: quem pediu esqueceu-se do valor, e a API diz-lho, em vez de adivinhar |
+
+   O que não pode acontecer é o contrato não dizer nada sobre este caso. A fase 2 confronta a tua decisão com o código.
+
+#### Paragem 1, no teu projeto
+
+O `contrato-da-api.md` tem o formato dos erros, a forma do filme, os três pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?idade=`.
+
+Pensa antes de continuares: o cartaz não entra no contrato. Porquê, se também responde a pedidos? A resposta: o contrato da API é para programas, como uma interface em React, que leem o JSON e têm de saber o que vão receber. O cartaz é uma página para pessoas. Quem a recebe é o browser, que a mostra, e não um programa que tenha de a interpretar.
+
+### Fase 2, no teu projeto: a primeira versão já existe
+
+A tua primeira versão é o `server.js` da ficha, e já cumpre quase todo o contrato. Não a escrevas outra vez. A ordem das rotas, que o caminho normal treina nesta fase, volta no desafio deste caminho.
+
+1. Lê a rota de `/api/filmes` e descobre o que ela responde ao pedido `/api/filmes?idade=`. Escreve-o no caderno e confirma no browser.
+
+   A resposta: 200, com os oito filmes. O `if (idade)` trata o texto vazio como falso, e a idade não filtra.
+
+2. Se o teu contrato diz 400, na rota da lista, muda a linha `if (idade) {` para `if (idade !== undefined) {`. Antes de guardares, prevê o que responde agora `/api/filmes?idade=`, e porquê. Guarda e confirma no browser.
+
+   A resposta: 400, com a mensagem da idade. O texto vazio não é `undefined`, por isso entra no `if`. Lá dentro, o `Number("")` dá 0, que fica abaixo de 1.
+
+Pensa antes de continuares: na papelaria, o `Number("")` dava 0 sem ninguém o ter escrito, e foi preciso uma função própria, a `paraInteiro`. Porque é que no cinema a verificação da ficha chega? A resposta: porque no cinema o 0 nunca é um valor válido. A idade e o número do filme começam em 1, e a duração máxima também. O texto vazio dá 0, e o 0 é recusado pela condição `< 1`. Na papelaria, o `?stockMaximo=0` é um pedido válido, e o texto vazio passava por ele. Um parâmetro repetido, como `?idade=12&idade=14`, também é recusado, porque chega como um array, e o `Number` de um array com dois valores dá `NaN`.
+
+### Fase 3, no teu projeto: verificar a primeira versão
+
+Faz a fase 3 do caminho normal com estes pedidos, que são os do cinema.
+
+1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe duas colunas, "previsto" e "obtido": `/api/estado`, `/api/filmes`, `/api/filmes?genero=Aventura`, `/api/filmes?idade=10`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/9`, `/api/filme` e `/cartaz?genero=Aventura`.
+
+2. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md` e para o teu `server.js`.
+
+3. Faz cada pedido no browser, com o separador Rede aberto, e preenche a coluna do obtido, com o código e o corpo.
+
+   O que deves ver:
+
+   | Pedido | Código | Resposta |
+   | --- | --- | --- |
+   | `/api/estado` | 200 | `{"estado":"ok","aplicacao":"Cinema da escola"}` |
+   | `/api/filmes` | 200 | os oito filmes |
+   | `/api/filmes?genero=Aventura` | 200 | Os Goonies e Jumanji |
+   | `/api/filmes?idade=10` | 200 | Shrek, Toy Story e O Rei Leão |
+   | `/api/filmes?genero=Aventura&idade=10` | 200 | `[]` |
+   | `/api/filmes?idade=doze` | 400 | `{"erro":"A idade tem de ser um número inteiro maior do que 0"}` |
+   | `/api/filmes/3` | 200 | Os Goonies |
+   | `/api/filmes/abc` | 400 | `{"erro":"O número do filme tem de ser um número inteiro positivo"}` |
+   | `/api/filmes/9` | 404 | `{"erro":"Não existe o filme 9"}` |
+   | `/api/filme` | 404 | `{"erro":"Rota não encontrada"}` |
+   | `/cartaz?genero=Aventura` | 200 | a página "Cartaz: Aventura", com Os Goonies e o Jumanji |
+
+4. A tua primeira versão cumpre todas as linhas do contrato, incluindo o `/api/filme`, porque o middleware final já existe desde a ficha. Se fizeste os exercícios 6 e 7, acrescenta à tabela os pedidos das tabelas desses dois exercícios da ficha, com o que obtiveste. Na fase 9, têm de dar o mesmo.
+
+#### Paragem 3, no teu projeto
+
+A primeira versão está verificada, e a tabela do caderno é a referência para o resto do laboratório. As camadas não podem mudar nenhuma destas respostas.
+
+Pensa antes de continuares: porque é que `/api/filmes?genero=Aventura&idade=10` responde 200 com uma lista vazia, e não com um erro? A resposta: os dois parâmetros são válidos, e o pedido está bem feito. Só que nenhum filme de aventura é para menos de 12 anos. Uma pesquisa sem resultados responde 200 com a lista vazia. O 404 fica para quando se pede uma coisa concreta que não existe, como o filme 9.
+
+### Fase 4, no teu projeto: o repository e o service, e um teste sem servidor
+
+A tua primeira versão mistura tudo. Na rota da lista, o `req.query` é HTTP. A regra "um aluno de 12 anos pode ver os filmes para 12" é do clube de cinema. O `Filme.find` e o `$lte` são da base de dados. E no cartaz o filtro do género volta a ser construído da mesma maneira. As camadas separam isto. Na papelaria, os artigos estão num array, e a separação começa pelos dados e pelo service. No cinema, os filmes estão no Atlas, e o lugar dos dados é ocupado por uma camada nova, o repository. É a única camada que usa o modelo `Filme` e que escreve filtros do MongoDB. O service fica com as regras do clube e pede os filmes ao repository. A ordem é a do caminho normal, de dentro para fora: primeiro o repository e o service, depois o controller, por fim as rotas e o `server.js`.
+
+1. Dentro de `src`, cria a pasta `repositories` e, nela, o ficheiro `filmes.repository.js`, com este conteúdo:
+
+   ```js
+   // src/repositories/filmes.repository.js: o acesso aos filmes na base de dados.
+   // Das camadas da aplicação, é a única que usa o modelo Filme e que escreve os
+   // filtros na linguagem do MongoDB, como o $lte.
+   import { Filme } from "../models/filme.model.js";
+
+   /**
+    * Procura os filmes que cumprem as condições recebidas.
+    * As condições que faltam não se aplicam; sem nenhuma, vêm todos os filmes.
+    * @param {object} condicoes com genero (texto) e idadeMinimaAte (número), os dois opcionais
+    * @returns {Promise<object[]>} os filmes encontrados, possivelmente nenhum
+    */
+   export async function procurarFilmes(condicoes) {
+     // O filtro é o mesmo que escreverias na barra do Atlas. Constrói-se aqui,
+     // a partir das condições, para nenhuma outra camada precisar de o conhecer.
+     const filtro = {};
+     if (condicoes.genero !== undefined) {
+       filtro.genero = condicoes.genero;
+     }
+     if (condicoes.idadeMinimaAte !== undefined) {
+       filtro.idadeMinima = { $lte: condicoes.idadeMinimaAte };
+     }
+     const filmes = await Filme.find(filtro);
+     return filmes;
+   }
+
+   /**
+    * Procura um filme pelo número que o clube lhe deu, no campo numero, e não pelo _id.
+    * @param {number} numero um inteiro positivo, já verificado pelo controller
+    * @returns {Promise<object | null>} o filme, ou null se não existir
+    */
+   export async function procurarPorNumero(numero) {
+     // O find devolve sempre uma lista. Como não há dois filmes com o mesmo
+     // número, a lista vem com um filme, ou vazia.
+     const encontrados = await Filme.find({ numero: numero });
+     if (encontrados.length === 0) {
+       return null;
+     }
+     return encontrados[0];
+   }
+   ```
+
+   Leitura guiada: começa pelo `import` do modelo `Filme`. Depois da fase 6, é a única camada da aplicação que o importa. A `procurarFilmes` recebe as condições já com nomes do clube, como `idadeMinimaAte`, e transforma-as no filtro do MongoDB, o mesmo que escreverias na barra do Atlas. A `procurarPorNumero` é o `find` da tua rota de um filme, e devolve `null` quando não encontra. Não sabe o que é um 404. As duas são `async`, porque esperam pela base de dados, e quem as chama tem de usar o `await`.
+
+   No `server.js`, não mudes nada por agora. As rotas de lá continuam a usar o modelo até à fase 6.
+
+2. Cria a pasta `src/services` e, nela, o ficheiro `filmes.service.js`, com este conteúdo:
+
+   ```js
+   // src/services/filmes.service.js: as regras do clube de cinema sobre os filmes.
+   // Recebe valores simples e devolve valores simples. Não sabe nada de HTTP,
+   // nem de MongoDB: pede os filmes ao repository, com as condições que as
+   // regras do clube dão.
+   import { procurarFilmes, procurarPorNumero } from "../repositories/filmes.repository.js";
+
+   /**
+    * Devolve os filmes que cumprem os filtros recebidos.
+    * Os filtros já chegam verificados pelo controller; os que faltam não se aplicam.
+    * @param {object} filtros com genero (texto) e idade (número), os dois opcionais
+    * @returns {Promise<object[]>} os filmes, possivelmente nenhum
+    */
+   export async function listarFilmes(filtros) {
+     const condicoes = {};
+     if (filtros.genero !== undefined) {
+       condicoes.genero = filtros.genero;
+     }
+     if (filtros.idade !== undefined) {
+       // A regra do clube: um aluno pode ver um filme quando a idade mínima do
+       // filme é a idade dele ou menos. Um aluno de 12 anos vê os filmes para 12.
+       condicoes.idadeMinimaAte = filtros.idade;
+     }
+     const filmes = await procurarFilmes(condicoes);
+     return filmes;
+   }
+
+   /**
+    * Procura um filme pelo número.
+    * @param {number} numero um inteiro positivo, já verificado pelo controller
+    * @returns {Promise<object | null>} o filme, ou null se não existir
+    */
+   export async function obterFilme(numero) {
+     const filme = await procurarPorNumero(numero);
+     return filme;
+   }
+   ```
+
+   Leitura guiada: o `import` pede as duas funções ao repository, dentro das mesmas chavetas, e os `..` sobem de `src/services/` para `src/`. A `listarFilmes` recebe os filtros como o controller os vai entregar, com a idade já em número, e escreve a regra da idade como uma condição: `idadeMinimaAte`. Não há nenhum `$lte` neste ficheiro. A `obterFilme` só passa o pedido ao repository. É curta, e existe para o controller nunca falar diretamente com o repository: cada camada conhece só a do lado. Se um dia o clube tiver uma regra sobre um filme, por exemplo esconder os de sessões que já passaram, é aqui que ela entra.
+
+3. Se fizeste o exercício 6, a duração máxima passa pelas duas camadas que acabaste de escrever. No `listarFilmes`, copia `filtros.duracaoMaxima` para `condicoes.duracaoMinutosAte`, num `if` igual ao do género. No `procurarFilmes`, a condição que escreveste no filtro do teu `server.js` para a duração entra a seguir à da idade, a ler `condicoes.duracaoMinutosAte`. Acrescenta também os dois nomes novos à documentação das duas funções.
+
+4. Na raiz do projeto, cria um ficheiro `experimentar-service.js`, com este conteúdo:
+
+   ```js
+   // experimentar-service.js: usa o service sem servidor e sem HTTP.
+   // Precisa da base de dados, por isso liga-se a ela e desliga-se no fim, como
+   // o seed. Serve só para este laboratório; apaga-o no fim da fase 4.
+   import mongoose from "mongoose";
+   import { ligarBaseDeDados } from "./src/db/mongoose.js";
+   import { listarFilmes, obterFilme } from "./src/services/filmes.service.js";
+
+   try {
+     await ligarBaseDeDados();
+     console.log("Todos:", (await listarFilmes({})).length);
+     console.log("Aventura:", (await listarFilmes({ genero: "Aventura" })).map((filme) => filme.titulo));
+     console.log("Para 10 anos:", (await listarFilmes({ idade: 10 })).map((filme) => filme.titulo));
+     console.log("Filme 3:", (await obterFilme(3)).titulo);
+     console.log("Filme 9:", await obterFilme(9));
+   } catch (erro) {
+     console.error(`A experiência falhou: ${erro.message}`);
+   }
+
+   await mongoose.disconnect();
+   ```
+
+   Leitura guiada: como o seed, o ficheiro liga-se à base antes de usar o service e desliga-se no fim. Sem o `disconnect`, o programa ficava à espera e não voltava ao terminal. Cada linha chama o service e escreve só o que interessa: quantos filmes vieram, os títulos, ou o `null` de um filme que não existe.
+
+5. Antes de o correres, escreve no caderno o que esperas em cada uma das cinco linhas que começam pelo nome da experiência.
+
+6. No segundo terminal, na raiz do projeto, corre o ficheiro com o `.env`, como o seed:
+
+   ```bash
+   node --env-file=.env experimentar-service.js
+   ```
+
+   O que deves ver:
+
+   ```text
+   Ligada à base de dados cinema
+   Todos: 8
+   Aventura: [ 'Os Goonies', 'Jumanji' ]
+   Para 10 anos: [ 'Shrek', 'Toy Story', 'O Rei Leão' ]
+   Filme 3: Os Goonies
+   Filme 9: null
+   ```
+
+   Isto quer dizer que o service funciona sem servidor e sem HTTP. Ao contrário do da papelaria, precisa da base de dados, e por isso do `.env`. Sem o `--env-file=.env`, o ficheiro escreve `A experiência falhou: falta a MONGODB_URI no ficheiro .env`.
+
+7. Compara com a tua previsão. Na linha "Para 10 anos", o service recebeu `{ idade: 10 }`, e nenhuma linha do service tem o `$lte`. Escreve no caderno quem o escreveu, e com que valor.
+
+   A resposta: o repository. O service transformou a idade na condição do clube, `idadeMinimaAte: 10`, e o repository transformou essa condição no filtro do MongoDB, `{ idadeMinima: { $lte: 10 } }`.
+
+8. Apaga o ficheiro `experimentar-service.js`. Ele mostrou o que interessava.
+
+#### Paragem 4, no teu projeto
+
+O repository e o service existem, e o service funciona sem servidor. A aplicação continua a responder com as rotas do `server.js`, como na fase 3.
+
+Pensa antes de continuares: se o clube passasse os filmes para uma base de dados MariaDB, como as de Sistemas de Informação, que ficheiros mudavam? A resposta: o repository, a ligação e o modelo, que são os que usam o Mongoose. O service não mudava, porque não sabe que base de dados está por baixo. O controller e as rotas também não. É para isso que o repository existe.
+
+### Fase 5, no teu projeto: o controller
+
+No cinema, o mesmo controller serve a API, que responde em JSON, e o cartaz, que responde com uma página. As duas coisas são HTTP: ler o pedido, verificar o que chegou e escolher a resposta.
+
+1. Cria a pasta `src/controllers` e, nela, o ficheiro `filmes.controller.js`, com este conteúdo. As verificações são as do teu `server.js`, tal como estão; as três funções exportadas são as três rotas, agora com nome e a chamar o service. Se, na fase 2, mudaste o `if (idade)` para cumprir o teu contrato, faz a mesma mudança na `listar`.
+
+   ```js
+   // src/controllers/filmes.controller.js: a ponte entre o HTTP e o service.
+   // Lê e verifica o que vem no pedido, chama o service e escolhe a resposta:
+   // JSON na API dos filmes, como diz o contrato, e uma página no cartaz.
+   import { listarFilmes, obterFilme } from "../services/filmes.service.js";
+
+   /** GET /api/filmes, com os filtros opcionais ?genero= e ?idade= */
+   export async function listar(req, res) {
+     const genero = req.query.genero;
+     const idade = req.query.idade;
+
+     // O objeto dos filtros começa vazio e só recebe o que o contrato prevê,
+     // já verificado. O req.query nunca segue inteiro para o service.
+     const filtros = {};
+     if (genero) {
+       filtros.genero = genero;
+     }
+     if (idade) {
+       const idadeEmNumero = Number(idade); // chega como texto, "12", e passa a número
+       if (!Number.isInteger(idadeEmNumero) || idadeEmNumero < 1) {
+         res.status(400).json({ erro: "A idade tem de ser um número inteiro maior do que 0" });
+         return;
+       }
+       filtros.idade = idadeEmNumero;
+     }
+
+     const filmes = await listarFilmes(filtros);
+     res.json(filmes);
+   }
+
+   /** GET /api/filmes/:numero */
+   export async function obter(req, res) {
+     const numero = Number(req.params.numero); // chega como texto, "3", e passa a número
+     if (!Number.isInteger(numero) || numero < 1) {
+       res.status(400).json({ erro: "O número do filme tem de ser um número inteiro positivo" });
+       return;
+     }
+     const filme = await obterFilme(numero);
+     if (filme === null) {
+       res.status(404).json({ erro: `Não existe o filme ${numero}` });
+       return;
+     }
+     res.json(filme);
+   }
+
+   /** GET /cartaz, com o filtro opcional ?genero=. Responde com uma página, e não com JSON. */
+   export async function mostrarCartaz(req, res) {
+     const genero = req.query.genero;
+     let titulo = "Cartaz";
+     const filtros = {};
+     if (genero) {
+       titulo = `Cartaz: ${genero}`;
+       filtros.genero = genero;
+     }
+     const filmes = await listarFilmes(filtros);
+     res.render("cartaz", { titulo: titulo, filmes: filmes });
+   }
+   ```
+
+   Leitura guiada: o `import` pede duas funções ao service, e nenhuma ao repository nem ao modelo. A `listar` constrói o objeto `filtros` só com os parâmetros que o contrato prevê, com a idade já verificada e em número. A `obter` faz as duas verificações, primeiro 400 e depois 404, e traduz o `null` do service num 404. A `mostrarCartaz` é a tua rota do cartaz, agora com nome: o mesmo filtro do género, a mesma função do service, e o `res.render` em vez do `res.json`. As três são `async`, porque esperam pelo service.
+
+2. Se fizeste o exercício 6, a verificação da duração máxima da tua rota da lista entra na `listar`, a seguir à da idade. O valor convertido segue no `filtros`, com o nome `duracaoMaxima`, que é o que o service lê.
+
+3. Se fizeste o exercício 7, a tua rota do cartaz passa para a `mostrarCartaz`. A verificação da idade, a resposta 400 com a página e o título com as duas partes ficam lá, porque são o pedido e a página. Sai só a condição da idade que escreveste no filtro. A idade convertida segue no `filtros`, como na `listar`, e é o service que aplica a regra. Depois, responde no caderno: a verificação da idade está agora na `listar` e na `mostrarCartaz`. Porque é que não passou para o service, como a regra?
+
+   A resposta: porque cada função responde de maneira diferente a uma idade inválida. A API responde com JSON, como diz o contrato, e o cartaz com uma página. Escolher a resposta é HTTP, e é do controller. O que deixou de estar repetido é a regra e a consulta, que agora estão uma só vez, no service e no repository.
+
+4. Responde no caderno: na `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarFilmes`?
+
+   A resposta: o `filtros` só recebe os parâmetros que o contrato prevê, já convertidos e verificados. Com o `req.query` passado diretamente, a idade chegava ao service como texto, sem verificação. E qualquer parâmetro que alguém inventasse seguiria até às camadas de baixo. No cinema, o que lá chega acaba num filtro do MongoDB. Passar o `req.query` inteiro seria deixar quem faz o pedido escrever a consulta.
+
+Ainda não há nada de novo para ver no browser. Nenhuma rota chama o controller, e a aplicação continua a responder com as rotas do `server.js`.
+
+#### Paragem 5, no teu projeto
+
+O repository, o service e o controller estão nos seus ficheiros. A aplicação continua a responder como na fase 3.
+
+Pensa antes de continuares: a `mostrarCartaz` responde com uma página, e não com JSON. Porque é que está no controller? A resposta: porque trata um pedido HTTP. Lê o `req.query`, verifica-o e escolhe a resposta. Uma página ou um JSON são só a forma da resposta. Como cada filme aparece continua a ser decidido pelo modelo `cartaz.ejs`, que não muda.
+
+### Fase 6, no teu projeto: as rotas e o server.js que as monta
+
+1. Cria a pasta `src/rotas` e, nela, o ficheiro `filmes.rotas.js`, com este conteúdo:
+
+   ```js
+   // src/rotas/filmes.rotas.js: que pedido da API dos filmes vai para que função do controller.
+   // Os caminhos são relativos ao sítio onde este router é montado, em server.js:
+   // "/" quer dizer /api/filmes, e "/:numero" quer dizer /api/filmes/:numero.
+   import express from "express";
+   import { listar, obter } from "../controllers/filmes.controller.js";
+
+   const router = express.Router();
+
+   router.get("/", listar);
+   router.get("/:numero", obter);
+
+   export default router;
+   ```
+
+   Leitura guiada: o router vai ser montado em `/api/filmes`, por isso `"/"` quer dizer `/api/filmes`, e `"/:numero"` quer dizer `/api/filmes/:numero`. Cada rota passa ao Express o nome de uma função do controller, sem a chamar. No fim, o `export default` exporta uma só coisa, o router, sem lhe dar nome. O cartaz não está aqui, porque não faz parte da API.
+
+2. Substitui o conteúdo do `src/server.js` por este. Saem o `import` do modelo e as três rotas, que já estão nas camadas. Entram o `import` do router e o da `mostrarCartaz`, o `app.use` das rotas da API e a rota do cartaz. O resto fica como estava. Se fizeste os exercícios 6 e 7, o `server.js` é este na mesma, porque as tuas soluções já estão nas camadas.
+
+   ```js
+   // src/server.js: o ponto de arranque da aplicação do cinema da escola.
+   // Cria a aplicação Express, monta as rotas da API e a do cartaz, liga-se à
+   // base de dados e só depois à porta. As regras e as consultas estão nas camadas.
+   import express from "express";
+   import { ligarBaseDeDados } from "./db/mongoose.js";
+   import filmesRotas from "./rotas/filmes.rotas.js";
+   import { mostrarCartaz } from "./controllers/filmes.controller.js";
+
+   const app = express();
+
+   // A porta vem do ambiente: em desenvolvimento, do ficheiro .env.
+   // Se não estiver definida, a aplicação usa a 3000.
+   const PORTA = process.env.PORT || 3000;
+
+   // O motor dos modelos das páginas. O Express procura os modelos na pasta
+   // views da pasta de onde arrancas o servidor, que é a raiz do projeto.
+   app.set("view engine", "ejs");
+
+   // Middleware de registo: escreve no terminal cada pedido que chega,
+   // e passa-o à frente. Está antes das rotas, para ver todos os pedidos.
+   app.use((req, res, next) => {
+     console.log(`${req.method} ${req.url}`);
+     next();
+   });
+
+   // Rota de estado: serve para confirmar que a API está ligada e a responder.
+   app.get("/api/estado", (req, res) => {
+     res.json({ estado: "ok", aplicacao: "Cinema da escola" });
+   });
+
+   // Todos os pedidos começados por /api/filmes seguem para o router dos filmes.
+   app.use("/api/filmes", filmesRotas);
+
+   // O cartaz é um só pedido, por isso não tem router próprio: a rota fica aqui,
+   // e a função que responde está no controller.
+   app.get("/cartaz", mostrarCartaz);
+
+   // Middleware final: só chega aqui um pedido a que nenhuma rota respondeu.
+   app.use((req, res) => {
+     res.status(404).json({ erro: "Rota não encontrada" });
+   });
+
+   // Primeiro a ligação à base, e só depois o servidor: uma aplicação que não
+   // chega aos dados não deve começar a aceitar pedidos.
+   try {
+     await ligarBaseDeDados();
+   } catch (erro) {
+     console.error(`Não foi possível ligar à base de dados: ${erro.message}`);
+     process.exit(1);
+   }
+
+   app.listen(PORTA, (erro) => {
+     if (erro) {
+       console.error(`Não foi possível ligar a aplicação: ${erro.message}`);
+       return;
+     }
+     console.log(`Cinema da escola em http://localhost:${PORTA}`);
+   });
+   ```
+
+   Leitura guiada: dos dois `import` novos, o do router não tem chavetas, porque o ficheiro das rotas tem um `export default`, e o nome `filmesRotas` é escolhido aqui. O da `mostrarCartaz` tem chavetas, porque pede um nome que o controller exporta. O `app.use("/api/filmes", filmesRotas)` quer dizer: os pedidos começados por `/api/filmes` seguem para este router. O `app.get("/cartaz", mostrarCartaz)` passa a função ao Express, sem a chamar, como dentro do router.
+
+3. Guarda e confirma no terminal que a aplicação reiniciou sem erros, com `Ligada à base de dados cinema` e `Cinema da escola em http://localhost:3000`. Se houver um erro de `import` num dos ficheiros novos, é agora que aparece. É a primeira vez que o `server.js` carrega as rotas e o controller, que carrega o service, que carrega o repository.
+
+4. Abre `/api/estado`, `/api/filmes?genero=Aventura`, `/api/filmes/3` e `/cartaz?genero=Aventura`. O que deves ver: as mesmas respostas da fase 3, que agora vêm das camadas. O terminal continua a mostrar uma linha por pedido, com o endereço completo, porque o middleware de registo está antes do router.
+
+#### Paragem 6, no teu projeto
+
+A aplicação responde pelas camadas. O `server.js` já não importa o modelo `Filme`, e nenhuma linha dele fala com a base de dados, a não ser a ligação no arranque.
+
+Pensa antes de continuares: que ficheiros do teu projeto importam agora o modelo `Filme`, e porquê esses? A resposta: o repository e o seed. O repository é a camada da aplicação que fala com a base de dados. O seed não faz parte da aplicação: corre à parte, com o `npm run seed`, para pôr os filmes na base.
+
+### Fase 7, no teu projeto
+
+Faz a fase 7 como está, com os nomes do cinema. No passo 1, apaga o `.js` do `import` do controller, em `filmes.rotas.js`. No passo 2, muda o `listar` do mesmo `import` para `listarTodos`. No passo 3, no `server.js`, muda `import filmesRotas from` para `import { filmesRotas } from`. As mensagens são as da fase 7, com os nomes dos teus ficheiros: o caminho `src/controllers/filmes.controller`, sem o `.js`, `'../controllers/filmes.controller.js' does not provide an export named 'listarTodos'` e `'./rotas/filmes.rotas.js' does not provide an export named 'filmesRotas'`. Depois de cada correção, confirma que o terminal voltou a escrever `Cinema da escola em http://localhost:3000`.
+
+### Fase 8, no teu projeto: a ordem do middleware final
+
+O teu middleware final já existe desde a ficha, e a fase 3 mostrou que o `/api/filme` já responde em JSON. Em vez dos passos da fase 8:
+
+1. Confirma que o middleware final está depois do `app.use` das rotas e da rota do cartaz.
+2. Provoca um erro de propósito. Muda o `app.use("/api/filmes", filmesRotas)` para depois do middleware final, logo antes do `try` da ligação à base. Prevê o que respondem `/api/estado`, `/api/filmes/3` e `/cartaz?genero=Aventura`. Guarda e abre os três.
+
+   O que deves ver: `/api/estado` e o cartaz respondem como sempre, porque as suas rotas estão acima do middleware final. `/api/filmes/3` dá `{"erro":"Rota não encontrada"}`, com 404. O middleware final responde a todos os pedidos que lhe chegam e não os passa à frente, por isso o router, abaixo dele, nunca é usado.
+
+3. Repõe o `app.use` das rotas antes do middleware final e confirma que `/api/filmes/3` volta a responder.
+
+### Fase 9, no teu projeto: verificar o contrato
+
+1. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Os pedidos são estes: `/api/filmes`, `/api/filmes?genero=Musical`, `/api/filmes?idade=10`, `/api/filmes?genero=Ficção científica&idade=14`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes?idade=0`, `/api/filmes?idade=12.5`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/0`, `/api/filmes/9` e `/api/filme`.
+
+2. Acrescenta duas linhas, para os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/filmes?idade=`, com a resposta que decidiste na fase 1. Se fizeste os exercícios 6 e 7, acrescenta também os pedidos das tabelas desses exercícios da ficha.
+
+3. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md`.
+
+4. Faz cada pedido no browser, com o separador Rede aberto, e preenche as outras duas colunas.
+
+   O que deves ver:
+
+   | Pedido | Código | Resposta |
+   | --- | --- | --- |
+   | `/api/filmes` | 200 | os oito filmes |
+   | `/api/filmes?genero=Musical` | 200 | `[]` |
+   | `/api/filmes?idade=10` | 200 | Shrek, Toy Story e O Rei Leão |
+   | `/api/filmes?genero=Ficção científica&idade=14` | 200 | Regresso ao Futuro, Matrix e Interstellar |
+   | `/api/filmes?genero=Aventura&idade=10` | 200 | `[]` |
+   | `/api/filmes?idade=doze` | 400 | `{"erro":"A idade tem de ser um número inteiro maior do que 0"}` |
+   | `/api/filmes?idade=0` | 400 | o mesmo erro |
+   | `/api/filmes?idade=12.5` | 400 | o mesmo erro |
+   | `/api/filmes/3` | 200 | Os Goonies |
+   | `/api/filmes/abc` | 400 | `{"erro":"O número do filme tem de ser um número inteiro positivo"}` |
+   | `/api/filmes/0` | 400 | o mesmo erro |
+   | `/api/filmes/9` | 404 | `{"erro":"Não existe o filme 9"}` |
+   | `/api/filme` | 404 | `{"erro":"Rota não encontrada"}` |
+   | `/api/estado` | 200 | `{"estado":"ok","aplicacao":"Cinema da escola"}` |
+   | `/api/filmes?idade=` | o que decidiste | a resposta do teu contrato |
+
+5. Compara com a tabela da fase 3. Os pedidos que estão nas duas têm de dar as mesmas respostas, também o `/api/filme` e os dos exercícios 6 e 7, se os acrescentaste. As camadas mudaram a organização do código, e não o que a aplicação responde.
+
+6. Se alguma linha não conferir, há um erro no código ou no contrato. Descobre qual, corrige-o e volta a verificar a linha. Um 400 que mudou procura-se primeiro no controller. Uma lista que mudou procura-se nas condições que o service passa e, depois, no filtro que o repository constrói.
+
+No fim, a tabela tem de ter pelo menos um 200, um 400 e um 404 verificados.
+
+### Fase 10, no teu projeto
+
+Faz a fase 10 como está, com uma diferença. O `git status` mostra o `contrato-da-api.md`, as alterações ao `src/server.js` e as quatro pastas novas dentro de `src`. Não deve aparecer o `experimentar-service.js`, que apagaste, nem o `.env`. O commit leva esta mensagem:
+
+```bash
+git add .
+git commit -m "Cinema: contrato e camadas, com o repository a falar com o Atlas"
+git log --oneline
+```
+
+O que deves ver: o `git log` mostra agora dois commits, o primeiro do cinema e este.
+
+### O desafio, no teu projeto
+
+Os desafios do fim do laboratório são da papelaria. No cinema, faz este: um pedido novo, que devolve a lista dos géneros dos filmes, cada um só uma vez. Decide o caminho (por exemplo, `/api/generos` ou `/api/filmes/generos`), a camada de cada parte e a ordem dos géneros, e escreve-o no contrato antes do código. Pista: se o caminho começar por `/api/filmes`, pensa no que a rota `"/:numero"` faz a um pedido como `/api/filmes/generos`.
+
+### Antes de terminares, no teu projeto
+
+A lista do fim do laboratório vale também para ti, com três diferenças. A decisão do contrato é sobre o pedido `?idade=`. Na fase 4, a explicação que fica no caderno é a do `$lte`, que o service não escreve. E o `git log --oneline` mostra os dois commits do cinema. No fim, o professor vai pedir-te que escolhas uma linha da tabela da fase 9 e expliques o caminho desse pedido pelas camadas. No cinema, esse caminho acaba no repository e no Atlas.
 
 ## Fase 1: o contrato, antes do código
 
