@@ -17,7 +17,7 @@ O que aprendeste no 11.º ano. Podes consultar os teus apontamentos e estes cap�
 - o `fetch`: [Fetch e AJAX](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/17-Fetch-AJAX.md);
 - o React, para a parte opcional: [Estado e eventos](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/04_estado_e_eventos.md), [Listas e condicionais](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/05_listas_e_condicionais.md) e [Formulários controlados](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/06_formularios_controlados.md).
 
-Deste ano, o [guia do tema Arquitetura e setup Node](03-arquitetura-e-setup-node.md) explica o npm e os scripts. O exercício 1 e os exercícios 7 e 8 usam o projeto da [ficha do cinema da escola](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md), de Sistemas de Informação.
+Não precisas de nenhum trabalho anterior. Tudo o que os exercícios usam está nesta ficha.
 
 ## Como trabalhar
 
@@ -25,7 +25,7 @@ A parte obrigatória são as partes A e B, os exercícios 1 a 8, por esta ordem.
 
 Esta ficha é de revisão, e podes consultar os apontamentos e os capítulos indicados acima. Tenta primeiro sozinho, e consulta quando ficares preso. Assim percebes, e o professor também, onde precisas de rever.
 
-Resolve no caderno. Nos exercícios com código, escreve primeiro o que esperas que aconteça, e só depois experimenta. Se tiveres o computador, prepara a pasta da secção "Preparar a pasta" antes do exercício 2. Os exercícios 7 e 8 precisam da API do cinema a correr; sem ela, responde em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
+Resolve no caderno. Nos exercícios com código, escreve primeiro o que esperas que aconteça, e só depois experimenta. Se tiveres o computador, prepara a pasta da secção "Preparar a pasta" antes do exercício 2. Os exercícios 7 e 8 precisam também do servidor de teste dessa secção, que se instala com internet; sem ele, responde em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
 
 ## O cenário: o clube de videojogos
 
@@ -54,7 +54,7 @@ Para experimentares os exercícios 2 a 8 no computador, precisas de uma pasta pr
    npm init -y
    ```
 
-3. No `package.json`, muda a linha `"type": "commonjs"` para `"type": "module"`, como fizeste na ficha do cinema. É o que deixa usar o `import` e o `export`.
+3. No `package.json`, muda a linha `"type": "commonjs"` para `"type": "module"`. É o que deixa usar o `import` e o `export`.
 4. Cria o ficheiro `jogos.js` com o conteúdo do cenário.
 
 Escreve cada exercício num ficheiro próprio, como `exercicio2.js`, que começa por esta linha:
@@ -65,18 +65,82 @@ import { jogos } from "./jogos.js";
 
 Corre-o com `node exercicio2.js`, na pasta `revisao-js`.
 
+Para os exercícios 7 e 8, a pasta precisa também de um servidor de teste, que responde com os jogos do clube.
+
+1. Na pasta `revisao-js`, instala o Express. Precisa de internet.
+
+   ```bash
+   npm install express
+   ```
+
+2. Cria o ficheiro `servidor.js` com este conteúdo. Não faz parte de nenhum exercício: só responde aos pedidos dos exercícios 7 e 8.
+
+   ```js
+   // servidor.js: um servidor de teste, que responde com os jogos do clube.
+   // Serve só para os exercícios 7 e 8.
+   import express from "express";
+   import { jogos } from "./jogos.js";
+
+   const app = express();
+
+   // GET /api/jogos: a lista dos jogos, em JSON.
+   app.get("/api/jogos", (req, res) => {
+     res.json(jogos);
+   });
+
+   // Qualquer outro pedido: 404, com a mensagem de erro em JSON.
+   app.use((req, res) => {
+     res.status(404).json({ erro: "Rota não encontrada" });
+   });
+
+   app.listen(3000, () => {
+     console.log("Servidor de teste em http://localhost:3000");
+   });
+   ```
+
+3. Num segundo terminal, também na pasta `revisao-js`, liga-o com `node servidor.js`. Deve aparecer `Servidor de teste em http://localhost:3000`. Para o desligar, carrega em Ctrl+C nesse terminal.
+
 ## Parte A: o terminal e o npm
 
 ### Exercício 1: o projeto que veio numa pen
 
-Um colega copiou o projeto `cinema-da-escola` para uma pen e passou-to. Como manda o `.gitignore`, a pasta não traz a `node_modules` nem o `.env`. Traz o `package.json`, o `package-lock.json`, o `.env.example`, o `.gitignore`, a `src` e a `views`.
+Um colega copiou para uma pen o projeto `clube-videojogos`, uma pequena aplicação Node, e passou-to. Como manda o `.gitignore`, a pasta não traz a `node_modules` nem o `.env`. Traz isto:
 
-a) Abriste o terminal dentro da pasta. Escreve, por ordem, o que fazes até a aplicação estar a correr: os comandos e o que tens de escrever no `.env`. Explica para que serve cada passo.
+```text
+clube-videojogos/
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+└── src/
+    └── server.js
+```
+
+O `package.json` é este:
+
+```json
+{
+  "name": "clube-videojogos",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch --env-file=.env src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
+```
+
+E o `.env.example` tem uma só linha, `PORT=3000`.
+
+a) Abriste o terminal dentro da pasta. Escreve, por ordem, os comandos que corres até a aplicação estar a correr, e explica para que serve cada um.
 
 b) O colega criou o `.env` e correu logo `npm run dev`. Apareceu esta mensagem (mostram-se só as linhas que interessam):
 
 ```text
-Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'express' imported from /home/aluno/cinema-da-escola/src/server.js
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'express' imported from /home/aluno/clube-videojogos/src/server.js
 ```
 
 O que é que ele se esqueceu de fazer? Explica como o percebes pela mensagem.
@@ -166,25 +230,25 @@ c) Depois da correção, o que aparece na consola?
 
 ### Exercício 7: o que devolve uma função async
 
-Esta função vai buscar os filmes à API do cinema:
+Esta função vai buscar os jogos ao servidor de teste:
 
 ```js
 // exercicio7.js: o que devolve uma função async.
-async function carregarFilmes() {
-  const resposta = await fetch("http://localhost:3000/api/filmes");
-  const filmes = await resposta.json();
-  return filmes;
+async function carregarJogos() {
+  const resposta = await fetch("http://localhost:3000/api/jogos");
+  const jogos = await resposta.json();
+  return jogos;
 }
 
-const resultado = carregarFilmes();
+const resultado = carregarJogos();
 console.log(resultado);
 ```
 
 a) Antes de experimentares, o que mostra a última linha? Explica, por palavras tuas, o que devolve uma função `async`.
 
-b) Muda as duas últimas linhas para a consola mostrar quantos filmes vieram.
+b) Muda as duas últimas linhas para a consola mostrar quantos jogos vieram.
 
-Se tiveres a API do cinema a correr na porta 3000, experimenta as duas versões. Se não, responde em papel.
+Se tiveres o servidor de teste ligado, experimenta as duas versões. Se não, responde em papel.
 
 ### Exercício 8: os três finais de um pedido
 
@@ -192,30 +256,30 @@ Esta versão da função verifica a resposta, e quem a chama trata os erros:
 
 ```js
 // exercicio8.js: os três finais possíveis de um pedido.
-async function carregarFilmes(caminho) {
+async function carregarJogos(caminho) {
   const resposta = await fetch(`http://localhost:3000${caminho}`);
   if (!resposta.ok) {
     throw new Error(`O servidor respondeu ${resposta.status}`);
   }
-  const filmes = await resposta.json();
-  return filmes;
+  const jogos = await resposta.json();
+  return jogos;
 }
 
 try {
-  const filmes = await carregarFilmes("/api/filmes");
-  console.log(`Vieram ${filmes.length} filmes`);
+  const jogos = await carregarJogos("/api/jogos");
+  console.log(`Vieram ${jogos.length} jogos`);
 } catch (erro) {
-  console.log(`Não foi possível carregar os filmes: ${erro.message}`);
+  console.log(`Não foi possível carregar os jogos: ${erro.message}`);
 }
 ```
 
-a) Copia esta tabela para o caderno e completa a última coluna. Para a situação 2, o pedido muda para `carregarFilmes("/api/filme")`.
+a) Copia esta tabela para o caderno e completa a última coluna. Para a situação 2, o pedido muda para `carregarJogos("/api/jogo")`.
 
 | Situação | O que a consola mostra |
 | --- | --- |
-| 1. A API está ligada, e o pedido é a `/api/filmes` | |
-| 2. A API está ligada, e o pedido é a `/api/filme`, sem o `s` | |
-| 3. A API está desligada | |
+| 1. O servidor está ligado, e o pedido é a `/api/jogos` | |
+| 2. O servidor está ligado, e o pedido é a `/api/jogo`, sem o `s` | |
+| 3. O servidor está desligado | |
 
 b) Nas situações 2 e 3, o erro vai parar ao `catch`. Em cada uma, quem o lança: o `fetch`, ou o teu código?
 
