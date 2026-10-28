@@ -25,7 +25,7 @@ A parte obrigatória são as partes A e B, os exercícios 1 a 8, por esta ordem.
 
 Esta ficha é de revisão, e podes consultar os apontamentos e os capítulos indicados acima. Tenta primeiro sozinho, e consulta quando ficares preso. Assim percebes, e o professor também, onde precisas de rever.
 
-Resolve no caderno. Nos exercícios com código, escreve primeiro o que esperas que aconteça, e só depois experimenta. Se tiveres o computador, prepara a pasta da secção "Preparar a pasta" antes do exercício 2. Os exercícios 7 e 8 precisam também do servidor de teste dessa secção, que se instala com internet; sem ele, responde em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
+Resolve no caderno. Nos exercícios com código, escreve primeiro o que esperas que aconteça, e só depois experimenta. Cada exercício constrói-se só com o que está na ficha. O exercício 1 cria a pasta `revisao-js`, onde experimentas os exercícios 2 a 8, se tiveres o computador. Os exercícios 7 e 8 precisam também de um servidor de teste, que a ficha dá antes do exercício 7 e se instala com internet; sem ele, responde em papel. A parte C faz-se em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
 
 ## O cenário: o clube de videojogos
 
@@ -43,109 +43,60 @@ export const jogos = [
 ];
 ```
 
-## Preparar a pasta
+## Parte A: o terminal e o npm
 
-Para experimentares os exercícios 2 a 8 no computador, precisas de uma pasta própria, fora de qualquer outro projeto.
+### Exercício 1: a pasta da revisão
 
-1. Cria uma pasta chamada `revisao-js`, abre-a no VS Code e abre um terminal dentro dela.
-2. Cria o projeto:
+Neste exercício crias, do zero, a pasta onde vais experimentar os exercícios seguintes. Se não tiveres o computador, responde a partir do que a ficha mostra.
 
-   ```bash
-   npm init -y
-   ```
+a) Abre um terminal na tua pasta de trabalho, fora de qualquer outro projeto. Escreve os três comandos que criam uma pasta `revisao-js`, entram nela e criam lá dentro um projeto Node com as respostas por omissão. Explica para que serve cada um, e depois corre-os. O `package.json` que aparece é este:
 
-3. No `package.json`, muda a linha `"type": "commonjs"` para `"type": "module"`. É o que deixa usar o `import` e o `export`.
-4. Cria o ficheiro `jogos.js` com o conteúdo do cenário.
+```json
+{
+  "name": "revisao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
+```
 
-Escreve cada exercício num ficheiro próprio, como `exercicio2.js`, que começa por esta linha:
+b) Prepara o projeto para os exercícios seguintes. Muda o `"type"` para `"module"`, que é o que deixa usar o `import` e o `export`. Cria o ficheiro `ola.js`, com uma linha que escreve na consola `A pasta da revisão está pronta.`. Acrescenta aos scripts do `package.json` um script `ola` que corre esse ficheiro. Escreve no caderno as linhas do `package.json` que mudaste ou acrescentaste, e confirma com `npm run ola`.
+
+c) Provoca dois erros. Para cada um, explica o que correu mal e como o percebes pela mensagem (mostram-se só as linhas que interessam).
+
+- Corre `npm run ole`, com o nome do script mal escrito:
+
+  ```text
+  npm error Missing script: "ole"
+  npm error
+  npm error Did you mean this?
+  npm error   npm run ola # run the "ola" package script
+  ```
+
+- Sobe para a pasta de cima, com `cd ..`, e corre lá `npm run ola`:
+
+  ```text
+  npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/home/aluno/package.json'
+  ```
+
+No fim, volta à pasta `revisao-js`, com `cd revisao-js`. Os exercícios seguintes correm-se todos nesta pasta.
+
+## Parte B: JavaScript
+
+Na pasta `revisao-js`, cria o ficheiro `jogos.js` com o conteúdo do cenário. Escreve cada exercício num ficheiro próprio, como `exercicio2.js`, que começa por esta linha:
 
 ```js
 import { jogos } from "./jogos.js";
 ```
 
 Corre-o com `node exercicio2.js`, na pasta `revisao-js`.
-
-Para os exercícios 7 e 8, a pasta precisa também de um servidor de teste, que responde com os jogos do clube.
-
-1. Na pasta `revisao-js`, instala o Express. Precisa de internet.
-
-   ```bash
-   npm install express
-   ```
-
-2. Cria o ficheiro `servidor.js` com este conteúdo. Não faz parte de nenhum exercício: só responde aos pedidos dos exercícios 7 e 8.
-
-   ```js
-   // servidor.js: um servidor de teste, que responde com os jogos do clube.
-   // Serve só para os exercícios 7 e 8.
-   import express from "express";
-   import { jogos } from "./jogos.js";
-
-   const app = express();
-
-   // GET /api/jogos: a lista dos jogos, em JSON.
-   app.get("/api/jogos", (req, res) => {
-     res.json(jogos);
-   });
-
-   // Qualquer outro pedido: 404, com a mensagem de erro em JSON.
-   app.use((req, res) => {
-     res.status(404).json({ erro: "Rota não encontrada" });
-   });
-
-   app.listen(3000, () => {
-     console.log("Servidor de teste em http://localhost:3000");
-   });
-   ```
-
-3. Num segundo terminal, também na pasta `revisao-js`, liga-o com `node servidor.js`. Deve aparecer `Servidor de teste em http://localhost:3000`. Para o desligar, carrega em Ctrl+C nesse terminal.
-
-## Parte A: o terminal e o npm
-
-### Exercício 1: o projeto que veio numa pen
-
-Um colega copiou para uma pen o projeto `clube-videojogos`, uma pequena aplicação Node, e passou-to. Como manda o `.gitignore`, a pasta não traz a `node_modules` nem o `.env`. Traz isto:
-
-```text
-clube-videojogos/
-├── .env.example
-├── .gitignore
-├── package.json
-├── package-lock.json
-└── src/
-    └── server.js
-```
-
-O `package.json` é este:
-
-```json
-{
-  "name": "clube-videojogos",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch --env-file=.env src/server.js"
-  },
-  "dependencies": {
-    "express": "^5.3.0"
-  }
-}
-```
-
-E o `.env.example` tem uma só linha, `PORT=3000`.
-
-a) Abriste o terminal dentro da pasta. Escreve, por ordem, os comandos que corres até a aplicação estar a correr, e explica para que serve cada um.
-
-b) O colega criou o `.env` e correu logo `npm run dev`. Apareceu esta mensagem (mostram-se só as linhas que interessam):
-
-```text
-Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'express' imported from /home/aluno/clube-videojogos/src/server.js
-```
-
-O que é que ele se esqueceu de fazer? Explica como o percebes pela mensagem.
-
-## Parte B: JavaScript
 
 ### Exercício 2: as propriedades de um jogo
 
@@ -228,6 +179,43 @@ b) Corrige o programa mudando um só ficheiro. Diz qual, e porque é esse.
 
 c) Depois da correção, o que aparece na consola?
 
+### O servidor de teste dos exercícios 7 e 8
+
+Para experimentares os exercícios 7 e 8, a pasta `revisao-js` precisa de um servidor de teste, que responde com os jogos do clube. Se não tiveres internet para o instalar, faz os dois exercícios em papel.
+
+1. Na pasta `revisao-js`, instala o Express. Precisa de internet.
+
+   ```bash
+   npm install express
+   ```
+
+2. Cria o ficheiro `servidor.js` com este conteúdo. Não faz parte de nenhum exercício: só responde aos pedidos dos exercícios 7 e 8.
+
+   ```js
+   // servidor.js: um servidor de teste, que responde com os jogos do clube.
+   // Serve só para os exercícios 7 e 8.
+   import express from "express";
+   import { jogos } from "./jogos.js";
+
+   const app = express();
+
+   // GET /api/jogos: a lista dos jogos, em JSON.
+   app.get("/api/jogos", (req, res) => {
+     res.json(jogos);
+   });
+
+   // Qualquer outro pedido: 404, com a mensagem de erro em JSON.
+   app.use((req, res) => {
+     res.status(404).json({ erro: "Rota não encontrada" });
+   });
+
+   app.listen(3000, () => {
+     console.log("Servidor de teste em http://localhost:3000");
+   });
+   ```
+
+3. Num segundo terminal, também na pasta `revisao-js`, liga-o com `node servidor.js`. Deve aparecer `Servidor de teste em http://localhost:3000`. Para o desligar, carrega em Ctrl+C nesse terminal.
+
 ### Exercício 7: o que devolve uma função async
 
 Esta função vai buscar os jogos ao servidor de teste:
@@ -287,7 +275,7 @@ c) Imagina que apagavas as três linhas do `if (!resposta.ok)`. O que mostrava a
 
 ## Parte C, opcional: React e formulários
 
-Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros, que vais encontrar nos exercícios 9 e 10. Lê o componente todo antes de começares.
+Esta parte faz-se em papel: lês o componente e escreves as correções no caderno. Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros, que vais encontrar nos exercícios 9 e 10. Lê o componente todo antes de começares.
 
 ```jsx
 import { useState } from "react";
@@ -336,7 +324,7 @@ Enquanto a lista não tem nenhum jogo, a página deve mostrar a frase "Ainda nã
 
 ## Apoio
 
-- Exercício 1: o `package-lock.json` diz que versões dos pacotes instalar. Na mensagem, lê de onde veio o pedido e o que foi pedido.
+- Exercício 1: um script é uma linha dentro de `"scripts"`, com o nome entre aspas, os dois pontos e o comando, e uma vírgula a separá-la da linha anterior. Nas mensagens, lê o que o npm procurou e onde.
 - Exercício 2: uma template string escreve-se entre acentos graves, e cada valor entra com `${...}`.
 - Exercício 3: o `filter` recebe uma condição com duas partes. Repara no "ou mais".
 - Exercício 4: experimenta o `find` sozinho, com o `id` 9, e vê o que aparece na consola.
@@ -357,7 +345,7 @@ Enquanto a lista não tem nenhum jogo, a página deve mostrar a frase "Ainda nã
 - Os exercícios 1 a 8 têm resposta no caderno, com a previsão escrita antes do resultado nos que têm código.
 - Nos exercícios 4 e 5, as funções dão o valor certo também com o `id` que não existe e com a lista vazia.
 - No exercício 8, sabes dizer, em cada situação, quem lançou o erro.
-- Se tiveste o computador, os exercícios 2 a 6 correm na pasta `revisao-js`.
+- Se tiveste o computador, o `npm run ola` escreve a frase do exercício 1, e os exercícios 2 a 6 correm na pasta `revisao-js`.
 
 ## Autoavaliação
 
