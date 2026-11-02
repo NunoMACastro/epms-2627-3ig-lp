@@ -12,6 +12,8 @@ Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que apresenta a orde
 - o laboratório, para seguir passo a passo no computador, sem precisares de abrir o guia;
 - a ficha de exercícios, para praticares sozinho.
 
+Em cada área, os guias estão na pasta da área. Os laboratórios estão na pasta `laboratorios` e as fichas na pasta `exercicios`. Cada uma destas pastas tem um índice que explica o que é esse tipo de documento. Se tinhas guardado a ligação para um laboratório ou uma ficha, procura o documento nessas pastas.
+
 Para teres os materiais no teu computador, clona este repositório uma vez, numa pasta tua:
 
 ```bash

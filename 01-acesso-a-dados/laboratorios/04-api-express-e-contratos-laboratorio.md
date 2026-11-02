@@ -1,8 +1,8 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Laboratório: API Express e contratos
 
-Laboratório do tema API Express e contratos, do módulo M14, Acesso a Bases de Dados. Vais escrever o contrato da API da papelaria e uma primeira versão que o cumpre com tudo no `server.js`, e depois separá-la em camadas, sem mudar nenhuma resposta. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](04-api-express-e-contratos.md) tem a teoria completa, para quem quiser saber mais.
+Laboratório do tema API Express e contratos, do módulo M14, Acesso a Bases de Dados. Vais escrever o contrato da API da papelaria e uma primeira versão que o cumpre com tudo no `server.js`, e depois separá-la em camadas, sem mudar nenhuma resposta. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../04-api-express-e-contratos.md) tem a teoria completa, para quem quiser saber mais.
 
 ## O que vais construir
 
@@ -40,7 +40,7 @@ No caderno, ficam duas tabelas de verificação, com o que previste e o que obti
 
 ## Palavras que vais usar
 
-- Contrato de uma API: o documento que diz, para cada pedido, o método e o caminho, os parâmetros e todas as respostas possíveis, incluindo as de erro. Para saber mais, vê a secção "O que é o contrato de uma API" do [guia](04-api-express-e-contratos.md).
+- Contrato de uma API: o documento que diz, para cada pedido, o método e o caminho, os parâmetros e todas as respostas possíveis, incluindo as de erro. Para saber mais, vê a secção "O que é o contrato de uma API" do [guia](../04-api-express-e-contratos.md).
 - Parâmetro de pesquisa: um valor que vem depois do `?` no endereço, como `categoria` em `?categoria=Papel`; lê-se em `req.query`, e chega sempre como texto.
 - Parâmetro de caminho: um valor que vem dentro do caminho, como o `2` em `/api/artigos/2`; lê-se em `req.params`, e também chega como texto.
 - Verificar à entrada: confirmar, no princípio da função que trata o pedido, que os valores que chegaram servem, antes de os usar.
@@ -49,13 +49,13 @@ No caderno, ficam duas tabelas de verificação, com o que previste e o que obti
 - `export` e `import`: o `export` deixa um nome ser usado por outros ficheiros; o `import` pede-o, com o caminho do ficheiro.
 - `export default`: exporta uma só coisa, sem nome, que se importa sem chavetas.
 - Router (em português, encaminhador): um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor.
-- Camadas: as rotas dizem que pedido vai para que função; o controller trata o HTTP; o service tem as regras da papelaria; os dados guardam os artigos. Para saber mais, vê a secção "As camadas em código" do [guia](04-api-express-e-contratos.md).
+- Camadas: as rotas dizem que pedido vai para que função; o controller trata o HTTP; o service tem as regras da papelaria; os dados guardam os artigos. Para saber mais, vê a secção "As camadas em código" do [guia](../04-api-express-e-contratos.md).
 - Middleware final: a função registada com `app.use`, sem caminho, que responde aos pedidos que nenhuma rota tratou.
 - Repository: a camada que vai buscar os dados à base de dados, e a única que usa o Mongoose para isso. Só aparece neste laboratório no caminho do cinema; na papelaria, chega no tema seguinte.
 
 ## O que precisas
 
-- O projeto `papelaria-api` do laboratório do tema anterior, com o `.env`, o `npm run dev` a funcionar e o primeiro commit feito. Se não o tiveres, copia a pasta [papelaria-api](../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho. Dentro dela, corre `npm install`, cria o `.env` a partir do `.env.example` e faz o `git init` e o primeiro commit, como na fase 6 desse laboratório.
+- O projeto `papelaria-api` do laboratório do tema anterior, com o `.env`, o `npm run dev` a funcionar e o primeiro commit feito. Se não o tiveres, copia a pasta [papelaria-api](../../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho. Dentro dela, corre `npm install`, cria o `.env` a partir do `.env.example` e faz o `git init` e o primeiro commit, como na fase 6 desse laboratório.
 - Se fizeste a ficha do cinema da escola, de Sistemas de Informação, podes fazer este laboratório no projeto `cinema-da-escola`, em vez da papelaria. Nesse caso, lê primeiro a secção "Se vens do projeto do cinema da escola".
 - O Node.js e o npm. Confirma com `node --version` e `npm --version`; devem aparecer dois números de versão, o do Node a começar por `v`.
 - Um editor de código e dois terminais: um para a API, outro para os comandos.
@@ -711,7 +711,7 @@ A lista do fim do laboratório vale também para ti, com três diferenças. A de
 
 ## Fase 1: o contrato, antes do código
 
-Uma API é usada por programas, como a tua interface em React, e um programa não consegue adivinhar. Precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. O contrato de uma API diz isso, pedido a pedido. Diz o método e o caminho, e os parâmetros: onde vêm, de que tipo são e que valores servem. Diz também a resposta quando corre bem, e todas as respostas de erro. Escreve-se antes do código e obriga as duas partes: a API compromete-se a responder assim, e o cliente a pedir assim. E é com ele que se verifica a API. Se responde ao que o contrato diz, está certa. Para saber mais, lê a secção "O que é o contrato de uma API" do [guia](04-api-express-e-contratos.md).
+Uma API é usada por programas, como a tua interface em React, e um programa não consegue adivinhar. Precisa de saber exatamente o que pedir e o que vai receber, incluindo quando corre mal. O contrato de uma API diz isso, pedido a pedido. Diz o método e o caminho, e os parâmetros: onde vêm, de que tipo são e que valores servem. Diz também a resposta quando corre bem, e todas as respostas de erro. Escreve-se antes do código e obriga as duas partes: a API compromete-se a responder assim, e o cliente a pedir assim. E é com ele que se verifica a API. Se responde ao que o contrato diz, está certa. Para saber mais, lê a secção "O que é o contrato de uma API" do [guia](../04-api-express-e-contratos.md).
 
 1. Na raiz do projeto, ao lado do `package.json`, cria o ficheiro `contrato-da-api.md`. Escreve-o em Markdown, o formato destes documentos. Um título começa por `#`. Uma tabela escreve-se com uma linha de texto por cada linha da tabela, com `|` entre as colunas. Logo a seguir à linha dos títulos vem uma linha só com traços, como `| --- | --- | --- |`. Um bloco de JSON fica entre duas linhas de três acentos graves, a primeira com a palavra `json`.
 
@@ -793,7 +793,7 @@ Pensa antes de continuares: porque é que o contrato não diz se os artigos est�
 
 ## Fase 2: tudo no server.js, com as rotas primeiro pela ordem errada
 
-Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o contrato com tudo no `src/server.js`, como os servidores de Sistemas de Informação. Quase tudo já o conheces de lá: o `app.get`, o `req.query` e o `req.params`, sempre como texto, o `res.status(...).json(...)` e o `return` depois de um erro. Há duas coisas novas. A primeira é verificar à entrada. A rota só lê os parâmetros que o contrato prevê, converte os números e responde 400 se não servirem. A segunda é uma armadilha. O `Number("")` dá 0, e não `NaN`. E há uma regra que já viste em Sistemas de Informação, a ordem das rotas. O Express experimenta-as pela ordem em que foram registadas, e a primeira que corresponder responde. Para saber mais, lê a secção "Primeira versão: tudo no server.js" do [guia](04-api-express-e-contratos.md).
+Antes de dividir a API em camadas, escreve-se uma primeira versão que cumpre o contrato com tudo no `src/server.js`, como os servidores de Sistemas de Informação. Quase tudo já o conheces de lá: o `app.get`, o `req.query` e o `req.params`, sempre como texto, o `res.status(...).json(...)` e o `return` depois de um erro. Há duas coisas novas. A primeira é verificar à entrada. A rota só lê os parâmetros que o contrato prevê, converte os números e responde 400 se não servirem. A segunda é uma armadilha. O `Number("")` dá 0, e não `NaN`. E há uma regra que já viste em Sistemas de Informação, a ordem das rotas. O Express experimenta-as pela ordem em que foram registadas, e a primeira que corresponder responde. Para saber mais, lê a secção "Primeira versão: tudo no server.js" do [guia](../04-api-express-e-contratos.md).
 
 1. No `src/server.js`, a seguir à linha `const app = express();`, acrescenta o array dos oito artigos. Este podes copiá-lo. São dados, e escrevê-los à mão não ensina nada.
 
@@ -1020,7 +1020,7 @@ Pensa antes de continuares: se o mesmo parâmetro vier duas vezes, como em `?sto
 
 ## Fase 3: verificar a primeira versão
 
-Cada linha do contrato diz o que a API responde a um pedido, e por isso cada linha se pode verificar. Faz-se o pedido e compara-se a resposta. Antes de cada pedido, prevês o código e a resposta, só com o contrato e o código à frente. Esta primeira tabela fica de referência. Na fase 4 o código começa a mudar de ficheiro, e as respostas têm de continuar as mesmas. Para saber mais, lê o passo 2 do exemplo guiado do [guia](04-api-express-e-contratos.md).
+Cada linha do contrato diz o que a API responde a um pedido, e por isso cada linha se pode verificar. Faz-se o pedido e compara-se a resposta. Antes de cada pedido, prevês o código e a resposta, só com o contrato e o código à frente. Esta primeira tabela fica de referência. Na fase 4 o código começa a mudar de ficheiro, e as respostas têm de continuar as mesmas. Para saber mais, lê o passo 2 do exemplo guiado do [guia](../04-api-express-e-contratos.md).
 
 1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe duas colunas, "previsto" e "obtido": `/api/estado`, `/api/artigos`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?stockMaximo=`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
@@ -1061,7 +1061,7 @@ Pensa antes de continuares: na tabela, `/api/artigos/abc` dá 400, e `/api/artig
 
 ## Fase 4: os dados e o service, e um teste sem servidor
 
-A primeira versão funciona, mas mistura tudo. Os dados, o HTTP e as regras da papelaria estão nas mesmas funções. Para experimentar a regra dos artigos a encomendar, tens de ligar a API e fazer o pedido. As camadas separam isto. A separação faz-se de dentro para fora: primeiro os dados e o service, depois o controller, por fim as rotas e o `server.js`. O código não se reescreve. Cada parte muda de ficheiro. Cada ficheiro é um módulo, e os módulos ligam-se com `import` e `export`. Num projeto com `"type": "module"`, o que se declara num ficheiro fica fechado lá dentro. O `export` deixa outro ficheiro usar um nome, e o `import` pede-o, com o caminho do ficheiro. Nos teus ficheiros, o caminho começa por `./` (a mesma pasta) ou `../` (a pasta de cima) e acaba sempre em `.js`. O service fica com as regras, sem saber nada de HTTP, e por isso pode ser usado sem servidor. Para saber mais, lê as secções "Os dados temporários" e "O service" do [guia](04-api-express-e-contratos.md).
+A primeira versão funciona, mas mistura tudo. Os dados, o HTTP e as regras da papelaria estão nas mesmas funções. Para experimentar a regra dos artigos a encomendar, tens de ligar a API e fazer o pedido. As camadas separam isto. A separação faz-se de dentro para fora: primeiro os dados e o service, depois o controller, por fim as rotas e o `server.js`. O código não se reescreve. Cada parte muda de ficheiro. Cada ficheiro é um módulo, e os módulos ligam-se com `import` e `export`. Num projeto com `"type": "module"`, o que se declara num ficheiro fica fechado lá dentro. O `export` deixa outro ficheiro usar um nome, e o `import` pede-o, com o caminho do ficheiro. Nos teus ficheiros, o caminho começa por `./` (a mesma pasta) ou `../` (a pasta de cima) e acaba sempre em `.js`. O service fica com as regras, sem saber nada de HTTP, e por isso pode ser usado sem servidor. Para saber mais, lê as secções "Os dados temporários" e "O service" do [guia](../04-api-express-e-contratos.md).
 
 1. Dentro de `src`, cria a pasta `dados` e, nela, o ficheiro `artigos.dados.js`, com este conteúdo. É o array do teu `server.js`, copiado, com `export` à frente do `const`:
 
@@ -1189,7 +1189,7 @@ Pensa antes de continuares: porque é que o `import` do service escreve `../dado
 
 ## Fase 5: o controller
 
-O controller é a camada que conhece o HTTP. Lê do pedido o que interessa, converte-o e verifica-o, e responde 400 se não servir. Depois chama o service e escolhe o código e o corpo da resposta. A verificação à entrada da primeira versão passa para aqui. Saber se `"abc"` é um número é um problema do pedido, e é do controller. Saber se um artigo tem de ser encomendado é uma regra, e é do service. Para saber mais, lê as secções "Verificar à entrada, no controller" e "O controller" do [guia](04-api-express-e-contratos.md).
+O controller é a camada que conhece o HTTP. Lê do pedido o que interessa, converte-o e verifica-o, e responde 400 se não servir. Depois chama o service e escolhe o código e o corpo da resposta. A verificação à entrada da primeira versão passa para aqui. Saber se `"abc"` é um número é um problema do pedido, e é do controller. Saber se um artigo tem de ser encomendado é uma regra, e é do service. Para saber mais, lê as secções "Verificar à entrada, no controller" e "O controller" do [guia](../04-api-express-e-contratos.md).
 
 1. Cria a pasta `src/controllers` e, nela, o ficheiro `artigos.controller.js`, com este conteúdo. A `paraInteiro` copia-la do teu `server.js`, tal como está; as três funções exportadas são as três rotas do teu `server.js`, agora com nome e a chamar o service.
 
@@ -1277,7 +1277,7 @@ Pensa antes de continuares: porque é que a `paraInteiro` ficou no controller, e
 
 ## Fase 6: as rotas e o server.js que as monta
 
-As rotas são o índice da API. Dizem que pedido vai para que função do controller. Num ficheiro próprio, ficam num router, criado com `express.Router()`: um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor. Dentro do router, os caminhos são relativos ao sítio onde ele é montado. A regra da ordem continua a valer lá dentro. E o `server.js` fica só com o arranque: a porta, a rota de estado, a montagem do router e o `app.listen`. Para saber mais, lê as secções "As rotas" e "O server.js que monta as rotas" do [guia](04-api-express-e-contratos.md).
+As rotas são o índice da API. Dizem que pedido vai para que função do controller. Num ficheiro próprio, ficam num router, criado com `express.Router()`: um conjunto de rotas que se monta, todo de uma vez, num caminho do servidor. Dentro do router, os caminhos são relativos ao sítio onde ele é montado. A regra da ordem continua a valer lá dentro. E o `server.js` fica só com o arranque: a porta, a rota de estado, a montagem do router e o `app.listen`. Para saber mais, lê as secções "As rotas" e "O server.js que monta as rotas" do [guia](../04-api-express-e-contratos.md).
 
 1. Cria a pasta `src/rotas` e, nela, o ficheiro `artigos.rotas.js`, com este conteúdo. Desta vez, a rota fixa vai logo antes da rota com o parâmetro. Viste porquê na fase 2.
 
@@ -1347,7 +1347,7 @@ Pensa antes de continuares: como sabes que as respostas vêm mesmo das camadas, 
 
 ## Fase 7: três erros de módulos
 
-Os `import` entre os teus ficheiros são a maior fonte de erros deste laboratório: a extensão `.js`, um nome que o outro ficheiro não exporta, e as chavetas num `export default`. Nesta fase provocas os três, para reconheceres as mensagens quando te acontecerem. Com o `--watch`, a API tenta reiniciar a cada gravação e falha; escreve o erro e depois `Failed running 'src/server.js'. Waiting for file changes before restarting...`, e volta a arrancar sozinha quando corriges o ficheiro. Para saber mais, lê a secção "Erros frequentes" do [guia](04-api-express-e-contratos.md).
+Os `import` entre os teus ficheiros são a maior fonte de erros deste laboratório: a extensão `.js`, um nome que o outro ficheiro não exporta, e as chavetas num `export default`. Nesta fase provocas os três, para reconheceres as mensagens quando te acontecerem. Com o `--watch`, a API tenta reiniciar a cada gravação e falha; escreve o erro e depois `Failed running 'src/server.js'. Waiting for file changes before restarting...`, e volta a arrancar sozinha quando corriges o ficheiro. Para saber mais, lê a secção "Erros frequentes" do [guia](../04-api-express-e-contratos.md).
 
 Para cada erro: prevê, provoca, lê a mensagem no terminal, copia para o caderno a linha que interessa e corrige.
 
@@ -1367,7 +1367,7 @@ Depois de cada correção, confirma no terminal que a API voltou a escrever `API
 
 ## Fase 8: o middleware final
 
-O contrato diz que todas as respostas de erro têm a mesma forma, `{ "erro": "..." }`. Assim, o cliente React trata qualquer erro da mesma maneira: lê a mensagem no campo `erro` do JSON e mostra-a, seja qual for o pedido que falhou. Falta uma resposta, que a API não escreve: a de um caminho que não existe, como `/api/artigo`, a que o Express responde sozinho, com uma página HTML. A solução é o middleware final, que já viste em Sistemas de Informação: uma função registada com `app.use`, sem caminho, que o Express chama quando nenhuma rota respondeu ao pedido. Por isso fica no fim, depois de todas as rotas. Para saber mais, lê a secção "Um formato único para os erros" do [guia](04-api-express-e-contratos.md).
+O contrato diz que todas as respostas de erro têm a mesma forma, `{ "erro": "..." }`. Assim, o cliente React trata qualquer erro da mesma maneira: lê a mensagem no campo `erro` do JSON e mostra-a, seja qual for o pedido que falhou. Falta uma resposta, que a API não escreve: a de um caminho que não existe, como `/api/artigo`, a que o Express responde sozinho, com uma página HTML. A solução é o middleware final, que já viste em Sistemas de Informação: uma função registada com `app.use`, sem caminho, que o Express chama quando nenhuma rota respondeu ao pedido. Por isso fica no fim, depois de todas as rotas. Para saber mais, lê a secção "Um formato único para os erros" do [guia](../04-api-express-e-contratos.md).
 
 1. Abre outra vez `http://localhost:3000/api/artigo`. O que deves ver: a página do Express, como na fase 3. As camadas mudaram a organização do código, e isto não mudou.
 
@@ -1427,7 +1427,7 @@ Pensa antes de continuares: e se o middleware final ficasse antes do `app.use` d
 
 ## Fase 9: verificar o contrato
 
-Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](04-api-express-e-contratos.md).
+Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](../04-api-express-e-contratos.md).
 
 1. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Os pedidos são estes: `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
@@ -1524,4 +1524,4 @@ Escreveste `router.get("/", obter)`. O pedido da lista vai parar à função de 
 
 O professor vai pedir-te que escolhas uma linha da tabela da fase 9 e expliques o caminho desse pedido pelas camadas.
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

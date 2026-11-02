@@ -1,4 +1,4 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Ficha de exercícios: arquitetura e setup Node
 
@@ -6,7 +6,7 @@ Ficha do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados.
 
 ## O que precisas de saber
 
-O [guia do tema](03-arquitetura-e-setup-node.md) e o [laboratório](03-arquitetura-e-setup-node-laboratorio.md).
+O [guia do tema](../03-arquitetura-e-setup-node.md) e o [laboratório](../laboratorios/03-arquitetura-e-setup-node-laboratorio.md).
 
 ## Como trabalhar
 
@@ -169,4 +169,4 @@ Pensa, por fim, nisto: para a porta e para o nome, um valor por omissão faz sen
 2. Que exercício te custou mais, e porquê?
 3. Que dúvida concreta levas para a aula?
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

@@ -1,4 +1,4 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Ficha de exercícios: modelo documental e primeiras consultas no Atlas
 
@@ -6,7 +6,7 @@ Ficha do tema Modelo documental e primeiras consultas no Atlas, do módulo M14, 
 
 ## O que precisas de saber
 
-O [guia do tema](02-modelo-documental-e-consultas-no-atlas.md) e o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
+O [guia do tema](../02-modelo-documental-e-consultas-no-atlas.md) e o [laboratório](../laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
 ## Como trabalhar
 
@@ -227,4 +227,4 @@ Pensa numa aplicação que gostavas de fazer e que guarde dados, por exemplo a d
 2. Em que consulta o resultado foi diferente do que previste? Qual foi a causa?
 3. Conseguias explicar a um colega a diferença entre a cópia do preço numa venda e o total de golos de um jogador?
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

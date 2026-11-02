@@ -1,4 +1,4 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Ficha de exercícios: Ligação segura, CRUD e regras de domínio
 
@@ -6,7 +6,7 @@ Ficha do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acess
 
 ## O que precisas de saber
 
-O [guia do tema](05-ligacao-segura-crud-e-regras-de-dominio.md) e o laboratório que fizeste: o [da papelaria](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) ou o [do cinema da escola](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md).
+O [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md) e o laboratório que fizeste: o [da papelaria](../laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) ou o [do cinema da escola](../laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md).
 
 ## Como trabalhar
 
@@ -311,4 +311,4 @@ Na tua função do desafio, entre ler o jogo e alterá-lo passa um instante, e d
 2. No exercício 6, que erro te parece mais perigoso numa aplicação verdadeira, e porquê?
 3. Que dúvida concreta levas para a aula?
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

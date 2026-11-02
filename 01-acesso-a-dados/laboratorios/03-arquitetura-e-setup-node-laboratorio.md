@@ -1,8 +1,8 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Laboratório: arquitetura e setup Node
 
-Laboratório do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Vais desenhar o servidor da papelaria e preparar, no teu computador, o projeto da API: a pasta, os scripts, a configuração num `.env`, o `.gitignore` e o primeiro commit. No fim, traças um pedido do browser até à API e de volta. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](03-arquitetura-e-setup-node.md) tem a teoria completa, para quem quiser saber mais.
+Laboratório do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Vais desenhar o servidor da papelaria e preparar, no teu computador, o projeto da API: a pasta, os scripts, a configuração num `.env`, o `.gitignore` e o primeiro commit. No fim, traças um pedido do browser até à API e de volta. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../03-arquitetura-e-setup-node.md) tem a teoria completa, para quem quiser saber mais.
 
 ## O que vais construir
 
@@ -35,7 +35,7 @@ No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de
 ## Palavras que vais usar
 
 - Cliente: a parte da aplicação que o utilizador vê e usa; aqui, a interface em React, que corre no browser.
-- API: o servidor em Node.js com Express, por onde o React usa a aplicação. Para saber mais, vê a secção "A tua aplicação tem três partes" do [guia](03-arquitetura-e-setup-node.md).
+- API: o servidor em Node.js com Express, por onde o React usa a aplicação. Para saber mais, vê a secção "A tua aplicação tem três partes" do [guia](../03-arquitetura-e-setup-node.md).
 - Mongoose: a biblioteca de JavaScript com que a API vai falar com o MongoDB Atlas, mais à frente.
 - Cadeia de ligação: o endereço que leva a API ao Atlas, começado por `mongodb+srv://`, com o utilizador e a palavra-passe da base de dados lá dentro. É um segredo.
 - Camada: uma parte do servidor com uma só responsabilidade. A API tem quatro: rotas, controller (controlador), service (serviço) e repository (repositório).
@@ -45,7 +45,7 @@ No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de
 - `.env`: o ficheiro com as variáveis de ambiente deste computador; nunca vai para o Git.
 - `.env.example`: o ficheiro com os nomes das variáveis, sem segredos; vai para o Git.
 - `.gitignore`: o ficheiro que diz ao Git o que ignorar.
-- Git e commit: o Git guarda o histórico do projeto; um commit é uma fotografia dos ficheiros, guardada com uma mensagem e a data. Para saber mais, vê a secção "O mínimo de Git" do [guia](03-arquitetura-e-setup-node.md).
+- Git e commit: o Git guarda o histórico do projeto; um commit é uma fotografia dos ficheiros, guardada com uma mensagem e a data. Para saber mais, vê a secção "O mínimo de Git" do [guia](../03-arquitetura-e-setup-node.md).
 - Repositório: a pasta de um projeto com o histórico do Git, guardado na pasta escondida `.git`; em inglês, repository, a palavra que o Git escreve no ecrã. Não é a camada repository do servidor. A palavra é a mesma, as coisas são diferentes.
 
 ## O que precisas
@@ -146,7 +146,7 @@ A aplicação da papelaria vai ter três partes, e cada uma corre num sítio dif
 
 Entre o React e a API, a conversa é em HTTP, com JSON. Entre a API e o Atlas, é feita pelo Mongoose, que precisa da cadeia de ligação, com a palavra-passe da base de dados. Essa cadeia fica só na API. Tudo o que vai para o browser pode ser lido por quem abrir as ferramentas de programador.
 
-Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As rotas dizem que método e que caminho vão para que função. O controller lê o pedido, converte o que chega como texto, chama o service, escolhe o código de estado e responde. O service tem as regras da papelaria e não sabe nada de HTTP. O repository é o único que fala com o MongoDB. Dividir assim põe cada mudança num sítio só. Para saber mais, lê as secções "A tua aplicação tem três partes" e "As camadas dentro do servidor" do [guia](03-arquitetura-e-setup-node.md).
+Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As rotas dizem que método e que caminho vão para que função. O controller lê o pedido, converte o que chega como texto, chama o service, escolhe o código de estado e responde. O service tem as regras da papelaria e não sabe nada de HTTP. O repository é o único que fala com o MongoDB. Dividir assim põe cada mudança num sítio só. Para saber mais, lê as secções "A tua aplicação tem três partes" e "As camadas dentro do servidor" do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Desenha as três partes da aplicação da papelaria: o React, a API e o MongoDB Atlas. Em cada seta, escreve o que viaja: "HTTP com JSON" ou "Mongoose". Assinala com um círculo o único sítio onde a cadeia de ligação ao Atlas existe.
 
@@ -191,7 +191,7 @@ Pensa antes de continuares: porque é que o repository é a única camada que fa
 
 ## Fase 2: a pasta e o package.json
 
-Em Sistemas de Informação, um servidor de aula começava com `npm init -y`, a troca do `"type"` e `npm install express`. Um projeto que vai crescer durante o ano, e que vais entregar e instalar noutro computador, precisa de mais arrumação. O código fica numa pasta `src` (de *source*, código-fonte). E o `package.json` ganha scripts: nomes curtos para os comandos que arrancam a API, para ninguém ter de os saber de cor. Para saber mais, lê a secção "Preparar um projeto Node" do [guia](03-arquitetura-e-setup-node.md).
+Em Sistemas de Informação, um servidor de aula começava com `npm init -y`, a troca do `"type"` e `npm install express`. Um projeto que vai crescer durante o ano, e que vais entregar e instalar noutro computador, precisa de mais arrumação. O código fica numa pasta `src` (de *source*, código-fonte). E o `package.json` ganha scripts: nomes curtos para os comandos que arrancam a API, para ninguém ter de os saber de cor. Para saber mais, lê a secção "Preparar um projeto Node" do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Na tua pasta de trabalho de Linguagens de Programação, cria o projeto e instala o Express. Cria-o fora da pasta dos materiais da disciplina, se a tiveres no computador. Essa pasta já tem o seu próprio histórico do Git.
 
@@ -244,7 +244,7 @@ Pensa antes de continuares: porque é que o `start` aparece numa parte da lista 
 
 ## Fase 3: o servidor e o primeiro arranque
 
-Há valores de que a API precisa que não são código, como a porta onde escuta. Se a porta estiver escrita no código, mudá-la obriga a mudar o código. Por isso o servidor lê-a do ambiente, com um valor por omissão, se não a encontrar. E a primeira rota é uma rota de estado, que só diz que a API está viva. É a forma mais rápida de confirmar que o servidor está ligado. Para saber mais, lê o passo 4 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
+Há valores de que a API precisa que não são código, como a porta onde escuta. Se a porta estiver escrita no código, mudá-la obriga a mudar o código. Por isso o servidor lê-a do ambiente, com um valor por omissão, se não a encontrar. E a primeira rota é uma rota de estado, que só diz que a API está viva. É a forma mais rápida de confirmar que o servidor está ligado. Para saber mais, lê o passo 4 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Cria o ficheiro `src/server.js`, dentro da pasta `src`, com este conteúdo. Escreve-o em vez de o copiar, e lê cada linha:
 
@@ -296,7 +296,7 @@ Pensa antes de continuares: não há nenhum ficheiro `.env`, e a API arrancou na
 
 ## Fase 4: a configuração no .env
 
-Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as variáveis de ambiente, que se leem em `process.env`. Para não teres de as definir à mão de cada vez, escreves-as num ficheiro `.env`, na raiz do projeto, uma por linha, no formato `NOME=valor`. O `--env-file=.env` do script `dev` lê esse ficheiro quando a API arranca. O `.env` é deste computador e pode ter segredos, por isso nunca vai para o Git. Para quem descarrega o projeto saber que variáveis definir, há o `.env.example`: os mesmos nomes, sem segredos, com comentários. Esse vai para o Git. Para saber mais, lê a secção "Configuração fora do código: o .env" do [guia](03-arquitetura-e-setup-node.md).
+Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as variáveis de ambiente, que se leem em `process.env`. Para não teres de as definir à mão de cada vez, escreves-as num ficheiro `.env`, na raiz do projeto, uma por linha, no formato `NOME=valor`. O `--env-file=.env` do script `dev` lê esse ficheiro quando a API arranca. O `.env` é deste computador e pode ter segredos, por isso nunca vai para o Git. Para quem descarrega o projeto saber que variáveis definir, há o `.env.example`: os mesmos nomes, sem segredos, com comentários. Esse vai para o Git. Para saber mais, lê a secção "Configuração fora do código: o .env" do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Tenta arrancar com o script de desenvolvimento. Antes, prevê: o que vai acontecer, se o `.env` ainda não existe?
 
@@ -341,7 +341,7 @@ Pensa antes de continuares: se o `.env` tiver `PORT=3001`, que valor tem `proces
 
 ## Fase 5: mudar a configuração sem mexer no código
 
-A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o `--watch`, nem é preciso parar a API. O Node vê que o `.env` mudou e reinicia-a com o valor novo. Nesta fase vês também o engano mais difícil de encontrar na configuração, porque não dá erro nenhum. Para saber mais, lê o passo 6 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
+A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o `--watch`, nem é preciso parar a API. O Node vê que o `.env` mudou e reinicia-a com o valor novo. Nesta fase vês também o engano mais difícil de encontrar na configuração, porque não dá erro nenhum. Para saber mais, lê o passo 6 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Com a API ligada pelo `npm run dev`, abre o `.env`, muda `PORT=3000` para `PORT=3001` e guarda.
 
@@ -363,7 +363,7 @@ Pensa antes de continuares: porque é que o engano da `PORTA` é mais perigoso d
 
 ## Fase 6: guardar no Git sem guardar segredos
 
-O Git guarda o histórico do projeto. Cada commit é uma fotografia de todos os ficheiros, com uma mensagem e a data. Antes de guardar, o Git propõe-se guardar tudo o que está na pasta. Há duas coisas que nunca devem ir. Uma é a pasta `node_modules`, que se recria com `npm install` e tem milhares de ficheiros que não são teus. A outra é o `.env`, que pode ter segredos. O ficheiro `.gitignore` diz ao Git o que ignorar, e tem de existir antes do primeiro commit. Nesta fase vais ver o `.env` a aparecer na lista do Git antes de existir o `.gitignore`. É de propósito. Segue os passos pela ordem, e não faças `git add` antes do passo 6. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](03-arquitetura-e-setup-node.md).
+O Git guarda o histórico do projeto. Cada commit é uma fotografia de todos os ficheiros, com uma mensagem e a data. Antes de guardar, o Git propõe-se guardar tudo o que está na pasta. Há duas coisas que nunca devem ir. Uma é a pasta `node_modules`, que se recria com `npm install` e tem milhares de ficheiros que não são teus. A outra é o `.env`, que pode ter segredos. O ficheiro `.gitignore` diz ao Git o que ignorar, e tem de existir antes do primeiro commit. Nesta fase vais ver o `.env` a aparecer na lista do Git antes de existir o `.gitignore`. É de propósito. Segue os passos pela ordem, e não faças `git add` antes do passo 6. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Para a API com Ctrl+C. Na pasta `papelaria-api`, começa o histórico:
 
@@ -422,7 +422,7 @@ Pensa antes de continuares: um colega fez o `git add .` antes de criar o `.gitig
 
 ## Fase 7: traçar o pedido
 
-Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço no browser até veres a resposta. É o que este tema te pede para mostrares no fim. O separador "Rede" das ferramentas de programador mostra o que viajou em cada pedido. Para saber mais, lê o passo 8 do exemplo guiado do [guia](03-arquitetura-e-setup-node.md).
+Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço no browser até veres a resposta. É o que este tema te pede para mostrares no fim. O separador "Rede" das ferramentas de programador mostra o que viajou em cada pedido. Para saber mais, lê o passo 8 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Liga a API com `npm run dev`. No browser, abre as ferramentas de programador (F12) e escolhe o separador "Rede" (ou "Network").
 
@@ -531,4 +531,4 @@ A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address alread
 
 Mostra também ao professor o resultado do `git log --oneline` e do `git status`. São a prova de que o projeto está guardado e de que o `.env` ficou de fora.
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

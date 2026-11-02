@@ -1,8 +1,8 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Laboratório: Ligação segura, CRUD e regras de domínio
 
-Laboratório do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acesso a Bases de Dados. Vais ligar a API da papelaria a uma base de teste no Atlas e pôr as camadas a ler e a escrever nela. A API passa a criar, ler, alterar e apagar artigos, e recusa o que não cumpre as regras da papelaria. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](05-ligacao-segura-crud-e-regras-de-dominio.md) tem a teoria completa, para quem quiser saber mais.
+Laboratório do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acesso a Bases de Dados. Vais ligar a API da papelaria a uma base de teste no Atlas e pôr as camadas a ler e a escrever nela. A API passa a criar, ler, alterar e apagar artigos, e recusa o que não cumpre as regras da papelaria. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md) tem a teoria completa, para quem quiser saber mais.
 
 Se fizeste o tema anterior no projeto do cinema da escola, este laboratório não é o teu. Faz o [laboratório do cinema](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md), que parte do ponto onde esse projeto ficou.
 
@@ -50,7 +50,7 @@ A pasta `src/dados`, com o array, sai. No caderno, fica a tabela de verificaçã
 
 ## Palavras que vais usar
 
-- CRUD: as quatro operações de quem guarda dados: criar, ler, alterar e apagar. Para saber mais, vê a secção "O contrato cresce: criar, alterar e apagar" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+- CRUD: as quatro operações de quem guarda dados: criar, ler, alterar e apagar. Para saber mais, vê a secção "O contrato cresce: criar, alterar e apagar" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 - Base de teste: uma base de dados com dados conhecidos, só para experiências, que um script reconstrói. Aqui é a `papelaria-teste`.
 - Seed: o programa que põe na base os dados com que a aplicação começa. O desta API apaga os artigos e insere os oito do início.
 - Mongoose: o pacote do Node que liga a API ao MongoDB e faz as consultas, com funções como o `find`.
@@ -69,7 +69,7 @@ A pasta `src/dados`, com o array, sai. No caderno, fica a tabela de verificaçã
 
 ## O que precisas
 
-- O projeto `papelaria-api` do laboratório do tema anterior, com as camadas, o contrato e os dois commits. Se não o tiveres, copia a pasta [papelaria-api-com-camadas](../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) dos exemplos para a tua pasta de trabalho, com o nome `papelaria-api`. Dentro dela, corre `npm install` e cria o `.env` a partir do `.env.example`, com `cp .env.example .env` (no Windows, na linha de comandos clássica, `copy .env.example .env`). Depois, guarda o projeto num primeiro commit, com `git init`, `git add .` e `git commit -m "API da papelaria com camadas"`.
+- O projeto `papelaria-api` do laboratório do tema anterior, com as camadas, o contrato e os dois commits. Se não o tiveres, copia a pasta [papelaria-api-com-camadas](../../exemplos/acesso-a-dados/papelaria-api-com-camadas/README.md) dos exemplos para a tua pasta de trabalho, com o nome `papelaria-api`. Dentro dela, corre `npm install` e cria o `.env` a partir do `.env.example`, com `cp .env.example .env` (no Windows, na linha de comandos clássica, `copy .env.example .env`). Depois, guarda o projeto num primeiro commit, com `git init`, `git add .` e `git commit -m "API da papelaria com camadas"`.
 - A tua conta no MongoDB Atlas, com o cluster, o utilizador da base de dados e a palavra-passe dele, do laboratório do tema do modelo documental. O endereço IP do computador onde estás tem de estar autorizado no Atlas.
 - Internet, em todas as fases: a API só arranca depois de se ligar ao Atlas.
 - O Node.js e o npm. Confirma com `node --version` e `npm --version`; devem aparecer dois números de versão, o do Node a começar por `v`.
@@ -181,7 +181,7 @@ Já ligaste uma API ao Atlas duas vezes, na aula de 12 de outubro e na ficha do 
 
 ## Fase 1: o contrato cresce
 
-O contrato vem antes do código, como no tema anterior: é ele que diz o que a API tem de fazer, e é contra ele que se verifica no fim. Muda em três sítios. O artigo passa a ser identificado pelo `_id` que o MongoDB lhe dá, e não pelo `id` inteiro. Há três pedidos novos, com os métodos `POST`, para criar, `PATCH`, para alterar alguns campos, e `DELETE`, para apagar. E há quatro códigos novos. O 201 quer dizer criado, e o 204, correu bem e não há nada a devolver. O 409 quer dizer conflito: o pedido está bem escrito, mas os dados, como estão agora, não o deixam fazer. O 500 é um erro interno do servidor. Para saber mais, lê a secção "O contrato cresce: criar, alterar e apagar" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O contrato vem antes do código, como no tema anterior: é ele que diz o que a API tem de fazer, e é contra ele que se verifica no fim. Muda em três sítios. O artigo passa a ser identificado pelo `_id` que o MongoDB lhe dá, e não pelo `id` inteiro. Há três pedidos novos, com os métodos `POST`, para criar, `PATCH`, para alterar alguns campos, e `DELETE`, para apagar. E há quatro códigos novos. O 201 quer dizer criado, e o 204, correu bem e não há nada a devolver. O 409 quer dizer conflito: o pedido está bem escrito, mas os dados, como estão agora, não o deixam fazer. O 500 é um erro interno do servidor. Para saber mais, lê a secção "O contrato cresce: criar, alterar e apagar" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Abre o `contrato-da-api.md`. Muda a frase do início para dizer que esta versão está ligada ao MongoDB Atlas. Diz também que as respostas são todas JSON, menos a de um artigo apagado, que não tem corpo. Na secção dos erros, troca o exemplo `"Não existe o artigo 99"` por `"Não existe o artigo 000000000000000000000000"`, porque o 99 passa a dar 400. E acrescenta lá esta frase:
 
@@ -243,7 +243,7 @@ Pensa antes de continuares: o `DELETE` de um artigo com stock dá 409, e não 40
 
 ## Fase 2: a base de teste
 
-Neste laboratório vais criar, alterar e apagar artigos muitas vezes, e algumas experiências vão correr mal de propósito. Se as fizesses na base `papelaria`, a do laboratório do Atlas, perdias o que lá inseriste à mão. Por isso, a API trabalha numa base de teste, a `papelaria-teste`, no mesmo cluster. Um seed, como o do cinema, reconstrói-a com os oito artigos do início sempre que precisares. Para saber mais, lê a secção "A base de teste" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+Neste laboratório vais criar, alterar e apagar artigos muitas vezes, e algumas experiências vão correr mal de propósito. Se as fizesses na base `papelaria`, a do laboratório do Atlas, perdias o que lá inseriste à mão. Por isso, a API trabalha numa base de teste, a `papelaria-teste`, no mesmo cluster. Um seed, como o do cinema, reconstrói-a com os oito artigos do início sempre que precisares. Para saber mais, lê a secção "A base de teste" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Dentro de `src`, cria a pasta `models` e, nela, o ficheiro `artigo.model.js`, com este conteúdo:
 
@@ -348,7 +348,7 @@ Pensa antes de continuares: o teu `_id` do caderno A4 é igual ao do teu colega?
 
 ## Fase 3: o repository
 
-A pasta `src/dados` fazia de repository, com os artigos num array. Agora entra o repository a sério: a única camada que fala com o MongoDB, que recebe valores já verificados e escreve as consultas com o Mongoose. Há uma diferença que muda as outras camadas. Ler um array é imediato. Perguntar ao Atlas demora, e as funções do Mongoose devolvem uma promessa, uma resposta que ainda não chegou. Por isso, o repository usa o `await`, e quem o chama também: o service espera pelo repository, e o controller espera pelo service. Para saber mais, lê a secção "O repository: os artigos passam a vir da base" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+A pasta `src/dados` fazia de repository, com os artigos num array. Agora entra o repository a sério: a única camada que fala com o MongoDB, que recebe valores já verificados e escreve as consultas com o Mongoose. Há uma diferença que muda as outras camadas. Ler um array é imediato. Perguntar ao Atlas demora, e as funções do Mongoose devolvem uma promessa, uma resposta que ainda não chegou. Por isso, o repository usa o `await`, e quem o chama também: o service espera pelo repository, e o controller espera pelo service. Para saber mais, lê a secção "O repository: os artigos passam a vir da base" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Dentro de `src`, cria a pasta `repositories` e, nela, o ficheiro `artigos.repository.js`, com este conteúdo:
 
@@ -535,7 +535,7 @@ Pensa antes de continuares: abre `/api/artigos/abc`. O que aparece, e é o que o
 
 ## Fase 4: a forma de um ObjectId
 
-Um ObjectId escreve-se com 24 carateres hexadecimais, os algarismos da base 16: cada um é de 0 a 9 ou de `a` a `f`. Um `id` com outra forma nunca pode ser o `_id` de um artigo, e o pedido está mal escrito: é um 400. Um `id` com a forma certa, mas que nenhum artigo tem, é um 404. Só o controller pode separar os dois, verificando a forma antes de chamar o service, como fazia com o `paraInteiro`. Para saber mais, lê a secção "O _id e a forma de um ObjectId" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+Um ObjectId escreve-se com 24 carateres hexadecimais, os algarismos da base 16: cada um é de 0 a 9 ou de `a` a `f`. Um `id` com outra forma nunca pode ser o `_id` de um artigo, e o pedido está mal escrito: é um 400. Um `id` com a forma certa, mas que nenhum artigo tem, é um 404. Só o controller pode separar os dois, verificando a forma antes de chamar o service, como fazia com o `paraInteiro`. Para saber mais, lê a secção "O _id e a forma de um ObjectId" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. No controller, a seguir à função `paraInteiro`, acrescenta esta função:
 
@@ -595,7 +595,7 @@ Pensa antes de continuares: porque é que a `eIdentificador` está no controller
 
 Para criar um artigo, o pedido leva cinco campos. Esses dados vão no corpo do pedido, e não no endereço. O corpo é uma parte do pedido que vem depois do endereço e dos cabeçalhos, e um cabeçalho, o `Content-Type`, diz que o corpo vem em JSON. O Express não o lê sozinho. Quem o lê é o middleware `express.json()`, que o converte num objeto e o guarda em `req.body`.
 
-O `req.body` é o que quem pediu quiser que seja. Pode trazer um `_id` escolhido à mão, um campo com o nome mal escrito, ou um objeto como `{ "$ne": null }` no lugar de um texto. Num filtro do MongoDB, esse objeto seria um operador. Por isso, o controller nunca o passa inteiro. Tem uma lista fechada de campos aceites, e copia só esses, cada um com o tipo certo. Tudo o resto é recusado com 400. Para saber mais, lê as secções "O corpo do pedido" e "Uma lista fechada de campos" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O `req.body` é o que quem pediu quiser que seja. Pode trazer um `_id` escolhido à mão, um campo com o nome mal escrito, ou um objeto como `{ "$ne": null }` no lugar de um texto. Num filtro do MongoDB, esse objeto seria um operador. Por isso, o controller nunca o passa inteiro. Tem uma lista fechada de campos aceites, e copia só esses, cada um com o tipo certo. Tudo o resto é recusado com 400. Para saber mais, lê as secções "O corpo do pedido" e "Uma lista fechada de campos" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. No `src/server.js`, logo a seguir à linha `const app = express();`, acrescenta:
 
@@ -817,7 +817,7 @@ Pensa antes de continuares: corre `await pedir("POST", "/api/artigos", { nome: "
 
 ## Fase 6: as regras de cada campo, no schema
 
-Um stock de -3 é um inteiro, mas uma papelaria não tem -3 cadernos. Estas regras são do domínio, o assunto da aplicação, e ficam no schema do modelo, onde podem ser garantidas. Tudo o que escreve artigos passa pelo modelo: a API, o seed e os scripts. O Mongoose verifica as regras antes de criar um documento, e, se alguma falhar, não escreve nada e lança um `ValidationError`. Numa alteração, só as verifica quando se pede, como a fase 7 mostra. A divisão fica assim: o controller vê a forma do pedido, os campos e os tipos; o schema vê os valores, se fazem sentido para a papelaria. Para saber mais, lê a secção "As regras de cada campo, no schema" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+Um stock de -3 é um inteiro, mas uma papelaria não tem -3 cadernos. Estas regras são do domínio, o assunto da aplicação, e ficam no schema do modelo, onde podem ser garantidas. Tudo o que escreve artigos passa pelo modelo: a API, o seed e os scripts. O Mongoose verifica as regras antes de criar um documento, e, se alguma falhar, não escreve nada e lança um `ValidationError`. Numa alteração, só as verifica quando se pede, como a fase 7 mostra. A divisão fica assim: o controller vê a forma do pedido, os campos e os tipos; o schema vê os valores, se fazem sentido para a papelaria. Para saber mais, lê a secção "As regras de cada campo, no schema" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Substitui o conteúdo de `src/models/artigo.model.js` por este:
 
@@ -951,7 +951,7 @@ Pensa antes de continuares: um colega diz que a regra do stock negativo devia es
 
 ## Fase 7: alterar só o que vem no pedido
 
-A papelaria recebeu uma entrega de cadernos e quer mudar o stock, sem reescrever o resto do artigo. O `PATCH` altera só os campos que vierem no corpo. No Mongoose, faz-se com o `findByIdAndUpdate`, que procura o artigo pelo `_id` e muda os campos recebidos. Esta fase tem uma parte que não está escrita aqui: as opções da função vais encontrá-las na documentação do Mongoose. Para saber mais, lê a secção "Alterar só o que vem no pedido" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+A papelaria recebeu uma entrega de cadernos e quer mudar o stock, sem reescrever o resto do artigo. O `PATCH` altera só os campos que vierem no corpo. No Mongoose, faz-se com o `findByIdAndUpdate`, que procura o artigo pelo `_id` e muda os campos recebidos. Esta fase tem uma parte que não está escrita aqui: as opções da função vais encontrá-las na documentação do Mongoose. Para saber mais, lê a secção "Alterar só o que vem no pedido" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. No repository, acrescenta no fim esta função. É a primeira versão, ainda sem opções:
 
@@ -1091,7 +1091,7 @@ Pensa antes de continuares: o `PATCH` com `{ precoCentimo: 300 }` é recusado. S
 
 ## Fase 8: apagar, e a regra que precisa da base
 
-A papelaria tem uma regra para apagar: um artigo só sai do catálogo quando já não há unidades na loja. Esta regra não cabe no schema, porque o schema verifica os valores que se vão escrever, e apagar não escreve nada. Para a aplicar, é preciso ir à base ver o stock do artigo agora. Uma regra que precisa do estado dos dados fica no service, que o pode pedir ao repository. O service diz o que aconteceu, e o controller traduz em códigos: 204, sem corpo, quando apagou; 404, quando o artigo não existe; e 409, quando a regra não deixa. Para saber mais, lê a secção "Apagar, e a regra que precisa da base" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+A papelaria tem uma regra para apagar: um artigo só sai do catálogo quando já não há unidades na loja. Esta regra não cabe no schema, porque o schema verifica os valores que se vão escrever, e apagar não escreve nada. Para a aplicar, é preciso ir à base ver o stock do artigo agora. Uma regra que precisa do estado dos dados fica no service, que o pode pedir ao repository. O service diz o que aconteceu, e o controller traduz em códigos: 204, sem corpo, quando apagou; 404, quando o artigo não existe; e 409, quando a regra não deixa. Para saber mais, lê a secção "Apagar, e a regra que precisa da base" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. No repository, acrescenta no fim esta função:
 
@@ -1659,7 +1659,7 @@ Pensa antes de continuares: entre o `procurarPorId` e o `apagarPorId` do service
 
 ## Fase 9: ver o que vai mudar antes de apagar muitos
 
-O `findByIdAndDelete` apaga um artigo, escolhido pelo `_id`. O `deleteMany` apaga todos os que cumprirem um filtro, e um filtro errado apaga o que não devia. Com o filtro vazio, `{}`, apaga a coleção inteira. Por isso, antes de um `deleteMany` ou de um `updateMany`, corre-se o mesmo filtro num `find`, ou num `countDocuments`, que só conta, e vê-se o que ele escolhe. E faz-se a experiência na base de teste, que o seed reconstrói. Para saber mais, lê a secção "Ver o que vai mudar antes de mudar muitos" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O `findByIdAndDelete` apaga um artigo, escolhido pelo `_id`. O `deleteMany` apaga todos os que cumprirem um filtro, e um filtro errado apaga o que não devia. Com o filtro vazio, `{}`, apaga a coleção inteira. Por isso, antes de um `deleteMany` ou de um `updateMany`, corre-se o mesmo filtro num `find`, ou num `countDocuments`, que só conta, e vê-se o que ele escolhe. E faz-se a experiência na base de teste, que o seed reconstrói. Para saber mais, lê a secção "Ver o que vai mudar antes de mudar muitos" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 A papelaria vai deixar de vender artigos de desenho. Apagar uma categoria inteira faz-se uma vez, à parte, como o seed, e não é um pedido da API.
 
@@ -1903,4 +1903,4 @@ O `DB_NAME` do `.env` não acaba em `-teste`. Muda a linha para `DB_NAME=papelar
 
 O professor vai pedir-te que escolhas um pedido da tabela da fase 10 e expliques o caminho dele pelas camadas, até à base, e o que confirmaste no Atlas.
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

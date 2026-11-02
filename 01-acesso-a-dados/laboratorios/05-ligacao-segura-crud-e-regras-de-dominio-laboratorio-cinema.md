@@ -1,8 +1,8 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Laboratório: Ligação segura, CRUD e regras de domínio, no cinema da escola
 
-Laboratório do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acesso a Bases de Dados, para quem fez o tema anterior no projeto do cinema da escola. Vais pôr a aplicação do cinema a trabalhar numa base de teste e a escrever nela: criar, alterar e apagar filmes, recusando o que não cumpre as regras do clube. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](05-ligacao-segura-crud-e-regras-de-dominio.md) tem a teoria completa, com os exemplos na papelaria, para quem quiser saber mais.
+Laboratório do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acesso a Bases de Dados, para quem fez o tema anterior no projeto do cinema da escola. Vais pôr a aplicação do cinema a trabalhar numa base de teste e a escrever nela: criar, alterar e apagar filmes, recusando o que não cumpre as regras do clube. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md) tem a teoria completa, com os exemplos na papelaria, para quem quiser saber mais.
 
 ## O que vais construir
 
@@ -48,7 +48,7 @@ No caderno, fica a tabela de verificação, com o que previste e o que obtiveste
 
 ## Palavras que vais usar
 
-- CRUD: as quatro operações de quem guarda dados: criar, ler, alterar e apagar. Para saber mais, vê a secção "O contrato cresce: criar, alterar e apagar" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+- CRUD: as quatro operações de quem guarda dados: criar, ler, alterar e apagar. Para saber mais, vê a secção "O contrato cresce: criar, alterar e apagar" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 - Base de teste: uma base de dados com dados conhecidos, só para experiências, que um script reconstrói. Aqui é a `cinema-teste`.
 - Seed: o programa que põe na base os dados com que a aplicação começa. O do cinema apaga os filmes e insere os oito do clube.
 - Mongoose: o pacote do Node que liga a aplicação ao MongoDB e faz as consultas, com funções como o `find`.
@@ -85,7 +85,7 @@ Se fizeste os exercícios 6 e 7 da ficha do cinema, com a duração máxima e o 
 
 ## Fase 1: o contrato cresce
 
-O contrato vem antes do código: é ele que diz o que a API tem de fazer, e é contra ele que se verifica no fim. Ganha três pedidos novos, com os métodos `POST`, para criar, `PATCH`, para alterar alguns campos, e `DELETE`, para apagar. E ganha quatro códigos novos. O 201 quer dizer criado, e o 204, correu bem e não há nada a devolver. O 409 quer dizer conflito: o pedido está bem escrito, mas os dados, como estão agora, não o deixam fazer. O 500 é um erro interno do servidor. Os filmes continuam a ser pedidos pelo `numero`, como no tema anterior. Para saber mais, lê a secção "O contrato cresce: criar, alterar e apagar" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O contrato vem antes do código: é ele que diz o que a API tem de fazer, e é contra ele que se verifica no fim. Ganha três pedidos novos, com os métodos `POST`, para criar, `PATCH`, para alterar alguns campos, e `DELETE`, para apagar. E ganha quatro códigos novos. O 201 quer dizer criado, e o 204, correu bem e não há nada a devolver. O 409 quer dizer conflito: o pedido está bem escrito, mas os dados, como estão agora, não o deixam fazer. O 500 é um erro interno do servidor. Os filmes continuam a ser pedidos pelo `numero`, como no tema anterior. Para saber mais, lê a secção "O contrato cresce: criar, alterar e apagar" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Abre o `contrato-da-api.md`. Acrescenta à secção dos erros esta frase:
 
@@ -138,7 +138,7 @@ Pensa antes de continuares: o contrato diz que o `numero` de um filme não se al
 
 ## Fase 2: a base de teste
 
-Neste laboratório vais criar, alterar e apagar filmes muitas vezes, e algumas experiências vão correr mal de propósito. A base `cinema` é a da ficha, que entregaste, e deve ficar como está. Por isso, a aplicação passa a trabalhar numa base de teste, a `cinema-teste`, no mesmo cluster. O seed reconstrói-a com os oito filmes do clube sempre que precisares. Mas o seed tem um perigo: o `deleteMany({})` apaga todos os filmes da base onde está ligado. Por isso, ganha uma verificação, e só apaga se o nome da base acabar em `-teste`. Para saber mais, lê a secção "A base de teste" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+Neste laboratório vais criar, alterar e apagar filmes muitas vezes, e algumas experiências vão correr mal de propósito. A base `cinema` é a da ficha, que entregaste, e deve ficar como está. Por isso, a aplicação passa a trabalhar numa base de teste, a `cinema-teste`, no mesmo cluster. O seed reconstrói-a com os oito filmes do clube sempre que precisares. Mas o seed tem um perigo: o `deleteMany({})` apaga todos os filmes da base onde está ligado. Por isso, ganha uma verificação, e só apaga se o nome da base acabar em `-teste`. Para saber mais, lê a secção "A base de teste" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Substitui o conteúdo de `src/seed.js` por este:
 
@@ -232,7 +232,7 @@ Pensa antes de continuares: o `_id` de Os Goonies na base `cinema-teste` é igua
 
 Para criar um filme, o pedido leva seis campos. Esses dados vão no corpo do pedido, e não no endereço. O corpo é uma parte do pedido que vem depois do endereço e dos cabeçalhos, e um cabeçalho, o `Content-Type`, diz que o corpo vem em JSON. O Express não o lê sozinho. Quem o lê é o middleware `express.json()`, que o converte num objeto e o guarda em `req.body`.
 
-O `req.body` é o que quem pediu quiser que seja. Pode trazer um campo que o clube não previu, um campo com o nome mal escrito, ou um objeto como `{ "$ne": null }` no lugar de um texto. Num filtro do MongoDB, esse objeto seria um operador. Por isso, o controller nunca o passa inteiro. Tem uma lista fechada de campos aceites, e copia só esses, cada um com o tipo certo. Tudo o resto é recusado com 400. No cinema, há um campo diferente dos outros, a sessão, que é um objeto com o dia e a hora, e a lista fechada também lhe confirma os campos. Para saber mais, lê as secções "O corpo do pedido" e "Uma lista fechada de campos" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O `req.body` é o que quem pediu quiser que seja. Pode trazer um campo que o clube não previu, um campo com o nome mal escrito, ou um objeto como `{ "$ne": null }` no lugar de um texto. Num filtro do MongoDB, esse objeto seria um operador. Por isso, o controller nunca o passa inteiro. Tem uma lista fechada de campos aceites, e copia só esses, cada um com o tipo certo. Tudo o resto é recusado com 400. No cinema, há um campo diferente dos outros, a sessão, que é um objeto com o dia e a hora, e a lista fechada também lhe confirma os campos. Para saber mais, lê as secções "O corpo do pedido" e "Uma lista fechada de campos" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. No `src/server.js`, logo a seguir à linha do `app.set("view engine", "ejs");`, acrescenta:
 
@@ -463,7 +463,7 @@ Pensa antes de continuares: corre `await pedir("POST", "/api/filmes", { titulo: 
 
 ## Fase 4: as regras de cada campo, no schema
 
-Um filme sem título, ou com a idade mínima de 10 anos, não faz sentido para o clube. A classificação dos filmes só tem as idades 6, 12, 14, 16 e 18. Estas regras são do domínio, o assunto da aplicação, e ficam no schema do modelo, onde podem ser garantidas. Tudo o que escreve filmes passa pelo modelo: a API, o seed e os scripts. O Mongoose verifica as regras antes de criar um documento, e, se alguma falhar, não escreve nada e lança um `ValidationError`. Numa alteração, só as verifica quando se pede, como a fase 6 mostra. A divisão fica assim: o controller vê a forma do pedido, os campos e os tipos; o schema vê os valores, se fazem sentido para o clube. Para saber mais, lê a secção "As regras de cada campo, no schema" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+Um filme sem título, ou com a idade mínima de 10 anos, não faz sentido para o clube. A classificação dos filmes só tem as idades 6, 12, 14, 16 e 18. Estas regras são do domínio, o assunto da aplicação, e ficam no schema do modelo, onde podem ser garantidas. Tudo o que escreve filmes passa pelo modelo: a API, o seed e os scripts. O Mongoose verifica as regras antes de criar um documento, e, se alguma falhar, não escreve nada e lança um `ValidationError`. Numa alteração, só as verifica quando se pede, como a fase 6 mostra. A divisão fica assim: o controller vê a forma do pedido, os campos e os tipos; o schema vê os valores, se fazem sentido para o clube. Para saber mais, lê a secção "As regras de cada campo, no schema" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 1. Substitui o conteúdo de `src/models/filme.model.js` por este:
 
@@ -596,7 +596,7 @@ Pensa antes de continuares: cria o Wall-E duas vezes, com o pedido do passo 8 da
 
 ## Fase 5: a regra do número repetido, no service
 
-O clube tem uma regra que compara um filme com os outros: não há dois filmes com o mesmo número. Esta regra não cabe no schema, que olha para um filme de cada vez. Para a aplicar, é preciso perguntar à base se o número já está a ser usado. Uma regra que precisa do estado dos dados fica no service, que o pode pedir ao repository. A função de que precisa já existe, a `procurarPorNumero`, que o pedido de um filme usa. O service diz se criou ou não, e o controller traduz: 201 quando criou, e 409 quando a regra não deixa. Para saber mais, lê a secção "Apagar, e a regra que precisa da base" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md), que mostra uma regra deste tipo na papelaria.
+O clube tem uma regra que compara um filme com os outros: não há dois filmes com o mesmo número. Esta regra não cabe no schema, que olha para um filme de cada vez. Para a aplicar, é preciso perguntar à base se o número já está a ser usado. Uma regra que precisa do estado dos dados fica no service, que o pode pedir ao repository. A função de que precisa já existe, a `procurarPorNumero`, que o pedido de um filme usa. O service diz se criou ou não, e o controller traduz: 201 quando criou, e 409 quando a regra não deixa. Para saber mais, lê a secção "Apagar, e a regra que precisa da base" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md), que mostra uma regra deste tipo na papelaria.
 
 1. No service, substitui a função `criarFilme` por esta:
 
@@ -671,7 +671,7 @@ Pensa antes de continuares: o pedido com o número 9 repetido está bem escrito.
 
 ## Fase 6: alterar só o que vem no pedido
 
-O clube mudou a sessão de Os Goonies, ou percebeu que a duração do Wall-E estava errada. O `PATCH` altera só os campos que vierem no corpo. No Mongoose, faz-se com o `findOneAndUpdate`, que procura o filme com um filtro, aqui `{ numero: numero }`, e muda os campos recebidos. Esta fase tem uma parte que não está escrita aqui: as opções da função vais encontrá-las na documentação do Mongoose. Para saber mais, lê a secção "Alterar só o que vem no pedido" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md), que faz o mesmo com o `findByIdAndUpdate`.
+O clube mudou a sessão de Os Goonies, ou percebeu que a duração do Wall-E estava errada. O `PATCH` altera só os campos que vierem no corpo. No Mongoose, faz-se com o `findOneAndUpdate`, que procura o filme com um filtro, aqui `{ numero: numero }`, e muda os campos recebidos. Esta fase tem uma parte que não está escrita aqui: as opções da função vais encontrá-las na documentação do Mongoose. Para saber mais, lê a secção "Alterar só o que vem no pedido" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md), que faz o mesmo com o `findByIdAndUpdate`.
 
 1. No repository, acrescenta no fim esta função. É a primeira versão, ainda sem opções:
 
@@ -1350,7 +1350,7 @@ Pensa antes de continuares: no service, entre a `procurarPorNumero` e a `inserir
 
 ## Fase 8: ver o que vai mudar antes de apagar muitos
 
-O `findOneAndDelete` apaga um filme, escolhido pelo número. O `deleteMany`, que o seed usa, apaga todos os que cumprirem um filtro, e um filtro errado apaga o que não devia. Com o filtro vazio, `{}`, apaga a coleção inteira. Por isso, antes de um `deleteMany` ou de um `updateMany`, corre-se o mesmo filtro num `find`, ou num `countDocuments`, que só conta, e vê-se o que ele escolhe. E faz-se a experiência na base de teste, que o seed reconstrói. Para saber mais, lê a secção "Ver o que vai mudar antes de mudar muitos" do [guia](05-ligacao-segura-crud-e-regras-de-dominio.md).
+O `findOneAndDelete` apaga um filme, escolhido pelo número. O `deleteMany`, que o seed usa, apaga todos os que cumprirem um filtro, e um filtro errado apaga o que não devia. Com o filtro vazio, `{}`, apaga a coleção inteira. Por isso, antes de um `deleteMany` ou de um `updateMany`, corre-se o mesmo filtro num `find`, ou num `countDocuments`, que só conta, e vê-se o que ele escolhe. E faz-se a experiência na base de teste, que o seed reconstrói. Para saber mais, lê a secção "Ver o que vai mudar antes de mudar muitos" do [guia](../05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 O clube vai deixar de passar filmes de aventura. Apagar um género inteiro faz-se uma vez, à parte, como o seed, e não é um pedido da API.
 
@@ -1566,4 +1566,4 @@ O `DB_NAME` do `.env` não acaba em `-teste`. Muda a linha para `DB_NAME=cinema-
 
 O professor vai pedir-te que escolhas um pedido da tabela da fase 9 e expliques o caminho dele pelas camadas, até à base, e o que confirmaste no Atlas.
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

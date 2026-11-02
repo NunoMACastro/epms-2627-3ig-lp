@@ -1,4 +1,4 @@
-![Cabeçalho](../imagens/cabecalho.png)
+![Cabeçalho](../../imagens/cabecalho.png)
 
 # Ficha de exercícios: Diagnóstico e revisão dirigida
 
@@ -353,4 +353,4 @@ Enquanto a lista não tem nenhum jogo, a página deve mostrar a frase "Ainda nã
 2. Que parte do 11.º ano sentes que ainda não dominas, e precisas de rever?
 3. Nos exercícios 7 e 8, consegues explicar a um colega a diferença entre o servidor desligado e um 404?
 
-![Rodapé](../imagens/rodape.png)
+![Rodapé](../../imagens/rodape.png)

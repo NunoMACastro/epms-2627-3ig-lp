@@ -2,7 +2,7 @@
 
 # Modelo documental e primeiras consultas no Atlas
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como o MongoDB organiza a informação em documentos e como se decide o que fica dentro de cada documento. Explica também como se fazem as primeiras perguntas a uma base de dados. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e a [ficha de exercícios](02-modelo-documental-e-consultas-no-atlas-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como o MongoDB organiza a informação em documentos e como se decide o que fica dentro de cada documento. Explica também como se fazem as primeiras perguntas a uma base de dados. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e a [ficha de exercícios](exercicios/02-modelo-documental-e-consultas-no-atlas-exercicios.md) deste tema.
 
 Este ano vais construir uma aplicação que guarda os dados numa base de dados MongoDB. Antes de escreveres uma linha de código para falar com a base de dados, precisas de perceber como é que ela organiza a informação e como se lhe fazem perguntas. É isso que este guia trata, ainda sem código: só com a base de dados e o browser.
 
@@ -209,7 +209,7 @@ O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada proje
 
 Há uma regra a lembrar. Se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
 
-Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster serve para o resto do ano. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto. Os passos para criar a conta e o cluster e para dar acesso ao professor estão na fase 1 do [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
+Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster serve para o resto do ano. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto. Os passos para criar a conta e o cluster e para dar acesso ao professor estão na fase 1 do [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
 ## Uma consulta descreve os documentos que queres
 
@@ -548,7 +548,7 @@ Quando uma consulta não devolve o que esperavas, abre um documento que devia ap
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório](02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e depois a [ficha de exercícios](02-modelo-documental-e-consultas-no-atlas-exercicios.md). O tema seguinte é Arquitetura e setup Node.
+Para praticar este tema, faz o [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e depois a [ficha de exercícios](exercicios/02-modelo-documental-e-consultas-no-atlas-exercicios.md). O tema seguinte é Arquitetura e setup Node.
 
 No próximo tema vais preparar o Node.js, que corre JavaScript fora do browser, e perceber o papel de um servidor. O servidor é o programa que recebe os pedidos da aplicação e fala com a base de dados. Depois vais escrever uma API, o servidor a que a aplicação faz os pedidos, com o Express, uma biblioteca do Node.js para escrever servidores. Só então ligas o servidor à base de dados que criaste no laboratório, com o utilizador e a palavra-passe que guardaste.
 

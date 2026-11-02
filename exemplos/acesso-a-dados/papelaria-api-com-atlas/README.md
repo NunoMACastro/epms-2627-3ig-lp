@@ -2,7 +2,7 @@
 
 # API da papelaria, ligada ao Atlas
 
-A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio (CRUD, do inglês, quer dizer criar, ler, alterar e apagar). Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais. A lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
+A API da papelaria a ir buscar os artigos ao MongoDB Atlas, com o Mongoose. É usada no tema 05, Ligação segura, CRUD e regras de domínio (CRUD, do inglês, quer dizer criar, ler, alterar e apagar). Parte do servidor que construíste em Sistemas de Informação, no laboratório "a API da papelaria", organizado como projeto no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). Dá um passo a mais. A lista dos artigos deixa de vir do array e passa a vir da base `papelaria` que criaste no [laboratório do tema 02](../../../01-acesso-a-dados/laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
 Só a lista mudou. A rota de detalhe ainda lê do array, com o id de 1 a 8. Passar o resto da API para a base, com o `_id` que o MongoDB dá a cada documento, é do tema da ligação segura.
 

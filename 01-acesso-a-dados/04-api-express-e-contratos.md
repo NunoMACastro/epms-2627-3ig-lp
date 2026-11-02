@@ -2,7 +2,7 @@
 
 # API Express e contratos
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica o que é o contrato de uma API e como se escreve uma API Express que o cumpre: primeiro num só ficheiro, depois separada em camadas. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](04-api-express-e-contratos-laboratorio.md) e a [ficha de exercícios](04-api-express-e-contratos-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica o que é o contrato de uma API e como se escreve uma API Express que o cumpre: primeiro num só ficheiro, depois separada em camadas. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](laboratorios/04-api-express-e-contratos-laboratorio.md) e a [ficha de exercícios](exercicios/04-api-express-e-contratos-exercicios.md) deste tema.
 
 No tema anterior desenhaste as camadas da API da papelaria e preparaste o projeto, com uma só rota, a de estado. Neste tema a API começa a responder a pedidos a sério: a lista dos artigos, com filtros, um artigo de cada vez e os artigos que é preciso encomendar. Os artigos ainda estão num array, dentro do servidor, e só passam para o MongoDB Atlas no tema seguinte. Mas a API já se comporta como uma API a sério: responde sempre em JSON, recusa os pedidos mal feitos com o código certo e cumpre um contrato escrito.
 
@@ -828,7 +828,7 @@ Um erro com `erro`, outro com `mensagem`, um 404 do Express em HTML. O cliente R
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório](04-api-express-e-contratos-laboratorio.md), em que escreves o contrato, a primeira versão e as camadas da papelaria no teu projeto. Depois faz a [ficha de exercícios](04-api-express-e-contratos-exercicios.md), com a API do torneio de futsal. O tema seguinte é Ligação segura, CRUD e regras de domínio. CRUD, do inglês, quer dizer criar, ler, alterar e apagar.
+Para praticar este tema, faz o [laboratório](laboratorios/04-api-express-e-contratos-laboratorio.md), em que escreves o contrato, a primeira versão e as camadas da papelaria no teu projeto. Depois faz a [ficha de exercícios](exercicios/04-api-express-e-contratos-exercicios.md), com a API do torneio de futsal. O tema seguinte é Ligação segura, CRUD e regras de domínio. CRUD, do inglês, quer dizer criar, ler, alterar e apagar.
 
 Nesse tema, os dados temporários saem. A API liga-se ao teu cluster do Atlas com o Mongoose, e com a cadeia de ligação no `.env` que preparaste no tema anterior. O repository passa a fazer as consultas que escreveste na barra de consulta do tema do modelo documental. O `id` inteiro passa a ser o `_id` do MongoDB, e o contrato muda nessa linha. Chegam também os pedidos que criam, alteram e apagam artigos, com os dados no corpo do pedido, lidos por um middleware, o `express.json()`, que esse tema explica.
 

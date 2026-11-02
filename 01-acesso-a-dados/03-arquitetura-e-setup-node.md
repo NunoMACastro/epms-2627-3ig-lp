@@ -2,7 +2,7 @@
 
 # Arquitetura e setup Node
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como se organiza uma aplicação com um cliente, um servidor e uma base de dados. Explica também como se prepara o projeto do servidor no teu computador, o que em inglês se chama setup. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](03-arquitetura-e-setup-node-laboratorio.md) e a [ficha de exercícios](03-arquitetura-e-setup-node-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como se organiza uma aplicação com um cliente, um servidor e uma base de dados. Explica também como se prepara o projeto do servidor no teu computador, o que em inglês se chama setup. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](laboratorios/03-arquitetura-e-setup-node-laboratorio.md) e a [ficha de exercícios](exercicios/03-arquitetura-e-setup-node-exercicios.md) deste tema.
 
 No tema anterior criaste no MongoDB Atlas a base de dados da papelaria e fizeste-lhe perguntas pelo browser. Uma aplicação não funciona assim. Os utilizadores não abrem o Atlas, abrem a aplicação, e é a aplicação que fala com a base de dados por eles. Neste tema vais perceber como se organiza essa aplicação, peça a peça, e vais preparar a primeira dessas peças: o projeto do servidor, a que se chama API.
 
@@ -584,7 +584,7 @@ A tentação, quando o projeto ainda é pequeno, é escrever a regra e a consult
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório](03-arquitetura-e-setup-node-laboratorio.md), em que preparas este esqueleto no teu computador, e depois a [ficha de exercícios](03-arquitetura-e-setup-node-exercicios.md), com a aplicação do torneio de futsal. O tema seguinte é API Express e contratos.
+Para praticar este tema, faz o [laboratório](laboratorios/03-arquitetura-e-setup-node-laboratorio.md), em que preparas este esqueleto no teu computador, e depois a [ficha de exercícios](exercicios/03-arquitetura-e-setup-node-exercicios.md), com a aplicação do torneio de futsal. O tema seguinte é API Express e contratos.
 
 Nesse tema escreves as primeiras rotas da papelaria com as camadas que desenhaste neste: as rotas, o controller e o service. Os artigos ainda estão num array, sem base de dados. Vais escrever o contrato da API, que diz, para cada pedido, o que se envia e o que se recebe, incluindo os erros. E vais verificar as respostas 200, 400 e 404. Depois, no tema da ligação segura, a API liga-se ao Atlas com o Mongoose quando arranca, com a cadeia de ligação no `.env` que preparaste agora. O repository passa a fazer as consultas por essa ligação.
 

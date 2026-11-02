@@ -2,7 +2,7 @@
 
 # Ligação segura, CRUD e regras de domínio
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como a API da papelaria passa a guardar os artigos no MongoDB Atlas. Mostra como os cria, lê, altera e apaga, e como recusa o que não cumpre as regras da papelaria. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório da papelaria](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md), o [laboratório do cinema da escola](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md), para quem traz esse projeto, e a [ficha de exercícios](05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como a API da papelaria passa a guardar os artigos no MongoDB Atlas. Mostra como os cria, lê, altera e apaga, e como recusa o que não cumpre as regras da papelaria. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório da papelaria](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md), o [laboratório do cinema da escola](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md), para quem traz esse projeto, e a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md) deste tema.
 
 No tema anterior, a API da papelaria ficou com um contrato escrito e com as camadas separadas, mas os artigos estavam num array, dentro do servidor. Já ligaste uma API ao Atlas com o Mongoose duas vezes. A primeira foi na aula em que a papelaria foi buscar os artigos à base; a segunda, na ficha do cinema da escola, que juntou um seed. Este tema junta as duas coisas e dá o passo que faltava. A API deixa de só ler: passa a escrever na base de dados.
 
@@ -52,7 +52,7 @@ No fim deste guia, consegues:
 - O modelo e o seu schema, a descrição da forma dos documentos de uma coleção, com o nome da coleção escrito à mão, da mesma ficha e do mesmo exemplo.
 - O seed, com o `deleteMany` e o `insertMany`, da mesma ficha.
 - Os métodos HTTP, como o GET e o POST, e o middleware registado com `app.use`, do tema "HTTP, rotas e middleware" de Sistemas de Informação.
-- O `async`, o `await`, o `try`, o `catch` e o `fetch`, do 11.º ano e da [ficha de revisão](01-diagnostico-e-revisao-dirigida-exercicios.md).
+- O `async`, o `await`, o `try`, o `catch` e o `fetch`, do 11.º ano e da [ficha de revisão](exercicios/01-diagnostico-e-revisao-dirigida-exercicios.md).
 - O `typeof`, o ciclo `for...of` e os métodos `filter`, `map` e `includes` dos arrays, do mesmo ano e da mesma ficha.
 
 O corpo de um pedido viste-o em Sistemas de Informação só como ideia. Lê-lo com o `express.json()`, os códigos 201, 204 e 409, e o middleware de erros, ainda não os usaste. Este guia explica-os no sítio onde aparecem. O código 500 já o viste no tema anterior, quando um erro no código fazia a API falhar.
@@ -1209,7 +1209,7 @@ O `DB_NAME` do `.env` não acaba em `-teste`. É a verificação do seed a fazer
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório da papelaria](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) e depois a [ficha de exercícios](05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md). Se fizeste o tema anterior no projeto do cinema, faz o [laboratório do cinema da escola](05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md) no lugar do da papelaria. O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
+Para praticar este tema, faz o [laboratório da papelaria](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) e depois a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md). Se fizeste o tema anterior no projeto do cinema, faz o [laboratório do cinema da escola](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md) no lugar do da papelaria. O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
 
 ## Para saber mais
 
