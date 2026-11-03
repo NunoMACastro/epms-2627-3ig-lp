@@ -23,7 +23,7 @@ papelaria-api/
         └── artigos.rotas.js           que pedido vai para que função
 ```
 
-No caderno, ficam duas tabelas de verificação, com o que previste e o que obtiveste em cada pedido. Ficas a saber escrever o contrato de uma API, cumpri-lo e verificá-lo, e separar o código em camadas ligadas com `import` e `export`.
+Pelo caminho, verificas a API duas vezes, pedido a pedido: prevês o código de cada resposta, fazes o pedido e comparas com o contrato. Ficas a saber escrever o contrato de uma API, cumpri-lo e verificá-lo, e separar o código em camadas ligadas com `import` e `export`.
 
 | Fase | O que muda | O que funciona no fim |
 | --- | --- | --- |
@@ -60,7 +60,6 @@ No caderno, ficam duas tabelas de verificação, com o que previste e o que obti
 - O Node.js e o npm. Confirma com `node --version` e `npm --version`; devem aparecer dois números de versão, o do Node a começar por `v`.
 - Um editor de código e dois terminais: um para a API, outro para os comandos.
 - O browser, com as ferramentas de programador (F12) no separador "Rede" (ou "Network"), para veres o código de cada resposta.
-- O caderno, para as previsões e as duas tabelas de verificação.
 
 Antes de começares, liga a API com `npm run dev` e deixa-a ligada. Com o `--watch`, ela reinicia sozinha sempre que guardas um ficheiro que ela já usa. Mantém o terminal à vista, porque é lá que os erros aparecem.
 
@@ -93,11 +92,11 @@ As fases 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que v�
 
 2. A seguir ao array, acrescenta a função `paraInteiro` do passo 3 da fase 2, com o comentário que a acompanha.
 
-3. Na rota de detalhe, troca a verificação que escreveste em Sistemas de Informação. A linha `const id = Number(req.params.id);` passa a `const id = paraInteiro(req.params.id);`, e a condição do 400, `!Number.isInteger(id) || id < 1`, passa a `id === null || id < 1`. Escreve no caderno, numa frase, porque mudas uma verificação que já funcionava.
+3. Na rota de detalhe, troca a verificação que escreveste em Sistemas de Informação. A linha `const id = Number(req.params.id);` passa a `const id = paraInteiro(req.params.id);`, e a condição do 400, `!Number.isInteger(id) || id < 1`, passa a `id === null || id < 1`. Porque é que mudas uma verificação que já funcionava? Pensa antes de leres a resposta.
 
    A resposta: para usar a mesma verificação nos dois parâmetros que são números, e porque a do `stockMaximo` tem de recusar o texto vazio. Para o `id`, a verificação de Sistemas de Informação chegava. Um `id` só com espaços dava 0, que fica abaixo de 1 e dá 400 na mesma. Para o `stockMaximo` não chega, porque lá o 0 é um valor válido, e o `Number("")` daria 0 sem ninguém o ter escrito.
 
-4. Agora a rota da lista. A tua aplica um filtro e acaba logo ali, com `res.json` e `return`. O contrato acrescenta-lhe um segundo filtro, o `stockMaximo`, e um pedido pode trazer os dois ao mesmo tempo, como `/api/artigos?categoria=Papel&stockMaximo=4`. Antes de mudares o código, responde no caderno. Imagina que acrescentavas o `stockMaximo` noutro `if`, igual ao da categoria e a seguir a ele, com o seu próprio `res.json` e `return`. Que artigos responderia a tua rota a esse pedido? E quais deviam ser, pelo contrato?
+4. Agora a rota da lista. A tua aplica um filtro e acaba logo ali, com `res.json` e `return`. O contrato acrescenta-lhe um segundo filtro, o `stockMaximo`, e um pedido pode trazer os dois ao mesmo tempo, como `/api/artigos?categoria=Papel&stockMaximo=4`. Antes de mudares o código, pensa neste caso. Imagina que acrescentavas o `stockMaximo` noutro `if`, igual ao da categoria e a seguir a ele, com o seu próprio `res.json` e `return`. Que artigos responderia a tua rota a esse pedido? E quais deviam ser, pelo contrato?
 
    A resposta: o pedido entrava no `if` da categoria, que responde e acaba ali. A rota devolvia os três artigos de papel, o caderno (12), o bloco de notas (0) e a resma (4), e o `stockMaximo` era ignorado sem erro nenhum. Pelo contrato, deviam ser só o bloco de notas e a resma. Com os dois `if` trocados, ignorava-se a categoria, e vinham os quatro artigos com stock até 4, de todas as categorias. Dois filtros que se podem juntar não cabem em ramos que respondem cada um por si. Têm de reduzir o mesmo resultado, um a seguir ao outro, com uma só resposta no fim.
 
@@ -107,9 +106,9 @@ As fases 1, 4, 7 e 10 fazem-se como estão. As outras têm as diferenças que v�
 
 ### Fase 3, no teu projeto
 
-Faz a fase 3 como está, com uma diferença no passo 4. O teu `/api/artigo` não mostra a página do Express. O teu servidor tem o middleware final desde Sistemas de Informação, e por isso responde `{"erro":"Rota não encontrada"}`, com 404, que é o que o contrato pede. A tua primeira versão cumpre todas as linhas do contrato, incluindo essa. Regista-o na tabela.
+Faz a fase 3 como está, com uma diferença no passo 4. O teu `/api/artigo` não mostra a página do Express. O teu servidor tem o middleware final desde Sistemas de Informação, e por isso responde `{"erro":"Rota não encontrada"}`, com 404, que é o que o contrato pede. A tua primeira versão cumpre todas as linhas do contrato, incluindo essa.
 
-No passo 5, compara o que a rota reescrita responde ao `?categoria=` com o que a tua rota de Sistemas de Informação respondia, com o `if (categoria)`. Escreve no caderno porque são diferentes.
+No passo 5, compara o que a rota reescrita responde ao `?categoria=` com o que a tua rota de Sistemas de Informação respondia, com o `if (categoria)`. Porque é que são diferentes?
 
 A resposta: a rota reescrita responde 200 com `[]`, e a de Sistemas de Informação respondia 200 com os oito artigos. No `if (categoria)`, o texto vazio conta como falso, e a rota não filtrava. Na rota reescrita, o texto vazio não é `undefined`, entra no filtro, e nenhum artigo tem a categoria vazia. O que conta é o teu contrato. Se a rota não o cumpre, muda a rota, como no passo 5 da fase 3.
 
@@ -237,7 +236,7 @@ Em todas as fases, lê primeiro a introdução da fase do caminho normal, que ex
 
    Se fizeste o exercício 6 da ficha, acrescenta à tabela dos parâmetros de `GET /api/filmes` a linha do `duracaoMaxima`. Vem na pesquisa, é um inteiro e não é obrigatório. Os valores válidos são 1 ou mais, e só aparecem os filmes que duram esse número de minutos ou menos. Acrescenta também, na linha do 400, o `duracaoMaxima` que não é um número inteiro maior do que 0.
 
-3. O contrato deixa um caso por decidir: o pedido `/api/filmes?idade=`, com o parâmetro `idade` presente, mas sem valor. Decide o que a API deve responder, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/filmes`. No caderno, escreve porque escolheste essa resposta. Pensa em quem pode fazer este pedido. Pode ser alguém que se esqueceu de escrever o número, ou um formulário com uma opção "qualquer idade", que envia o campo vazio. Escreve a tua decisão antes de leres a resposta.
+3. O contrato deixa um caso por decidir: o pedido `/api/filmes?idade=`, com o parâmetro `idade` presente, mas sem valor. Decide o que a API deve responder, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/filmes`. Por baixo da decisão, escreve numa frase porque a escolheste. Pensa em quem pode fazer este pedido. Pode ser alguém que se esqueceu de escrever o número, ou um formulário com uma opção "qualquer idade", que envia o campo vazio. Escreve a tua decisão antes de leres a resposta.
 
    A resposta: há duas decisões defensáveis, e qualquer uma serve, desde que esteja escrita no contrato e que o código a cumpra.
 
@@ -250,7 +249,7 @@ Em todas as fases, lê primeiro a introdução da fase do caminho normal, que ex
 
 #### Paragem 1, no teu projeto
 
-O `contrato-da-api.md` tem o formato dos erros, a forma do filme, os três pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?idade=`.
+O `contrato-da-api.md` tem o formato dos erros, a forma do filme, os três pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?idade=`, com a razão.
 
 Pensa antes de continuares: o cartaz não entra no contrato. Porquê, se também responde a pedidos? A resposta: o contrato da API é para programas, como uma interface em React, que leem o JSON e têm de saber o que vão receber. O cartaz é uma página para pessoas. Quem a recebe é o browser, que a mostra, e não um programa que tenha de a interpretar.
 
@@ -258,7 +257,7 @@ Pensa antes de continuares: o cartaz não entra no contrato. Porquê, se também
 
 A tua primeira versão é o `server.js` da ficha, e já cumpre quase todo o contrato. Não a escrevas outra vez. A ordem das rotas, que o caminho normal treina nesta fase, volta no desafio deste caminho.
 
-1. Lê a rota de `/api/filmes` e descobre o que ela responde ao pedido `/api/filmes?idade=`. Escreve-o no caderno e confirma no browser.
+1. Lê a rota de `/api/filmes` e descobre o que ela responde ao pedido `/api/filmes?idade=`. Depois, confirma no browser.
 
    A resposta: 200, com os oito filmes. O `if (idade)` trata o texto vazio como falso, e a idade não filtra.
 
@@ -272,11 +271,11 @@ Pensa antes de continuares: na papelaria, o `Number("")` dava 0 sem ninguém o t
 
 Faz a fase 3 do caminho normal com estes pedidos, que são os do cinema.
 
-1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe duas colunas, "previsto" e "obtido": `/api/estado`, `/api/filmes`, `/api/filmes?genero=Aventura`, `/api/filmes?idade=10`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/9`, `/api/filme` e `/cartaz?genero=Aventura`.
+1. Os pedidos a verificar são estes: `/api/estado`, `/api/filmes`, `/api/filmes?genero=Aventura`, `/api/filmes?idade=10`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/9`, `/api/filme` e `/cartaz?genero=Aventura`.
 
-2. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md` e para o teu `server.js`.
+2. Para cada pedido, antes de o fazeres, prevê de cabeça o código e a resposta, só a olhar para o teu `contrato-da-api.md` e para o teu `server.js`.
 
-3. Faz cada pedido no browser, com o separador Rede aberto, e preenche a coluna do obtido, com o código e o corpo.
+3. Faz o pedido no browser, com o separador Rede aberto, e compara o código e o corpo com a tua previsão. Depois, passa ao pedido seguinte.
 
    O que deves ver:
 
@@ -294,11 +293,11 @@ Faz a fase 3 do caminho normal com estes pedidos, que são os do cinema.
    | `/api/filme` | 404 | `{"erro":"Rota não encontrada"}` |
    | `/cartaz?genero=Aventura` | 200 | a página "Cartaz: Aventura", com Os Goonies e o Jumanji |
 
-4. A tua primeira versão cumpre todas as linhas do contrato, incluindo o `/api/filme`, porque o middleware final já existe desde a ficha. Se fizeste os exercícios 6 e 7, acrescenta à tabela os pedidos das tabelas desses dois exercícios da ficha, com o que obtiveste. Na fase 9, têm de dar o mesmo.
+4. A tua primeira versão cumpre todas as linhas do contrato, incluindo o `/api/filme`, porque o middleware final já existe desde a ficha. Se fizeste os exercícios 6 e 7, faz também os pedidos das tabelas desses dois exercícios da ficha, e confirma que a tua aplicação responde o que elas dizem. Na fase 9, têm de dar o mesmo.
 
 #### Paragem 3, no teu projeto
 
-A primeira versão está verificada, e a tabela do caderno é a referência para o resto do laboratório. As camadas não podem mudar nenhuma destas respostas.
+A primeira versão está verificada, e a tabela do passo 3 é a referência para o resto do laboratório. As camadas não podem mudar nenhuma destas respostas.
 
 Pensa antes de continuares: porque é que `/api/filmes?genero=Aventura&idade=10` responde 200 com uma lista vazia, e não com um erro? A resposta: os dois parâmetros são válidos, e o pedido está bem feito. Só que nenhum filme de aventura é para menos de 12 anos. Uma pesquisa sem resultados responde 200 com a lista vazia. O 404 fica para quando se pede uma coisa concreta que não existe, como o filme 9.
 
@@ -424,7 +423,7 @@ A tua primeira versão mistura tudo. Na rota da lista, o `req.query` é HTTP. A 
 
    Leitura guiada: como o seed, o ficheiro liga-se à base antes de usar o service e desliga-se no fim. Sem o `disconnect`, o programa ficava à espera e não voltava ao terminal. Cada linha chama o service e escreve só o que interessa: quantos filmes vieram, os títulos, ou o `null` de um filme que não existe.
 
-5. Antes de o correres, escreve no caderno o que esperas em cada uma das cinco linhas que começam pelo nome da experiência.
+5. Antes de o correres, prevê o que vai aparecer em cada uma das cinco linhas que começam pelo nome da experiência.
 
 6. No segundo terminal, na raiz do projeto, corre o ficheiro com o `.env`, como o seed:
 
@@ -445,7 +444,7 @@ A tua primeira versão mistura tudo. Na rota da lista, o `req.query` é HTTP. A 
 
    Isto quer dizer que o service funciona sem servidor e sem HTTP. Ao contrário do da papelaria, precisa da base de dados, e por isso do `.env`. Sem o `--env-file=.env`, o ficheiro escreve `A experiência falhou: falta a MONGODB_URI no ficheiro .env`.
 
-7. Compara com a tua previsão. Na linha "Para 10 anos", o service recebeu `{ idade: 10 }`, e nenhuma linha do service tem o `$lte`. Escreve no caderno quem o escreveu, e com que valor.
+7. Compara com a tua previsão. Na linha "Para 10 anos", o service recebeu `{ idade: 10 }`, e nenhuma linha do service tem o `$lte`. Quem o escreveu, e com que valor? Escreve a resposta num comentário no fim do `filmes.service.js`, com `//` no início de cada linha.
 
    A resposta: o repository. O service transformou a idade na condição do clube, `idadeMinimaAte: 10`, e o repository transformou essa condição no filtro do MongoDB, `{ idadeMinima: { $lte: 10 } }`.
 
@@ -526,11 +525,11 @@ No cinema, o mesmo controller serve a API, que responde em JSON, e o cartaz, que
 
 2. Se fizeste o exercício 6, a verificação da duração máxima da tua rota da lista entra na `listar`, a seguir à da idade. O valor convertido segue no `filtros`, com o nome `duracaoMaxima`, que é o que o service lê.
 
-3. Se fizeste o exercício 7, a tua rota do cartaz passa para a `mostrarCartaz`. A verificação da idade, a resposta 400 com a página e o título com as duas partes ficam lá, porque são o pedido e a página. Sai só a condição da idade que escreveste no filtro. A idade convertida segue no `filtros`, como na `listar`, e é o service que aplica a regra. Depois, responde no caderno: a verificação da idade está agora na `listar` e na `mostrarCartaz`. Porque é que não passou para o service, como a regra?
+3. Se fizeste o exercício 7, a tua rota do cartaz passa para a `mostrarCartaz`. A verificação da idade, a resposta 400 com a página e o título com as duas partes ficam lá, porque são o pedido e a página. Sai só a condição da idade que escreveste no filtro. A idade convertida segue no `filtros`, como na `listar`, e é o service que aplica a regra. Depois, responde num comentário no fim do `filmes.controller.js`: a verificação da idade está agora na `listar` e na `mostrarCartaz`. Porque é que não passou para o service, como a regra?
 
    A resposta: porque cada função responde de maneira diferente a uma idade inválida. A API responde com JSON, como diz o contrato, e o cartaz com uma página. Escolher a resposta é HTTP, e é do controller. O que deixou de estar repetido é a regra e a consulta, que agora estão uma só vez, no service e no repository.
 
-4. Responde no caderno: na `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarFilmes`?
+4. Responde num comentário no fim do `filmes.controller.js`: na `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarFilmes`?
 
    A resposta: o `filtros` só recebe os parâmetros que o contrato prevê, já convertidos e verificados. Com o `req.query` passado diretamente, a idade chegava ao service como texto, sem verificação. E qualquer parâmetro que alguém inventasse seguiria até às camadas de baixo. No cinema, o que lá chega acaba num filtro do MongoDB. Passar o `req.query` inteiro seria deixar quem faz o pedido escrever a consulta.
 
@@ -655,13 +654,13 @@ O teu middleware final já existe desde a ficha, e a fase 3 mostrou que o `/api/
 
 ### Fase 9, no teu projeto: verificar o contrato
 
-1. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Os pedidos são estes: `/api/filmes`, `/api/filmes?genero=Musical`, `/api/filmes?idade=10`, `/api/filmes?genero=Ficção científica&idade=14`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes?idade=0`, `/api/filmes?idade=12.5`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/0`, `/api/filmes/9` e `/api/filme`.
+1. Os pedidos a verificar são estes: `/api/filmes`, `/api/filmes?genero=Musical`, `/api/filmes?idade=10`, `/api/filmes?genero=Ficção científica&idade=14`, `/api/filmes?genero=Aventura&idade=10`, `/api/filmes?idade=doze`, `/api/filmes?idade=0`, `/api/filmes?idade=12.5`, `/api/filmes/3`, `/api/filmes/abc`, `/api/filmes/0`, `/api/filmes/9` e `/api/filme`.
 
-2. Acrescenta duas linhas, para os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/filmes?idade=`, com a resposta que decidiste na fase 1. Se fizeste os exercícios 6 e 7, acrescenta também os pedidos das tabelas desses exercícios da ficha.
+2. Junta-lhes os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/filmes?idade=`, com a resposta que decidiste na fase 1. Se fizeste os exercícios 6 e 7, junta também os pedidos das tabelas desses exercícios da ficha.
 
-3. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md`.
+3. Para cada pedido, antes de o fazeres, prevê de cabeça o código da resposta, só a olhar para o teu `contrato-da-api.md`.
 
-4. Faz cada pedido no browser, com o separador Rede aberto, e preenche as outras duas colunas.
+4. Faz o pedido no browser, com o separador Rede aberto. Compara o código com a tua previsão, e o corpo com o contrato. Depois, passa ao pedido seguinte.
 
    O que deves ver:
 
@@ -683,11 +682,11 @@ O teu middleware final já existe desde a ficha, e a fase 3 mostrou que o `/api/
    | `/api/estado` | 200 | `{"estado":"ok","aplicacao":"Cinema da escola"}` |
    | `/api/filmes?idade=` | o que decidiste | a resposta do teu contrato |
 
-5. Compara com a tabela da fase 3. Os pedidos que estão nas duas têm de dar as mesmas respostas, também o `/api/filme` e os dos exercícios 6 e 7, se os acrescentaste. As camadas mudaram a organização do código, e não o que a aplicação responde.
+5. Compara com a tabela da fase 3. Os pedidos que estão nas duas têm de dar as mesmas respostas, também o `/api/filme`. Os dos exercícios 6 e 7, se os fizeste, têm de dar o que as tabelas da ficha dizem. As camadas mudaram a organização do código, e não o que a aplicação responde.
 
 6. Se alguma linha não conferir, há um erro no código ou no contrato. Descobre qual, corrige-o e volta a verificar a linha. Um 400 que mudou procura-se primeiro no controller. Uma lista que mudou procura-se nas condições que o service passa e, depois, no filtro que o repository constrói.
 
-No fim, a tabela tem de ter pelo menos um 200, um 400 e um 404 verificados.
+No fim, tens de ter verificado pelo menos um 200, um 400 e um 404.
 
 ### Fase 10, no teu projeto
 
@@ -707,7 +706,7 @@ Os desafios do fim do laboratório são da papelaria. No cinema, faz este: um pe
 
 ### Antes de terminares, no teu projeto
 
-A lista do fim do laboratório vale também para ti, com três diferenças. A decisão do contrato é sobre o pedido `?idade=`. Na fase 4, a explicação que fica no caderno é a do `$lte`, que o service não escreve. E o `git log --oneline` mostra os dois commits do cinema. No fim, o professor vai pedir-te que escolhas uma linha da tabela da fase 9 e expliques o caminho desse pedido pelas camadas. No cinema, esse caminho acaba no repository e no Atlas.
+A lista do fim do laboratório vale também para ti, com estas diferenças. A decisão do contrato é sobre o pedido `?idade=`. O comentário da fase 4 está no fim do `filmes.service.js` e explica o `$lte`, que o service não escreve. O da fase 5 está no fim do `filmes.controller.js`. O `git log --oneline` mostra os dois commits do cinema. E, no cinema, o caminho de um pedido pelas camadas acaba no repository e no Atlas.
 
 ## Fase 1: o contrato, antes do código
 
@@ -773,7 +772,7 @@ Uma API é usada por programas, como a tua interface em React, e um programa nã
    | --- | --- | --- |
    | 404 | não há nenhuma rota com esse método e esse caminho | `{ "erro": "Rota não encontrada" }` |
 
-3. O contrato deixa um caso por decidir: o pedido `/api/artigos?categoria=`, com o parâmetro `categoria` presente, mas sem valor. Decide o que a API deve responder a este pedido, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/artigos`. No caderno, escreve porque escolheste essa resposta e não outra. Pensa em quem pode fazer este pedido. Pode ser alguém que se esqueceu de escrever a categoria, ou um formulário do React com uma opção "todas as categorias", que envia o campo vazio. Escreve a tua decisão antes de leres a resposta.
+3. O contrato deixa um caso por decidir: o pedido `/api/artigos?categoria=`, com o parâmetro `categoria` presente, mas sem valor. Decide o que a API deve responder a este pedido, com que código e com que corpo, e escreve a tua decisão no contrato, na secção de `GET /api/artigos`. Por baixo da decisão, escreve numa frase porque escolheste essa resposta e não outra. Pensa em quem pode fazer este pedido. Pode ser alguém que se esqueceu de escrever a categoria, ou um formulário do React com uma opção "todas as categorias", que envia o campo vazio. Escreve a tua decisão antes de leres a resposta.
 
    A resposta: há três decisões defensáveis, e qualquer uma serve, desde que esteja escrita no contrato e que o código a cumpra.
 
@@ -787,7 +786,7 @@ Uma API é usada por programas, como a tua interface em React, e um programa nã
 
 ### Paragem 1
 
-O `contrato-da-api.md` tem o formato dos erros, a forma do artigo, os quatro pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?categoria=`. É uma das duas coisas que este tema te pede para entregar; a outra é a tabela de verificação da fase 9.
+O `contrato-da-api.md` tem o formato dos erros, a forma do artigo, os quatro pedidos, a resposta a qualquer outro pedido e a tua decisão sobre o `?categoria=`, com a razão. É uma das duas coisas que este tema te pede para entregar; a outra são as rotas, na API em camadas que guardas no commit da fase 10.
 
 Pensa antes de continuares: porque é que o contrato não diz se os artigos estão num array ou no Atlas? A resposta: porque isso é decisão de quem escreve a API, e pode mudar sem o contrato mudar. É o que vai acontecer no tema seguinte, quando os artigos passarem para o Atlas. As respostas ficam iguais.
 
@@ -1022,11 +1021,11 @@ Pensa antes de continuares: se o mesmo parâmetro vier duas vezes, como em `?sto
 
 Cada linha do contrato diz o que a API responde a um pedido, e por isso cada linha se pode verificar. Faz-se o pedido e compara-se a resposta. Antes de cada pedido, prevês o código e a resposta, só com o contrato e o código à frente. Esta primeira tabela fica de referência. Na fase 4 o código começa a mudar de ficheiro, e as respostas têm de continuar as mesmas. Para saber mais, lê o passo 2 do exemplo guiado do [guia](../04-api-express-e-contratos.md).
 
-1. Copia para o caderno esta coluna de pedidos e acrescenta-lhe duas colunas, "previsto" e "obtido": `/api/estado`, `/api/artigos`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?stockMaximo=`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
+1. Os pedidos a verificar são estes: `/api/estado`, `/api/artigos`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?stockMaximo=`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
-2. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md` e para o teu `server.js`.
+2. Para cada pedido, antes de o fazeres, prevê de cabeça o código e a resposta, só a olhar para o teu `contrato-da-api.md` e para o teu `server.js`.
 
-3. Faz cada pedido no browser, com o separador Rede aberto, e preenche a coluna do obtido, com o código e o corpo.
+3. Faz o pedido no browser, com o separador Rede aberto, e compara o código e o corpo com a tua previsão. Depois, passa ao pedido seguinte.
 
    O que deves ver:
 
@@ -1044,7 +1043,7 @@ Cada linha do contrato diz o que a API responde a um pedido, e por isso cada lin
 
 4. Repara na última linha. O código, 404, está certo, mas o corpo é uma página HTML, e não o JSON com `erro` que o contrato promete. A página diz `Cannot GET /api/artigo` (não é possível obter `/api/artigo`). É a única linha do contrato que esta versão não cumpre, e fica assim de propósito. É o assunto da fase 8.
 
-5. Volta à tua decisão sobre o pedido `?categoria=`. Lê a rota de `/api/artigos` e descobre o que ela responde a esse pedido, com que código e com que corpo. Escreve-o no caderno e confirma no browser, com `http://localhost:3000/api/artigos?categoria=`.
+5. Volta à tua decisão sobre o pedido `?categoria=`. Lê a rota de `/api/artigos` e descobre o que ela responde a esse pedido, com que código e com que corpo. Depois, confirma no browser, com `http://localhost:3000/api/artigos?categoria=`.
 
    A resposta: 200, com `[]`. O `req.query.categoria` é o texto vazio, que não é `undefined`, por isso entra no filtro, e nenhum artigo tem a categoria vazia. Se o teu contrato diz isto, a rota já o cumpre. Se diz outra coisa, muda a rota, e volta a abrir o pedido:
 
@@ -1055,7 +1054,7 @@ Cada linha do contrato diz o que a API responde a um pedido, e por isso cada lin
 
 ### Paragem 3
 
-A primeira versão responde ao que o contrato diz, menos ao `/api/artigo`, e a tabela do caderno é a referência para o resto do laboratório.
+A primeira versão responde ao que o contrato diz, menos ao `/api/artigo`, e a tabela do passo 3 é a referência para o resto do laboratório.
 
 Pensa antes de continuares: na tabela, `/api/artigos/abc` dá 400, e `/api/artigos/99` dá 404. Porque é que não dão os dois 404? A resposta: `abc` nem sequer é um identificador válido, por isso o pedido está mal feito, e a API diz-o com um 400. O 99 é um identificador válido, mas não há nenhum artigo com ele. O pedido está bem feito, e o que se pediu não existe. Por isso a rota verifica primeiro o identificador, e só depois procura o artigo.
 
@@ -1150,7 +1149,7 @@ A primeira versão funciona, mas mistura tudo. Os dados, o HTTP e as regras da p
 
    Leitura guiada: o ficheiro importa as três funções do service e escreve o resultado de cinco chamadas. O caminho começa por `./`, porque a pasta `src` está na mesma pasta deste ficheiro.
 
-4. Antes de o correres, escreve no caderno o que esperas em cada uma das cinco linhas.
+4. Antes de o correres, prevê o que vai aparecer em cada uma das cinco linhas.
 
 5. No segundo terminal, na raiz do projeto, corre:
 
@@ -1175,7 +1174,7 @@ A primeira versão funciona, mas mistura tudo. Os dados, o HTTP e as regras da p
 
    Isto quer dizer que o service funciona sozinho, sem browser, sem servidor e sem HTTP. Na primeira versão, para experimentar a mesma regra, tinhas de ligar a API e fazer o pedido.
 
-6. Compara com a tua previsão. Repara no marcador fluorescente. Não está na lista do stock até 3, mas está na lista a encomendar. Escreve no caderno porquê.
+6. Compara com a tua previsão. Repara no marcador fluorescente. Não está na lista do stock até 3, mas está na lista a encomendar. Escreve porquê num comentário no fim do `artigos.service.js`, com `//` no início de cada linha.
 
    A resposta: tem 8 unidades, mais do que 3, por isso não entra no filtro do stock até 3. Mas o seu stock mínimo é 10, e 8 é menos do que 10, por isso tem de ser encomendado. "Pouco stock" é um número escolhido por quem faz o pedido; "abaixo do mínimo" é uma regra da papelaria, com um mínimo diferente para cada artigo.
 
@@ -1259,7 +1258,7 @@ O controller é a camada que conhece o HTTP. Lê do pedido o que interessa, conv
 
    Leitura guiada: começa pelo `import`, que pede três nomes ao service, dentro das mesmas chavetas. A `paraInteiro` não tem `export`. É uma ajuda interna, e um nome que não se exporta não pode ser usado por engano noutro sítio. Cada função exportada trata um pedido do contrato, e o comentário diz qual. A `listar` constrói o objeto `filtros` só com os parâmetros que vieram e que o contrato prevê. A `obter` faz as duas verificações, primeiro 400 e depois 404, e traduz o `null` do service num 404.
 
-2. Responde no caderno: na função `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarArtigos`?
+2. Responde num comentário no fim do `artigos.controller.js`: na função `listar`, porque é que o `filtros` começa vazio e só recebe o que veio no pedido? O que aconteceria se se passasse o `req.query` diretamente ao `listarArtigos`?
 
    A resposta: o `filtros` só recebe os parâmetros que o contrato prevê, já convertidos e verificados. Com o `req.query` passado diretamente, o `stockMaximo` chegava ao service como texto, e `"abc"` passava sem erro, com uma lista vazia em vez de um 400. E qualquer parâmetro que alguém inventasse chegaria ao service. No tema seguinte, esse objeto vai ser um filtro do MongoDB. Passá-lo inteiro seria deixar quem faz o pedido escrever a consulta.
 
@@ -1349,7 +1348,7 @@ Pensa antes de continuares: como sabes que as respostas vêm mesmo das camadas, 
 
 Os `import` entre os teus ficheiros são a maior fonte de erros deste laboratório: a extensão `.js`, um nome que o outro ficheiro não exporta, e as chavetas num `export default`. Nesta fase provocas os três, para reconheceres as mensagens quando te acontecerem. Com o `--watch`, a API tenta reiniciar a cada gravação e falha; escreve o erro e depois `Failed running 'src/server.js'. Waiting for file changes before restarting...`, e volta a arrancar sozinha quando corriges o ficheiro. Para saber mais, lê a secção "Erros frequentes" do [guia](../04-api-express-e-contratos.md).
 
-Para cada erro: prevê, provoca, lê a mensagem no terminal, copia para o caderno a linha que interessa e corrige.
+Para cada erro: prevê, provoca, lê a mensagem no terminal, encontra a linha que diz o que falhou e corrige.
 
 1. Sem extensão. No `artigos.rotas.js`, no `import` do controller, apaga o `.js` do fim do caminho e guarda.
 
@@ -1427,15 +1426,15 @@ Pensa antes de continuares: e se o middleware final ficasse antes do `app.use` d
 
 ## Fase 9: verificar o contrato
 
-Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. Esta tabela é o que entregas para mostrar que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](../04-api-express-e-contratos.md).
+Cada linha desta tabela corresponde a uma linha do contrato. Quando todas conferem, a API cumpre o contrato nos casos verificados. A tabela verifica um exemplo de cada linha do contrato, e não todos os valores possíveis. Um pedido que não está nela, como `/api/artigos/0`, pode ainda ter um erro. É esta verificação que mostra que a API cumpre o contrato. Para saber mais, lê o passo 7 do exemplo guiado do [guia](../04-api-express-e-contratos.md).
 
-1. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Os pedidos são estes: `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
+1. Os pedidos a verificar são estes: `/api/artigos`, `/api/artigos?categoria=Desenho`, `/api/artigos?stockMaximo=3`, `/api/artigos?categoria=Papel&stockMaximo=4`, `/api/artigos?categoria=Cola`, `/api/artigos?stockMaximo=abc`, `/api/artigos?stockMaximo=`, `/api/artigos?stockMaximo=-1`, `/api/artigos/2`, `/api/artigos/abc`, `/api/artigos/99`, `/api/artigos/abaixo-do-minimo` e `/api/artigo`.
 
-2. Acrescenta duas linhas, para os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/artigos?categoria=`, com a resposta que decidiste na fase 1.
+2. Junta-lhes os dois pedidos do teu contrato que não estão nesta lista: o `/api/estado` e o `/api/artigos?categoria=`, com a resposta que decidiste na fase 1.
 
-3. Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md`.
+3. Para cada pedido, antes de o fazeres, prevê de cabeça o código da resposta, só a olhar para o teu `contrato-da-api.md`.
 
-4. Faz cada pedido no browser, com o separador Rede aberto, e preenche as outras duas colunas.
+4. Faz o pedido no browser, com o separador Rede aberto. Compara o código com a tua previsão, e o corpo com o contrato. Depois, passa ao pedido seguinte.
 
    O que deves ver:
 
@@ -1461,7 +1460,7 @@ Cada linha desta tabela corresponde a uma linha do contrato. Quando todas confer
 
 6. Se alguma linha não conferir, há um erro no código ou no contrato. Descobre qual, corrige-o e volta a verificar a linha. Um 400 que mudou procura-se primeiro no controller; uma lista que mudou, no service ou nos filtros que o controller lhe passa.
 
-No fim, a tabela tem de ter pelo menos um 200, um 400 e um 404 verificados.
+No fim, tens de ter verificado pelo menos um 200, um 400 e um 404.
 
 ## Fase 10: guardar no Git
 
@@ -1514,14 +1513,11 @@ Escreveste `router.get("/", obter)`. O pedido da lista vai parar à função de 
 
 ## Antes de terminares
 
-- [ ] O `contrato-da-api.md` está no projeto, com a rota de estado e a tua decisão sobre o pedido `?categoria=`, e a razão dessa decisão está no caderno.
-- [ ] A tabela da fase 3 está no caderno, com a primeira versão verificada.
-- [ ] As previsões e os resultados do teste do service, na fase 4, estão no caderno, com a explicação do marcador fluorescente.
-- [ ] As respostas das fases 5 e 7 estão no caderno.
-- [ ] A tabela da fase 9 está verificada, com pelo menos um 200, um 400 e um 404.
+- [ ] O `contrato-da-api.md` está no projeto, com a rota de estado e a tua decisão sobre o pedido `?categoria=`, com a razão por baixo.
+- [ ] O `artigos.service.js` acaba com o comentário da fase 4, que explica porque é que o marcador fluorescente está na lista a encomendar.
+- [ ] O `artigos.controller.js` acaba com o comentário da fase 5, que explica porque é que o `filtros` começa vazio.
+- [ ] A tua API dá as respostas da tabela da fase 9, e verificaste pelo menos um 200, um 400 e um 404.
 - [ ] O `git log --oneline` mostra dois commits.
 - [ ] Consegues explicar, por palavras tuas, o caminho de um pedido pelas camadas: que função de que ficheiro correu, e quem decidiu o código da resposta.
-
-O professor vai pedir-te que escolhas uma linha da tabela da fase 9 e expliques o caminho desse pedido pelas camadas.
 
 ![Rodapé](../../imagens/rodape.png)

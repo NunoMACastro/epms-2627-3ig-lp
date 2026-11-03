@@ -6,7 +6,7 @@ Laboratório do tema Modelo documental e primeiras consultas no Atlas, do módul
 
 ## O que vais construir
 
-No fim, o teu cluster no Atlas tem a base de dados `papelaria`, com nove artigos na coleção `artigos` e um fornecedor na coleção `fornecedores`. Um dos artigos aponta para esse fornecedor. No caderno, ficam as tuas previsões e os resultados de sete consultas e de uma pergunta feita à mão.
+No fim, o teu cluster no Atlas tem a base de dados `papelaria`, com nove artigos na coleção `artigos` e um fornecedor na coleção `fornecedores`. Um dos artigos aponta para esse fornecedor. Pelo caminho, fazes sete consultas e respondes a uma pergunta que a barra de consulta não faz.
 
 Ficas a saber criar uma base de dados no Atlas, inserir documentos, escrever consultas com filtro, projeção, ordenação e limite, e guardar uma referência a outro documento.
 
@@ -45,7 +45,6 @@ Ficas a saber criar uma base de dados no Atlas, inserir documentos, escrever con
 
 - Um browser, para usares o Atlas. Confirma que chegas a ele. Abre `https://www.mongodb.com/cloud/atlas/register`, e deve aparecer a página de registo do Atlas.
 - Acesso ao teu email, para confirmares a conta do Atlas.
-- O teu caderno, para escreveres as previsões antes de cada consulta.
 
 Se já criaste a conta e o cluster numa aula anterior, começa na fase 2. Da fase 1, faz só o que te faltar do que a paragem 1 descreve, como o convite ao professor. Se já tens a base `papelaria` com os oito artigos da fase 2, confirma que são exatamente oito e começa na fase 3.
 
@@ -151,7 +150,7 @@ Pensa antes de continuares: dois artigos com o mesmo nome podiam viver na mesma 
 
 Até agora vês todos os artigos. Na papelaria, quem lá trabalha quer só alguns: os de papel, ou os que têm pouco stock. Pedir informação a uma base de dados chama-se fazer uma consulta. No MongoDB, a consulta descreve os documentos que queres com um documento chamado filtro, escrito com a forma de um objeto de JavaScript. É a base de dados que percorre os documentos e devolve só os que cumprem o filtro, como o `filter` de um array. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](../02-modelo-documental-e-consultas-no-atlas.md).
 
-A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escreves no caderno o número da consulta e os artigos que esperas. Depois executas e comparas. Quando o resultado é diferente do que previste, a explicação dessa diferença é o que mais te ensina, por isso não a saltes. Para preveres, usa esta tabela dos oito artigos:
+A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, prevês, de cabeça, que artigos ela devolve. Depois executas e comparas com o que o passo diz. Quando o resultado é diferente do que previste, a explicação dessa diferença é o que mais te ensina, por isso não a saltes. Para preveres, usa esta tabela dos oito artigos:
 
 | Artigo | Categoria | Stock | Stock mínimo | Preço (cêntimos) | Corredor |
 | --- | --- | ---: | ---: | ---: | --- |
@@ -166,7 +165,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
 
 1. Encontra a barra de consulta. Com a coleção `artigos` aberta no Data Explorer, há uma barra de consulta por cima da lista de documentos. O campo principal é o do filtro ("Filter"). Escreves lá o filtro e carregas em "Find" (procurar) para executar. "Reset" (repor) limpa a consulta e volta a mostrar todos os documentos.
 
-2. Consulta 1, uma igualdade: os artigos de uma categoria. Prevê no caderno que artigos devolve este filtro. Depois escreve-o no campo do filtro e carrega em "Find":
+2. Consulta 1, uma igualdade: os artigos de uma categoria. Prevê que artigos devolve este filtro. Depois escreve-o no campo do filtro e carrega em "Find":
 
    ```js
    { categoria: "Papel" }
@@ -231,7 +230,7 @@ A forma de trabalhar é sempre a mesma. Antes de executares uma consulta, escrev
 
 ### Paragem 3
 
-Sabes escolher documentos por igualdade, com um operador, com duas condições, por um intervalo e por um campo embutido. No caderno, tens a previsão e o resultado das consultas 1 a 5.
+Sabes escolher documentos por igualdade, com um operador, com duas condições, por um intervalo e por um campo embutido. Cada uma das consultas 1 a 5 devolveu, no teu cluster, os artigos que o passo diz.
 
 Pensa antes de continuares: a consulta 3 devolveu dois artigos. Quantos devolveria `{ categoria: "Escrita" }`, sozinho, e porquê? A resposta: três, a Esferográfica azul, o Lápis HB e o Marcador fluorescente. Sem a segunda condição, o Lápis HB, com 25 unidades, já não fica de fora. Basta-lhe ser da categoria Escrita.
 
@@ -249,7 +248,7 @@ Até agora, cada documento do resultado aparece com todos os campos. Às vezes s
 
    Leitura guiada: `nome: 1` e `stock: 1` dizem "mostra só estes dois campos". O `_id` aparece sempre, a não ser que o escondas, e por isso está lá `_id: 0`.
 
-   Antes de executares, responde no caderno: aparecem os mesmos documentos da consulta 2, ou outros?
+   Antes de executares, prevê: aparecem os mesmos documentos da consulta 2, ou outros?
 
    O que deves ver: os mesmos quatro documentos da consulta 2, cada um só com o nome e o stock, como `{ nome: "Esferográfica azul", stock: 3 }`. A projeção muda o que se vê de cada documento, mas não muda que documentos aparecem. Isso é trabalho do filtro.
 
@@ -273,7 +272,7 @@ Na papelaria, quem faz o inventário quer saber os três artigos mais caros. Sã
    { precoCentimos: -1 }
    ```
 
-   No campo "Limit", escreve `3`. Prevê no caderno que artigos aparecem, e por que ordem. Depois executa.
+   No campo "Limit", escreve `3`. Prevê que artigos aparecem, e por que ordem. Depois executa.
 
    O que deves ver: a Resma de papel A4 (520), o Compasso escolar (450) e o Caderno A4 quadriculado (250), por esta ordem. Primeiro, a ordenação põe os oito do mais caro para o mais barato. Depois, o limite deixa ficar só os três primeiros.
 
@@ -293,9 +292,9 @@ Pensa antes de continuares: com a ordenação `{ precoCentimos: -1 }` e o limite
 
 Na papelaria, a pergunta que mais importa é "que artigos estão abaixo do stock mínimo e precisam de ser encomendados?". Um artigo está abaixo do mínimo quando o seu `stock` é menor do que o seu `stockMinimo`. Parece uma pergunta como as outras, mas não é. Os operadores comparam um campo com um valor fixo, escrito no filtro, e esta pergunta compara dois campos do mesmo documento. O operador que compara dois campos, `$expr`, não é aceite na barra de consulta do Atlas. Por isso, desta vez respondes à mão. Para saber mais, lê a secção "Uma consulta descreve os documentos que queres" do [guia](../02-modelo-documental-e-consultas-no-atlas.md).
 
-1. Olha para a tabela dos oito artigos, na fase 3, e escreve no caderno os artigos em que o stock é menor do que o stock mínimo.
+1. Olha para a tabela dos oito artigos, na fase 3, e encontra os artigos em que o stock é menor do que o stock mínimo.
 
-   O que deves ter no caderno: quatro artigos abaixo do mínimo. Compara, linha a linha, com esta tabela:
+   A resposta: quatro artigos abaixo do mínimo. Compara, linha a linha, com esta tabela:
 
    | Artigo | Stock | Stock mínimo | Abaixo do mínimo? |
    | --- | ---: | ---: | --- |
@@ -390,7 +389,7 @@ Abre um documento que devia aparecer e compara, campo a campo, o nome, a escrita
 
 ### O email de confirmação da conta não chega
 
-Procura na pasta de spam. Enquanto esperas, acompanha as fases 3 a 6 no ecrã de um colega e escreve as tuas previsões no teu caderno. Faz as consultas no teu cluster quando a conta estiver confirmada.
+Procura na pasta de spam. Enquanto esperas, acompanha as fases 3 a 6 no ecrã de um colega e faz as tuas previsões. Faz as consultas no teu cluster quando a conta estiver confirmada.
 
 ### O professor vê o teu projeto, mas não os teus documentos
 
@@ -414,7 +413,7 @@ Quem tiver essa palavra-passe e um endereço autorizado entra na tua base de dad
 
 ## Desafios
 
-Estes desafios usam os nove artigos do fim da fase 7. Em cada um, escreve primeiro a consulta e o resultado que esperas, e só depois executa.
+Estes desafios usam os nove artigos do fim da fase 7. Em cada um, prevê o resultado antes de executares a consulta.
 
 1. Os artigos de escrita ou de desenho com menos de 10 unidades. Pista: o operador `$in` recebe uma lista de valores, escrita entre parênteses retos, e o documento fica no resultado se o campo for igual a qualquer um deles.
 2. Só o nome e o preço dos artigos de papel, do mais barato para o mais caro.
@@ -425,10 +424,8 @@ Estes desafios usam os nove artigos do fim da fase 7. Em cada um, escreve primei
 - [ ] A tua base `papelaria` tem nove artigos na coleção `artigos` e um fornecedor na coleção `fornecedores`.
 - [ ] O convite ao professor está enviado, com o papel "Project Data Access Read Only".
 - [ ] A palavra-passe do utilizador da base de dados está guardada num sítio seguro, fora do código e do caderno.
-- [ ] No caderno, para cada uma das sete consultas e para a pergunta feita à mão, está o que previste e o que obtiveste.
-- [ ] Para cada resultado diferente do previsto, escreveste a causa, como um campo mal escrito, uma maiúscula, um operador trocado ou a falta do `$`.
+- [ ] Cada uma das sete consultas devolveu, no teu cluster, os artigos que o passo diz, e sabes que quatro artigos estão abaixo do stock mínimo.
+- [ ] Para cada resultado diferente do previsto, encontraste a causa, como um campo mal escrito, uma maiúscula, um operador trocado ou a falta do `$`.
 - [ ] Consegues explicar, por palavras tuas, porque é que a localização ficou embutida no artigo e o fornecedor ficou numa coleção à parte.
-
-O professor pode pedir-te para explicares um destes pontos em voz alta, ou para preveres o resultado de uma consulta parecida, com outros valores. É assim que se verifica que o trabalho é teu.
 
 ![Rodapé](../../imagens/rodape.png)

@@ -31,7 +31,7 @@ cinema-da-escola/
     └── cartaz.ejs                     não muda
 ```
 
-No caderno, fica a tabela de verificação, com o que previste e o que obtiveste em cada pedido. Ficas a saber pôr uma API a escrever numa base de dados sem deixar entrar o que não deve, e a dizer em que camada fica cada regra.
+Ficas a saber pôr uma API a escrever numa base de dados sem deixar entrar o que não deve, e a dizer em que camada fica cada regra.
 
 | Fase | O que muda | O que funciona no fim |
 | --- | --- | --- |
@@ -43,7 +43,7 @@ No caderno, fica a tabela de verificação, com o que previste e o que obtiveste
 | 6 | O `PATCH`, com as opções da documentação | A API altera filmes, com as regras a correr |
 | 7 | O `DELETE` | A API apaga filmes |
 | 8 | O script que mostra antes de apagar | Apagas um género inteiro na base de teste, vendo antes o que sai |
-| 9 | A tabela de verificação | A API cumpre o contrato, confirmado na base e sem o segredo à vista |
+| 9 | Os pedidos de verificação | A API cumpre o contrato, confirmado na base e sem o segredo à vista |
 | 10 | O commit | O commit do CRUD no histórico |
 
 ## Palavras que vais usar
@@ -71,7 +71,6 @@ No caderno, fica a tabela de verificação, com o que previste e o que obtiveste
 - Internet, em todas as fases: a aplicação só arranca depois de se ligar ao Atlas. Se a rede falhar, chama o professor.
 - Um editor de código e dois terminais: um para a aplicação, outro para os comandos.
 - O browser, com as ferramentas de programador (F12, ou Cmd+Option+I no Mac). Vais usar o separador "Rede" (ou "Network"), para veres o código de cada resposta. E vais usar o separador "Consola" (ou "Console"), para fazeres os pedidos que a barra de endereço não faz.
-- O caderno, para as previsões e a tabela de verificação.
 
 Se fizeste os exercícios 6 e 7 da ficha do cinema, com a duração máxima e o cartaz para uma idade, o teu código tem essas duas peças. Este laboratório não lhes toca: ficam onde as puseste no tema anterior. Quando um passo mandar substituir um ficheiro inteiro, é sempre um ficheiro onde elas não estão.
 
@@ -755,7 +754,7 @@ O clube mudou a sessão de Os Goonies, ou percebeu que a duração do Wall-E est
 
    O que deves ver: 200. No browser, Os Goonies têm agora `"idadeMinima":10`. A regra do `enum`, que no `POST` recusava a idade 10, não correu. A fase 4 dizia que o schema corre quando se cria um filme; numa alteração feita assim, por omissão, não corre.
 
-7. As duas surpresas resolvem-se com opções, que se passam num terceiro argumento do `findOneAndUpdate`. Abre a documentação do Mongoose, em [mongoosejs.com/docs/api/model.html](https://mongoosejs.com/docs/api/model.html), e procura a secção `Model.findOneAndUpdate()`. Confirma no topo da página a versão da documentação, que deve ser a 9. A versão que tens instalada vê-se no `package-lock.json`, ou com o comando `npm ls mongoose`. A página foi consultada a 30 de outubro de 2026, na versão 9.11.4. Na lista dos parâmetros, procura a opção que faz a função devolver o documento depois da alteração, e a que faz correr as regras do schema. Escreve no caderno o nome de cada uma e o valor que lhe tens de dar.
+7. As duas surpresas resolvem-se com opções, que se passam num terceiro argumento do `findOneAndUpdate`. Abre a documentação do Mongoose, em [mongoosejs.com/docs/api/model.html](https://mongoosejs.com/docs/api/model.html), e procura a secção `Model.findOneAndUpdate()`. Confirma no topo da página a versão da documentação, que deve ser a 9. A versão que tens instalada vê-se no `package-lock.json`, ou com o comando `npm ls mongoose`. A página foi consultada a 30 de outubro de 2026, na versão 9.11.4. Na lista dos parâmetros, procura a opção que faz a função devolver o documento depois da alteração, e a que faz correr as regras do schema. Para cada uma, procura também o valor que lhe tens de dar.
 
    A resposta: a primeira é o `returnDocument`, com o valor `'after'`; por omissão é `'before'`, e por isso vinha a idade antiga. A segunda é o `runValidators`, com `true`: as regras do schema, a que a documentação chama validators, só correm numa alteração quando se pede. A documentação mostra também o `new`, com `true`, que faz o mesmo do que o `returnDocument: 'after'`, e que muitos tutoriais usam. No Mongoose 9 está marcado como obsoleto.
 
@@ -1442,7 +1441,7 @@ A verificação faz-se como no tema anterior, com previsões e resultados, e com
 
 1. Corre `npm run seed`. Na consola, se recarregaste a página, cola outra vez o bloco da `pedir`.
 
-2. Copia para o caderno a coluna dos pedidos abaixo e acrescenta-lhe três colunas: "código previsto", "código obtido" e "corpo confere com o contrato". Preenche a coluna da previsão, só a olhar para o teu `contrato-da-api.md`.
+2. Lê os pedidos abaixo, que se contam de 1 a 13, pela ordem da lista. Prevê de cabeça o código de cada um, só a olhar para o teu `contrato-da-api.md`.
 
    ```js
    await pedir("GET", "/api/filmes?genero=Animação&idade=6");
@@ -1460,7 +1459,7 @@ A verificação faz-se como no tema anterior, com previsões e resultados, e com
    await pedir("PUT", "/api/filmes/1", { titulo: "Shrek 2" });
    ```
 
-3. Faz cada pedido, pela ordem da lista, e preenche as outras duas colunas. A seguir ao pedido 7, antes do 8, faz a primeira confirmação do passo 4 no Atlas: o pedido 11 vai apagar o Wall-E.
+3. Faz cada pedido, pela ordem da lista. Compara o código e o corpo de cada resposta com a tua previsão e com o contrato. A seguir ao pedido 7, antes do 8, faz a primeira confirmação do passo 4 no Atlas: o pedido 11 vai apagar o Wall-E.
 
    O que deves ver:
 
@@ -1480,7 +1479,7 @@ A verificação faz-se como no tema anterior, com previsões e resultados, e com
    | 12 | 404 | `{"erro":"Não existe o filme 9"}` |
    | 13 | 404 | `{"erro":"Rota não encontrada"}`, porque o contrato não tem `PUT` |
 
-4. Confirma no Atlas, na coleção `filmes` da base `cinema-teste`, o que os pedidos que escrevem disseram. Faz a confirmação em dois momentos. Depois do pedido 7, o Wall-E está lá, com 98 minutos, e não há nenhum Up. Depois do pedido 11, o Wall-E já não está, e ficam os oito filmes do clube. Escreve no caderno, ao lado das linhas 3, 7 e 11, o que viste na base. Abre também o `/cartaz`: mostra os oito filmes, como no início.
+4. Confirma no Atlas, na coleção `filmes` da base `cinema-teste`, o que os pedidos que escrevem disseram. Faz a confirmação em dois momentos. Depois do pedido 7, o Wall-E está lá, com 98 minutos, e não há nenhum Up. Depois do pedido 11, o Wall-E já não está, e ficam os oito filmes do clube. Assim ficam confirmados na base os pedidos 3, 7 e 11. Abre também o `/cartaz`: mostra os oito filmes, como no início.
 
 5. Confirma que a cadeia de ligação não escapou. No terminal dos comandos, procura o endereço do cluster, que acaba em `mongodb.net`, em todos os ficheiros que o Git guarda:
 
@@ -1488,11 +1487,11 @@ A verificação faz-se como no tema anterior, com previsões e resultados, e com
    git grep -n "mongodb.net"
    ```
 
-   O que deves ver: nada, e o terminal pronto para outro comando. O `git grep` procura nos ficheiros que o Git guarda, e o `.env` não é um deles. Se aparecer um ficheiro, a cadeia está nele: tira-a de lá, põe-na só no `.env`, e diz ao professor, porque a palavra-passe pode ter de ser mudada no Atlas. No browser, no separador "Rede", abre algumas das respostas da tabela e o código-fonte do cartaz: nenhum tem a cadeia nem a palavra-passe.
+   O que deves ver: nada, e o terminal pronto para outro comando. O `git grep` procura nos ficheiros que o Git guarda, e o `.env` não é um deles. Se aparecer um ficheiro, a cadeia está nele: tira-a de lá, põe-na só no `.env`, e avisa o professor, porque a palavra-passe pode ter de ser mudada no Atlas. No browser, no separador "Rede", abre algumas das respostas da tabela e o código-fonte do cartaz: nenhum tem a cadeia nem a palavra-passe.
 
 6. Se alguma linha não conferir, há um erro no código ou no contrato. Descobre qual, corrige e volta a verificar a linha, depois de correres o seed.
 
-No fim, a tabela tem de ter pelo menos um 200, um 201, um 204, um 400, um 404 e um 409 verificados.
+No fim, verificaste pelo menos um 200, um 201, um 204, um 400, um 404 e um 409.
 
 ## Fase 10: guardar no Git
 
@@ -1552,18 +1551,16 @@ O `DB_NAME` do `.env` não acaba em `-teste`. Muda a linha para `DB_NAME=cinema-
 
 ## Desafios
 
-1. Uma sessão por dia. O clube projeta um filme por semana, e não pode haver dois filmes com a sessão no mesmo dia. Acrescenta ao contrato e à API esta regra, ao criar e ao alterar, com o código que achares certo. Decide primeiro a camada da regra, e escreve no caderno porquê. Pista: ao alterar a sessão de um filme, o próprio filme já tem um dia, e não conta como repetido.
+1. Uma sessão por dia. O clube projeta um filme por semana, e não pode haver dois filmes com a sessão no mesmo dia. Acrescenta ao contrato e à API esta regra, ao criar e ao alterar, com o código que achares certo. Decide primeiro a camada da regra, e diz porquê num comentário, junto da regra, no ficheiro onde ela ficar. Pista: ao alterar a sessão de um filme, o próprio filme já tem um dia, e não conta como repetido.
 2. Mudar as sessões de um género. Escreve um script, como o da fase 8, que muda a hora da sessão de todos os filmes de um género para uma hora dada no comando, com o `updateMany`. Antes de alterar, mostra o que vai mudar. Pista: para mudar um campo de um documento embutido, o MongoDB escreve o caminho com um ponto, entre aspas, como `"sessao.hora"`.
 
 ## Antes de terminares
 
 - [ ] O `contrato-da-api.md` tem as regras de cada campo e os três pedidos novos.
 - [ ] O `npm run seed` reconstrói a base `cinema-teste`, recusa-se a correr na base `cinema`, e a base da ficha continua como estava.
-- [ ] As respostas das paragens estão no caderno, e as duas opções do `findOneAndUpdate`, com o nome e o valor, também.
-- [ ] A tabela da fase 9 está verificada, e as linhas que escrevem estão confirmadas na base.
+- [ ] O `alterarPorNumero` do repository passa ao `findOneAndUpdate` as duas opções da documentação, com o nome e o valor certos.
+- [ ] Os pedidos da fase 9 dão os códigos e as respostas da tabela, e os que escrevem estão confirmados na base.
 - [ ] O `git grep -n "mongodb.net"` não encontra nada, e o `git log --oneline` mostra o commit deste laboratório.
 - [ ] Consegues explicar, por palavras tuas, em que camada fica cada regra do clube, e porquê. São três: a forma do pedido, os valores de cada campo e o número repetido.
-
-O professor vai pedir-te que escolhas um pedido da tabela da fase 9 e expliques o caminho dele pelas camadas, até à base, e o que confirmaste no Atlas.
 
 ![Rodapé](../../imagens/rodape.png)

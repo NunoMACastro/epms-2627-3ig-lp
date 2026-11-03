@@ -20,17 +20,17 @@ papelaria-api/
     └── server.js        o arranque da API
 ```
 
-No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de um pedido, do browser até à API e de volta. Ficas a saber preparar um projeto Node que se pode entregar e instalar noutro computador, sem segredos no Git.
+Em papel, fica o plano do servidor, desenhado por ti: as três partes da aplicação e as camadas da API. Ficas a saber preparar um projeto Node que se pode entregar e instalar noutro computador, sem segredos no Git.
 
 | Fase | O que muda | O que funciona no fim |
 | --- | --- | --- |
-| 1 | O diagrama das três partes e das camadas, em papel | O plano do servidor, mostrado ao professor |
+| 1 | O diagrama das três partes e das camadas, em papel | O plano do servidor, desenhado |
 | 2 | A pasta, o Express e os scripts do `package.json` | O `npm run` mostra os scripts `start` e `dev` |
 | 3 | O `src/server.js`, com a rota de estado | A API responde em `/api/estado` |
 | 4 | O `.env` e o `.env.example` | O `npm run dev` arranca a API com a configuração do `.env` |
 | 5 | A porta, mudada no `.env` com a API ligada | A API muda de porta sem mexer no código |
 | 6 | O `.gitignore` e o primeiro commit | O projeto no Git, sem o `.env` nem a `node_modules` |
-| 7 | O traçado do pedido de estado | A tabela do pedido, com o que observaste |
+| 7 | O traçado do pedido de estado | Cada passo do pedido, confirmado no separador Rede |
 
 ## Palavras que vais usar
 
@@ -56,7 +56,7 @@ No caderno, ficam o diagrama do servidor, o registo do que fizeste e a tabela de
 - Um editor de código, como o Visual Studio Code, e um terminal. No Visual Studio Code, abre o terminal no menu "Terminal", com "New Terminal" ("Novo Terminal", se o editor estiver em português).
 - Internet, só para o `npm install`.
 - O browser, com as ferramentas de programador: abrem-se com F12, e o separador "Rede" (ou "Network") mostra cada pedido.
-- O caderno, ou um ficheiro de texto fora do projeto, para registares os comandos que corres e o que aconteceu. No fim vais precisar desse registo, do diagrama da fase 1 e da tabela da fase 7.
+- Papel, para desenhares o plano do servidor, na fase 1.
 
 ## Se alguma coisa falhar
 
@@ -116,7 +116,7 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
    });
    ```
 
-   Antes de a escreveres, responde no caderno: o que aconteceria se a escrevesses no fim do ficheiro, depois do middleware final?
+   Antes de a escreveres, pensa: o que aconteceria se a escrevesses no fim do ficheiro, depois do middleware final?
 
    A resposta: a rota nunca respondia. O middleware final responde a todos os pedidos que lhe chegam e não chama `next()`, por isso `/api/estado` dava 404, com `{"erro":"Rota não encontrada"}`. É a regra da ordem do middleware, que viste em Sistemas de Informação. Os pedidos passam pela fila de cima para baixo.
 
@@ -136,7 +136,7 @@ A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta
 
 - Fases 4 e 5: fazem-se como estão. No terminal aparecem também as linhas do middleware de registo, uma por pedido.
 - Fase 6: faz-se como está. Se o teu `.env` já tem a cadeia de ligação verdadeira, porque já ligaste a API ao Atlas, o passo 4 é o mais importante do laboratório. Só fazes o `git add` depois de confirmares que o `.env` desapareceu da lista. No passo 6, a mensagem do commit diz o que o teu projeto tem, por exemplo `API da papelaria organizada como projeto, com a rota /api/estado`.
-- Fase 7: os passos 1 a 4 fazem-se como estão. No passo 4, a tua tabela tem duas funções no passo 3: o middleware de registo, que escreve `GET /api/estado` no terminal, e depois a rota de estado. O passo 5 muda, porque no teu projeto a rota `/api/artigos` já existe. Em vez dele, abre `http://localhost:3000/api/artigos/abc`, regista o código e a mensagem, e escreve numa frase que linha do `src/server.js` escolheu esse código.
+- Fase 7: os passos 1 a 4 fazem-se como estão. No passo 4, o passo 3 da tabela tem, no teu projeto, duas funções: o middleware de registo, que escreve `GET /api/estado` no terminal, e depois a rota de estado. O passo 5 muda, porque no teu projeto a rota `/api/artigos` já existe. Em vez dele, abre `http://localhost:3000/api/artigos/abc`. Que código e que mensagem recebes? Que linha do `src/server.js` escolheu esse código?
 
   A resposta: 400, com `{"erro":"O identificador do artigo tem de ser um número inteiro positivo"}`. Escolheu-o o `res.status(400)` da rota de detalhe, dentro da verificação `if (!Number.isInteger(id) || id < 1)`, porque `abc` não é um número. Também aqui o middleware de registo corre antes da rota.
 
@@ -165,7 +165,7 @@ Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As
    | Service | Devolve a lista ao controller |
    | Controller | Responde 200 com a lista em JSON |
 
-3. Agora, um pedido diferente: `GET /api/valor-do-stock`. A interface quer mostrar quanto vale, em dinheiro, tudo o que a papelaria tem em loja. Para cada artigo, conta-se o stock vezes o preço, e no fim somam-se todos. Desenha as mesmas quatro camadas para este pedido e responde, ao lado do desenho, a cada pergunta, antes de leres a resposta.
+3. Agora, um pedido diferente: `GET /api/valor-do-stock`. A interface quer mostrar quanto vale, em dinheiro, tudo o que a papelaria tem em loja. Para cada artigo, conta-se o stock vezes o preço, e no fim somam-se todos. Desenha as mesmas quatro camadas para este pedido. Depois, pensa em cada pergunta antes de leres a resposta.
 
    - Em que camada se faz a conta? O que é que a camada de baixo lhe entrega para a poder fazer?
 
@@ -185,7 +185,7 @@ Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As
 
 ### Paragem 1
 
-Tens o diagrama das três partes e os dois diagramas de camadas. Mostra-os ao professor antes de passares à fase 2. São uma das duas coisas que este tema te pede para entregar.
+Tens desenhados o diagrama das três partes e os dois diagramas de camadas. São uma das duas coisas que este tema te pede para entregar.
 
 Pensa antes de continuares: porque é que o repository é a única camada que fala com o MongoDB? A resposta: para a base de dados ficar num sítio só. Se a papelaria trocar o MongoDB por outra base de dados, muda-se o repository, e as rotas, os controllers e os services ficam iguais. E uma consulta que não encontra nada procura-se num sítio só.
 
@@ -329,7 +329,7 @@ Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as vari
 
 4. Volta a correr `npm run dev`. O que deves ver: as duas linhas do npm e `API a correr em http://localhost:3000`. Agora o `.env` existe, e o Node leu-o.
 
-5. Abre o `.env` e o `.env.example` lado a lado no editor. Neste momento são iguais. Escreve no caderno o que vai ser diferente entre os dois quando a API se ligar ao Atlas.
+5. Abre o `.env` e o `.env.example` lado a lado no editor. Neste momento são iguais. Pensa: o que vai ser diferente entre os dois quando a API se ligar ao Atlas?
 
    A resposta: o `.env` vai ter a cadeia de ligação verdadeira, com a palavra-passe, na `MONGODB_URI`. O `.env.example` continua com a linha vazia e o comentário, porque vai para o Git.
 
@@ -422,13 +422,13 @@ Pensa antes de continuares: um colega fez o `git add .` antes de criar o `.gitig
 
 ## Fase 7: traçar o pedido
 
-Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço no browser até veres a resposta. É o que este tema te pede para mostrares no fim. O separador "Rede" das ferramentas de programador mostra o que viajou em cada pedido. Para saber mais, lê o passo 8 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
+Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço no browser até veres a resposta. É o que este tema te pede para saberes fazer no fim. O separador "Rede" das ferramentas de programador mostra o que viajou em cada pedido. Para saber mais, lê o passo 8 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
 
 1. Liga a API com `npm run dev`. No browser, abre as ferramentas de programador (F12) e escolhe o separador "Rede" (ou "Network").
 
 2. Abre `http://localhost:3000/api/estado`.
 
-3. Clica no pedido `estado` e regista no caderno o método, o endereço completo, o código de estado e o `content-type` da resposta. Regista também o "Remote Address" ("Endereço remoto", com o browser em português), que é o endereço do computador que respondeu.
+3. Clica no pedido `estado` e procura o método, o endereço completo, o código de estado e o `content-type` da resposta. Procura também o "Remote Address" ("Endereço remoto", com o browser em português), que é o endereço do computador que respondeu.
 
    O que deves ver:
 
@@ -440,7 +440,7 @@ Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaj
    | `content-type` | `application/json; charset=utf-8` |
    | Remote Address | `[::1]:3000` ou `127.0.0.1:3000`, que são duas formas de dizer "este computador", na porta 3000 |
 
-4. Copia para o caderno esta tabela dos cinco passos do pedido e, em cada linha, acrescenta o que observaste que o confirma:
+4. Lê esta tabela dos cinco passos do pedido. Para cada passo, procura o que observaste que o confirma, antes de leres a resposta por baixo da tabela:
 
    | Passo | Onde | O que acontece |
    | --- | --- | --- |
@@ -450,7 +450,7 @@ Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaj
    | 4 | API | A função responde com `res.json(...)`. O Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
    | 5 | browser | Recebe a resposta e mostra o JSON. O código e o tipo veem-se no separador Rede |
 
-   O que deves ter acrescentado:
+   O que confirma cada passo:
 
    - no passo 1, o endereço completo;
    - no passo 2, a porta 3000 no Remote Address;
@@ -458,13 +458,13 @@ Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaj
    - no passo 4, o código 200 e o `application/json`, vistos no separador Rede;
    - no passo 5, o JSON que o browser mostra, que é o corpo da resposta.
 
-5. Abre também `http://localhost:3000/api/artigos`. Regista o código e explica, numa frase, porque é que esta rota ainda não existe e quando vai existir.
+5. Abre também `http://localhost:3000/api/artigos`. Que código recebes? Porque é que esta rota ainda não existe, e quando vai existir?
 
    A resposta: 404, com a página `Cannot GET /api/artigos` do Express. A rota ainda não existe porque o `server.js` só tem a rota de estado. Vai existir no tema seguinte, API Express e contratos, com o controller e o service dos artigos.
 
 ### Paragem 7
 
-Tens a tabela do pedido de estado, com as tuas observações. É a evidência do tema. Vais explicá-la ao professor, passo a passo, sem a ler.
+Seguiste o pedido de estado do princípio ao fim, e cada passo tem uma observação que o confirma. Saber explicar este pedido, passo a passo e por palavras tuas, é a evidência do tema.
 
 Pensa antes de continuares: em que passo do pedido aparece a porta 3000, e quem a escolheu? A resposta: no passo 2, quando o pedido chega à porta 3000, onde a API está à escuta. Foi o `app.listen` que ligou a API a essa porta, com o valor da variável `PORT` lido do `.env`.
 
@@ -521,12 +521,12 @@ A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address alread
 
 ## Antes de terminares
 
-- [ ] O diagrama das três partes e os dois diagramas de camadas da fase 1 estão no caderno, e mostraste-os ao professor.
+- [ ] Desenhaste, na fase 1, o diagrama das três partes e os dois diagramas de camadas.
 - [ ] O `npm run` mostra os scripts `start` e `dev`.
 - [ ] O `.env` e o `.env.example` estão na raiz do projeto, e o `.env` não aparece no `git status`.
 - [ ] O `git log --oneline` mostra o primeiro commit, e o `git status` diz que não há nada para guardar.
-- [ ] O registo dos comandos das fases 2 a 6 está no caderno, com os dois erros provocados: o `.env` em falta e a variável com o nome errado.
-- [ ] A tabela do pedido da fase 7 está no caderno, com as tuas observações.
+- [ ] Viste no terminal os dois erros provocados, o `.env` em falta e a variável com o nome errado, e a API voltou a responder em `http://localhost:3000/api/estado`.
+- [ ] No separador Rede, encontraste o método, o código, o `content-type` e o Remote Address do pedido de estado.
 - [ ] Consegues explicar, por palavras tuas, o pedido `GET /api/estado`, desde que escreves o endereço no browser até veres a resposta.
 
 Mostra também ao professor o resultado do `git log --oneline` e do `git status`. São a prova de que o projeto está guardado e de que o `.env` ficou de fora.

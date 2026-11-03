@@ -10,17 +10,19 @@ O [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md) e o laborató
 
 ## Como trabalhar
 
-A parte obrigatória são os exercícios 1 a 7, por esta ordem. Os exercícios 1, 2, 3, 6 e 7 fazem-se em papel. Os exercícios 4 e 5 fazem-se no computador, numa pasta que preparas antes do exercício 4, e não precisam de internet nem do Atlas. O desafio e o "Para ires mais longe" são opcionais.
+A parte obrigatória são os exercícios 1 a 7, por esta ordem. Fazem-se todos no computador, numa pasta `ficha-05`, e nenhum precisa de internet nem do Atlas. Os exercícios 4 e 5 têm ficheiros que corres; os outros pedem respostas escritas. O desafio e o "Para ires mais longe" são opcionais.
 
-Nos exercícios em papel, responde antes de experimentar. Nos do computador, escreve no caderno o que esperas de cada linha antes de correres o ficheiro de experiência. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
+Antes do exercício 1, cria a pasta `ficha-05` na raiz do projeto do teu laboratório, a `papelaria-api` ou a `cinema-da-escola`. Nela, cria um ficheiro de texto `respostas-05.md`, que escreves no editor. As respostas dos exercícios 1, 2, 3, 6 e 7, do desafio e do "Para ires mais longe" vão para esse ficheiro. Antes de cada resposta, põe o número do exercício e a letra da alínea. O código de uma resposta, como uma correção ou um filtro, vai num bloco de código, como os exemplos em JSON do teu `contrato-da-api.md`. No exercício 4, a resposta escrita fica num comentário no fim do `campos.js`.
 
-Entrega as respostas no caderno e a pasta `ficha-05`, com os ficheiros dos exercícios 4 e 5. As resoluções são trabalhadas na aula.
+Antes de correres um ficheiro de experiência, prevê o que dá cada linha. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
+
+Entrega a pasta `ficha-05`, com o `respostas-05.md` e os ficheiros dos exercícios 4 e 5. As resoluções são trabalhadas na aula.
 
 ## O cenário: o clube de videojogos, no MongoDB
 
 No guia e no laboratório trabalhaste com a papelaria ou com o cinema. Esta ficha usa o clube de videojogos da escola, que conheces da ficha de revisão. O clube passou os jogos para o MongoDB, e tem uma API em camadas, a `clube-api`, organizada como a tua.
 
-Cada jogo tem o título, o género, o número máximo de jogadores (`jogadoresMax`), se está disponível agora ou emprestado (`disponivel`) e quantas vezes já foi requisitado (`requisicoes`). Na base de teste, a coleção `jogos` tem estes seis. Nesta ficha, o seed do clube escreve os `_id` à mão, sempre os mesmos, para os pedidos se poderem escrever no papel. Na tua API, é o MongoDB que os dá, e cada seed dá outros.
+Cada jogo tem o título, o género, o número máximo de jogadores (`jogadoresMax`), se está disponível agora ou emprestado (`disponivel`) e quantas vezes já foi requisitado (`requisicoes`). Na base de teste, a coleção `jogos` tem estes seis. Nesta ficha, o seed do clube escreve os `_id` à mão, sempre os mesmos, para os pedidos da ficha os poderem usar. Na tua API, é o MongoDB que os dá, e cada seed dá outros.
 
 | `_id` | `titulo` | `genero` | `jogadoresMax` | `disponivel` | `requisicoes` |
 | --- | --- | --- | ---: | --- | ---: |
@@ -50,11 +52,11 @@ E isto sobre os pedidos:
 | `PATCH /api/jogos/:id` | 200 com o jogo alterado; 400; 404 |
 | `DELETE /api/jogos/:id` | 204 sem corpo; 400; 404; 409 se o jogo estiver emprestado, porque ainda não voltou ao clube |
 
-## Em papel
+## Ler e decidir
 
 ### Exercício 1: ler o contrato
 
-Para cada pedido, escreve no caderno o código da resposta e, numa linha, porquê. Os pedidos fazem-se pela ordem da tabela, e cada um parte da base como o anterior a deixou.
+Para cada pedido, escreve o código da resposta e, numa linha, porquê. Os pedidos fazem-se pela ordem da tabela, e cada um parte da base como o anterior a deixou.
 
 | N.º | Pedido | Corpo |
 | ---: | --- | --- |
@@ -71,7 +73,7 @@ Para cada pedido, escreve no caderno o código da resposta e, numa linha, porqu�
 
 ### Exercício 2: em que camada fica cada regra
 
-Para cada regra do clube, escreve no caderno a camada onde fica, o controller, o schema ou o service, e uma frase que diga porquê. A última é uma regra que o clube quer acrescentar à API, e que o contrato ainda não tem.
+Para cada regra do clube, escreve a camada onde fica, o controller, o schema ou o service, e uma frase que diga porquê. A última é uma regra que o clube quer acrescentar à API, e que o contrato ainda não tem.
 
 1. O `jogadoresMax` é um número inteiro.
 2. O `jogadoresMax` vai de 1 a 16.
@@ -109,13 +111,13 @@ c) Quem consegue ver estes dados, além do professor responsável? Pensa na base
 
 d) Os dados do exemplo são inventados. Porque é que a base de teste do clube não pode ter os dados de alunos verdadeiros, nem os dos teus colegas?
 
-## No computador
+## Escrever e corrigir código
 
-Os exercícios 4 e 5 fazem-se numa pasta `ficha-05`, dentro do projeto do teu laboratório, a `papelaria-api` ou a `cinema-da-escola`. Assim, o Node encontra o Mongoose que já lá instalaste, e não precisas de internet. Nenhum dos dois exercícios se liga ao Atlas.
+Os exercícios 4 e 5 correm na pasta `ficha-05`, a do `respostas-05.md`, dentro do projeto do teu laboratório. Assim, o Node encontra o Mongoose que já lá instalaste, e não precisas de internet. Nenhum dos dois exercícios se liga ao Atlas.
 
 Prepara a pasta assim:
 
-1. Na raiz do teu projeto, cria a pasta `ficha-05`.
+1. Se ainda não a tens, cria a pasta `ficha-05` na raiz do teu projeto.
 2. Nela, cria os dois ficheiros de experiência, com este conteúdo. Não fazem parte de nenhum exercício: só correm o que escreves.
 
    O `experimentar-campos.js`, para o exercício 4:
@@ -178,9 +180,9 @@ Prepara a pasta assim:
 
 Na pasta `ficha-05`, cria o ficheiro `campos.js` e escreve nele a função `lerCamposDoJogo(corpo)`, exportada. Faz o que a `lerCamposDoArtigo` ou a `lerCamposDoFilme` do laboratório fazem, mas para os campos de um jogo do clube, com os tipos do contrato. As regras dos valores, como os limites e os géneros, ficam para o schema, no exercício 5. Devolve `{ erro }`, com uma mensagem que diz qual é o campo, ao primeiro problema, ou `{ dados }`, com os campos lidos.
 
-Antes de correres o `experimentar-campos.js`, escreve no caderno o que esperas de cada uma das oito linhas. Pode ser um `erro`, e então diz se fala de um campo ou do corpo, ou podem ser os `dados`. Depois, corre-o com `node experimentar-campos.js` e compara.
+O `experimentar-campos.js` experimenta a função com oito corpos, e corre-se com `node experimentar-campos.js`. Antes de o correres, prevê o que dá cada linha: um `erro`, que fala de um campo ou do corpo, ou os `dados`.
 
-Quando acabares, responde no caderno: o Mongoose converte o texto `"true"` no booleano `true`, sem dar erro. O que acontecia a um pedido com `"disponivel": "false"` se a tua função não verificasse o tipo do `disponivel`?
+Num comentário no fim do `campos.js`, responde a esta pergunta: o Mongoose converte o texto `"true"` no booleano `true`, sem dar erro. O que acontecia a um pedido com `"disponivel": "false"` se a tua função não verificasse o tipo do `disponivel`?
 
 ### Exercício 5: as regras do jogo, no schema
 
@@ -188,11 +190,11 @@ Na pasta `ficha-05`, cria o ficheiro `jogo.model.js`, com o schema e o modelo do
 
 O campo `requisicoes` precisa de uma regra que o guia não mostrou. O `default` dá ao campo um valor quando ele não vem: `default: 0` faz com que um jogo novo comece com 0 requisições. As requisições também nunca podem ser negativas.
 
-Antes de correres o `experimentar-schema.js`, escreve no caderno, para cada uma das sete linhas, se o jogo é aceite ou recusado e, se for recusado, por que regra. Depois, corre-o com `node experimentar-schema.js` e compara. A primeira linha tem de mostrar o jogo com `"requisicoes":0`, que ninguém escreveu nos dados.
+O `experimentar-schema.js` experimenta o modelo com sete jogos, e corre-se com `node experimentar-schema.js`. Antes de o correres, prevê se cada jogo é aceite ou recusado e, se for recusado, por que regra. A primeira linha tem de mostrar o jogo com `"requisicoes":0`, que ninguém escreveu nos dados.
 
 ### Exercício 6: encontra os erros
 
-Cada um destes três pedaços da `clube-api` tem pelo menos um erro. Para cada um, escreve no caderno o que se vê, com o pedido ou o comando que o mostra, a causa e a correção.
+Cada um destes três pedaços da `clube-api` tem pelo menos um erro. Para cada um, escreve no `respostas-05.md` o que se vê, com o pedido ou o comando que o mostra, a causa e a correção.
 
 a) O script que apaga os jogos de um género:
 
@@ -221,7 +223,7 @@ try {
 await mongoose.disconnect();
 ```
 
-Um colega correu `node --env-file=.env src/apagar-genero.js`, esquecendo-se do género no fim. O que aconteceu à coleção, e porquê? Corrige o script. Depois, pensa no comando com `Festa`: o que apaga, e há alguma regra do clube que o script não respeita?
+Um colega correu `node --env-file=.env src/apagar-genero.js`, esquecendo-se do género no fim. O que aconteceu à coleção, e porquê? Corrige o script. E com `Festa` no fim do comando: o que apaga, e há alguma regra do clube que o script não respeita?
 
 b) A função do service que apaga um jogo:
 
@@ -264,15 +266,13 @@ Para este, pensa no que responde um `PATCH` ao Tetris e um `PATCH` a `/api/jogos
 
 ### Exercício 7: ver o que vai mudar antes de apagar
 
-O clube quer tirar da coleção os jogos que estão disponíveis e que nunca foram requisitados.
+O clube quer tirar da coleção os jogos que estão disponíveis e que nunca foram requisitados. As respostas vão para o `respostas-05.md`.
 
-a) Escreve o filtro do MongoDB que escolhe esses jogos.
+a) Escreve o filtro do MongoDB que escolhe esses jogos, e os títulos dos jogos do cenário que ele escolhe.
 
-b) Aplica o teu filtro à tabela do cenário, linha a linha, e escreve os títulos dos jogos que ele escolhe.
+b) Escreve as linhas de um script que, com esse filtro, mostra primeiro quantos jogos vão sair e quais, e só depois os apaga. O filtro escreve-se uma só vez.
 
-c) Escreve as linhas de um script que, com esse filtro, mostra primeiro quantos jogos vão sair e quais, e só depois os apaga. O filtro escreve-se uma só vez.
-
-d) Um colega escreveu o filtro só com `{ disponivel: true }`. Quantos jogos apagava, e quais?
+c) Um colega escreveu o filtro só com `{ disponivel: true }`. Quantos jogos apagava, e quais?
 
 ## Apoio
 
@@ -281,14 +281,14 @@ d) Um colega escreveu o filtro só com `{ disponivel: true }`. Quantos jogos apa
 - Exercício 3: a secção "Os dados pessoais e o RGPD" do guia. Para cada campo, procura o ecrã que o usa.
 - Exercício 4: começa pela função do teu laboratório. O que muda é a lista dos campos e um tipo que ela não tinha.
 - Exercício 5: a secção "As regras de cada campo, no schema" do guia, e o modelo do teu laboratório.
-- Exercício 6: na alínea a), escreve o filtro que o script constrói quando o comando não traz a terceira palavra. Depois, pensa no que esse filtro faz num `find` e num `deleteMany`. Na b), segue o `DELETE` do Tetris e o do Mario Kart. Na c), vê na documentação do Mongoose, na secção `Model.updateOne()`, o que esta função devolve, e segue o que o controller faz com isso.
+- Exercício 6: na alínea a), descobre primeiro o filtro que o script constrói quando o comando não traz a terceira palavra. Depois, pensa no que esse filtro faz num `find` e num `deleteMany`. Na b), segue o `DELETE` do Tetris e o do Mario Kart. Na c), vê na documentação do Mongoose, na secção `Model.updateOne()`, o que esta função devolve, e segue o que o controller faz com isso.
 - Exercício 7: a secção "Ver o que vai mudar antes de mudar muitos" do guia, e o script de apagar do teu laboratório.
 
 ## Desafio opcional
 
 **Requisitar um jogo.** O clube quer um pedido que regista a requisição de um jogo: o jogo passa a estar emprestado, e as requisições aumentam uma. Um jogo que já está emprestado não se pode requisitar.
 
-1. Escreve, no caderno, as linhas do contrato do pedido: o método, o caminho, o corpo, se o tiver, e as respostas possíveis, com os códigos.
+1. Escreve as linhas do contrato do pedido: o método, o caminho, o corpo, se o tiver, e as respostas possíveis, com os códigos.
 2. Diz em que camada fica cada parte, como na tabela do passo 2 do exemplo guiado do guia.
 3. Escreve a função do service e a do controller.
 
@@ -296,13 +296,13 @@ As decisões novas: o pedido não precisa de corpo, porque não há nada a escol
 
 ## Para ires mais longe
 
-Na tua função do desafio, entre ler o jogo e alterá-lo passa um instante, e dois pedidos ao mesmo tempo podiam requisitar o mesmo jogo. O MongoDB consegue verificar e alterar numa só operação. O `findOneAndUpdate` com o filtro `{ _id: id, disponivel: true }` só encontra o jogo se ele ainda estiver disponível. O operador `$inc`, de incrementar, aumenta um número sem o ler primeiro: `{ $inc: { requisicoes: 1 } }`. Escreve a função do repository que faz a requisição numa só operação. Depois, explica como é que o service distingue, quando ela devolve `null`, um jogo que não existe de um jogo emprestado.
+Na tua função do desafio, entre ler o jogo e alterá-lo passa um instante, e dois pedidos ao mesmo tempo podiam requisitar o mesmo jogo. O MongoDB consegue verificar e alterar numa só operação. O `findOneAndUpdate` com o filtro `{ _id: id, disponivel: true }` só encontra o jogo se ele ainda estiver disponível. O operador `$inc`, de incrementar, aumenta um número sem o ler primeiro: `{ $inc: { requisicoes: 1 } }`. Escreve a função do repository que faz a requisição numa só operação. Explica também como é que o service distingue, quando ela devolve `null`, um jogo que não existe de um jogo emprestado.
 
 ## Critérios de conclusão
 
-- Os exercícios 1, 2, 3, 6 e 7 estão respondidos no caderno, com o porquê de cada resposta.
-- O `experimentar-campos.js` dá, nas oito linhas, o que escreveste no caderno, ou explicaste a diferença.
-- O `experimentar-schema.js` dá, nas sete linhas, o que escreveste no caderno, ou explicaste a diferença, e a primeira linha mostra o `"requisicoes":0`.
+- Os exercícios 1, 2, 3, 6 e 7 estão respondidos no `respostas-05.md`, com o porquê de cada resposta.
+- O `experimentar-campos.js` corre, e cada uma das oito linhas dá o que a lista fechada e os tipos do contrato pedem para esse corpo. O `campos.js` acaba com o comentário que responde à pergunta do `"disponivel": "false"`.
+- O `experimentar-schema.js` corre, cada jogo é aceite ou recusado como o contrato do clube pede, e a primeira linha mostra o `"requisicoes":0`.
 - No exercício 6, cada erro tem o pedido ou o comando que o mostra, a causa e a correção.
 
 ## Autoavaliação

@@ -10,11 +10,11 @@ O [guia do tema](../04-api-express-e-contratos.md) e o [laboratório](../laborat
 
 ## Como trabalhar
 
-A parte obrigatória são os exercícios 1 a 4, por esta ordem. Os exercícios 1 e 2 fazem-se em papel; o 3 e o 4, no computador, num projeto que preparas antes do exercício 3. O exercício 4 é o mais longo. Os dois desafios do fim são opcionais.
+A parte obrigatória são os exercícios 1 a 4, por esta ordem. Os exercícios 1 e 2 respondem-se sem correr código, num ficheiro de texto chamado `respostas-04.md`, com o número do exercício antes de cada resposta. Guarda-o na tua pasta de trabalho, fora da `torneio-api`. O 3 e o 4 fazem-se num projeto que preparas antes do exercício 3. O exercício 4 é o mais longo. Os dois desafios do fim são opcionais.
 
-Nos exercícios em papel, responde antes de experimentar. Nos do computador, escreve primeiro o contrato e as respostas que esperas, e só depois o código. Verifica cada resposta no browser, com o separador Rede aberto. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
+Nos exercícios 3 e 4, o contrato é a referência: verifica cada resposta da API no browser, com o separador Rede aberto, e compara-a com ele. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
 
-Entrega as respostas dos exercícios 1 e 2 e o projeto `torneio-api`, com o `contrato-da-api.md` e os ficheiros do exercício 4, e os dos desafios, se os fizeres. Não entregues a `node_modules` nem o `.env`. As resoluções são trabalhadas na aula.
+Entrega o `respostas-04.md` e o projeto `torneio-api`, com o `contrato-da-api.md` e os ficheiros do exercício 4, e os dos desafios, se os fizeres. Não entregues a `node_modules` nem o `.env`. As resoluções são trabalhadas na aula.
 
 ## O cenário: a API do torneio
 
@@ -43,7 +43,7 @@ export const jogos = [
 ];
 ```
 
-## Em papel
+## Sem correr código
 
 ### Exercício 1: ler um contrato
 
@@ -102,7 +102,7 @@ export function equipa(req, res) {
 
 A API arranca sem nenhum erro no terminal, e mesmo assim este código tem três problemas, cada um de um tipo diferente. Para cada um, diz qual é, o que acontece por causa dele e como se corrige.
 
-## No computador
+## No projeto torneio-api
 
 Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria. Esse esqueleto já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`.
 
@@ -166,7 +166,7 @@ Para verificar, com o contrato ao lado:
 ## Apoio
 
 - Exercício 1: a secção "O contrato da API da papelaria" do guia, e a subsecção "Verificar à entrada".
-- Exercício 2: segue à mão, linha a linha, os pedidos `/api/jogos`, `/api/equipas/x` e `/api/equipas/9`, e compara cada resposta com o contrato.
+- Exercício 2: segue de cabeça, linha a linha, os pedidos `/api/jogos`, `/api/equipas/x` e `/api/equipas/9`, e compara cada resposta com o contrato.
 - Exercício 3: a secção "O contrato da API da papelaria" do guia, e a fase 1 do laboratório.
 - Exercício 4: a secção "As camadas em código" do guia, e as fases 4 a 8 do laboratório. Faz uma camada de cada vez, de dentro para fora, como no laboratório, e verifica a tabela no fim.
 
@@ -178,8 +178,7 @@ Os dois desafios fazem-se no projeto `torneio-api`, depois do exercício 4, e n�
 
 A comissão do torneio quer saber os pontos de cada equipa. Uma vitória vale 3 pontos, um empate 1 e uma derrota 0.
 
-1. Acrescenta primeiro ao contrato o pedido `GET /api/equipas/:id/pontos`: os parâmetros, as respostas possíveis e a forma do JSON da resposta de sucesso. A forma é decisão tua; escreve-a antes do código.
-2. Depois, implementa-o.
+Acrescenta à API o pedido `GET /api/equipas/:id/pontos`, e ao contrato a entrada dele: os parâmetros, as respostas possíveis e a forma do JSON da resposta de sucesso. A forma é decisão tua, e o contrato di-la.
 
 As decisões novas: em que camada fica a regra dos pontos? E a regra precisa de duas listas, as equipas (para saber se a equipa existe) e os jogos (para contar). Que camada as junta?
 
@@ -195,12 +194,11 @@ Pistas, só se precisares, uma de cada vez:
 
 A interface React vai mostrar os jogos assim: "12.º IG 3 - 1 11.º IG". Com o contrato atual, o React recebe os números das equipas e teria de pedir cada equipa à parte para saber o nome.
 
-1. Decide como a API pode devolver os jogos com os nomes das equipas: um parâmetro de pesquisa novo em `GET /api/jogos`, ou um caminho novo? Escreve no contrato a tua decisão, com a forma do JSON, e explica porque escolheste essa.
-2. Implementa-a. A junção dos nomes é feita em que camada?
+A API passa a poder devolver os jogos com os nomes das equipas. Como, decides tu: um parâmetro de pesquisa novo em `GET /api/jogos`, ou um caminho novo? A decisão fica no contrato, com a forma do JSON e, por baixo, a razão da tua escolha. A junção dos nomes é feita em que camada?
 
 ## Critérios de conclusão
 
-- Os exercícios 1 e 2 estão respondidos, com a consequência e a correção de cada problema do exercício 2.
+- O `respostas-04.md` tem os exercícios 1 e 2 respondidos, com a consequência e a correção de cada problema do exercício 2.
 - O `contrato-da-api.md` tem os três pedidos, o filtro `equipa`, a forma de uma equipa e de um jogo, o formato dos erros e a resposta a qualquer outro pedido.
 - A resposta à equipa 9 está escrita no contrato, e justificada.
 - Cada linha da tabela do exercício 4 dá o resultado esperado, e a da equipa 9 dá o que o teu contrato diz.

@@ -10,11 +10,11 @@ O [guia do tema](../03-arquitetura-e-setup-node.md) e o [laboratório](../labora
 
 ## Como trabalhar
 
-Os exercícios 1 a 6 são obrigatórios e fazem-se em papel, por esta ordem. O desafio opcional faz-se no computador, no projeto `papelaria-api` do laboratório.
+Os exercícios 1 a 6 são obrigatórios, por esta ordem. Escreve as respostas no editor, num ficheiro de texto chamado `respostas-03.md`, com o número do exercício e a letra da alínea antes de cada uma. Guarda-o na tua pasta de trabalho de Linguagens de Programação, fora da `papelaria-api`. O diagrama do exercício 6 desenha-se em papel. O desafio opcional faz-se no projeto `papelaria-api` do laboratório.
 
 Responde primeiro sem abrir o guia. Quando não souberes, escreve o que achas e porquê, e só depois confirma. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício. Em cada exercício que peça uma justificação, uma ou duas frases chegam.
 
-Entrega as respostas dos exercícios 1 a 6, com o diagrama do exercício 6 desenhado ou fotografado. Se fizeres o desafio, entrega o `src/server.js` e o `.env.example`, e nunca o `.env`. As resoluções são trabalhadas na aula.
+Entrega o `respostas-03.md` e o diagrama do exercício 6, em papel ou fotografado. Se fizeres o desafio, entrega o `src/server.js` e o `.env.example`, e nunca o `.env`. As resoluções são trabalhadas na aula.
 
 ## O cenário: a aplicação do torneio
 
@@ -147,21 +147,23 @@ c) Onde fica a cadeia de ligação ao Atlas, e que camada fala com o Atlas neste
 
 ## Desafio opcional
 
-Faz-se no computador, no projeto `papelaria-api` do laboratório.
+Faz-se no projeto `papelaria-api` do laboratório.
 
-1. Acrescenta ao `.env` e ao `.env.example` uma variável `NOME_APLICACAO`, com o valor `Papelaria da escola`.
-2. Muda a rota `/api/estado` para responder com o nome que está nessa variável, em vez do texto escrito no código.
-3. Decide o que acontece quando a variável não existe. Usas um valor por omissão, como fizeste com a porta? Experimenta, apagando-a do `.env`.
+A rota `/api/estado` passa a responder com o nome da aplicação que está numa variável de ambiente nova, `NOME_APLICACAO`, em vez do texto escrito no código. A variável fica no `.env` e no `.env.example`, como a porta, com o valor `Papelaria da escola`.
 
-Pensa, por fim, nisto: para a porta e para o nome, um valor por omissão faz sentido. Para a `MONGODB_URI`, faria sentido escrever no código um endereço por omissão? Porquê?
+Decide também o que acontece quando a variável não existe. Usas um valor por omissão, como fizeste com a porta?
+
+Para verificar: com a variável no `.env`, `/api/estado` responde com `"aplicacao":"Papelaria da escola"`. Sem ela, apagada do `.env`, a API faz o que decidiste.
+
+Responde, por fim, num comentário no `src/server.js`, junto da linha que lê o nome. Para a porta e para o nome, um valor por omissão faz sentido. Para a `MONGODB_URI`, faria sentido escrever no código um endereço por omissão? Porquê?
 
 ## Critérios de conclusão
 
-- Os exercícios 1 a 6 estão respondidos, com o número de cada um.
+- O `respostas-03.md` tem os exercícios 1 a 6 respondidos, com o número de cada um.
 - O diagrama do exercício 6 tem as quatro camadas e o Atlas, com o que cada camada faz neste pedido.
 - Cada resposta que pede uma justificação tem uma ou duas frases a explicá-la.
 - No exercício 5, cada situação tem uma porta, ou o que acontece.
-- Se fizeste o desafio, a API responde com o nome do `.env`, e o `.env` não está entre o que entregas.
+- Se fizeste o desafio, a API responde com o nome do `.env`, o `src/server.js` tem o comentário sobre a `MONGODB_URI`, e o `.env` não está entre o que entregas.
 
 ## Autoavaliação
 

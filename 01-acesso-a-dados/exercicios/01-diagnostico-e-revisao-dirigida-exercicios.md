@@ -25,7 +25,7 @@ A parte obrigatória são as partes A e B, os exercícios 1 a 8, por esta ordem.
 
 Esta ficha é de revisão, e podes consultar os apontamentos e os capítulos indicados acima. Tenta primeiro sozinho, e consulta quando ficares preso. Assim percebes, e o professor também, onde precisas de rever.
 
-Resolve no caderno. Nos exercícios com código, escreve primeiro o que esperas que aconteça, e só depois experimenta. Cada exercício constrói-se só com o que está na ficha. O exercício 1 cria a pasta `revisao-js`, onde experimentas os exercícios 2 a 8, se tiveres o computador. Os exercícios 7 e 8 precisam também de um servidor de teste, que a ficha dá antes do exercício 7 e se instala com internet; sem ele, responde em papel. A parte C faz-se em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
+Com o computador, as respostas escritas ficam em comentários `//` nos ficheiros da pasta `revisao-js`; sem ele, resolve numa folha. Nos exercícios com código, pensa primeiro no que esperas que aconteça, e só depois experimenta. Cada exercício constrói-se só com o que está na ficha. O exercício 1 cria a pasta `revisao-js`, onde experimentas os exercícios 2 a 8, se tiveres o computador. Os exercícios 7 e 8 precisam também de um servidor de teste, que a ficha dá antes do exercício 7 e se instala com internet; sem ele, responde em papel. A parte C faz-se em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
 
 ## O cenário: o clube de videojogos
 
@@ -67,7 +67,7 @@ a) Abre um terminal na tua pasta de trabalho, fora de qualquer outro projeto. Es
 }
 ```
 
-b) Prepara o projeto para os exercícios seguintes. Muda o `"type"` para `"module"`, que é o que deixa usar o `import` e o `export`. Cria o ficheiro `ola.js`, com uma linha que escreve na consola `A pasta da revisão está pronta.`. Acrescenta aos scripts do `package.json` um script `ola` que corre esse ficheiro. Escreve no caderno as linhas do `package.json` que mudaste ou acrescentaste, e confirma com `npm run ola`.
+b) Prepara o projeto para os exercícios seguintes. Muda o `"type"` para `"module"`, que é o que deixa usar o `import` e o `export`. Cria o ficheiro `ola.js`, com uma linha que escreve na consola `A pasta da revisão está pronta.`. Acrescenta aos scripts do `package.json` um script `ola` que corre esse ficheiro. Confirma com `npm run ola`. Sem computador, escreve na folha as linhas do `package.json` que mudarias ou acrescentarias.
 
 c) Provoca dois erros. Para cada um, explica o que correu mal e como o percebes pela mensagem (mostram-se só as linhas que interessam).
 
@@ -122,19 +122,19 @@ c) O que mostra `console.log(jogo.preco)`? Dá erro? Explica.
 
 Quatro amigos querem um jogo para jogarem juntos, agora. Escreve o código que dá a lista dos títulos dos jogos que lhes servem: os que estão disponíveis e deixam jogar quatro pessoas, ou mais.
 
-Antes de o correres, escreve no caderno os títulos que esperas. Depois, escreve o que mostra `console.log(jogos.length)` a seguir ao teu código, e porquê.
+Antes de o correres, prevê os títulos que vão aparecer. Depois, escreve o que mostra `console.log(jogos.length)` a seguir ao teu código, e porquê.
 
 ### Exercício 4: procurar um jogo
 
 Escreve a função `procurarJogo(lista, id)`, que devolve o jogo da lista com esse `id`, ou `null` se não houver nenhum. Experimenta com o `id` 3 e com o `id` 9.
 
-No caderno, responde: o que devolvia a tua função com o `id` 9 se tivesse só a linha `return lista.find((jogo) => jogo.id === id);`?
+Responde: o que devolvia a tua função com o `id` 9 se tivesse só a linha `return lista.find((jogo) => jogo.id === id);`?
 
 ### Exercício 5: o total de requisições
 
 Escreve a função `totalDeRequisicoes(lista)`, que devolve quantas vezes, ao todo, os jogos da lista já foram requisitados. Podes usar um ciclo ou o `reduce`.
 
-Antes de experimentares, escreve no caderno o que esperas destas três chamadas, e depois confirma:
+Antes de experimentares, prevê o que dão estas três chamadas, e depois confirma:
 
 - com a lista `jogos`;
 - com uma lista vazia, `[]`;
@@ -261,7 +261,7 @@ try {
 }
 ```
 
-a) Copia esta tabela para o caderno e completa a última coluna. Para a situação 2, o pedido muda para `carregarJogos("/api/jogo")`.
+a) Completa a última coluna desta tabela. Para a situação 2, o pedido muda para `carregarJogos("/api/jogo")`.
 
 | Situação | O que a consola mostra |
 | --- | --- |
@@ -275,7 +275,7 @@ c) Imagina que apagavas as três linhas do `if (!resposta.ok)`. O que mostrava a
 
 ## Parte C, opcional: React e formulários
 
-Esta parte faz-se em papel: lês o componente e escreves as correções no caderno. Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros, que vais encontrar nos exercícios 9 e 10. Lê o componente todo antes de começares.
+Esta parte faz-se em papel: lês o componente e escreves as correções numa folha. Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros, que vais encontrar nos exercícios 9 e 10. Lê o componente todo antes de começares.
 
 ```jsx
 import { useState } from "react";
@@ -338,11 +338,11 @@ Enquanto a lista não tem nenhum jogo, a página deve mostrar a frase "Ainda nã
 
 ## Desafio opcional
 
-**O jogo mais requisitado.** Escreve a função `maisRequisitado(lista)`, que devolve o jogo da lista com mais requisições. Decide, e escreve no caderno, o que ela devolve com uma lista vazia, e o que acontece se dois jogos tiverem o mesmo número de requisições. Experimenta com a lista `jogos` e com duas listas inventadas por ti, uma para cada caso.
+**O jogo mais requisitado.** Escreve a função `maisRequisitado(lista)`, que devolve o jogo da lista com mais requisições. Decide, e escreve num comentário por cima da função, o que ela devolve com uma lista vazia, e o que acontece se dois jogos tiverem o mesmo número de requisições. Experimenta com a lista `jogos` e com duas listas inventadas por ti, uma para cada caso.
 
 ## Critérios de conclusão
 
-- Os exercícios 1 a 8 têm resposta no caderno, com a previsão escrita antes do resultado nos que têm código.
+- Os exercícios 1 a 8 têm resposta, nos comentários dos ficheiros ou na folha.
 - Nos exercícios 4 e 5, as funções dão o valor certo também com o `id` que não existe e com a lista vazia.
 - No exercício 8, sabes dizer, em cada situação, quem lançou o erro.
 - Se tiveste o computador, o `npm run ola` escreve a frase do exercício 1, e os exercícios 2 a 6 correm na pasta `revisao-js`.

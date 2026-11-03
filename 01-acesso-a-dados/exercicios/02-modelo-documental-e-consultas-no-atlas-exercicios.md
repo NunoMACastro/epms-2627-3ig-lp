@@ -14,11 +14,9 @@ A parte obrigatória são os exercícios 1 a 8, por esta ordem. Nos exercícios 
 
 O desafio opcional e os exercícios de "Para ires mais longe" são para depois da parte obrigatória, se quiseres treinar mais ou se alguma coisa ainda não assentou.
 
-Responde no caderno ou num ficheiro de texto teu, com o número de cada exercício. Nas perguntas que pedem uma justificação, a justificação é a parte mais importante da resposta. Uma decisão certa sem razão escrita vale pouco. Uma decisão discutível, bem justificada, mostra que percebeste as regras.
+Responde num ficheiro de texto no editor, chamado `respostas-02.md`, com o número de cada exercício. Nas perguntas que pedem uma justificação, a justificação é a parte mais importante da resposta. Uma decisão certa sem razão escrita vale pouco. Uma decisão discutível, bem justificada, mostra que percebeste as regras.
 
-Nas consultas, escreve primeiro no caderno a consulta e os jogos que esperas que apareçam, e só depois a executas. Para as consultas, precisas do teu cluster no Atlas, criado no laboratório.
-
-O professor pode pedir-te para explicares em voz alta uma das decisões do exercício 2. Também pode pedir-te para preveres o resultado de uma consulta parecida com as desta ficha, com outros valores. É assim que se confirma que o trabalho é teu e que o percebeste.
+Para as consultas, precisas do teu cluster no Atlas, criado no laboratório. Antes de executares uma consulta, pensa nos jogos que esperas que apareçam. A consulta que dá o resultado certo vai para o ficheiro das respostas, com o número do exercício.
 
 ## O cenário: o torneio de futsal da escola
 
@@ -137,7 +135,7 @@ Os jogos da jornada 1 que se disputaram num recinto coberto.
 
 ### Exercício 6: os jogos empatados
 
-Os jogos que acabaram empatados. Se concluíres que não se consegue escrever na barra de consulta, explica porquê e responde à mão, olhando para os nove documentos.
+Os jogos que acabaram empatados. Se concluíres que não se consegue escrever na barra de consulta, explica porquê e encontra-os tu, nos nove documentos.
 
 ### Exercício 7: a equipa da casa do 10.º ano
 
@@ -147,7 +145,7 @@ Os jogos em que a equipa da casa foi uma turma do 10.º ano. Escreve-o com um s�
 
 É o último exercício obrigatório, e o único em que vais aprender sozinho um operador que o guia não ensina.
 
-Todos os jogos do 10.º A, tanto em casa como fora. Com os operadores do guia não consegues. O operador que usaste no exercício 7 também não serve. Explica porquê. Depois lê a [página do operador `$or`](https://www.mongodb.com/docs/manual/reference/operator/query/or/), na documentação oficial da MongoDB, e escreve o filtro. Executa-o e confirma o número de documentos.
+Todos os jogos do 10.º A, tanto em casa como fora. Com os operadores do guia não consegues, e o operador que usaste no exercício 7 também não serve. Explica porquê. O filtro escreve-se com o operador `$or`, que aprendes na [página do operador `$or`](https://www.mongodb.com/docs/manual/reference/operator/query/or/), na documentação oficial da MongoDB.
 
 A página está em inglês. Não precisas de a ler toda. Procura nela a forma do filtro e um exemplo, e compara-os com os filtros que já escreveste.
 
@@ -170,13 +168,13 @@ Se quiseres ver todos os operadores de comparação, vê a página dos [operador
 
 ## Desafio opcional
 
-A comissão quer a classificação do torneio: cada vitória vale 3 pontos, cada empate vale 1 ponto e cada derrota vale 0. Com os nove jogos da coleção, calcula à mão os pontos de cada uma das seis equipas e faz a tabela da classificação. Se duas equipas tiverem os mesmos pontos, ficam empatadas na tabela. Depois explica porque é que esta pergunta não se responde com uma consulta na barra do Atlas. Mais à frente no módulo vais aprender a fazer este tipo de cálculo no código.
+A comissão quer a classificação do torneio: cada vitória vale 3 pontos, cada empate vale 1 ponto e cada derrota vale 0. Com os nove jogos da coleção, calcula tu os pontos de cada uma das seis equipas e faz a tabela da classificação, no ficheiro das respostas. Se duas equipas tiverem os mesmos pontos, ficam empatadas na tabela. Explica também porque é que esta pergunta não se responde com uma consulta na barra do Atlas. Mais à frente no módulo vais aprender a fazer este tipo de cálculo no código.
 
 ## Para ires mais longe
 
 Estes exercícios são opcionais. Faz-os depois da parte obrigatória, pela ordem que quiseres.
 
-O exercício 9 leva o teu modelo até ao fim. Escreves os documentos tal como a aplicação os guardaria. Os exercícios 10 a 13 são consultas do mesmo tipo das do laboratório, agora com os jogos do torneio. São bons para treinar se alguma dessas consultas te correu mal no laboratório. Usam a mesma coleção `jogos` da base `torneio`, e a regra é a mesma. Escreve primeiro a consulta e os jogos que esperas, e só depois executa. O exercício 14 leva o método do guia a uma aplicação tua.
+O exercício 9 leva o teu modelo até ao fim. Escreves os documentos tal como a aplicação os guardaria. Os exercícios 10 a 13 são consultas do mesmo tipo das do laboratório, agora com os jogos do torneio. São bons para treinar se alguma dessas consultas te correu mal no laboratório. Usam a mesma coleção `jogos` da base `torneio`, e trabalhas como nos exercícios 5 a 8. O exercício 14 leva o método do guia a uma aplicação tua.
 
 ### Exercício 9: os documentos do teu modelo
 
@@ -204,7 +202,7 @@ Pensa numa aplicação que gostavas de fazer e que guarde dados, por exemplo a d
 
 ## Critérios de conclusão
 
-- Os exercícios 1 a 8 estão feitos, com o número de cada um.
+- Os exercícios 1 a 8 estão no teu ficheiro das respostas, com o número de cada um, incluindo as consultas que deram o resultado certo.
 - Cada decisão do exercício 2 tem uma justificação escrita, com as regras do guia.
 - O teu modelo responde às cinco perguntas da comissão, como mostra a tabela do exercício 4.
 - Cada exercício dá o número de jogos desta tabela. Se o teu número for diferente, procura a causa antes de passares à frente. Os enganos mais comuns estão na secção "Erros frequentes" do guia.
@@ -225,6 +223,6 @@ Pensa numa aplicação que gostavas de fazer e que guarde dados, por exemplo a d
 
 1. Que decisão do exercício 2 te custou mais a justificar, e porquê?
 2. Em que consulta o resultado foi diferente do que previste? Qual foi a causa?
-3. Conseguias explicar a um colega a diferença entre a cópia do preço numa venda e o total de golos de um jogador?
+3. Consegues explicar, por palavras tuas, a diferença entre a cópia do preço numa venda e o total de golos de um jogador?
 
 ![Rodapé](../../imagens/rodape.png)
