@@ -2,386 +2,197 @@
 
 # Laboratório: arquitetura e setup Node
 
-Laboratório do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. Vais desenhar o servidor da papelaria e preparar, no teu computador, o projeto da API: a pasta, os scripts, a configuração num `.env`, o `.gitignore` e o primeiro commit. No fim, traças um pedido do browser até à API e de volta. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../03-arquitetura-e-setup-node.md) tem a teoria completa, para quem quiser saber mais.
+Laboratório do tema Arquitetura e setup Node, do módulo M14, Acesso a Bases de Dados. É o passo 1 do jogo Fechado na escola, o projeto que vais construir, um passo de cada vez, nos laboratórios de Linguagens de Programação e de Sistemas de Informação. Começas numa pasta vazia e acabas com as cenas do jogo no MongoDB Atlas, uma API que as mostra e o primeiro commit. Cada passo diz o que fazer, porquê e o que deves ver. Avanças ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte. Tudo o que precisas está aqui; o [guia do tema](../03-arquitetura-e-setup-node.md) tem a teoria completa, para quem quiser saber mais.
+
+Quase tudo o que vais fazer já o fizeste no cinema da escola, noutro projeto: o `npm init`, os scripts, a ligação com o Mongoose, o modelo e o seed. O laboratório dá também por sabido o HTTP de Sistemas de Informação: o pedido e a resposta, os códigos de estado, os parâmetros de rota e o middleware. Por isso, cada passo explica pouco e pede-te muitas previsões. Prevês de cabeça, corres e comparas com o que o laboratório diz que deves ver.
 
 ## O que vais construir
 
-O projeto `papelaria-api`, guardado no Git, com uma API que responde em `/api/estado`, e a configuração fora do código. No fim, a pasta fica assim:
+Fechado na escola é um jogo de aventura por escolhas. Adormeceste a estudar na biblioteca e acordas às 22:40, com a escola fechada e às escuras. Cada cena conta um bocado da história e dá-te uma, duas ou três escolhas. Cada escolha leva a outra cena, até chegares a um final: ou sais da escola, ou alguém te encontra lá dentro.
+
+Cada cena é um documento do MongoDB, com as escolhas lá dentro. Neste passo, o jogo ainda não tem páginas. As onze cenas ficam no teu cluster do Atlas, e a API responde com elas em JSON, no browser. No fim, a pasta do projeto fica assim:
 
 ```text
-papelaria-api/
-├── .env                 a configuração deste computador; nunca vai para o Git
+fechado-na-escola/
+├── .env                 a configuração deste computador, com a palavra-passe; nunca vai para o Git
 ├── .env.example         os nomes da configuração, sem segredos; vai para o Git
 ├── .gitignore           o que o Git deve ignorar
 ├── package.json
 ├── package-lock.json
 ├── node_modules/        recria-se com npm install; nunca vai para o Git
 └── src/
-    └── server.js        o arranque da API
+    ├── server.js        a API, com as rotas das cenas
+    ├── seed.js          as onze cenas, que se põem na base
+    ├── db/
+    │   └── mongoose.js  a ligação ao Atlas
+    └── models/
+        └── cena.model.js  o modelo das cenas
 ```
 
-Em papel, fica o plano do servidor, desenhado por ti: as três partes da aplicação e as camadas da API. Ficas a saber preparar um projeto Node que se pode entregar e instalar noutro computador, sem segredos no Git.
+Ficas a saber preparar, de raiz, um projeto Node que se guarda no Git e se instala noutro computador sem levar a palavra-passe. E ficas a saber explicar um pedido do browser até à base de dados e de volta.
 
 | Fase | O que muda | O que funciona no fim |
 | --- | --- | --- |
-| 1 | O diagrama das três partes e das camadas, em papel | O plano do servidor, desenhado |
-| 2 | A pasta, o Express e os scripts do `package.json` | O `npm run` mostra os scripts `start` e `dev` |
-| 3 | O `src/server.js`, com a rota de estado | A API responde em `/api/estado` |
-| 4 | O `.env` e o `.env.example` | O `npm run dev` arranca a API com a configuração do `.env` |
-| 5 | A porta, mudada no `.env` com a API ligada | A API muda de porta sem mexer no código |
-| 6 | O `.gitignore` e o primeiro commit | O projeto no Git, sem o `.env` nem a `node_modules` |
-| 7 | O traçado do pedido de estado | Cada passo do pedido, confirmado no separador Rede |
+| Preparar o projeto | A pasta, o npm e o `package.json` | O `npm run` mostra os três scripts |
+| 1 | O `.env`, o `.env.example`, o Git e o `.gitignore` | O Git vê o projeto, sem o `.env` nem a `node_modules` |
+| 2 | A cadeia de ligação, a ligação, o modelo e o seed | As onze cenas no Atlas |
+| 3 | O `src/server.js` | A API responde com as cenas, e jogas uma partida no browser |
+| 4 | Nada: segues um pedido no browser e no terminal | O pedido de uma cena, explicado passo a passo |
+| 5 | O primeiro commit | O projeto no Git, sem a palavra-passe |
+
+O passo 2, no tema seguinte, parte deste projeto. Divide a API em camadas e acrescenta a rota que leva de uma escolha à cena seguinte.
 
 ## Palavras que vais usar
 
-- Cliente: a parte da aplicação que o utilizador vê e usa; aqui, a interface em React, que corre no browser.
-- API: o servidor em Node.js com Express, por onde o React usa a aplicação. Para saber mais, vê a secção "A tua aplicação tem três partes" do [guia](../03-arquitetura-e-setup-node.md).
-- Mongoose: a biblioteca de JavaScript com que a API vai falar com o MongoDB Atlas, mais à frente.
-- Cadeia de ligação: o endereço que leva a API ao Atlas, começado por `mongodb+srv://`, com o utilizador e a palavra-passe da base de dados lá dentro. É um segredo.
-- Camada: uma parte do servidor com uma só responsabilidade. A API tem quatro: rotas, controller (controlador), service (serviço) e repository (repositório).
-- Rota de estado: uma rota que só responde que a API está ligada, como `GET /api/estado`.
-- Script: um nome curto para um comando, na secção `scripts` do `package.json`.
-- Variável de ambiente: um par nome e valor que o programa recebe quando arranca, e que se lê em `process.env`.
-- `.env`: o ficheiro com as variáveis de ambiente deste computador; nunca vai para o Git.
-- `.env.example`: o ficheiro com os nomes das variáveis, sem segredos; vai para o Git.
-- `.gitignore`: o ficheiro que diz ao Git o que ignorar.
-- Git e commit: o Git guarda o histórico do projeto; um commit é uma fotografia dos ficheiros, guardada com uma mensagem e a data. Para saber mais, vê a secção "O mínimo de Git" do [guia](../03-arquitetura-e-setup-node.md).
-- Repositório: a pasta de um projeto com o histórico do Git, guardado na pasta escondida `.git`; em inglês, repository, a palavra que o Git escreve no ecrã. Não é a camada repository do servidor. A palavra é a mesma, as coisas são diferentes.
+- `package.json`: a ficha de identidade do projeto, com o nome, os pacotes de que precisa e os scripts.
+- Script: um nome curto para um comando, na secção `scripts` do `package.json`. Corre-se com `npm run` seguido do nome, como `npm run dev`. Para saber mais, vê a secção "Preparar um projeto Node" do [guia](../03-arquitetura-e-setup-node.md).
+- Variável de ambiente: um par nome e valor que o programa recebe quando arranca, e que o código lê em `process.env`, como `process.env.PORT`.
+- `.env`: o ficheiro com as variáveis de ambiente deste computador, uma por linha, como `PORT=3000`. Pode ter segredos, por isso nunca vai para o Git. Para saber mais, vê a secção "Configuração fora do código: o .env" do [guia](../03-arquitetura-e-setup-node.md).
+- `.env.example`: os mesmos nomes do `.env`, sem segredos e com comentários. Vai para o Git, para quem descarregar o projeto saber o que tem de configurar.
+- Cadeia de ligação: o endereço que leva o servidor ao teu cluster no Atlas, começado por `mongodb+srv://`. Tem lá dentro o utilizador e a palavra-passe da base de dados, e por isso é um segredo.
+- Mongoose: a biblioteca de JavaScript com que o servidor fala com o MongoDB.
+- Schema e modelo: o schema descreve, campo a campo, a forma dos documentos de uma coleção. O modelo, feito a partir do schema, é o que o código usa para ler e escrever nessa coleção.
+- Documento embutido: um documento guardado dentro de outro, como cada escolha dentro da sua cena. Para saber mais, vê a secção "A informação relacionada embute-se ou referencia-se" do [guia do tema 02](../02-modelo-documental-e-consultas-no-atlas.md).
+- Seed: um programa que põe na base os dados de que a aplicação precisa para começar. Em inglês, seed quer dizer semente.
+- API: o servidor que responde aos pedidos com dados, em JSON, e não com páginas.
+- Rota de estado: uma rota que só responde que o servidor está ligado, como `GET /api/estado`.
+- Parâmetro de rota: a parte variável de um caminho, como o `:codigo` em `/api/cenas/:codigo`. O código lê-a em `req.params`.
+- Middleware: uma função por onde passam os pedidos, pela ordem em que está escrita no ficheiro. Pode responder ao pedido, ou passá-lo à frente com `next()`.
+- Git e commit: o Git guarda o histórico do projeto. Um commit é uma fotografia dos ficheiros, guardada com uma mensagem e a data. Para saber mais, vê a secção "O mínimo de Git" do [guia](../03-arquitetura-e-setup-node.md).
+- `.gitignore`: o ficheiro que diz ao Git o que ignorar. Para saber mais, vê a secção "O que vai para o Git: o .gitignore" do [guia](../03-arquitetura-e-setup-node.md).
+- Repositório: a pasta de um projeto com o histórico do Git, guardado na pasta escondida `.git`. Em inglês é repository, a palavra que o Git escreve no ecrã.
 
 ## O que precisas
 
-- O Node.js, que corre a API. Confirma que o tens com `node --version`; deve aparecer um número de versão começado por `v`, como `v26.11.1`, a versão com que este laboratório foi ensaiado. O primeiro número tem de ser 22 ou maior, porque as opções que o laboratório usa precisam do Node 22 ou mais recente.
-- O npm, que vem com o Node e instala o Express. Confirma com `npm --version`; deve aparecer um número de versão, como `11.20.0`.
+- O Node.js, que corre o servidor e o seed. Confirma que o tens com `node --version`. Deve aparecer um número de versão começado por `v`, como `v26.11.1`, a versão com que este laboratório foi ensaiado. O primeiro número tem de ser 22 ou maior, porque as opções dos scripts precisam dele.
+- O npm, que vem com o Node e instala os pacotes. Confirma com `npm --version`; deve aparecer um número de versão, como `11.20.0`.
 - O Git, que guarda o histórico do projeto. Confirma com `git --version`; deve aparecer `git version` seguido de um número. Se disser que o comando não existe, chama o professor.
-- Um editor de código, como o Visual Studio Code, e um terminal. No Visual Studio Code, abre o terminal no menu "Terminal", com "New Terminal" ("Novo Terminal", se o editor estiver em português).
-- Internet, só para o `npm install`.
-- O browser, com as ferramentas de programador: abrem-se com F12, e o separador "Rede" (ou "Network") mostra cada pedido.
-- Papel, para desenhares o plano do servidor, na fase 1.
+- O Visual Studio Code, ou outro editor de código, com um terminal. No Visual Studio Code, o terminal abre-se no menu "Terminal", com "New Terminal" ("Novo Terminal", com o editor em português).
+- A tua conta no MongoDB Atlas, com o cluster e o utilizador da base de dados que criaste na fase 1 do [laboratório do tema 02](02-modelo-documental-e-consultas-no-atlas-laboratorio.md). Precisas também da palavra-passe desse utilizador. O Atlas só aceita ligações dos endereços IP autorizados. Na escola, é o que autorizaste nessa fase. Para trabalhares em casa, acrescentas o endereço de casa na lista de acesso por endereço IP, na secção de segurança do menu lateral.
+- Internet, para o `npm install` e, da fase 2 em diante, para o Atlas.
+- O browser, com as ferramentas de programador, que se abrem com F12, ou com Cmd+Option+I no Mac. O separador "Rede" ("Network", com o browser em inglês) mostra cada pedido.
 
 ## Se alguma coisa falhar
 
-1. Estás na pasta certa? No terminal, `pwd` mostra a pasta atual (no Windows, na linha de comandos clássica, `cd`, sem mais nada). Tem de ser a `papelaria-api`, onde está o `package.json`. Se não for, entra nela com `cd papelaria-api`.
-2. Guardaste o ficheiro? O editor só grava quando guardas, e o `--watch` só reinicia a API depois de guardares.
-3. A API está ligada? O terminal tem de mostrar `API a correr em http://localhost:3000`. Se a paraste com Ctrl+C, arranca-a outra vez.
-4. O que diz a mensagem de erro? Lê-a como em Sistemas de Informação. Procura primeiro a linha que diz o tipo do erro, como `Error` ou `SyntaxError`, ou a que começa por `node:` ou por `npm error`. A última linha é muitas vezes só a versão do Node, ou o aviso do `--watch` de que está à espera. Os casos mais comuns estão nos [problemas frequentes](#problemas-frequentes).
+1. Estás na pasta certa? No terminal, `pwd` mostra a pasta atual (no Windows, na linha de comandos clássica, `cd`, sem mais nada). Tem de ser a `fechado-na-escola`, onde está o `package.json`. Se não for, entra nela com `cd fechado-na-escola`.
+2. Guardaste o ficheiro? O editor só grava quando guardas, e o `--watch` só volta a arrancar o servidor depois de guardares.
+3. O servidor está ligado? O terminal tem de mostrar `Fechado na escola em http://localhost:3000`. Se o paraste com Ctrl+C, arranca-o outra vez com `npm run dev`.
+4. O que diz a mensagem de erro? Procura primeiro a linha que diz o tipo do erro, ou a que começa por `node:` ou por `npm error`. Os casos mais comuns estão nos [problemas frequentes](#problemas-frequentes).
+5. O ficheiro está igual ao do laboratório? Neste laboratório, cada ficheiro escreve-se uma só vez, completo. A pasta [fechado-na-escola-passo-01](../../exemplos/acesso-a-dados/fechado-na-escola-passo-01/README.md), nos exemplos, tem todos os ficheiros como devem ficar. Compara com ela o ficheiro que falha.
 
-## Se vens da API da papelaria de Sistemas de Informação
+## Preparar o projeto
 
-Em Sistemas de Informação, no laboratório "a API da papelaria", criaste uma pasta `papelaria-api`, com o `package.json` e o Express instalado. O `server.js` tem os oito artigos, a rota da lista com o filtro por categoria, a rota de detalhe, o middleware de registo e o middleware final. É um servidor de um só ficheiro, que chegou para a aula. Este laboratório transforma-o num projeto, sem lhe mudar nenhuma resposta.
+1. Cria a pasta do projeto e abre-a no editor. Na tua pasta de trabalho de Linguagens de Programação, cria uma pasta chamada `fechado-na-escola`. Tem de ficar fora de qualquer outro projeto, e também fora da pasta dos materiais da disciplina, que tem o seu próprio Git. Abre-a no Visual Studio Code, no menu "File", com "Open Folder" ("Ficheiro", "Abrir Pasta"). Depois abre o terminal, que fica já dentro da pasta, e confirma com `pwd` (no Windows, na linha de comandos clássica, `cd`).
 
-A fase 1 faz-se como está, em papel. As fases 2 e 3 fazem-se pelos passos desta secção, em vez dos que estão nelas, porque o projeto já existe. As fases 4 a 7 fazem-se como estão, com as diferenças que esta secção indica no fim. Quem não fez essa API em Sistemas de Informação, ou não a tem, segue o caminho normal.
+   O que deves ver: o caminho da pasta, a acabar em `fechado-na-escola`. O nome da pasta conta, porque o npm vai dá-lo ao projeto.
 
-### Fase 2, no teu projeto: a pasta src e os scripts
+2. Cria o projeto e instala os dois pacotes. Antes de correres, prevê: que ficheiros e pastas vão aparecer na pasta?
 
-1. Abre no editor a pasta `papelaria-api` de Sistemas de Informação. Confirma que tem o `package.json`, o `package-lock.json`, a pasta `node_modules` e o `server.js`. Se a trouxeste de outro computador sem a `node_modules`, corre `npm install` dentro da pasta. O npm lê o `package.json` e volta a instalar o Express.
+   ```bash
+   npm init -y
+   npm install express mongoose
+   ```
 
-2. Cria a pasta `src` na raiz do projeto, ao lado do `package.json`, e muda o `server.js` para dentro dela. No Visual Studio Code, basta arrastá-lo para a pasta `src`. A partir daqui, o código vive em `src`, e a configuração e os ficheiros do npm ficam na raiz.
+   O que deves ver: o `npm init -y` escreve `Wrote to`, o caminho do `package.json` que criou e o conteúdo dele. O `npm install` escreve várias linhas, e pelo meio aparece uma como `added 83 packages, and audited 84 packages in 3s`. As linhas do `funding` e o `found 0 vulnerabilities` podem ignorar-se. Na pasta, aparecem o `package.json`, que é do `npm init`, e a `node_modules` e o `package-lock.json`, que são do `npm install`. O Express é o servidor, e o Mongoose fala com o MongoDB. Os comandos são os mesmos no Windows.
 
-3. No `package.json`, o `"type"` já está em `module`, desde Sistemas de Informação. Substitui a secção `"scripts"`, que tem o `"test"`, por esta:
+3. Abre o `package.json` e substitui o conteúdo todo por este:
 
    ```json
-   "scripts": {
-     "start": "node src/server.js",
-     "dev": "node --watch --env-file=.env src/server.js"
-   },
-   ```
-
-   A vírgula no fim mantém-se, porque há outras secções a seguir. O `start` arranca a API; o `dev` arranca-a para desenvolver, como explica a fase 2.
-
-4. Guarda e, no terminal, escreve `npm run`, sem mais nada. O que deves ver: a lista dos scripts, com o `start` e o `dev`, como na fase 2. Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos. A mensagem diz a linha e a coluna.
-
-5. Em Sistemas de Informação arrancavas o servidor com `node --watch server.js`. Prevê: se escreveres esse mesmo comando agora, na raiz do projeto, o que acontece? Experimenta, e depois sai com Ctrl+C.
-
-   O que deves ver: `Error: Cannot find module` seguido do caminho de um `server.js` na raiz, que já não existe, porque o ficheiro passou para `src`. Com o `--watch`, o Node não termina. Escreve `Failed running 'server.js'. Waiting for file changes before restarting...` e fica à espera. É para isto que servem os scripts: o caminho do arranque fica escrito uma vez, no `package.json`, e ninguém tem de o saber de cor.
-
-### Fase 3, no teu projeto: a porta e a rota de estado
-
-1. Abre o `src/server.js`. A porta está escrita no código, na linha `const PORTA = 3000;`. Substitui essa linha por estas três:
-
-   ```js
-   // A porta vem do ambiente: em desenvolvimento, do ficheiro .env.
-   // Se não estiver definida, a API usa a 3000.
-   const PORTA = process.env.PORT || 3000;
-   ```
-
-   Leitura guiada: `process.env.PORT` é o valor da variável de ambiente `PORT`, se existir. Se não existir, o `||` faz a constante ficar com 3000. A fase 4 explica de onde vêm as variáveis de ambiente.
-
-2. Acrescenta a rota de estado logo a seguir ao middleware de registo, e antes das rotas dos artigos:
-
-   ```js
-   // Rota de estado: serve para confirmar que a API está ligada e a responder.
-   // Responde em JSON, como todas as rotas de uma API.
-   app.get("/api/estado", (req, res) => {
-     res.json({ estado: "ok", aplicacao: "API da papelaria" });
-   });
-   ```
-
-   Antes de a escreveres, pensa: o que aconteceria se a escrevesses no fim do ficheiro, depois do middleware final?
-
-   A resposta: a rota nunca respondia. O middleware final responde a todos os pedidos que lhe chegam e não chama `next()`, por isso `/api/estado` dava 404, com `{"erro":"Rota não encontrada"}`. É a regra da ordem do middleware, que viste em Sistemas de Informação. Os pedidos passam pela fila de cima para baixo.
-
-3. Arranca a API com o script `start`:
-
-   ```bash
-   npm start
-   ```
-
-   O que deves ver: as duas linhas do npm (`> papelaria-api@1.0.0 start` e o comando) e depois `API a correr em http://localhost:3000`.
-
-4. No browser, abre `http://localhost:3000/api/estado` e depois `http://localhost:3000/api/artigos?categoria=Papel`. O que deves ver: o objeto com `"estado": "ok"` e, a seguir, os três artigos da categoria Papel, como em Sistemas de Informação. No terminal, o middleware de registo escreve uma linha por pedido, como `GET /api/estado`.
-
-5. Para a API com Ctrl+C. Pensa: não há nenhum ficheiro `.env`, e a API arrancou na porta 3000. De onde veio o 3000? A resposta: do `||` no código. Sem `.env` lido, `process.env.PORT` não existe, e a constante fica com o valor da direita.
-
-### As fases 4 a 7 no teu projeto
-
-- Fases 4 e 5: fazem-se como estão. No terminal aparecem também as linhas do middleware de registo, uma por pedido.
-- Fase 6: faz-se como está. Se o teu `.env` já tem a cadeia de ligação verdadeira, porque já ligaste a API ao Atlas, o passo 4 é o mais importante do laboratório. Só fazes o `git add` depois de confirmares que o `.env` desapareceu da lista. No passo 6, a mensagem do commit diz o que o teu projeto tem, por exemplo `API da papelaria organizada como projeto, com a rota /api/estado`.
-- Fase 7: os passos 1 a 4 fazem-se como estão. No passo 4, o passo 3 da tabela tem, no teu projeto, duas funções: o middleware de registo, que escreve `GET /api/estado` no terminal, e depois a rota de estado. O passo 5 muda, porque no teu projeto a rota `/api/artigos` já existe. Em vez dele, abre `http://localhost:3000/api/artigos/abc`. Que código e que mensagem recebes? Que linha do `src/server.js` escolheu esse código?
-
-  A resposta: 400, com `{"erro":"O identificador do artigo tem de ser um número inteiro positivo"}`. Escolheu-o o `res.status(400)` da rota de detalhe, dentro da verificação `if (!Number.isInteger(id) || id < 1)`, porque `abc` não é um número. Também aqui o middleware de registo corre antes da rota.
-
-## Fase 1: o plano do servidor, em papel
-
-A aplicação da papelaria vai ter três partes, e cada uma corre num sítio diferente. O cliente, em React, corre no browser. Mostra os dados e, quando precisa deles, pede-os à API com `fetch`. A API, em Node.js com Express, corre num servidor, que enquanto desenvolves é o teu computador. Recebe os pedidos, aplica as regras da papelaria, fala com a base de dados e responde em JSON. A base de dados é o MongoDB Atlas, que já conheces.
-
-Entre o React e a API, a conversa é em HTTP, com JSON. Entre a API e o Atlas, é feita pelo Mongoose, que precisa da cadeia de ligação, com a palavra-passe da base de dados. Essa cadeia fica só na API. Tudo o que vai para o browser pode ser lido por quem abrir as ferramentas de programador.
-
-Dentro da API, cada pedido atravessa quatro camadas, sempre pela mesma ordem. As rotas dizem que método e que caminho vão para que função. O controller lê o pedido, converte o que chega como texto, chama o service, escolhe o código de estado e responde. O service tem as regras da papelaria e não sabe nada de HTTP. O repository é o único que fala com o MongoDB. Dividir assim põe cada mudança num sítio só. Para saber mais, lê as secções "A tua aplicação tem três partes" e "As camadas dentro do servidor" do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Desenha as três partes da aplicação da papelaria: o React, a API e o MongoDB Atlas. Em cada seta, escreve o que viaja: "HTTP com JSON" ou "Mongoose". Assinala com um círculo o único sítio onde a cadeia de ligação ao Atlas existe.
-
-   O que deves ter no desenho: o círculo na API, e não na seta nem no React.
-
-2. Desenha as quatro camadas da API para o pedido `GET /api/artigos?stockMaximo=5`, que pede os artigos com 5 unidades ou menos. Ao lado de cada camada, escreve o que faz neste pedido.
-
-   O que deves ter no desenho:
-
-   | Camada | O que faz neste pedido |
-   | --- | --- |
-   | Rotas | Vê que é `GET /api/artigos` e passa o pedido à função do controller que lista artigos |
-   | Controller | Lê `stockMaximo`, que chega como texto, `"5"`, e converte-o para o número 5. Se não for um número válido, responde 400. Se for, chama o service |
-   | Service | Pede ao repository os artigos com stock até ao limite |
-   | Repository | Executa no Atlas a consulta `{ stock: { $lte: 5 } }` na coleção `artigos` e devolve os documentos |
-   | Service | Devolve a lista ao controller |
-   | Controller | Responde 200 com a lista em JSON |
-
-3. Agora, um pedido diferente: `GET /api/valor-do-stock`. A interface quer mostrar quanto vale, em dinheiro, tudo o que a papelaria tem em loja. Para cada artigo, conta-se o stock vezes o preço, e no fim somam-se todos. Desenha as mesmas quatro camadas para este pedido. Depois, pensa em cada pergunta antes de leres a resposta.
-
-   - Em que camada se faz a conta? O que é que a camada de baixo lhe entrega para a poder fazer?
-
-     A resposta: no service, porque é uma conta da papelaria, que não depende de HTTP nem do MongoDB. O repository vai buscar ao Atlas os artigos, ou só o stock e o preço de cada um, e entrega-os ao service, que multiplica e soma.
-
-   - Os preços estão guardados em cêntimos. A API responde com o valor em cêntimos ou em euros? E, se o ecrã tiver de mostrar o valor escrito como "80,65 €", em que parte da aplicação se faz essa transformação: na API ou no React?
-
-     A resposta: a API responde em cêntimos, um número inteiro, como todos os preços da aplicação. A transformação no texto do ecrã é do React. A API entrega dados, e quem os mostra é o cliente. Assim, o React também pode usar o valor em cêntimos noutras contas.
-
-   - Se a papelaria ainda não tiver nenhum artigo, que código e que valor deve ter a resposta? Que camada chega a esse valor, e que camada escolhe o código?
-
-     A resposta: 200, com o valor 0. O service chega ao 0, porque a soma de nenhum artigo é 0. O controller responde 200, porque o pedido estava certo e a resposta existe. Não é 404. O valor do stock existe, e é zero, tal como uma lista sem resultados é uma lista vazia, e não uma coisa que não existe.
-
-   - Este pedido não tem parâmetros. Há algum caso em que deva responder 400? Porquê?
-
-     A resposta: não. O 400 quer dizer que o pedido está mal feito, e um pedido sem parâmetros não tem nada que possa estar mal. Só pode correr mal do lado do servidor, por exemplo se o Atlas não responder, e isso não é culpa de quem pediu.
-
-### Paragem 1
-
-Tens desenhados o diagrama das três partes e os dois diagramas de camadas. São uma das duas coisas que este tema te pede para entregar.
-
-Pensa antes de continuares: porque é que o repository é a única camada que fala com o MongoDB? A resposta: para a base de dados ficar num sítio só. Se a papelaria trocar o MongoDB por outra base de dados, muda-se o repository, e as rotas, os controllers e os services ficam iguais. E uma consulta que não encontra nada procura-se num sítio só.
-
-## Fase 2: a pasta e o package.json
-
-Em Sistemas de Informação, um servidor de aula começava com `npm init -y`, a troca do `"type"` e `npm install express`. Um projeto que vai crescer durante o ano, e que vais entregar e instalar noutro computador, precisa de mais arrumação. O código fica numa pasta `src` (de *source*, código-fonte). E o `package.json` ganha scripts: nomes curtos para os comandos que arrancam a API, para ninguém ter de os saber de cor. Para saber mais, lê a secção "Preparar um projeto Node" do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Na tua pasta de trabalho de Linguagens de Programação, cria o projeto e instala o Express. Cria-o fora da pasta dos materiais da disciplina, se a tiveres no computador. Essa pasta já tem o seu próprio histórico do Git.
-
-   ```bash
-   mkdir papelaria-api
-   cd papelaria-api
-   npm init -y
-   npm install express
-   mkdir src
-   ```
-
-   O que deves ver: o `npm init -y` escreve o `package.json` que criou, e o `npm install express` mostra uma linha como `added 65 packages`. Os comandos são os mesmos no Windows.
-
-2. Abre a pasta `papelaria-api` no editor. No `package.json`, faz duas alterações:
-
-   - na linha do `"type"`, muda só a palavra `commonjs` para `module`, para o Node aceitar o `import`;
-   - substitui a secção `"scripts"`, que tem o `"test"`, por esta:
-
-     ```json
+   {
+     "name": "fechado-na-escola",
+     "version": "1.0.0",
+     "description": "Fechado na escola: um jogo de aventura em que cada cena conta um bocado da história e o jogador escolhe o que fazer.",
+     "main": "src/server.js",
      "scripts": {
        "start": "node src/server.js",
-       "dev": "node --watch --env-file=.env src/server.js"
+       "dev": "node --watch --env-file=.env src/server.js",
+       "seed": "node --env-file=.env src/seed.js"
      },
-     ```
+     "keywords": [],
+     "author": "",
+     "license": "ISC",
+     "type": "module",
+     "dependencies": {
+       "express": "^5.3.0",
+       "mongoose": "^9.11.4"
+     }
+   }
+   ```
 
-     A vírgula no fim mantém-se, porque há outras secções a seguir.
+   Leitura guiada: compara-o com o que o `npm init -y` escreveu. Mudaram quatro coisas. A `description` diz o que é o projeto. O `main` diz qual é o ficheiro principal, que vai ser o `src/server.js`. O `"type": "module"` deixa usar o `import` e o `export`. E o `test`, que só dava erro, deu lugar a três scripts. O `start` é o arranque noutro computador, onde a configuração vem do sistema. O `dev` é o que usas enquanto desenvolves: lê o `.env`, com o `--env-file`, e volta a arrancar o servidor sempre que guardas um ficheiro, com o `--watch`. O `seed` põe as cenas na base, também com o `.env`. A secção `dependencies` escreveu-a o `npm install`.
 
-   Leitura guiada: o `start` arranca a API, e é o comando que se usa quando ela é instalada noutro computador para funcionar. O `dev` é o que usas enquanto desenvolves. O `--watch` reinicia a API sempre que guardas o `server.js`, um ficheiro que ele importe, ou o `.env`. O `--env-file=.env` lê o ficheiro `.env` e põe a configuração que lá está à disposição do código, como explica a fase 4.
-
-3. Guarda e, no terminal, escreve `npm run`, sem mais nada.
+4. Guarda e, no terminal, escreve `npm run`, sem mais nada.
 
    O que deves ver:
 
    ```text
-   Lifecycle scripts included in papelaria-api@1.0.0:
+   Lifecycle scripts included in fechado-na-escola@1.0.0:
      start
        node src/server.js
    available via `npm run`:
      dev
        node --watch --env-file=.env src/server.js
+     seed
+       node --env-file=.env src/seed.js
    ```
 
-   Se o npm se queixar do JSON (`EJSONPARSE`), há uma vírgula ou uma aspa a mais ou a menos no `package.json`. A mensagem diz a linha e a coluna.
+   Isto quer dizer que o npm leu o `package.json` e encontrou os três scripts. O `start` aparece à parte porque é um nome que o npm já conhece, e por isso corre-se também com `npm start`, sem o `run`. Se o npm escrever um erro sobre o `package.json`, volta a copiar o bloco inteiro: falta-lhe ou sobra-lhe algum carácter.
 
-### Paragem 2
+## Fase 1: o segredo fora do Git
 
-O `package.json` tem o `"type": "module"` e os dois scripts, e o `npm run` mostra-os.
+Daqui a pouco, o `.env` vai ter a palavra-passe da tua base de dados. O Git guarda o que lhe pedires, e um `git add .` pede-lhe tudo o que está na pasta. Por isso, num projeto novo, a primeira coisa a fazer é dizer ao Git o que ele nunca deve guardar, no `.gitignore`, e confirmar no `git status` que ele obedece. Nesta fase fazes isso enquanto o `.env` ainda não tem segredo nenhum. Assim, vês o perigo sem correr nenhum risco. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](../03-arquitetura-e-setup-node.md).
 
-Pensa antes de continuares: porque é que o `start` aparece numa parte da lista e o `dev` noutra? A resposta: o `start` é um dos poucos scripts que o npm conhece pelo nome, e corre-se com `npm start`, sem o `run`. Todos os outros, como o `dev`, correm-se com `npm run`, seguido do nome.
-
-## Fase 3: o servidor e o primeiro arranque
-
-Há valores de que a API precisa que não são código, como a porta onde escuta. Se a porta estiver escrita no código, mudá-la obriga a mudar o código. Por isso o servidor lê-a do ambiente, com um valor por omissão, se não a encontrar. E a primeira rota é uma rota de estado, que só diz que a API está viva. É a forma mais rápida de confirmar que o servidor está ligado. Para saber mais, lê o passo 4 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Cria o ficheiro `src/server.js`, dentro da pasta `src`, com este conteúdo. Escreve-o em vez de o copiar, e lê cada linha:
-
-   ```js
-   // src/server.js: o ponto de arranque da API da papelaria.
-   // Lê a configuração do ambiente, cria a aplicação Express e liga-a à porta.
-   import express from "express";
-
-   // A porta vem do ambiente: em desenvolvimento, do ficheiro .env.
-   // Se não estiver definida, a API usa a 3000.
-   const PORTA = process.env.PORT || 3000;
-
-   const app = express();
-
-   // Rota de estado: serve para confirmar que a API está ligada e a responder.
-   // Responde em JSON, como todas as rotas de uma API.
-   app.get("/api/estado", (req, res) => {
-     res.json({ estado: "ok", aplicacao: "API da papelaria" });
-   });
-
-   app.listen(PORTA, (erro) => {
-     if (erro) {
-       console.error(`Não foi possível ligar a API: ${erro.message}`);
-       return;
-     }
-     console.log(`API a correr em http://localhost:${PORTA}`);
-   });
-   ```
-
-   Leitura guiada: lê o ficheiro de cima para baixo, pela ordem em que o Node o executa. Primeiro o `import` do Express. Depois a `PORTA`: `process.env.PORT` é o valor da variável de ambiente `PORT`, se existir, e o `||` usa o 3000 se não existir. A seguir, a `app` e a rota de estado, que responde com um objeto em JSON. No fim, o `app.listen`, que liga a API à porta e escreve a mensagem do arranque, ou a do erro.
-
-2. Arranca a API com o script `start`. Antes, prevê: em que porta vai ficar, se ainda não há nenhum ficheiro de configuração?
-
-   ```bash
-   npm start
-   ```
-
-   O que deves ver: as duas linhas do npm (`> papelaria-api@1.0.0 start` e o comando) e depois `API a correr em http://localhost:3000`.
-
-3. No browser, abre `http://localhost:3000/api/estado`. O que deves ver: `{"estado":"ok","aplicacao":"API da papelaria"}`. Isto quer dizer que a API está ligada e responde.
-
-4. Para a API com Ctrl+C, no terminal.
-
-### Paragem 3
-
-A API arranca com `npm start` e responde em `/api/estado`.
-
-Pensa antes de continuares: não há nenhum ficheiro `.env`, e a API arrancou na porta 3000. De onde veio o 3000? A resposta: do `||` no código. Sem nada que defina a variável `PORT`, `process.env.PORT` não existe, e a constante fica com o valor da direita.
-
-## Fase 4: a configuração no .env
-
-Cada programa, quando arranca, recebe um conjunto de pares nome e valor, as variáveis de ambiente, que se leem em `process.env`. Para não teres de as definir à mão de cada vez, escreves-as num ficheiro `.env`, na raiz do projeto, uma por linha, no formato `NOME=valor`. O `--env-file=.env` do script `dev` lê esse ficheiro quando a API arranca. O `.env` é deste computador e pode ter segredos, por isso nunca vai para o Git. Para quem descarrega o projeto saber que variáveis definir, há o `.env.example`: os mesmos nomes, sem segredos, com comentários. Esse vai para o Git. Para saber mais, lê a secção "Configuração fora do código: o .env" do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Tenta arrancar com o script de desenvolvimento. Antes, prevê: o que vai acontecer, se o `.env` ainda não existe?
-
-   ```bash
-   npm run dev
-   ```
-
-   O que deves ver: `node: .env: not found`, e a API não arranca. O `--env-file=.env` procura o ficheiro e não o encontra.
-
-2. Na raiz do projeto, ao lado do `package.json` e não dentro de `src`, cria o ficheiro `.env.example` com este conteúdo. Cria-o no editor de código. No Windows, o Bloco de Notas pode acrescentar `.txt` ao nome sem o mostrar.
+1. Na raiz do projeto, ao lado do `package.json`, cria o ficheiro `.env.example` com este conteúdo. Cria-o no editor de código, porque o Bloco de Notas do Windows pode acrescentar `.txt` ao nome sem o mostrar.
 
    ```text
-   # Porta onde a API escuta. Muda-a se a 3000 estiver ocupada.
+   # Porta onde o jogo escuta. Muda-a se a 3000 estiver ocupada.
    PORT=3000
 
    # Ligação ao MongoDB Atlas, no formato mongodb+srv://utilizador:palavra-passe@...
    # O endereço verdadeiro escreve-se só no .env. No .env.example, esta linha fica vazia.
    MONGODB_URI=
+
+   # Nome da base de dados no Atlas. A cadeia de ligação não o diz.
+   DB_NAME=fechado-na-escola
    ```
 
-   Leitura guiada: as linhas que começam por `#` são comentários. Os nomes das variáveis escrevem-se em maiúsculas, com `_` entre palavras. A `MONGODB_URI` fica vazia. A API ainda não fala com o Atlas.
+   Leitura guiada: são três variáveis, uma por linha, no formato `NOME=valor`, e as linhas que começam por `#` são comentários. A `MONGODB_URI` fica vazia, porque este ficheiro vai para o Git. O `DB_NAME` existe porque a cadeia de ligação te leva ao cluster, e um cluster pode ter várias bases de dados.
 
-3. Cria o `.env` como cópia do `.env.example`:
+2. Cria o `.env` como cópia do `.env.example`:
 
    ```bash
    cp .env.example .env
    ```
 
-   No Windows, na linha de comandos clássica, o comando é `copy .env.example .env`. Também podes criar o ficheiro no editor e copiar o conteúdo.
+   No Windows, na linha de comandos clássica, o comando é `copy .env.example .env`. O que deves ver: nenhuma mensagem, e o `.env` na lista de ficheiros do editor. Por agora, os dois ficheiros são iguais.
 
-4. Volta a correr `npm run dev`. O que deves ver: as duas linhas do npm e `API a correr em http://localhost:3000`. Agora o `.env` existe, e o Node leu-o.
-
-5. Abre o `.env` e o `.env.example` lado a lado no editor. Neste momento são iguais. Pensa: o que vai ser diferente entre os dois quando a API se ligar ao Atlas?
-
-   A resposta: o `.env` vai ter a cadeia de ligação verdadeira, com a palavra-passe, na `MONGODB_URI`. O `.env.example` continua com a linha vazia e o comentário, porque vai para o Git.
-
-### Paragem 4
-
-O projeto tem o `.env` e o `.env.example` na raiz, e o `npm run dev` arranca a API.
-
-Pensa antes de continuares: se o `.env` tiver `PORT=3001`, que valor tem `process.env.PORT` dentro da API, e de que tipo é? A resposta: `"3001"`, um texto. Os valores das variáveis de ambiente são sempre texto. Para a porta não faz diferença, porque o `app.listen` aceita as duas formas; numa conta, convertia-se com `Number(...)`.
-
-## Fase 5: mudar a configuração sem mexer no código
-
-A razão de pôr a porta no `.env` é poder mudá-la sem tocar no código. Com o `--watch`, nem é preciso parar a API. O Node vê que o `.env` mudou e reinicia-a com o valor novo. Nesta fase vês também o engano mais difícil de encontrar na configuração, porque não dá erro nenhum. Para saber mais, lê o passo 6 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Com a API ligada pelo `npm run dev`, abre o `.env`, muda `PORT=3000` para `PORT=3001` e guarda.
-
-   O que deves ver, no terminal: `Change detected in`, seguido do caminho do teu `.env`, depois `Restarting 'src/server.js'` e por fim `API a correr em http://localhost:3001`. O `--watch` viu a mudança no `.env` e reiniciou a API.
-
-2. No browser, abre `http://localhost:3000/api/estado` e depois `http://localhost:3001/api/estado`. O que deves ver: o primeiro dá "ligação recusada", e o segundo responde. Não mudaste uma única linha do `server.js`.
-
-3. Provoca um erro de propósito: no `.env`, muda o nome da variável de `PORT` para `PORTA`, para ficar `PORTA=3001`, e guarda. Antes de olhares para o terminal, prevê: em que porta fica a API?
-
-   O que deves ver: a API reinicia na porta 3000. O código lê `process.env.PORT`, e essa variável deixou de existir. A `PORTA` é outra variável, que ninguém lê. Sem `PORT`, o `||` usou o 3000. Não houve nenhuma mensagem de erro, e é isso que torna este engano difícil de encontrar.
-
-4. Repõe `PORT=3000` no `.env`, guarda e confirma que a API volta a responder em `http://localhost:3000/api/estado`.
-
-### Paragem 5
-
-A API muda de porta quando mudas o `.env`, sem mexeres no código, e volta à 3000.
-
-Pensa antes de continuares: porque é que o engano da `PORTA` é mais perigoso do que o `.env` em falta, da fase 4? A resposta: o `.env` em falta dá um erro, e a API não arranca, por isso dás logo por ele. O nome errado não dá erro nenhum. A API arranca noutra porta, e só descobres quando alguma coisa deixa de funcionar.
-
-## Fase 6: guardar no Git sem guardar segredos
-
-O Git guarda o histórico do projeto. Cada commit é uma fotografia de todos os ficheiros, com uma mensagem e a data. Antes de guardar, o Git propõe-se guardar tudo o que está na pasta. Há duas coisas que nunca devem ir. Uma é a pasta `node_modules`, que se recria com `npm install` e tem milhares de ficheiros que não são teus. A outra é o `.env`, que pode ter segredos. O ficheiro `.gitignore` diz ao Git o que ignorar, e tem de existir antes do primeiro commit. Nesta fase vais ver o `.env` a aparecer na lista do Git antes de existir o `.gitignore`. É de propósito. Segue os passos pela ordem, e não faças `git add` antes do passo 6. Para saber mais, lê as secções "O mínimo de Git" e "O que vai para o Git: o .gitignore" do [guia](../03-arquitetura-e-setup-node.md).
-
-1. Para a API com Ctrl+C. Na pasta `papelaria-api`, começa o histórico:
+3. Começa o histórico do Git nesta pasta:
 
    ```bash
    git init
    ```
 
-   O que deves ver: `Initialized empty Git repository in`, seguido do caminho da pasta. O Git criou nessa pasta um repositório vazio. O Git pode escrever antes umas linhas de sugestão (`hint`) sobre o nome do ramo principal, a que chama `branch`; podes ignorá-las.
+   O que deves ver: `Initialized empty Git repository in`, seguido do caminho da pasta e de `.git/`. O Git criou o repositório na pasta escondida `.git`. Antes disso, pode escrever umas linhas de sugestão, começadas por `hint:`, sobre o nome do ramo principal. O ramo é a linha do histórico, onde os commits ficam uns a seguir aos outros, e o principal chama-se `main` ou `master`. Podes ignorar as linhas `hint:`.
 
-2. Vê o estado da pasta:
+4. Vê o estado da pasta. Antes de correres, prevê: que ficheiros vai o Git mostrar como novos?
 
    ```bash
    git status --short
    ```
 
-   O que deves ver: uma lista com `??` à frente de cada nome, que quer dizer "ficheiro novo, que o Git ainda não segue". Na lista aparecem o `.env` e a `node_modules/`. Se fizesses agora `git add .`, o teu `.env` ia para o histórico. Não faças.
+   O que deves ver:
 
-3. Na raiz do projeto, cria o ficheiro `.gitignore` com este conteúdo, e guarda:
+   ```text
+   ?? .env
+   ?? .env.example
+   ?? node_modules/
+   ?? package-lock.json
+   ?? package.json
+   ```
+
+   O `??` quer dizer "ficheiro novo, que o Git ainda não segue". Na lista estão o `.env` e a `node_modules/`. Se fizesses agora `git add .`, os dois iam para o próximo commit, e daqui a pouco o `.env` levava a palavra-passe. Não faças nenhum `git add` antes da fase 5.
+
+5. Na raiz do projeto, cria o ficheiro `.gitignore` com este conteúdo, e guarda:
 
    ```text
    # Dependências: recriam-se com npm install.
@@ -391,82 +202,493 @@ O Git guarda o histórico do projeto. Cada commit é uma fotografia de todos os 
    .env
    ```
 
-   Leitura guiada: cada linha que não é comentário é uma regra. `node_modules/` ignora a pasta inteira, e `.env` ignora esse ficheiro. O `.env.example` não é ignorado, porque o nome é outro, e é isso que se quer.
+   Leitura guiada: cada linha que não é um comentário é uma regra. O `node_modules/` ignora a pasta inteira. O `.env` ignora esse ficheiro, e só esse: o `.env.example` tem outro nome, e por isso o Git continua a vê-lo.
 
-4. Volta a correr `git status --short`. O que deves ver: o `.env.example`, o `.gitignore`, o `package-lock.json`, o `package.json` e `src/`. O `.env` e a `node_modules/` desapareceram. Se algum dos dois ainda aparecer, para. Confirma o nome do ficheiro `.gitignore`, sem `.txt`, e a pasta onde está.
+6. Volta a correr `git status --short`. O que deves ver:
 
-5. Diz ao Git quem és, só neste projeto. Nos computadores da escola, que são partilhados, a configuração fica só nesta pasta, e não passa para quem usar o computador a seguir:
+   ```text
+   ?? .env.example
+   ?? .gitignore
+   ?? package-lock.json
+   ?? package.json
+   ```
+
+   O `.env` e a `node_modules/` desapareceram da lista, e o `.gitignore` entrou nela. O `.env` continua na pasta, e o servidor vai lê-lo. O Git é que passou a agir como se ele não existisse. Se o `.env` ou a `node_modules/` ainda aparecerem, confirma que o ficheiro se chama `.gitignore`, sem `.txt`, e que está ao lado do `package.json`.
+
+7. Diz ao Git quem és, só neste projeto, para ele pôr o teu nome em cada commit. Sem o `--global`, a configuração fica nesta pasta. Assim, nos computadores da escola, que são partilhados, não passa para quem usar o computador a seguir.
 
    ```bash
    git config user.name "O teu nome"
    git config user.email "o teu email da escola"
    ```
 
-6. Guarda o primeiro commit e confirma-o. O `git add .` prepara para o commit todos os ficheiros da pasta, menos os que o `.gitignore` manda ignorar. O `git commit -m "..."` guarda a fotografia desses ficheiros, com a mensagem que vem depois do `-m`. O `git log --oneline` lista os commits feitos, um por linha.
+   Troca o texto entre aspas pelo teu nome e pelo teu email. O que deves ver: nenhuma mensagem.
 
-   ```bash
-   git add .
-   git commit -m "Esqueleto da API da papelaria, com a rota /api/estado"
-   git log --oneline
+### Paragem 1
+
+O Git segue a pasta do projeto, e o `git status --short` não mostra o `.env` nem a `node_modules/`.
+
+Pensa antes de continuares: neste momento, o `.env.example` e o `.env` são iguais. O que vai ser diferente entre os dois no fim da fase 2? A resposta: o `.env` vai ter, na linha `MONGODB_URI=`, a cadeia de ligação do teu cluster, com a palavra-passe. O `.env.example` continua com a linha vazia, porque vai para o Git.
+
+## Fase 2: as cenas na base de dados
+
+Cada cena do jogo é um documento da coleção `cenas`, com o código que a identifica, como `corredor`, o título, o texto e as escolhas. Cada escolha tem o texto que o jogador lê e o destino, que é o código da cena para onde a escolha leva. As escolhas ficam embutidas na cena, numa lista dentro do documento. Uma escolha só faz sentido dentro da sua cena, mostra-se sempre com ela e nunca se procura sozinha. É a decisão de embutir, do tema 02.
+
+Para pôr as cenas na base, fazes o mesmo que no cinema. A ligação do Mongoose fica num ficheiro próprio, e há um modelo e um seed que apaga as cenas e volta a inseri-las. Para saber mais sobre embutir, lê a secção "A informação relacionada embute-se ou referencia-se" do [guia do tema 02](../02-modelo-documental-e-consultas-no-atlas.md).
+
+1. Cria o ficheiro `src/db/mongoose.js` com este conteúdo. No explorador do Visual Studio Code, no botão de ficheiro novo, podes escrever o caminho inteiro, `src/db/mongoose.js`, e o editor cria as pastas que faltam.
+
+   ```js
+   // src/db/mongoose.js: a ligação do jogo ao MongoDB Atlas, através do Mongoose.
+   // A cadeia de ligação leva o utilizador e a palavra-passe da base de dados:
+   // é um segredo, por isso vem do ficheiro .env e nunca está escrita no código.
+   import mongoose from "mongoose";
+
+   /**
+    * Liga o Mongoose à base de dados do jogo, no Atlas.
+    * Lê a cadeia de ligação de MONGODB_URI e o nome da base de DB_NAME.
+    * Se faltar a cadeia ou a ligação falhar, a promessa é rejeitada com o erro,
+    * e quem chamou não deixa o programa continuar.
+    * @returns {Promise<void>} cumprida quando a ligação está feita
+    */
+   export async function ligarBaseDeDados() {
+     const uri = process.env.MONGODB_URI;
+     if (!uri) {
+       throw new Error("falta a MONGODB_URI no ficheiro .env");
+     }
+
+     // A cadeia que o Atlas te dá não diz que base de dados usar. Sem o dbName,
+     // o Mongoose usava uma base chamada test, que está vazia.
+     await mongoose.connect(uri, { dbName: process.env.DB_NAME || "fechado-na-escola" });
+
+     // Escreve o nome da base, e nunca a cadeia de ligação, que tem a palavra-passe.
+     console.log(`Ligada à base de dados ${mongoose.connection.name}`);
+   }
    ```
 
-   O que deves ver: o `git log` mostra um commit, com um código curto à frente da mensagem. A mensagem diz o que mudou, em português e numa frase, para quem a ler daqui a um mês.
+   Leitura guiada: o ficheiro exporta uma só função, a `ligarBaseDeDados`, que o seed e o servidor vão chamar. Primeiro confirma que a cadeia de ligação existe. Depois liga-se, com o nome da base que vem do `.env`. Por fim, escreve a que base se ligou. A função é `async`, porque ligar a um servidor que está noutro sítio demora, e o `await` espera pela resposta do Atlas. A promessa de que fala o comentário é o que uma função `async` devolve, o resultado que há de chegar. Quem a chama espera por ele com o `await`, e um `throw` lá dentro chega ao `catch` de quem chamou.
 
-7. Corre outra vez `git status`. O que deves ver: o Git diz que não há nada para guardar (`nothing to commit, working tree clean`). Tudo o que devia estar no histórico está lá, e o `.env` continua fora.
+2. Cria o ficheiro `src/models/cena.model.js` com este conteúdo:
 
-### Paragem 6
+   ```js
+   // src/models/cena.model.js: o modelo das cenas do jogo, no Mongoose.
+   // Cada cena é um documento da coleção cenas: um bocado da história, com as
+   // escolhas que o jogador pode fazer a seguir.
+   import mongoose from "mongoose";
 
-O projeto está no Git, com um commit, e o `.env` e a `node_modules` ficaram de fora.
+   // Uma escolha não existe sozinha: só faz sentido dentro da sua cena, por isso
+   // está embutida nela. O destino é o código da cena para onde a escolha leva.
+   // O _id: false tira o identificador que o Mongoose daria a cada escolha:
+   // uma escolha não se procura sozinha, e não precisa dele.
+   const escolhaSchema = new mongoose.Schema(
+     {
+       texto: String,
+       destino: String,
+     },
+     { _id: false },
+   );
 
-Pensa antes de continuares: um colega fez o `git add .` antes de criar o `.gitignore`, e o `.env` foi no primeiro commit. Basta-lhe acrescentar o `.env` ao `.gitignore` agora? A resposta: não. O `.gitignore` faz o Git ignorar as mudanças futuras, mas a versão que foi no primeiro commit continua no histórico, e qualquer pessoa com acesso ao repositório a pode ler. Se o `.env` tivesse uma palavra-passe verdadeira, a única correção segura era mudá-la no Atlas. Por isso a ordem certa é: primeiro o `.gitignore`, depois o primeiro commit.
+   const cenaSchema = new mongoose.Schema({
+     // O código identifica a cena no jogo, como "corredor" ou "sala-12".
+     // É por ele que as escolhas apontam umas para as outras.
+     codigo: String,
+     titulo: String,
+     texto: String,
+     // Uma cena final acaba a partida, e não tem escolhas.
+     final: Boolean,
+     escolhas: [escolhaSchema],
+   });
 
-## Fase 7: traçar o pedido
+   // O terceiro argumento é o nome da coleção, escrito à mão.
+   export const Cena = mongoose.model("Cena", cenaSchema, "cenas");
+   ```
 
-Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço no browser até veres a resposta. É o que este tema te pede para saberes fazer no fim. O separador "Rede" das ferramentas de programador mostra o que viajou em cada pedido. Para saber mais, lê o passo 8 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
+   Leitura guiada: lê-o de baixo para cima. A última linha cria o modelo `Cena`, que o resto do jogo usa para ler e escrever na coleção `cenas`. O nome da coleção vai escrito à mão, porque o plural que o Mongoose inventaria segue as regras do inglês. Por cima, o `cenaSchema` tem um campo por cada dado da cena. O campo `escolhas` é uma lista: os parênteses retos à volta do `escolhaSchema` dizem que cada elemento tem a forma de uma escolha. É assim que um schema descreve uma lista de documentos embutidos.
 
-1. Liga a API com `npm run dev`. No browser, abre as ferramentas de programador (F12) e escolhe o separador "Rede" (ou "Network").
+3. Cria o ficheiro `src/seed.js` com este conteúdo:
 
-2. Abre `http://localhost:3000/api/estado`.
+   ```js
+   // src/seed.js: põe as cenas da história na base de dados.
+   // Corre-se à parte, com npm run seed, antes de arrancar o servidor.
+   // Apaga primeiro as cenas que lá estiverem, por isso pode correr-se
+   // as vezes que for preciso, sem repetir cenas.
+   import mongoose from "mongoose";
+   import { ligarBaseDeDados } from "./db/mongoose.js";
+   import { Cena } from "./models/cena.model.js";
 
-3. Clica no pedido `estado` e procura o método, o endereço completo, o código de estado e o `content-type` da resposta. Procura também o "Remote Address" ("Endereço remoto", com o browser em português), que é o endereço do computador que respondeu.
+   // A história começa na cena "inicio". Cada escolha leva à cena com o código
+   // do destino. As cenas finais não têm escolhas.
+   const cenas = [
+     {
+       codigo: "inicio",
+       titulo: "A biblioteca às escuras",
+       texto: "Acordas com a cara em cima de um livro de Matemática. A biblioteca está às escuras e a escola está em silêncio: adormeceste a estudar, e ninguém deu por ti. O telemóvel tem 3% de bateria e marca 22:40.",
+       final: false,
+       escolhas: [
+         { texto: "Sair para o corredor", destino: "corredor" },
+         { texto: "Procurar um carregador atrás do balcão", destino: "carregador" },
+       ],
+     },
+     {
+       codigo: "carregador",
+       titulo: "Atrás do balcão",
+       texto: "Encontras um carregador, mas a tomada não dá corrente: à noite, a escola desliga a luz das salas. Ao menos, a lanterna do telemóvel ainda funciona.",
+       final: false,
+       escolhas: [{ texto: "Sair para o corredor", destino: "corredor" }],
+     },
+     {
+       codigo: "corredor",
+       titulo: "O corredor do rés-do-chão",
+       texto: "Só se vê a luz verde das saídas de emergência. À esquerda, a porta da secretaria está entreaberta. Ao fundo, fica a porta principal. Lá em cima, alguma coisa bate com força, de vez em quando.",
+       final: false,
+       escolhas: [
+         { texto: "Entrar na secretaria", destino: "secretaria" },
+         { texto: "Ir até à porta principal", destino: "porta-principal" },
+         { texto: "Subir as escadas", destino: "escadas" },
+       ],
+     },
+     {
+       codigo: "secretaria",
+       titulo: "A secretaria",
+       texto: "Na parede há um quadro com chaves penduradas, e uma delas diz Sala 12. Em cima da mesa está um bilhete do contínuo: «Ronda às 23h. O ginásio fecha por fora.»",
+       final: false,
+       escolhas: [{ texto: "Levar a chave da sala 12 e voltar ao corredor", destino: "corredor" }],
+     },
+     {
+       codigo: "porta-principal",
+       titulo: "A porta principal",
+       texto: "A porta está fechada à chave, e a luz do alarme pisca a vermelho ao lado do puxador. Se a forçares, o alarme toca.",
+       final: false,
+       escolhas: [
+         { texto: "Forçar a porta", destino: "fim-alarme" },
+         { texto: "Voltar ao corredor", destino: "corredor" },
+       ],
+     },
+     {
+       codigo: "escadas",
+       titulo: "O primeiro andar",
+       texto: "Sobes devagar, com a lanterna apontada aos degraus. O barulho vem da sala 12: alguém deixou a janela aberta, e a cortina bate com o vento. Ao fundo do corredor, o passadiço leva ao ginásio.",
+       final: false,
+       escolhas: [
+         { texto: "Entrar na sala 12", destino: "sala-12" },
+         { texto: "Atravessar o passadiço até ao ginásio", destino: "fim-ginasio" },
+       ],
+     },
+     {
+       codigo: "sala-12",
+       titulo: "A sala 12",
+       texto: "A janela da sala 12 dá para o telhado do pavilhão, que fica mesmo por baixo. Lá em baixo, o portão das traseiras está aberto. No corredor, ouvem-se passos e o tilintar de chaves.",
+       final: false,
+       escolhas: [
+         { texto: "Sair pela janela para o telhado", destino: "fim-telhado" },
+         { texto: "Esconder-te debaixo da mesa do professor", destino: "fim-ronda" },
+       ],
+     },
+     {
+       codigo: "fim-telhado",
+       titulo: "Cá fora!",
+       texto: "Desces pelo telhado do pavilhão, passas o portão das traseiras e chegas a casa antes da meia-noite. Amanhã, ninguém na turma vai acreditar.",
+       final: true,
+       escolhas: [],
+     },
+     {
+       codigo: "fim-alarme",
+       titulo: "O alarme",
+       texto: "O alarme dispara e enche a escola de barulho. Dez minutos depois, chegam o contínuo e a diretora. Vais ter muito que explicar.",
+       final: true,
+       escolhas: [],
+     },
+     {
+       codigo: "fim-ronda",
+       titulo: "A ronda das 23h",
+       texto: "Os passos param à porta. O contínuo acende a luz, vê os teus ténis a espreitar debaixo da mesa e suspira: «Mais um que adormeceu na biblioteca.» Leva-te até à porta e liga aos teus pais.",
+       final: true,
+       escolhas: [],
+     },
+     {
+       codigo: "fim-ginasio",
+       titulo: "Fechado no ginásio",
+       texto: "Entras no ginásio, e a porta fecha-se atrás de ti com um estalo. Fecha por fora, como dizia o bilhete. Passas a noite em cima dos colchões, e às 8h a turma do primeiro tempo encontra-te lá dentro.",
+       final: true,
+       escolhas: [],
+     },
+   ];
+
+   try {
+     await ligarBaseDeDados();
+     // O filtro vazio, {}, escolhe todos os documentos: apaga todas as cenas.
+     const apagadas = await Cena.deleteMany({});
+     console.log(`Apagadas ${apagadas.deletedCount} cenas`);
+     // Insere as cenas de uma só vez, como o "Insert Document" do Atlas.
+     const inseridas = await Cena.insertMany(cenas);
+     console.log(`Inseridas ${inseridas.length} cenas`);
+   } catch (erro) {
+     console.error(`O seed falhou: ${erro.message}`);
+   }
+
+   // A ligação à base fica aberta até alguém a fechar. Sem esta linha,
+   // o programa ficava à espera e não voltava ao terminal.
+   await mongoose.disconnect();
+   ```
+
+   Leitura guiada: o ficheiro tem duas partes. Em cima, a lista `cenas`, com as onze cenas da história, cada uma com os campos do schema. Em baixo, o programa: liga-se com a função do `mongoose.js`, apaga todas as cenas com o `deleteMany`, insere as onze com o `insertMany` e, no fim, fecha a ligação. Repara no `destino` de cada escolha. É sempre o `codigo` de outra cena da lista, e o MongoDB não confirma que esse código existe. Quem o garante é quem escreve a história.
+
+4. Provoca um erro de propósito, antes de pores a cadeia de ligação no `.env`. Prevê: o que escreve o seed, com a `MONGODB_URI` vazia?
+
+   ```bash
+   npm run seed
+   ```
+
+   O que deves ver: as duas linhas do npm, `> fechado-na-escola@1.0.0 seed` e o comando, e depois `O seed falhou: falta a MONGODB_URI no ficheiro .env`. O `--env-file` leu o `.env`, mas a linha da `MONGODB_URI` não tem nada. A função de ligação recusou-se a continuar, com o `throw`, e o `catch` do seed escreveu a razão.
+
+5. Põe a cadeia de ligação no `.env`. No Atlas, carrega em "Connect" (ligar) no teu cluster e escolhe a ligação por "Drivers". Copia a cadeia que começa por `mongodb+srv://` para a linha `MONGODB_URI=` do `.env`, logo a seguir ao `=` e sem espaços. Troca o marcador da palavra-passe, a parte entre `<` e `>`, com os dois sinais incluídos, pela palavra-passe do utilizador da base de dados. Se no teu ecrã os nomes forem outros, procura a opção que mostra a cadeia começada por `mongodb+srv://`. Guarda o `.env`.
+
+   A cadeia leva ao teu cluster, por isso é a mesma em todos os teus projetos ligados a ele. O que muda de projeto para projeto é o `DB_NAME`. A partir deste momento, o `.env` tem um segredo. Não o copies para mais lado nenhum.
+
+6. Corre o seed outra vez:
+
+   ```bash
+   npm run seed
+   ```
+
+   O que deves ver, depois das duas linhas do npm:
+
+   ```text
+   Ligada à base de dados fechado-na-escola
+   Apagadas 0 cenas
+   Inseridas 11 cenas
+   ```
+
+   No fim, o terminal fica pronto para outro comando. A coleção ainda não existia, por isso não havia nada para apagar. Se o seed ficar parado uns 30 segundos e acabar com um erro, ou se escrever `bad auth`, vê os [problemas frequentes](#problemas-frequentes).
+
+7. Prevê: se correres o seed uma terceira vez, quantas cenas apaga, e com quantas fica a coleção? Depois, corre-o.
+
+   O que deves ver: `Apagadas 11 cenas` e `Inseridas 11 cenas`. A coleção continua com onze cenas, e nunca com 22. É por apagar primeiro que o seed se pode correr as vezes que for preciso.
+
+8. No Atlas, abre o "Data Explorer" (explorador de dados), a base `fechado-na-escola` e a coleção `cenas`. São os nomes que usaste no laboratório do tema 02. Se não vires a base, carrega no botão de atualizar do explorador.
+
+   O que deves ver: as onze cenas. Cada uma tem o `_id` que o MongoDB lhe deu e um campo `__v`, com o valor 0, que é do Mongoose e podes ignorar. As escolhas aparecem dentro da cena, numa lista, cada uma só com o `texto` e o `destino`, sem `_id`.
+
+### Paragem 2
+
+As onze cenas estão na coleção `cenas` do teu cluster, e o seed pode correr outra vez sem as repetir.
+
+Pensa antes de continuares: imagina que mudavas o título de uma cena no `seed.js` e voltavas a correr o seed. Na base, ficava o título antigo, o novo, ou os dois? A resposta: só o novo. O seed apaga todas as cenas e insere as do ficheiro, por isso a coleção fica sempre igual à lista `cenas` do `seed.js`. Serve para dados de exemplo, como estes. Numa base com dados verdadeiros, como as partidas dos jogadores, um `deleteMany({})` apagava-os todos.
+
+## Fase 3: a API das cenas
+
+Agora o servidor vai buscar as cenas à base e responde com elas em JSON. Tem três rotas: a de estado, a lista das cenas e uma cena pelo código. O código chega no endereço, como parâmetro de rota, e procura-se no campo `codigo`, e não no `_id`. As escolhas apontam umas para as outras pelo código, e por isso é ele que o jogo usa. Antes das rotas fica o middleware de registo, que escreve cada pedido no terminal. Depois delas fica o middleware final, para os pedidos a que nenhuma rota respondeu. E o servidor só começa a aceitar pedidos depois de se ligar à base.
+
+1. Cria o ficheiro `src/server.js` com este conteúdo:
+
+   ```js
+   // src/server.js: o servidor do jogo Fechado na escola.
+   // Uma API em JSON, com as cenas da história lidas do MongoDB Atlas através
+   // do Mongoose. Por agora, está tudo neste ficheiro.
+   import express from "express";
+   import { ligarBaseDeDados } from "./db/mongoose.js";
+   import { Cena } from "./models/cena.model.js";
+
+   const app = express();
+
+   // A porta vem do ambiente: em desenvolvimento, do ficheiro .env.
+   // Se não estiver definida, o jogo usa a 3000.
+   const PORTA = process.env.PORT || 3000;
+
+   // Middleware de registo: escreve no terminal cada pedido que chega,
+   // e passa-o à frente. Está antes das rotas, para ver todos os pedidos.
+   app.use((req, res, next) => {
+     console.log(`${req.method} ${req.url}`);
+     next();
+   });
+
+   // Rota de estado: serve para confirmar que o servidor está ligado e a responder.
+   app.get("/api/estado", (req, res) => {
+     res.json({ estado: "ok", aplicacao: "Fechado na escola" });
+   });
+
+   // Todas as cenas da história, lidas da base de dados.
+   app.get("/api/cenas", async (req, res) => {
+     const cenas = await Cena.find({});
+     res.json(cenas);
+   });
+
+   // Uma cena: GET /api/cenas/corredor. O :codigo é um parâmetro de rota, e
+   // procura-se no campo codigo de cada documento, e não no _id.
+   app.get("/api/cenas/:codigo", async (req, res) => {
+     const codigo = req.params.codigo;
+     // O find devolve sempre uma lista. Como não há duas cenas com o mesmo
+     // código, a lista vem com uma cena, ou vazia, se o código não existir.
+     const encontradas = await Cena.find({ codigo: codigo });
+     if (encontradas.length === 0) {
+       res.status(404).json({ erro: `Não existe a cena ${codigo}` });
+       return;
+     }
+     res.json(encontradas[0]);
+   });
+
+   // Middleware final: só chega aqui um pedido a que nenhuma rota respondeu.
+   app.use((req, res) => {
+     res.status(404).json({ erro: "Rota não encontrada" });
+   });
+
+   // Primeiro a ligação à base, e só depois o servidor: um jogo que não
+   // chega às cenas não deve começar a aceitar pedidos.
+   try {
+     await ligarBaseDeDados();
+   } catch (erro) {
+     console.error(`Não foi possível ligar à base de dados: ${erro.message}`);
+     process.exit(1);
+   }
+
+   app.listen(PORTA, (erro) => {
+     if (erro) {
+       console.error(`Não foi possível ligar o servidor: ${erro.message}`);
+       return;
+     }
+     console.log(`Fechado na escola em http://localhost:${PORTA}`);
+   });
+   ```
+
+   Leitura guiada: lê-o de cima para baixo. É a ordem por que o Node o executa quando arranca, e é também a ordem por que cada pedido passa pelo middleware e pelas rotas. Primeiro os `import`, com a ligação e o modelo que escreveste na fase 2. Depois a `app` e a porta. A seguir vêm o middleware de registo, as três rotas e o middleware final. As duas rotas das cenas são `async`, porque perguntam à base e esperam pela resposta com o `await`. No fim, o arranque: a ligação à base primeiro, e só depois o `app.listen`. Se a ligação falhar, o `process.exit(1)` termina o programa, com um código que quer dizer "acabou com erro".
+
+2. Arranca o servidor. Antes de correres, prevê: que linhas vai escrever, e por que ordem?
+
+   ```bash
+   npm run dev
+   ```
+
+   O que deves ver, depois das duas linhas do npm:
+
+   ```text
+   Ligada à base de dados fechado-na-escola
+   Fechado na escola em http://localhost:3000
+   ```
+
+   Primeiro a ligação, e só depois o servidor, pela ordem do arranque. O servidor fica a correr neste terminal, e para o parar carregas em Ctrl+C. Por agora, deixa-o ligado.
+
+3. Prevê o código e a resposta de cada pedido da tabela. Depois, abre cada um no browser, com `http://localhost:3000` seguido do caminho, e confirma o código no separador Rede das ferramentas de programador. Os nomes que este laboratório dá aos separadores e aos campos das ferramentas de programador são os do Chrome.
+
+   | Pedido | Código | Resposta |
+   | --- | --- | --- |
+   | `/api/estado` | 200 | `{"estado":"ok","aplicacao":"Fechado na escola"}` |
+   | `/api/cenas` | 200 | A lista das onze cenas, cada uma com o `_id` e o `__v` |
+   | `/api/cenas/inicio` | 200 | A cena com o título "A biblioteca às escuras" e duas escolhas |
+   | `/api/cenas/sala-13` | 404 | `{"erro":"Não existe a cena sala-13"}` |
+   | `/api/cena/inicio` | 404 | `{"erro":"Rota não encontrada"}` |
+
+   Os dois 404 vêm de sítios diferentes. O `/api/cenas/sala-13` chegou à rota das cenas, que perguntou à base e recebeu uma lista vazia. O `/api/cena/inicio`, sem o `s`, não corresponde a nenhuma rota, e quem lhe responde é o middleware final, sem ir à base. No terminal, o middleware de registo escreve uma linha por pedido, como `GET /api/cenas/inicio`. Pode aparecer também `GET /favicon.ico`: é o browser a pedir o ícone do separador, e o middleware final responde-lhe com 404.
+
+4. Joga uma partida. Abre `/api/cenas/inicio` e lê as escolhas. Escolhe uma e abre `/api/cenas/` seguido do `destino` dela, como `/api/cenas/corredor`. Continua assim, cena a cena.
+
+   O que deves ver: ao fim de algumas cenas, uma cena com `"final":true` e sem escolhas, com `"escolhas":[]`. A partida acabou. Há quatro finais, e só num deles sais da escola sem que ninguém dê por ti. É o jogo a funcionar, ainda sem páginas. No passo 2, a API passa a ter uma rota que faz por ti o salto de uma escolha para a cena seguinte.
+
+5. Provoca um erro de propósito, desta vez sem mensagem de erro nenhuma. Com o servidor ligado, abre o `.env`, muda `DB_NAME=fechado-na-escola` para `DB_NAME=fechado-na-escol`, sem o `a` do fim, e guarda. Prevê: o servidor volta a arrancar? E o que respondem `/api/cenas` e `/api/cenas/inicio`?
+
+   O que deves ver: o `--watch` deu pela mudança do `.env`. Limpa o ecrã do terminal e escreve primeiro `Change detected in`, com o caminho do `.env`, e `Restarting 'src/server.js'`. Só depois vêm `Ligada à base de dados fechado-na-escol` e a linha do arranque. Não há erro nenhum. O `/api/cenas` responde 200, com `[]`, e o `/api/cenas/inicio` responde 404, com `{"erro":"Não existe a cena inicio"}`. O servidor ligou-se a uma base que não existia, e ninguém o recusou. O Mongoose até a criou, com a coleção `cenas` vazia, porque cria a coleção de cada modelo que não encontra. A única pista é a linha do terminal que diz a que base o servidor se ligou.
+
+6. Repõe `DB_NAME=fechado-na-escola` no `.env` e guarda. O que deves ver: o servidor volta a arrancar, ligado à base `fechado-na-escola`, e `/api/cenas/inicio` volta a mostrar a primeira cena. No Data Explorer do Atlas, depois de o atualizares, vês também a base `fechado-na-escol`, que o Mongoose criou. Podes deixá-la: está vazia, e o jogo não a usa.
+
+### Paragem 3
+
+A API responde com as cenas da base, e jogaste uma partida a pedir uma cena de cada vez.
+
+Pensa antes de continuares: com a base errada, a lista das cenas veio com 200 e `[]`, e não com 404. Estava certo? A resposta: estava. O pedido era válido e a lista existe, só não tinha nenhuma cena. O 404 é para uma coisa que não existe, como a cena de um código que nenhuma tem. É por isso que a rota de uma cena verifica a lista vazia e escolhe o 404, e a rota da lista não o faz.
+
+## Fase 4: o pedido, do browser à base de dados e de volta
+
+Explicar um pedido é dizer, por ordem, quem faz o quê, onde corre e o que viaja, desde que escreves o endereço até veres a resposta. Neste projeto há três sítios: o browser, o servidor, que corre no teu computador, e o Atlas, na internet. O separador "Rede" das ferramentas de programador mostra o que viajou entre o browser e o servidor. O terminal mostra os pedidos que o servidor recebeu. Para saber mais, lê o passo 8 do exemplo guiado do [guia](../03-arquitetura-e-setup-node.md).
+
+1. Com o servidor ligado, abre as ferramentas de programador (F12) e escolhe o separador "Rede". No topo do separador, marca "Disable cache" ("Desativar cache", com o browser em português). Sem isso, numa segunda visita, o browser pode mostrar o código 304, sem o `Content-Type`. O 304 quer dizer que o browser já tinha a resposta guardada. Depois, abre `http://localhost:3000/api/cenas/corredor`.
+
+2. Na lista do separador Rede, clica no pedido `corredor`. Procura o método, o endereço completo, o código de estado e, nos cabeçalhos da resposta, o `Content-Type`. Procura também o "Remote Address" ("Endereço remoto", com o browser em português), que é o endereço do computador que respondeu.
 
    O que deves ver:
 
    | Campo | Valor |
    | --- | --- |
    | Método | `GET` |
-   | Endereço | `http://localhost:3000/api/estado` |
+   | Endereço | `http://localhost:3000/api/cenas/corredor` |
    | Código | 200 |
-   | `content-type` | `application/json; charset=utf-8` |
-   | Remote Address | `[::1]:3000` ou `127.0.0.1:3000`, que são duas formas de dizer "este computador", na porta 3000 |
+   | `Content-Type` | `application/json; charset=utf-8` |
+   | Remote Address | `[::1]:3000` ou `127.0.0.1:3000`, duas formas de dizer "este computador", na porta 3000 |
 
-4. Lê esta tabela dos cinco passos do pedido. Para cada passo, procura o que observaste que o confirma, antes de leres a resposta por baixo da tabela:
+3. Lê os sete passos do pedido. Para cada um, procura o que viste que o confirma, antes de leres a confirmação por baixo da tabela.
 
    | Passo | Onde | O que acontece |
    | --- | --- | --- |
-   | 1 | browser | Escreves `http://localhost:3000/api/estado`. O browser faz um pedido `GET /api/estado` ao computador `localhost`, porta 3000 |
-   | 2 | sistema operativo | O pedido chega à porta 3000, onde o processo da API está à escuta |
-   | 3 | API (Node e Express) | O Express procura uma rota para `GET /api/estado`, encontra-a e chama a sua função |
-   | 4 | API | A função responde com `res.json(...)`. O Express converte o objeto para JSON e junta o código 200 e o tipo `application/json` |
-   | 5 | browser | Recebe a resposta e mostra o JSON. O código e o tipo veem-se no separador Rede |
+   | 1 | browser | Escreves o endereço. O browser faz o pedido `GET /api/cenas/corredor` ao computador `localhost`, na porta 3000 |
+   | 2 | servidor | O pedido chega à porta 3000, onde o servidor está à escuta. O middleware de registo escreve-o no terminal e passa-o à frente |
+   | 3 | servidor | O Express procura uma rota para o caminho e encontra a `/api/cenas/:codigo`. O `req.params.codigo` fica com `"corredor"` |
+   | 4 | servidor | A função pede ao Mongoose as cenas com o código `corredor` e espera com o `await`. O Mongoose usa a ligação ao Atlas que o servidor abriu no arranque |
+   | 5 | Atlas | Procura na coleção `cenas` e devolve o documento do corredor |
+   | 6 | servidor | A função responde com o `res.json`. O Express converte a cena para JSON e junta o código 200 e o tipo `application/json` |
+   | 7 | browser | Recebe a resposta e mostra o JSON |
 
    O que confirma cada passo:
 
-   - no passo 1, o endereço completo;
-   - no passo 2, a porta 3000 no Remote Address;
-   - no passo 3, a função do `app.get("/api/estado", ...)`;
-   - no passo 4, o código 200 e o `application/json`, vistos no separador Rede;
-   - no passo 5, o JSON que o browser mostra, que é o corpo da resposta.
+   - no passo 1, o método e o endereço, no separador Rede;
+   - no passo 2, a porta 3000 no Remote Address, e a linha `GET /api/cenas/corredor` no terminal;
+   - no passo 3, o `codigo` da cena que veio na resposta, que é `corredor`;
+   - nos passos 4 e 5, o texto do corredor, que só existe na base, porque o `server.js` não o tem;
+   - no passo 6, o código 200 e o `application/json`, no separador Rede;
+   - no passo 7, o JSON que o browser mostra, que é o corpo da resposta.
 
-5. Abre também `http://localhost:3000/api/artigos`. Que código recebes? Porque é que esta rota ainda não existe, e quando vai existir?
+4. Pensa: no separador Rede, aparece algum pedido ao Atlas? A resposta: não. Há um só pedido, do browser ao servidor. Quem fala com o Atlas, nos passos 4 e 5, é o servidor, pela ligação que abriu quando arrancou. É por isso que a cadeia de ligação, com a palavra-passe, pode estar no `.env` do servidor. Nunca viaja para o browser, e ninguém a vê nas ferramentas de programador.
 
-   A resposta: 404, com a página `Cannot GET /api/artigos` do Express. A rota ainda não existe porque o `server.js` só tem a rota de estado. Vai existir no tema seguinte, API Express e contratos, com o controller e o service dos artigos.
+5. Abre `/api/cenas/sala-13`. Em que passo é que a história muda, e quem escolhe o 404? A resposta: no passo 5, o Atlas não encontra nenhuma cena com esse código e devolve uma lista vazia. No passo 6, a função vê a lista vazia e responde 404, com a mensagem da cena que não existe. Os passos 1 a 4 são iguais aos do corredor, porque o pedido foi mesmo à base.
 
-### Paragem 7
+### Paragem 4
 
-Seguiste o pedido de estado do princípio ao fim, e cada passo tem uma observação que o confirma. Saber explicar este pedido, passo a passo e por palavras tuas, é a evidência do tema.
+Sabes dizer, por ordem, o que acontece num pedido de uma cena, onde corre cada passo e o que confirma cada um.
 
-Pensa antes de continuares: em que passo do pedido aparece a porta 3000, e quem a escolheu? A resposta: no passo 2, quando o pedido chega à porta 3000, onde a API está à escuta. Foi o `app.listen` que ligou a API a essa porta, com o valor da variável `PORT` lido do `.env`.
+Pensa antes de continuares: e o pedido `/api/cena/inicio`, sem o `s`? Em que passo muda a história, e o Atlas chega a ser consultado? A resposta: muda no passo 3. O Express não encontra nenhuma rota para esse caminho, e o pedido segue até ao middleware final, que responde 404 com `{"erro":"Rota não encontrada"}`. Os passos 4 e 5 não acontecem, e o Atlas não é consultado.
+
+## Fase 5: o primeiro commit
+
+Um commit guarda a fotografia dos ficheiros que preparaste com o `git add`. Agora o `.env` tem a palavra-passe, e é aqui que o `.gitignore` da fase 1 conta. Antes de qualquer `git add`, confirmas no `git status` o que vai entrar. Depois do commit, o `git log` mostra o histórico, e o `git status` diz se ficou alguma coisa por guardar. O servidor pode continuar ligado. Para saber mais, lê a secção "O mínimo de Git" do [guia](../03-arquitetura-e-setup-node.md).
+
+1. Vê o estado da pasta. Antes de correres, prevê: que ficheiros aparecem agora, e quais não podem aparecer?
+
+   ```bash
+   git status --short
+   ```
+
+   O que deves ver:
+
+   ```text
+   ?? .env.example
+   ?? .gitignore
+   ?? package-lock.json
+   ?? package.json
+   ?? src/
+   ```
+
+   A pasta `src/` aparece numa só linha, porque o Git ainda não segue nenhum ficheiro dela. O `.env` e a `node_modules/` não aparecem. Se o `.env` aparecer, para aqui, não faças o `git add` e chama o professor.
+
+2. Prepara e guarda o primeiro commit. O `git add .` prepara todos os ficheiros da pasta, menos os que o `.gitignore` manda ignorar. O `git commit -m` guarda a fotografia, com a mensagem que vem entre aspas.
+
+   ```bash
+   git add .
+   git commit -m "Passo 1 do Fechado na escola: as cenas no Atlas e a API das cenas"
+   ```
+
+   O que deves ver: primeiro, uma linha que começa como `[main (root-commit) e421b9f]`, seguida da mensagem. O `main`, ou `master`, é o nome do ramo, a linha do histórico. O `root-commit` quer dizer que é o primeiro commit, e o `e421b9f` é o código curto dele, que no teu computador é outro. A seguir, `8 files changed` e uma linha `create mode 100644` por cada ficheiro guardado. São os oito ficheiros do projeto, quatro na raiz e quatro na `src`, e nenhum é o `.env`. Se o Git escrever `Please tell me who you are`, faz o passo 7 da fase 1 e repete o commit.
+
+3. Confirma o histórico e o estado:
+
+   ```bash
+   git log --oneline
+   git status
+   ```
+
+   O que deves ver: o `git log --oneline` mostra um commit, com o código curto à frente da mensagem. O `git status` diz `nothing to commit, working tree clean`, que quer dizer que não ficou nada por guardar. O `.env` continua na pasta, fora do histórico.
+
+### Paragem 5
+
+O projeto está no Git, com um commit, e o `.env` e a `node_modules` ficaram de fora. É o fim do passo 1, e o passo 2 começa nesta pasta.
+
+Pensa antes de continuares: um colega fez o `git add .` antes de criar o `.gitignore`, e o `.env`, já com a cadeia de ligação, foi no primeiro commit. Basta-lhe acrescentar agora o `.env` ao `.gitignore`? A resposta: não. O `.gitignore` só faz o Git ignorar o que ele ainda não guardou. O `.env` que foi no primeiro commit continua no histórico, e quem tiver acesso ao repositório pode lê-lo. A única correção segura é mudar no Atlas a palavra-passe desse utilizador. Por isso, primeiro o `.gitignore`, e só depois o primeiro commit.
 
 ## Problemas frequentes
 
@@ -476,59 +698,67 @@ Aparece uma mensagem a dizer que o ficheiro `npm.ps1` não pode ser carregado, p
 
 ### O ficheiro ficou com .txt no fim
 
-No Windows, `.env.txt` ou `.gitignore.txt`. O Node não encontra o `.env`, e o Git não lê o `.gitignore`. Muda o nome no editor de código, que mostra o nome completo.
+No Windows, `.env.txt`, `.env.example.txt` ou `.gitignore.txt`. O Node não encontra o `.env`, e o Git não lê o `.gitignore`. Muda o nome no editor de código, que mostra o nome completo.
 
 ### cp não é reconhecido como comando
 
 Estás na linha de comandos clássica do Windows. Usa `copy .env.example .env`. Na PowerShell, o `cp` funciona.
 
-### O .env está dentro da pasta src
+### node: .env: not found
 
-O `--env-file=.env` procura o ficheiro na pasta onde corres o `npm run dev`, que é a raiz do projeto. O `.env`, o `.env.example` e o `.gitignore` ficam todos ao lado do `package.json`.
+O `--env-file=.env` procura o `.env` na pasta onde corres o comando, que tem de ser a raiz do projeto. Ou o ficheiro não existe, ou está dentro da `src`, ou ficou com `.txt` no fim. O `.env`, o `.env.example` e o `.gitignore` ficam todos ao lado do `package.json`.
 
 ### npm dev não funciona
 
-Aparece `Unknown command: "dev"`. Falta o `run`. O comando é `npm run dev`. Se a mensagem for `Missing script: "dev"`, o script não existe no `package.json`, ou o nome está mal escrito; `npm run`, sozinho, mostra os scripts que existem.
+Aparece `Unknown command: "dev"`. Falta o `run`: o comando é `npm run dev`. Se a mensagem for `Missing script: "dev"`, o script não está no `package.json`, ou o nome está mal escrito. O `npm run`, sozinho, mostra os scripts que existem.
 
-### A API arranca na porta errada
+### O seed falhou: falta a MONGODB_URI no ficheiro .env
 
-O `process.env.PORT` está vazio, e a API usou a porta 3000 por omissão. Ou arrancaste com `npm start`, que não lê o `.env`, ou o nome da variável no `.env` é diferente do que o código lê, como `PORTA` e `PORT`.
+O servidor escreve o mesmo, a começar por `Não foi possível ligar à base de dados`. A linha `MONGODB_URI=` do `.env` está vazia, ou não existe. Volta ao passo 5 da fase 2. Confirma também que a puseste no `.env`, e não no `.env.example`.
 
-### Mudei a porta e a API não reiniciou
+### O seed ou o servidor ficam parados uns 30 segundos e acabam com um erro de ligação
 
-Confirma que mudaste o `.env`, e não o `.env.example`. O `--watch` só reinicia a API quando muda o `.env`, o `server.js` ou um ficheiro que ele importe. Confirma também que guardaste, e que a API foi arrancada com `npm run dev`, e não com `npm start`.
+O Mongoose tenta ligar-se durante 30 segundos e depois desiste, e o terminal mostra a razão. Com o Atlas, as causas mais comuns são duas. Uma é o endereço IP da rede onde estás não estar autorizado no Atlas, o que acontece quando mudas de computador ou de rede. A outra é não haver internet.
 
-### fatal: not a git repository
+### bad auth : authentication failed
 
-Quer dizer "não é um repositório do Git". Correste um comando do Git fora da pasta do projeto, ou antes do `git init`. Confirma em que pasta estás e entra na `papelaria-api`.
+O Atlas recusou o utilizador ou a palavra-passe da cadeia de ligação. Confirma que trocaste o marcador da palavra-passe, com os `<` e `>` incluídos, e que usaste o utilizador da base de dados, e não o da tua conta no Atlas. Se a palavra-passe tiver carateres como `@`, `:` ou `/`, a cadeia de ligação fica partida. O mais simples é criar no Atlas uma palavra-passe só com letras e algarismos.
 
-### Please tell me who you are
+### A lista das cenas vem vazia, e nenhuma cena existe
 
-O Git recusou o commit, porque não sabe o teu nome. Faz o passo 5 da fase 6 e repete o commit. Nalguns computadores, o Git não recusa. Faz o commit com um nome inventado a partir do nome do computador e sugere um comando com `--global`. Não o uses nos computadores da escola. Faz o passo 5. Os commits seguintes já levam o teu nome.
-
-### O .env foi para um commit
-
-Não tentes resolver sozinho. Chama o professor. Se o teu `.env` ainda tem a `MONGODB_URI` vazia, não há dano, e é o momento certo para aprender como se corrige. Se já tem a cadeia de ligação verdadeira, a palavra-passe desse utilizador tem de ser mudada no Atlas, porque fica no histórico.
+O `/api/cenas` dá `[]`, e o `/api/cenas/inicio` dá 404. O servidor ligou-se a uma base sem cenas. Vê no terminal a primeira linha do arranque, que diz a que base se ligou. Tem de ser `fechado-na-escola`. Se for outra, corrige o `DB_NAME` no `.env`. Se for essa, corre o `npm run seed`.
 
 ### A porta 3000 está ocupada
 
-A API escreve `Não foi possível ligar a API: listen EADDRINUSE: address already in use :::3000`, que quer dizer que a porta já está a ser usada. Tens outro servidor ligado, por exemplo um de Sistemas de Informação. Para-o. Se já tens o `.env`, da fase 4, também podes mudar lá a porta da API e arrancá-la com `npm run dev`. É para isso que ela lá está.
+O servidor escreve `Ligada à base de dados fechado-na-escola` e depois `Não foi possível ligar o servidor: listen EADDRINUSE: address already in use :::3000`. A porta já está a ser usada por outro servidor, por exemplo o do cinema da escola. O jogo não termina, mas também não responde. Para o outro servidor com Ctrl+C, no terminal onde ele está a correr. Depois, para também este e volta a arrancá-lo com `npm run dev`.
+
+### fatal: not a git repository
+
+Quer dizer "não é um repositório do Git". Correste um comando do Git fora da pasta do projeto, ou antes do `git init`. Confirma em que pasta estás e entra na `fechado-na-escola`.
+
+### Please tell me who you are
+
+O Git recusou o commit, porque não sabe o teu nome. Faz o passo 7 da fase 1 e repete o commit. Nalguns computadores, o Git não recusa: faz o commit com um nome inventado a partir do nome do computador, e sugere um comando com `--global`. Nos computadores da escola, não o uses. Faz o passo 7 da fase 1, e os commits seguintes já levam o teu nome.
+
+### O .env aparece no git status, ou foi para um commit
+
+Não faças mais nada no Git e chama o professor. Se o `.env` só aparece na lista, o `.gitignore` não está a funcionar, e corrige-se antes do `git add`. Se já foi num commit com a cadeia de ligação, a palavra-passe desse utilizador tem de ser mudada no Atlas, porque fica no histórico.
 
 ## Desafios
 
-1. O esqueleto de uma aplicação tua. Pensa numa aplicação que gostavas de fazer, por exemplo a da tua PAP, se tiver um servidor. Repete as fases 2 a 6 numa pasta nova, com o nome dela seguido de `-api`, e muda o texto da rota de estado para o nome da aplicação. Faz também o diagrama de camadas da fase 1 para o pedido mais importante dela.
-2. Uma porta que não é um número. Põe no `.env` a linha `PORT=abc` e arranca a API. O que acontece? Em macOS e Linux, repara também na pasta do projeto. Depois muda o `src/server.js` para a API se recusar a arrancar, com uma mensagem clara, quando a porta não for um número inteiro. Pista: o `Number(...)` converte o texto num número, e o `Number.isInteger(...)` diz se o resultado é um número inteiro.
+1. O mapa da história. Desenha em papel o mapa das onze cenas, com uma caixa por cena e uma seta por escolha, da cena até ao destino. Faz o mapa a partir das respostas da API, e não do `seed.js`. Depois, descobre no mapa o caminho mais curto do `inicio` até ao final em que sais da escola sem que ninguém dê por ti. E responde: uma partida pode não acabar nunca? Pista: o `/api/cenas` dá-te todas as cenas de uma vez, cada uma com o `codigo` e o `destino` das suas escolhas.
+
+2. A história verificada. O MongoDB não confirma que o destino de uma escolha é o código de uma cena que existe. Escreve um programa, `src/verificar-historia.js`, que lê as cenas da base e escreve no terminal cada escolha com um destino que não existe, e a cena onde ela está. Quando não houver nenhuma, escreve que a história está certa. Corre-o com `node --env-file=.env src/verificar-historia.js`. Para o testares, muda no `seed.js` o destino de uma escolha para um código que nenhuma cena tem, e corre o seed e o teu programa. No fim, repõe o destino e volta a correr o seed. Quando o programa funcionar, guarda-o num commit só dele, com `git add src/verificar-historia.js` e `git commit -m "Desafio: verificar a história"`, para o `git status` do passo seguinte começar limpo. Pista: o programa liga-se e desliga-se como o seed, e uma lista com o código de todas as cenas diz-te se um destino existe.
 
 ## Antes de terminares
 
-- [ ] Desenhaste, na fase 1, o diagrama das três partes e os dois diagramas de camadas.
-- [ ] O `npm run` mostra os scripts `start` e `dev`.
-- [ ] O `.env` e o `.env.example` estão na raiz do projeto, e o `.env` não aparece no `git status`.
-- [ ] O `git log --oneline` mostra o primeiro commit, e o `git status` diz que não há nada para guardar.
-- [ ] Viste no terminal os dois erros provocados, o `.env` em falta e a variável com o nome errado, e a API voltou a responder em `http://localhost:3000/api/estado`.
-- [ ] No separador Rede, encontraste o método, o código, o `content-type` e o Remote Address do pedido de estado.
-- [ ] Consegues explicar, por palavras tuas, o pedido `GET /api/estado`, desde que escreves o endereço no browser até veres a resposta.
-
-Mostra também ao professor o resultado do `git log --oneline` e do `git status`. São a prova de que o projeto está guardado e de que o `.env` ficou de fora.
+- [ ] O `npm run` mostra os scripts `start`, `dev` e `seed`.
+- [ ] O `npm run seed` escreve `Inseridas 11 cenas`, e vês as onze cenas no Data Explorer do Atlas.
+- [ ] O `npm run dev` escreve a base a que se ligou e o endereço do servidor, e `/api/cenas/inicio` mostra a primeira cena.
+- [ ] Jogaste uma partida até uma cena com `"final":true`.
+- [ ] Viste os dois erros provocados, a cadeia de ligação em falta e a base com o nome errado, e o `DB_NAME` voltou a `fechado-na-escola`.
+- [ ] No separador Rede, encontraste o método, o código, o `Content-Type` e o Remote Address do pedido de uma cena.
+- [ ] O `git log --oneline` mostra o primeiro commit, o `git status` diz que não há nada para guardar, e o `.env` não está no commit.
+- [ ] Consegues explicar, por palavras tuas, o pedido de uma cena, desde que escreves o endereço no browser até veres a resposta. E sabes dizer porque é que a palavra-passe do Atlas nunca chega ao browser.
 
 ![Rodapé](../../imagens/rodape.png)

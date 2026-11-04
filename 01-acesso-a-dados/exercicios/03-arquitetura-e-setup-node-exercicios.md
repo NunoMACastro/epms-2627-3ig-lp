@@ -10,7 +10,7 @@ O [guia do tema](../03-arquitetura-e-setup-node.md) e o [laboratório](../labora
 
 ## Como trabalhar
 
-Os exercícios 1 a 6 são obrigatórios, por esta ordem. Escreve as respostas no editor, num ficheiro de texto chamado `respostas-03.md`, com o número do exercício e a letra da alínea antes de cada uma. Guarda-o na tua pasta de trabalho de Linguagens de Programação, fora da `papelaria-api`. O diagrama do exercício 6 desenha-se em papel. O desafio opcional faz-se no projeto `papelaria-api` do laboratório.
+Os exercícios 1 a 6 são obrigatórios, por esta ordem. Escreve as respostas no editor, num ficheiro de texto chamado `respostas-03.md`, com o número do exercício e a letra da alínea antes de cada uma. Guarda-o na tua pasta de trabalho de Linguagens de Programação, fora da pasta de qualquer projeto. O diagrama do exercício 6 desenha-se em papel. O desafio opcional faz-se numa cópia da pasta `papelaria-api` dos exemplos.
 
 Responde primeiro sem abrir o guia. Quando não souberes, escreve o que achas e porquê, e só depois confirma. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício. Em cada exercício que peça uma justificação, uma ou duas frases chegam.
 
@@ -18,7 +18,7 @@ Entrega o `respostas-03.md` e o diagrama do exercício 6, em papel ou fotografad
 
 ## O cenário: a aplicação do torneio
 
-O guia e o laboratório trabalharam a papelaria. Esta ficha usa a aplicação do torneio de futsal da escola, que modelaste na ficha do tema anterior, e pede-te as mesmas decisões noutro problema.
+O guia trabalhou a papelaria, e o laboratório, o jogo Fechado na escola. Esta ficha usa a aplicação do torneio de futsal da escola, que modelaste na ficha do tema anterior, e pede-te as mesmas decisões noutro problema.
 
 A aplicação do torneio tem as três partes do guia:
 
@@ -140,14 +140,14 @@ c) Onde fica a cadeia de ligação ao Atlas, e que camada fala com o Atlas neste
 
 - Exercício 1: as secções "A tua aplicação tem três partes" e "O papel do servidor" do guia.
 - Exercício 2: a secção "O que faz cada camada" do guia. Para cada responsabilidade, pergunta-te se é HTTP, uma regra do torneio ou a base de dados.
-- Exercício 3: a secção "Os scripts do package.json" do guia, e a fase 2 do laboratório. Faz de conta que és o npm e o Node. Corre de cabeça cada script, desde o momento em que escreves o comando até à primeira linha do `server.js`. Confirma cada ficheiro que tens de ler e cada linha que tens de aceitar.
+- Exercício 3: a secção "Os scripts do package.json" do guia, e a preparação do projeto, no laboratório. Faz de conta que és o npm e o Node. Corre de cabeça cada script, desde o momento em que escreves o comando até à primeira linha do `server.js`. Confirma cada ficheiro que tens de ler e cada linha que tens de aceitar.
 - Exercício 4: as secções "O ficheiro .env.example" e "O que vai para o Git: o .gitignore" do guia.
-- Exercício 5: a secção "As variáveis de ambiente" do guia, e os scripts da fase 2 do laboratório. Compara o que cada comando passa ao Node.
+- Exercício 5: a secção "As variáveis de ambiente" do guia, e os scripts da preparação do projeto, no laboratório. Compara o que cada comando passa ao Node.
 - Exercício 6: a tabela da secção "Um pedido a atravessar as camadas" e o passo 2 do exemplo guiado do guia.
 
 ## Desafio opcional
 
-Faz-se no projeto `papelaria-api` do laboratório.
+Faz-se numa cópia da pasta [papelaria-api](../../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos, e não no projeto do jogo, que tem de continuar igual para o passo seguinte.
 
 A rota `/api/estado` passa a responder com o nome da aplicação que está numa variável de ambiente nova, `NOME_APLICACAO`, em vez do texto escrito no código. A variável fica no `.env` e no `.env.example`, como a porta, com o valor `Papelaria da escola`.
 

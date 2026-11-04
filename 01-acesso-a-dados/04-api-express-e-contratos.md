@@ -40,7 +40,7 @@ No fim deste guia, consegues:
 ## O que já sabes e vais usar
 
 - As três partes da aplicação, as quatro camadas da API e o que faz cada uma, explicadas no guia [03 Arquitetura e setup Node](03-arquitetura-e-setup-node.md).
-- O esqueleto da API da papelaria, com os scripts, o `.env`, o `.gitignore` e o primeiro commit, do mesmo guia e do seu laboratório. Este tema continua nesse projeto.
+- O esqueleto da API da papelaria, com os scripts, o `.env`, o `.gitignore` e o primeiro commit, do mesmo guia. Este guia continua nesse projeto, e o laboratório continua o jogo Fechado na escola, que preparaste no laboratório do tema anterior.
 - Os oito artigos da papelaria, com o nome, a categoria, o stock, o stock mínimo e o preço em cêntimos, do guia [02 Modelo documental e primeiras consultas no Atlas](02-modelo-documental-e-consultas-no-atlas.md).
 - Os dados que chegam no caminho (`req.params`) e na pesquisa (`req.query`), sempre como texto, do tema "HTTP, rotas e middleware" de Sistemas de Informação.
 - Os códigos 200, 400 e 404, e a diferença entre um parâmetro inválido e um recurso inexistente, do mesmo tema de Sistemas de Informação.
@@ -828,7 +828,7 @@ Um erro com `erro`, outro com `mensagem`, um 404 do Express em HTML. O cliente R
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório](laboratorios/04-api-express-e-contratos-laboratorio.md), em que escreves o contrato, a primeira versão e as camadas da papelaria no teu projeto. Depois faz a [ficha de exercícios](exercicios/04-api-express-e-contratos-exercicios.md), com a API do torneio de futsal. O tema seguinte é Ligação segura, CRUD e regras de domínio. CRUD, do inglês, quer dizer criar, ler, alterar e apagar.
+Para praticar este tema, faz o [laboratório](laboratorios/04-api-express-e-contratos-laboratorio.md), em que escreves o contrato da API do jogo Fechado na escola e separas o teu projeto em camadas. Depois faz a [ficha de exercícios](exercicios/04-api-express-e-contratos-exercicios.md), com a API do torneio de futsal. O tema seguinte é Ligação segura, CRUD e regras de domínio. CRUD, do inglês, quer dizer criar, ler, alterar e apagar.
 
 Nesse tema, os dados temporários saem. A API liga-se ao teu cluster do Atlas com o Mongoose, e com a cadeia de ligação no `.env` que preparaste no tema anterior. O repository passa a fazer as consultas que escreveste na barra de consulta do tema do modelo documental. O `id` inteiro passa a ser o `_id` do MongoDB, e o contrato muda nessa linha. Chegam também os pedidos que criam, alteram e apagam artigos, com os dados no corpo do pedido, lidos por um middleware, o `express.json()`, que esse tema explica.
 

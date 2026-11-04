@@ -106,10 +106,10 @@ A API arranca sem nenhum erro no terminal, e mesmo assim este código tem três 
 
 Os exercícios 3 e 4 fazem-se num projeto `torneio-api`. Não o preparas do zero, como no laboratório do tema anterior: partes do esqueleto publicado da papelaria. Esse esqueleto já tem o `package.json` com os scripts e o Express, o `src/server.js` com a rota de estado, o `.env.example` e o `.gitignore`.
 
-1. Copia a pasta [papelaria-api](../../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho, e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório. Esse já tem os ficheiros dos artigos, que aqui não servem.
+1. Copia a pasta [papelaria-api](../../exemplos/acesso-a-dados/papelaria-api/README.md) dos exemplos para a tua pasta de trabalho, e muda o nome da cópia para `torneio-api`. Copia a pasta dos exemplos, e não o teu projeto do laboratório, que é o jogo e aqui não serve.
 2. No `package.json`, muda o `name` para `torneio-api` e escreve na `description` uma frase tua sobre a API do torneio.
 3. No `src/server.js`, troca a papelaria pelo torneio no comentário do início e no texto da rota de estado, que passa a ser `API do torneio de futsal`.
-4. Num terminal dentro da pasta `torneio-api`, corre `npm install`, cria o `.env` a partir do `.env.example`, como no laboratório do tema anterior, e arranca a API com `npm run dev`. Se a API do laboratório estiver ligada, para-a primeiro com Ctrl+C, ou muda a porta no `.env` da `torneio-api`. As duas não podem usar a porta 3000 ao mesmo tempo.
+4. Num terminal dentro da pasta `torneio-api`, corre `npm install`, cria o `.env` a partir do `.env.example`, como no laboratório do tema anterior, e arranca a API com `npm run dev`. Se o jogo do laboratório estiver ligado, para-o primeiro com Ctrl+C, ou muda a porta no `.env` da `torneio-api`. Os dois não podem usar a porta 3000 ao mesmo tempo.
 5. No browser, `/api/estado` deve responder com o texto novo, e `/api/equipas` deve dar 404, porque essa rota ainda não existe. É o que vais escrever.
 6. Cria o ficheiro `src/dados/torneio.dados.js` com os dados do cenário.
 
