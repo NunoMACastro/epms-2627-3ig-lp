@@ -2,7 +2,7 @@
 
 # Ligação segura, CRUD e regras de domínio
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como a API da papelaria passa a guardar os artigos no MongoDB Atlas. Mostra como os cria, lê, altera e apaga, e como recusa o que não cumpre as regras da papelaria. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório da papelaria](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md), o [laboratório do cinema da escola](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md), para quem traz esse projeto, e a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md) deste tema.
+Módulo M14, Acesso a Bases de Dados. Este guia explica como a API da papelaria passa a guardar os artigos no MongoDB Atlas. Mostra como os cria, lê, altera e apaga, e como recusa o que não cumpre as regras da papelaria. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md) deste tema. O laboratório deste tema vai ser o passo 4 do jogo Fechado na escola, e ainda não está publicado.
 
 No tema anterior, a API da papelaria ficou com um contrato escrito e com as camadas separadas, mas os artigos estavam num array, dentro do servidor. Já ligaste uma API ao Atlas com o Mongoose duas vezes. A primeira foi na aula em que a papelaria foi buscar os artigos à base; a segunda, na ficha do cinema da escola, que juntou um seed. Este tema junta as duas coisas e dá o passo que faltava. A API deixa de só ler: passa a escrever na base de dados.
 
@@ -128,7 +128,7 @@ O browser nunca a pode receber. Tudo o que chega ao browser pode ser lido por qu
 
 Há uma terceira proteção, que se escolhe no Atlas. O utilizador da base de dados que a API usa deve ter só os privilégios de que precisa. Para a papelaria, chega ler e escrever nas bases da papelaria. Não precisa de criar outros utilizadores nem de mudar a configuração do cluster. Se a cadeia escapar, um utilizador com menos privilégios faz menos estragos.
 
-Para confirmar que a cadeia não escapou, há duas verificações simples. No Git, nenhum ficheiro guardado tem o endereço do cluster, que acaba em `mongodb.net`. No browser, nenhuma resposta da API o tem. Os laboratórios deste tema fazem as duas no fim.
+Para confirmar que a cadeia não escapou, há duas verificações simples. No Git, nenhum ficheiro guardado tem o endereço do cluster, que acaba em `mongodb.net`. No browser, nenhuma resposta da API o tem. Faz as duas no fim do tema.
 
 ## A base de teste
 
@@ -408,7 +408,7 @@ app.use(express.json());
 
 O `express.json()` faz três coisas. Lê o texto do corpo, quando o `Content-Type` diz `application/json`. Converte-o num objeto JavaScript, como o `JSON.parse`. E guarda-o em `req.body`, para o controller o usar. Sem esta linha, o `req.body` ficava `undefined`. Se o texto não for JSON válido, o `express.json()` não chega a chamar a rota: passa um erro ao Express, que a secção das regras do schema trata.
 
-Para fazer um pedido com corpo, o browser não chega: a barra de endereço só faz pedidos `GET`. Os laboratórios usam o `fetch`, que conheces do 11.º ano, na consola das ferramentas de programador. O `fetch` aceita um segundo argumento, com o método, os cabeçalhos e o corpo. Para não escreveres isso em cada pedido, os laboratórios dão-te uma função, `pedir`:
+Para fazer um pedido com corpo, o browser não chega: a barra de endereço só faz pedidos `GET`. Usa-se o `fetch`, que conheces do 11.º ano, na consola das ferramentas de programador. O `fetch` aceita um segundo argumento, com o método, os cabeçalhos e o corpo. Para não escreveres isso em cada pedido, usa esta função, `pedir`:
 
 ```js check
 // Faz um pedido à API e escreve na consola o código e o corpo da resposta.
@@ -1209,7 +1209,7 @@ O `DB_NAME` do `.env` não acaba em `-teste`. É a verificação do seed a fazer
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório da papelaria](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) e depois a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md). Se fizeste o tema anterior no projeto do cinema, faz o [laboratório do cinema da escola](laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md) no lugar do da papelaria. O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
+Para praticar este tema, faz a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md). O laboratório deste tema vai ser o passo 4 do jogo Fechado na escola, e ainda não está publicado. O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
 
 ## Para saber mais
 

@@ -6,13 +6,13 @@ Ficha do tema Ligação segura, CRUD e regras de domínio, do módulo M14, Acess
 
 ## O que precisas de saber
 
-O [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md) e o laboratório que fizeste: o [da papelaria](../laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md) ou o [do cinema da escola](../laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio-cinema.md).
+O [guia do tema](../05-ligacao-segura-crud-e-regras-de-dominio.md). O laboratório deste tema vai ser o passo 4 do jogo Fechado na escola, e ainda não está publicado.
 
 ## Como trabalhar
 
 A parte obrigatória são os exercícios 1 a 7, por esta ordem. Fazem-se todos no computador, numa pasta `ficha-05`, e nenhum precisa de internet nem do Atlas. Os exercícios 4 e 5 têm ficheiros que corres; os outros pedem respostas escritas. O desafio e o "Para ires mais longe" são opcionais.
 
-Antes do exercício 1, cria a pasta `ficha-05` na raiz do projeto do teu laboratório, a `papelaria-api` ou a `cinema-da-escola`. Nela, cria um ficheiro de texto `respostas-05.md`, que escreves no editor. As respostas dos exercícios 1, 2, 3, 6 e 7, do desafio e do "Para ires mais longe" vão para esse ficheiro. Antes de cada resposta, põe o número do exercício e a letra da alínea. O código de uma resposta, como uma correção ou um filtro, vai num bloco de código, como os exemplos em JSON do teu `contrato-da-api.md`. No exercício 4, a resposta escrita fica num comentário no fim do `campos.js`.
+Antes do exercício 1, cria a pasta `ficha-05` na raiz de um projeto teu que já tenha o Mongoose instalado, como a `papelaria-api` ou a `cinema-da-escola`. Nela, cria um ficheiro de texto `respostas-05.md`, que escreves no editor. As respostas dos exercícios 1, 2, 3, 6 e 7, do desafio e do "Para ires mais longe" vão para esse ficheiro. Antes de cada resposta, põe o número do exercício e a letra da alínea. O código de uma resposta, como uma correção ou um filtro, vai num bloco de código, como os exemplos em JSON do teu `contrato-da-api.md`. No exercício 4, a resposta escrita fica num comentário no fim do `campos.js`.
 
 Antes de correres um ficheiro de experiência, prevê o que dá cada linha. Se precisares de ajuda, o [Apoio](#apoio) diz onde procurar em cada exercício.
 
@@ -20,7 +20,7 @@ Entrega a pasta `ficha-05`, com o `respostas-05.md` e os ficheiros dos exercíci
 
 ## O cenário: o clube de videojogos, no MongoDB
 
-No guia e no laboratório trabalhaste com a papelaria ou com o cinema. Esta ficha usa o clube de videojogos da escola, que conheces da ficha de revisão. O clube passou os jogos para o MongoDB, e tem uma API em camadas, a `clube-api`, organizada como a tua.
+No guia trabalhaste com a papelaria. Esta ficha usa o clube de videojogos da escola, que conheces da ficha de revisão. O clube passou os jogos para o MongoDB, e tem uma API em camadas, a `clube-api`, organizada como a tua.
 
 Cada jogo tem o título, o género, o número máximo de jogadores (`jogadoresMax`), se está disponível agora ou emprestado (`disponivel`) e quantas vezes já foi requisitado (`requisicoes`). Na base de teste, a coleção `jogos` tem estes seis. Nesta ficha, o seed do clube escreve os `_id` à mão, sempre os mesmos, para os pedidos da ficha os poderem usar. Na tua API, é o MongoDB que os dá, e cada seed dá outros.
 
@@ -113,7 +113,7 @@ d) Os dados do exemplo são inventados. Porque é que a base de teste do clube n
 
 ## Escrever e corrigir código
 
-Os exercícios 4 e 5 correm na pasta `ficha-05`, a do `respostas-05.md`, dentro do projeto do teu laboratório. Assim, o Node encontra o Mongoose que já lá instalaste, e não precisas de internet. Nenhum dos dois exercícios se liga ao Atlas.
+Os exercícios 4 e 5 correm na pasta `ficha-05`, a do `respostas-05.md`, dentro do projeto onde a criaste. Assim, o Node encontra o Mongoose que já lá instalaste, e não precisas de internet. Nenhum dos dois exercícios se liga ao Atlas.
 
 Prepara a pasta assim:
 
@@ -178,7 +178,7 @@ Prepara a pasta assim:
 
 ### Exercício 4: a lista fechada do clube
 
-Na pasta `ficha-05`, cria o ficheiro `campos.js` e escreve nele a função `lerCamposDoJogo(corpo)`, exportada. Faz o que a `lerCamposDoArtigo` ou a `lerCamposDoFilme` do laboratório fazem, mas para os campos de um jogo do clube, com os tipos do contrato. As regras dos valores, como os limites e os géneros, ficam para o schema, no exercício 5. Devolve `{ erro }`, com uma mensagem que diz qual é o campo, ao primeiro problema, ou `{ dados }`, com os campos lidos.
+Na pasta `ficha-05`, cria o ficheiro `campos.js` e escreve nele a função `lerCamposDoJogo(corpo)`, exportada. Faz o que a `lerCamposDoArtigo` do guia faz, mas para os campos de um jogo do clube, com os tipos do contrato. As regras dos valores, como os limites e os géneros, ficam para o schema, no exercício 5. Devolve `{ erro }`, com uma mensagem que diz qual é o campo, ao primeiro problema, ou `{ dados }`, com os campos lidos.
 
 O `experimentar-campos.js` experimenta a função com oito corpos, e corre-se com `node experimentar-campos.js`. Antes de o correres, prevê o que dá cada linha: um `erro`, que fala de um campo ou do corpo, ou os `dados`.
 
@@ -279,10 +279,10 @@ c) Um colega escreveu o filtro só com `{ disponivel: true }`. Quantos jogos apa
 - Exercício 1: em cada pedido, segue a ordem das verificações do controller: primeiro a forma do `id`, depois a lista fechada, depois as regras do schema ou do service. Os pedidos 9 e 10 são sobre o mesmo jogo, e o 10 vê a base como o 9 a deixou.
 - Exercício 2: pergunta, para cada regra, se ela é sobre a forma do pedido, sobre o valor de um campo, ou se precisa de ir à base ver outros documentos.
 - Exercício 3: a secção "Os dados pessoais e o RGPD" do guia. Para cada campo, procura o ecrã que o usa.
-- Exercício 4: começa pela função do teu laboratório. O que muda é a lista dos campos e um tipo que ela não tinha.
-- Exercício 5: a secção "As regras de cada campo, no schema" do guia, e o modelo do teu laboratório.
+- Exercício 4: começa pela `lerCamposDoArtigo`, da secção "Uma lista fechada de campos" do guia. O que muda é a lista dos campos e um tipo que ela não tinha.
+- Exercício 5: a secção "As regras de cada campo, no schema" do guia, com o modelo do artigo.
 - Exercício 6: na alínea a), descobre primeiro o filtro que o script constrói quando o comando não traz a terceira palavra. Depois, pensa no que esse filtro faz num `find` e num `deleteMany`. Na b), segue o `DELETE` do Tetris e o do Mario Kart. Na c), vê na documentação do Mongoose, na secção `Model.updateOne()`, o que esta função devolve, e segue o que o controller faz com isso.
-- Exercício 7: a secção "Ver o que vai mudar antes de mudar muitos" do guia, e o script de apagar do teu laboratório.
+- Exercício 7: a secção "Ver o que vai mudar antes de mudar muitos" do guia, com o script de apagar uma categoria.
 
 ## Desafio opcional
 

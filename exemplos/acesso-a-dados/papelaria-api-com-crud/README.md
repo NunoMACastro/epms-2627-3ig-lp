@@ -2,7 +2,7 @@
 
 # API da papelaria, com o CRUD
 
-A API da papelaria a criar, ler, alterar e apagar os artigos numa base de teste do MongoDB Atlas, com o Mongoose. Recusa o que não cumpre o contrato. São os campos que não estão na lista fechada, os valores que não cumprem as regras do schema e o apagamento de um artigo que ainda tem stock. É o ponto em que acaba o laboratório do tema [05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md).
+A API da papelaria a criar, ler, alterar e apagar os artigos numa base de teste do MongoDB Atlas, com o Mongoose. Recusa o que não cumpre o contrato. São os campos que não estão na lista fechada, os valores que não cumprem as regras do schema e o apagamento de um artigo que ainda tem stock. É a API como fica no fim do tema [05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md).
 
 A versão anterior, com o contrato e as camadas e os artigos ainda num array, está em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md).
 
@@ -45,7 +45,7 @@ Precisas do Node.js 22 ou mais recente e de internet. No Atlas, precisas do teu 
 
    O que deves ver: o seed escreve `Ligada à base de dados papelaria-teste` e `Inseridos 8 artigos`; a API escreve outra vez a linha da base e, a seguir, `API a correr em http://localhost:3000`.
 
-5. No browser, abre `/api/artigos`. Os pedidos com corpo, como o `POST`, o `PATCH` e o `DELETE`, fazem-se na consola das ferramentas de programador, com a função `pedir` da fase 5 do laboratório. A tabela da fase 10 do laboratório diz o que cada pedido deve responder. Para parar, Ctrl+C.
+5. No browser, abre `/api/artigos`. Os pedidos com corpo, como o `POST`, o `PATCH` e o `DELETE`, fazem-se na consola das ferramentas de programador. Usa a função `pedir` da secção "O corpo do pedido" do [guia do tema](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md). O `contrato-da-api.md` diz o que cada pedido deve responder. Para parar, Ctrl+C.
 
 A base `papelaria`, a do laboratório do Atlas, não é usada. Se o `DB_NAME` disser `papelaria`, o seed recusa-se a correr.
 

@@ -39,6 +39,7 @@ Ficas a saber preparar, de raiz, um projeto Node que se guarda no Git e se insta
 | 3 | O `src/server.js` | A API responde com as cenas, e jogas uma partida no browser |
 | 4 | Nada: segues um pedido no browser e no terminal | O pedido de uma cena, explicado passo a passo |
 | 5 | O primeiro commit | O projeto no Git, sem a palavra-passe |
+| 6 | Nada no computador: desenhas em papel as camadas do passo 2 | O desenho do pedido de uma cena, camada a camada |
 
 O passo 2, no tema seguinte, parte deste projeto. Divide a API em camadas e acrescenta a rota que leva de uma escolha à cena seguinte.
 
@@ -686,9 +687,44 @@ Um commit guarda a fotografia dos ficheiros que preparaste com o `git add`. Agor
 
 ### Paragem 5
 
-O projeto está no Git, com um commit, e o `.env` e a `node_modules` ficaram de fora. É o fim do passo 1, e o passo 2 começa nesta pasta.
+O projeto está no Git, com um commit, e o `.env` e a `node_modules` ficaram de fora. O código do passo 1 está acabado, e falta só o desenho que prepara o passo 2.
 
 Pensa antes de continuares: um colega fez o `git add .` antes de criar o `.gitignore`, e o `.env`, já com a cadeia de ligação, foi no primeiro commit. Basta-lhe acrescentar agora o `.env` ao `.gitignore`? A resposta: não. O `.gitignore` só faz o Git ignorar o que ele ainda não guardou. O `.env` que foi no primeiro commit continua no histórico, e quem tiver acesso ao repositório pode lê-lo. A única correção segura é mudar no Atlas a palavra-passe desse utilizador. Por isso, primeiro o `.gitignore`, e só depois o primeiro commit.
+
+## Fase 6: o desenho das camadas
+
+No passo 2, o `server.js` deixa de fazer tudo sozinho e divide-se em camadas, cada uma num ficheiro e com uma só tarefa. Antes de escreveres esse código, desenhas o caminho que o pedido de uma cena vai fazer por elas. O desenho faz-se em papel, à mão, e é ele que guia o passo 2.
+
+1. Desenha uma caixa para cada uma destas partes, de cima para baixo: o browser, as rotas, o controller, o service, o repository e o Atlas. Liga-as com setas, pela ordem em que o pedido `GET /api/cenas/corredor` passa por elas.
+
+2. Junto de cada camada, do servidor, escreve numa linha o que ela faz neste pedido. Usa estas quatro ideias, uma por camada:
+
+   - procurar a cena na base de dados;
+   - ler o `codigo` do pedido e escolher a resposta, 200 ou 404;
+   - escolher a função que trata o caminho;
+   - aplicar as regras do jogo.
+
+3. Desenha também as setas de volta, do Atlas até ao browser, e escreve em cada uma o que viaja: a cena, ou nada, quando o código não existe.
+
+   Compara o teu desenho com este:
+
+   | Camada | O que faz no pedido `GET /api/cenas/corredor` |
+   | --- | --- |
+   | Rotas | Escolhem a função do controller que trata `/api/cenas/:codigo` |
+   | Controller | Lê o `codigo` do pedido, pede a cena ao service e escolhe a resposta: 200 com a cena, ou 404 com o erro |
+   | Service | Aplica as regras do jogo. Neste pedido não há nenhuma, e passa o pedido ao repository |
+   | Repository | Procura no Atlas, com o Mongoose, a cena com o código `corredor`, e devolve-a, ou devolve `null` |
+   | Atlas | Guarda as cenas e devolve o documento do corredor |
+
+   Na volta, a cena sobe do Atlas ao repository, do repository ao service e do service ao controller, que responde com ela em JSON. Quando o código não existe, o repository devolve `null`, e é o controller que decide o 404.
+
+4. Compara com a fase 4. Os sete passos do pedido são os mesmos, e o que muda é onde fica cada bocado de código. Hoje, está tudo na função da rota, no `server.js`.
+
+### Paragem 6
+
+Tens em papel o desenho das camadas do pedido de uma cena, e sabes dizer o que cada camada faz. É o fim do passo 1. Guarda o desenho: no passo 2, vais escrever estas camadas, uma de cada vez, nesta mesma pasta.
+
+Pensa antes de continuares: qual é a única camada que sabe que as cenas estão no MongoDB? A resposta: o repository. O controller e o service pedem uma cena e recebem uma cena, ou `null`, sem saberem de onde ela veio. Se um dia as cenas passarem para outra base de dados, só o repository muda.
 
 ## Problemas frequentes
 
@@ -759,6 +795,7 @@ Não faças mais nada no Git e chama o professor. Se o `.env` só aparece na lis
 - [ ] Viste os dois erros provocados, a cadeia de ligação em falta e a base com o nome errado, e o `DB_NAME` voltou a `fechado-na-escola`.
 - [ ] No separador Rede, encontraste o método, o código, o `Content-Type` e o Remote Address do pedido de uma cena.
 - [ ] O `git log --oneline` mostra o primeiro commit, o `git status` diz que não há nada para guardar, e o `.env` não está no commit.
+- [ ] Desenhaste em papel as camadas do pedido de uma cena, com o que cada uma faz.
 - [ ] Consegues explicar, por palavras tuas, o pedido de uma cena, desde que escreves o endereço no browser até veres a resposta. E sabes dizer porque é que a palavra-passe do Atlas nunca chega ao browser.
 
 ![Rodapé](../../imagens/rodape.png)
