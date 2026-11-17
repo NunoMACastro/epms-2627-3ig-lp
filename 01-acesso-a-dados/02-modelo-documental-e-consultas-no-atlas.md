@@ -2,65 +2,34 @@
 
 # Modelo documental e primeiras consultas no Atlas
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como o MongoDB organiza a informação em documentos e como se decide o que fica dentro de cada documento. Explica também como se fazem as primeiras perguntas a uma base de dados. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há o [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e a [ficha de exercícios](exercicios/02-modelo-documental-e-consultas-no-atlas-exercicios.md) deste tema.
+Neste guia vês como o MongoDB guarda a informação de uma aplicação: em documentos parecidos com os objetos de JavaScript, arrumados em coleções. Aprendes a fazer-lhe perguntas no MongoDB Atlas, pelo browser, e a decidir o que fica dentro de cada documento e o que fica noutro, ligado por uma referência.
 
-Este ano vais construir uma aplicação que guarda os dados numa base de dados MongoDB. Antes de escreveres uma linha de código para falar com a base de dados, precisas de perceber como é que ela organiza a informação e como se lhe fazem perguntas. É isso que este guia trata, ainda sem código: só com a base de dados e o browser.
+Usa os objetos, os métodos dos arrays e o JSON do 11.º ano, e as tabelas do SQL que aprendeste com o MariaDB. Rever: [Objetos e `this`: o que é um objeto](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/08-Objetos-e-this.md#0-o-que-é-um-objeto), [Funções de alto nível em arrays: o `filter`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#2-filter---selecionar) e [Objetos e `this`: JSON rápido](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/08-Objetos-e-this.md#6-json-rápido). Para praticar: [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e [ficha de exercícios](exercicios/02-modelo-documental-e-consultas-no-atlas-exercicios.md).
 
 ## Neste guia
 
-1. O que vais aprender
-2. O que já sabes e vais usar
-3. Uma aplicação guarda os dados numa base de dados
-4. O MongoDB guarda a informação em documentos
-5. A informação relacionada embute-se ou referencia-se
-6. No Atlas, cada aluno tem o seu cluster
-7. Uma consulta descreve os documentos que queres
-8. Um modelo desenha-se a partir das perguntas
-9. Exemplo guiado: modelar o inventário da papelaria
-10. Erros frequentes
-11. Palavras novas deste guia
-12. Verificar o que aprendeste
-13. O que vem a seguir
-14. Para saber mais
+1. [Parte 1: A informação guarda-se em documentos](#parte-1-a-informação-guarda-se-em-documentos)
+2. [Parte 2: As consultas no Atlas](#parte-2-as-consultas-no-atlas)
+3. [Parte 3: Desenhar os documentos de uma aplicação](#parte-3-desenhar-os-documentos-de-uma-aplicação)
+4. [Exemplo guiado: modelar o inventário da papelaria](#exemplo-guiado-modelar-o-inventário-da-papelaria)
 
-## O que vais aprender
+## Parte 1: A informação guarda-se em documentos
 
-No fim deste guia, consegues:
+### Uma aplicação guarda os dados numa base de dados
 
-- explicar o que são um documento, uma coleção e uma base de dados, e para que serve o campo `_id`;
-- decidir, num problema concreto, se uma informação fica dentro de um documento ou noutro documento, ligada por uma referência, e justificar a decisão;
-- criar uma base de dados no MongoDB Atlas e inserir documentos;
-- escrever consultas com filtros, escolha de campos e ordenação, e prever o resultado antes de as executares;
-- desenhar os documentos de uma aplicação a partir das perguntas a que ela tem de responder.
+Um array de objetos vive na memória do computador enquanto o programa está a correr. Quando o programa termina, ou o computador se desliga, os dados desaparecem. Numa papelaria, o stock de ontem tem de estar lá amanhã.
 
-## O que já sabes e vais usar
+Um ficheiro JSON guarda os dados, e chega para um programa pequeno, usado por uma pessoa. Mas imagina a papelaria da escola com três funcionários a vender ao mesmo tempo, em três computadores. Se dois programas escreverem no mesmo ficheiro ao mesmo tempo, um apaga o trabalho do outro. Com dez mil artigos, encontrar os que têm pouco stock obriga a ler o ficheiro inteiro de cada vez. E se o computador se desligar a meio de uma escrita, o ficheiro pode ficar estragado.
 
-- Os objetos de JavaScript, com propriedades a que se chega com o ponto, como `artigo.stock`, do 11.º ano.
-- Os arrays de objetos e os métodos `filter`, `map` e `sort`, do 11.º ano.
-- O JSON, a forma de escrever objetos como texto, do 11.º ano.
-- O `fetch`, que pede dados a um servidor, e o `await`, que espera pela resposta, do 11.º ano.
+Por isso, a aplicação não guarda os dados ela própria. Pede a um programa especializado que os guarde e que lhe responda ao que precisa de saber, depressa e com muitos utilizadores ao mesmo tempo. É o que faz o MariaDB, com que aprendeste SQL. Um programa destes corre num servidor, um computador sempre ligado que presta um serviço a outros computadores pela rede.
 
-Se alguma destas ideias estiver pouco firme, é normal. Vais usá-las muitas vezes neste guia, e o professor retoma-as sempre que for preciso.
+O MariaDB guarda a informação em tabelas. O MongoDB guarda-a em documentos.
 
-## Uma aplicação guarda os dados numa base de dados
+Este ano vais usar o MongoDB Atlas, que é o MongoDB a funcionar na **nuvem** (em inglês, *cloud*). Quer dizer que corre em servidores de um centro de dados da empresa que o faz, a que chegas pela internet. Crias a base de dados numa página web, e a empresa trata de a manter ligada e protegida.
 
-Um array de objetos vive na memória do computador enquanto o programa está a correr. Quando o programa termina, ou o computador se desliga, os dados desaparecem. Para a maior parte das aplicações isso não serve. Numa papelaria, o stock de ontem tem de estar lá amanhã.
+### O MongoDB guarda a informação em documentos
 
-Podias guardar os dados num ficheiro JSON, e para um programa pequeno usado por uma só pessoa isso funciona. Mas imagina a papelaria da escola com três funcionários a vender ao mesmo tempo, em três computadores. Se dois programas escreverem no mesmo ficheiro ao mesmo tempo, um apaga o trabalho do outro. Se o ficheiro tiver dez mil artigos, encontrar os que têm pouco stock obriga a ler o ficheiro inteiro de cada vez. E se o computador se desligar a meio de uma escrita, o ficheiro pode ficar estragado.
-
-Para isso há programas especializados em guardar dados de forma segura e em encontrá-los depressa, mesmo com muitos utilizadores ao mesmo tempo. A tua aplicação não guarda os dados ela própria. Pede a um desses programas que os guarde, e pergunta-lhe o que precisa de saber. Os dados que o programa guarda para uma aplicação formam uma **base de dados**.
-
-Esse programa corre num **servidor**: um computador que está sempre ligado e que presta um serviço a outros computadores através da rede. Neste caso, o serviço é guardar dados e responder a perguntas sobre eles. A mesma palavra, servidor, serve também para o programa que, nesse computador, presta o serviço.
-
-O MongoDB é um desses programas. O **MongoDB Atlas** é o MongoDB a funcionar na **nuvem** (em inglês, *cloud*), em servidores geridos pela empresa que o faz. Estar na nuvem quer dizer que esses servidores não estão na escola nem em tua casa. Estão num centro de dados da empresa, e chegas-lhes pela internet, a partir de qualquer computador com um browser. Tu crias a tua base de dados numa página web, e a empresa trata de a manter ligada, protegida e com cópias de segurança. É o que vais usar este ano.
-
-## O MongoDB guarda a informação em documentos
-
-Cada um destes programas tem uma forma de organizar a informação, a que se chama o seu modelo. O MongoDB usa o **modelo documental**: a informação guarda-se em documentos.
-
-### Documento, coleção e base de dados
-
-No 11.º ano trabalhaste com objetos de JavaScript. Um objeto junta várias informações sobre a mesma coisa, cada uma com um nome. Este objeto descreve um artigo de uma papelaria:
+No 11.º ano, um objeto de JavaScript juntava várias informações sobre a mesma coisa, cada uma com um nome. Este objeto descreve um artigo de uma papelaria:
 
 ```js
 const artigo = {
@@ -71,153 +40,115 @@ const artigo = {
 };
 ```
 
-Cada par nome e valor chama-se uma propriedade, e chega-se a cada valor com o ponto: `artigo.stock` dá `12`.
+O preço está em cêntimos, num número inteiro: `250` quer dizer 2,50 €. Os números com casas decimais nem sempre dão contas exatas no computador, e com dinheiro um cêntimo a mais ou a menos é um erro a sério.
 
-O preço está em cêntimos, como número inteiro: `250` quer dizer 2,50 €. Guarda-se assim porque os números com casas decimais nem sempre dão contas exatas no computador. Com dinheiro, uma conta errada por um cêntimo é um erro a sério.
+Um **documento** tem a forma de um objeto de JavaScript. É um conjunto de pares nome e valor que descreve uma coisa, como um artigo, um fornecedor ou uma venda. Num documento, cada par chama-se um campo, e não uma propriedade. O artigo acima, guardado no MongoDB, é um documento com quatro campos. Por guardar a informação em documentos, diz-se que o MongoDB segue o **modelo documental**.
 
-Um **documento** é um conjunto de campos, cada um com um nome e um valor, que descreve uma coisa: um artigo, um fornecedor, uma venda. Tem a mesma forma de um objeto de JavaScript. Os **campos** de um documento são o equivalente às propriedades de um objeto. O artigo acima, guardado no MongoDB, é um documento com quatro campos.
+Em JSON, o mesmo artigo fica quase igual, com aspas duplas nos nomes e sem a vírgula do fim: `{ "nome": "Caderno A4 quadriculado", "categoria": "Papel", "stock": 12, "precoCentimos": 250 }`.
 
-Também viste o JSON, que é a forma de escrever objetos como texto, para os guardar num ficheiro ou os enviar pela rede. O artigo acima, em JSON, fica quase igual: `{ "nome": "Caderno A4 quadriculado", "categoria": "Papel", "stock": 12, "precoCentimos": 250 }`. Os nomes dos campos e os textos ficam entre aspas duplas, porque o JSON não aceita aspas simples. E desaparece a vírgula depois do último campo, que o JSON também não aceita.
+### Uma coleção junta os documentos do mesmo tipo
 
-Uma **coleção** é um conjunto de documentos do mesmo tipo. Todos os artigos da papelaria ficam na coleção `artigos`, todos os fornecedores na coleção `fornecedores`, todas as vendas na coleção `vendas`.
+Uma **coleção** é um conjunto de documentos do mesmo tipo. Os artigos da papelaria ficam na coleção `artigos`, os fornecedores na coleção `fornecedores` e as vendas na coleção `vendas`. No MongoDB, uma base de dados é um conjunto de coleções da mesma aplicação, e a base de dados `papelaria` junta as três.
 
-Uma **base de dados** é um conjunto de coleções que pertencem à mesma aplicação. A base de dados `papelaria` tem as três coleções anteriores.
-
-Uma forma de fixar as três ideias é pensar num arquivo em papel. Cada documento é uma ficha preenchida. Cada coleção é uma gaveta onde se guardam as fichas do mesmo tipo: a gaveta dos artigos e a gaveta dos fornecedores. A base de dados é o armário com as gavetas todas da papelaria.
-
-No Atlas há ainda três níveis por cima destes, que vais encontrar ao criar a conta. Um **cluster** é o conjunto de servidores onde o MongoDB está a correr e onde vivem as tuas bases de dados. Um **projeto** agrupa clusters, e uma **organização** agrupa projetos. Do maior para o mais pequeno:
-
-```text
-organização → projeto → cluster → base de dados → coleção → documento
+```mermaid
+flowchart TD
+    BD[("base de dados papelaria")]
+    BD --> A["coleção artigos"]
+    BD --> F["coleção fornecedores"]
+    BD --> V["coleção vendas"]
+    A --> A1["documento: Caderno A4 quadriculado"]
+    A --> A2["documento: Esferográfica azul"]
+    F --> F1["documento: Fornecedor Exemplo, Lda."]
+    V --> V1["documento: a venda de 1 de outubro"]
 ```
 
-A palavra cluster quer dizer agrupamento, e o nome explica-se porque um cluster não é um servidor só. No plano gratuito que vais usar, o Atlas guarda os mesmos dados em três servidores ao mesmo tempo, com cópias iguais. Se um deles avariar, os outros continuam a responder e não se perde nada. Para ti, que vais usar o cluster pela página do Atlas, isto não se vê. O cluster funciona como se fosse um único servidor.
+O diagrama mostra a base de dados `papelaria` com as suas três coleções, e alguns documentos em cada uma. Pensa num arquivo em papel. Cada documento é uma ficha preenchida, cada coleção é a gaveta das fichas do mesmo tipo, e a base de dados é o armário.
 
-### Um documento parece um objeto JavaScript, mas não é bem igual
+### O campo `_id` e o ObjectId
 
-Quando escreves um documento no Atlas, escreves-o com a mesma forma de um objeto de JavaScript ou de um JSON. Como em JavaScript, os textos podem ir entre aspas duplas ou simples. Mas o MongoDB não o guarda como texto. Guarda-o num formato binário chamado **BSON**, que tem mais tipos de valores do que o JSON. Binário quer dizer que o documento fica guardado numa forma pensada para o computador ler e escrever depressa, e não para uma pessoa ler. Se abrisses o ficheiro onde ele está guardado, não reconhecerias o texto que escreveste. É o Atlas que o volta a mostrar com a forma de um objeto, para tu o leres.
+Cada documento de uma coleção tem obrigatoriamente um campo `_id`, com um valor diferente do de todos os outros documentos da coleção. É ele que distingue dois documentos, mesmo que tenham os mesmos campos, como dois artigos com o mesmo nome.
 
-A diferença que mais interessa agora é esta. Em JSON, uma data é apenas texto, como `"2026-10-01"`. Para o computador, isso é uma sequência de carateres, e não uma data. Não sabe fazer contas com ela, como saber quantos dias passaram entre duas vendas, nem sabe que "1/10/2026" e "2026-10-01" são o mesmo dia. No BSON existe um tipo de data a sério, que se pode comparar e ordenar corretamente. No Atlas escreve-se assim: `ISODate('2026-10-01T10:15:00Z')`. O mesmo acontece com o identificador de cada documento, que tem um tipo próprio, o ObjectId, explicado já a seguir.
+Se inserires um documento sem `_id`, o MongoDB cria um, do tipo **ObjectId**. Um ObjectId escreve-se com 24 carateres, só com algarismos de 0 a 9 e letras de `a` a `f`, como em `ObjectId('66fb1c2a9d3e4f5a6b7c8d01')`. Na prática, dois ObjectId nunca saem iguais, mesmo criados ao mesmo tempo em computadores diferentes. Por isso não inventas valores de `_id` à mão: deixas o MongoDB criá-los e usas os que ele criou.
 
-O texto dentro de `ISODate(...)` segue uma norma internacional para escrever datas e horas, a **ISO 8601**, que dá nome ao `ISODate`. Lê-se da esquerda para a direita, do maior para o mais pequeno:
+Prevê: se inserires o mesmo artigo duas vezes, sem `_id`, a coleção fica com um documento ou com dois?
 
-- primeiro vêm o ano, o mês e o dia, separados por hífenes: `2026-10-01` é 1 de outubro de 2026;
-- depois vem a letra `T`, que só serve para separar a data da hora;
-- depois vêm as horas, os minutos e os segundos: `10:15:00`;
-- no fim, a letra `Z` diz que a hora está em tempo universal coordenado, conhecido pela sigla **UTC**.
+Fica com dois, cada um com o seu `_id`. Para o MongoDB não são repetidos. São dois documentos diferentes que, por acaso, têm os mesmos campos.
 
-O UTC é a hora de referência usada no mundo inteiro, e não a hora de Portugal. A 1 de outubro, Portugal continental está na hora de verão, uma hora à frente do UTC, por isso `10:15` em UTC são 11:15 em Lisboa. No inverno, a hora de Portugal continental coincide com o UTC. Guardam-se as horas em UTC para que não haja confusões quando a hora muda entre o verão e o inverno, ou quando a aplicação é usada noutro país. É a aplicação que converte para a hora local quando a mostra.
+<details>
+<summary>Para ires mais longe: os 12 bytes de um ObjectId</summary>
 
-Quando vires um documento escrito com `ISODate(...)` ou `ObjectId(...)`, é a forma de dizer ao MongoDB que aquele valor tem um tipo especial. Não é um simples texto.
+Por dentro, um ObjectId tem 12 bytes, e um byte é a unidade de memória que guarda um número de 0 a 255. Os primeiros 4 bytes guardam o momento em que o ObjectId foi criado, em segundos contados desde 1 de janeiro de 1970. Os 5 seguintes são um valor aleatório do programa que o criou. Os últimos 3 são um contador, que sobe de cada vez. É esta combinação que torna praticamente impossível que dois saiam iguais.
 
-### O campo _id e o ObjectId
+Cada byte escreve-se com dois carateres em hexadecimal, o sistema de base 16. Aos algarismos de 0 a 9 juntam-se as letras de `a` a `f`, que valem de 10 a 15. Dois símbolos dão 16 vezes 16 valores, ou seja 256, exatamente os de um byte. Doze bytes, a dois carateres cada um, dão os 24 carateres, e nunca aparece um `g` ou um `z`.
 
-Cada documento de uma coleção tem obrigatoriamente um campo chamado `_id`, com um valor diferente do de todos os outros documentos da mesma coleção. É o que permite dizer "este documento e não outro", mesmo que haja dois artigos com o mesmo nome.
+</details>
 
-Se inserires um documento sem `_id`, o MongoDB cria um automaticamente, do tipo **ObjectId**. Um ObjectId aparece escrito como 24 carateres, com algarismos e letras de `a` a `f`, por exemplo `ObjectId('66fb1c2a9d3e4f5a6b7c8d01')`. Por dentro são 12 bytes; um **byte** é a unidade de memória que guarda um número de 0 a 255. Os 12 bytes têm três partes:
+### Um documento guarda tipos que o JSON não tem
 
-- os primeiros 4 guardam o momento em que foi criado, em segundos contados desde 1 de janeiro de 1970;
-- os 5 seguintes são um valor aleatório, gerado pelo programa que o criou;
-- os últimos 3 são um contador, que sobe de cada vez.
+Em JSON, uma data é só texto, como `"2026-10-01"`. O computador não a trata como uma data. Não sabe contar os dias entre duas vendas, nem sabe que "1/10/2026" e "2026-10-01" são o mesmo dia.
 
-Esta combinação torna praticamente impossível que dois ObjectId saiam iguais, mesmo criados ao mesmo tempo em computadores diferentes.
+O MongoDB não guarda os documentos como texto. Guarda-os em **BSON**, um formato binário, feito para o computador ler e escrever depressa, e não para uma pessoa ler. É o Atlas que te mostra cada documento com a forma de um objeto.
 
-Os 12 bytes aparecem escritos como 24 carateres porque cada byte se escreve com dois carateres no sistema **hexadecimal**, também chamado base 16. Na base 10, que usas no dia a dia, há dez algarismos, de 0 a 9. Na base 16 são precisos dezasseis símbolos, por isso aos algarismos de 0 a 9 juntam-se as letras de `a` a `f`, que valem de 10 a 15. Com dois símbolos hexadecimais escrevem-se 16 vezes 16 valores, ou seja 256: exatamente os de um byte. É por isso que num ObjectId só aparecem algarismos e as letras de `a` a `f`, e nunca um `g` ou um `z`. Doze bytes, a dois carateres cada um, dão os 24 carateres.
+O BSON tem mais tipos de valores do que o JSON, e um deles é a data, que se compara e ordena como uma data. Na janela do Atlas onde se inserem documentos, uma data escreve-se assim: `ISODate('2026-10-01T10:15:00Z')`. O ObjectId é outro desses tipos. Quando vires `ISODate(...)` ou `ObjectId(...)`, é a forma de dizer ao MongoDB que o valor tem um tipo especial, e não é um simples texto.
 
-Na prática, não inventas valores de `_id` à mão. Deixas o MongoDB criá-los e usas o que ele criou.
+O texto dentro do `ISODate(...)` lê-se do maior para o mais pequeno. Primeiro vêm o ano, o mês e o dia: `2026-10-01` é 1 de outubro de 2026. Depois vem a letra `T`, que só separa a data da hora, e por fim a hora, `10:15:00`. O `Z` do fim diz que a hora está em **UTC**, a hora de referência usada no mundo inteiro. Em Portugal continental, na hora de inverno, a hora é a do UTC. Na hora de verão, do fim de março ao fim de outubro, é mais uma: a 1 de outubro, `10:15` em UTC são 11:15 em Lisboa.
+
+<details>
+<summary>Para ires mais longe: porque se guardam as horas em UTC</summary>
+
+Com as horas em UTC, não há confusões quando a hora muda entre o verão e o inverno, nem quando a aplicação é usada noutro país. É a aplicação que converte para a hora local quando a mostra. A forma de escrever a data e a hora, do ano aos segundos, segue uma norma internacional, a ISO 8601, que dá o nome ao `ISODate`.
+
+</details>
 
 ### Os documentos de uma coleção não têm de ser iguais
 
-Numa folha de cálculo, todas as linhas têm as mesmas colunas. No MongoDB, dois documentos da mesma coleção podem ter campos diferentes. Um artigo pode ter um campo `cor` e outro não ter. Diz-se que o MongoDB tem um **esquema flexível**.
+Numa tabela do MariaDB, todas as linhas têm as mesmas colunas. No MongoDB, dois documentos da mesma coleção podem ter campos diferentes: um artigo pode ter um campo `cor`, e outro não. Diz-se que o MongoDB tem um **esquema flexível**.
 
-Isto dá jeito quando os dados variam de verdade, mas também é um perigo. Se escreveres `categria` em vez de `categoria` num documento, o MongoDB aceita sem dizer nada. Para ele, é só um campo com outro nome. Depois, quando procurares os artigos de uma categoria, esse documento não aparece, e não há nenhuma mensagem de erro a avisar. O mesmo acontece se guardares o stock como texto (`"12"`) num documento e como número (`12`) nos outros.
+Dá jeito quando os dados variam de verdade, mas também é um perigo. Se escreveres `categria` em vez de `categoria` num documento, o MongoDB aceita-o sem avisar, porque para ele é só outro campo. Depois, quando procurares os artigos de uma categoria, esse documento não aparece, e nenhuma mensagem de erro te avisa.
 
-Por isso, a responsabilidade de manter os documentos coerentes é tua e da tua aplicação. Mais à frente no módulo vais escrever o código que verifica os dados antes de os guardar. Por agora, a regra é escrever os documentos de uma coleção sempre com os mesmos nomes de campos e os mesmos tipos.
+Manter os documentos coerentes fica a cargo de quem os escreve. Por agora és tu, à mão; numa aplicação, é o código dela. A regra é escrever os documentos de uma coleção sempre com os mesmos nomes de campos e os mesmos tipos.
 
-### Se já trabalhaste com tabelas
+### A coleção é a tabela, e o documento é a linha
 
-Se já trabalhaste com bases de dados de tabelas, em Sistemas de Informação ou noutra disciplina, esta comparação ajuda a situar as ideias. Se ainda não trabalhaste, podes saltá-la.
+O SQL que aprendeste com o MariaDB usa uma base de dados relacional, feita de tabelas. O MongoDB é uma base de dados não relacional, mas quase todas as ideias têm par:
 
-| Base de dados de tabelas | MongoDB |
+| MariaDB (tabelas) | MongoDB (documentos) |
 | --- | --- |
 | Tabela | Coleção |
 | Linha | Documento |
 | Coluna | Campo |
 | Chave primária | Campo `_id` |
-| Todas as linhas têm as mesmas colunas | Os documentos podem ter campos diferentes |
-| Informação relacionada fica noutra tabela e junta-se com uma consulta | Informação relacionada pode ficar dentro do próprio documento |
+| A informação relacionada fica noutra tabela e junta-se numa consulta | A informação relacionada pode ficar dentro do próprio documento |
 
-A última linha é a grande diferença, e é o assunto da secção seguinte.
+A última linha é a maior diferença entre as duas. No MongoDB, quem desenha os documentos decide o que fica dentro de cada um.
 
-## A informação relacionada embute-se ou referencia-se
+### No Atlas, cada aluno tem o seu cluster
 
-Quando uma informação está relacionada com outra, o MongoDB deixa-te escolher entre duas formas de a guardar.
+No Atlas, as bases de dados vivem num **cluster**: o conjunto de servidores onde o MongoDB está a correr. O cluster fica dentro de um projeto, e o projeto dentro de uma organização. O projeto e a organização são as pastas do Atlas, que arrumam clusters e dizem quem lhes pode aceder.
 
-**Embutir** é guardar a informação dentro do próprio documento. A localização de um artigo na papelaria (corredor e prateleira) pode ficar dentro do documento do artigo, como um documento dentro de outro:
-
-```js
-{
-  nome: "Caderno A4 quadriculado",
-  categoria: "Papel",
-  localizacao: { corredor: "A", prateleira: 1 }
-}
+```mermaid
+flowchart LR
+    O[organização] --> P[projeto] --> C[cluster] --> B[base de dados] --> Co[coleção] --> D[documento]
 ```
 
-A um documento guardado dentro de outro chama-se **documento embutido**. Também se pode embutir um array, por exemplo a lista das linhas de uma venda. Uma **linha de uma venda** é o que aparece numa linha do talão de compra: que artigo se vendeu, quantas unidades e a que preço. Uma venda de três artigos diferentes tem três linhas, e cada linha é ela própria um pequeno documento dentro do array.
+O diagrama mostra os seis níveis, do maior para o mais pequeno, cada um dentro do anterior.
 
-**Referenciar** é guardar a informação num documento separado, noutra coleção, e guardar no primeiro documento apenas o `_id` do segundo. O fornecedor de um artigo pode ficar na coleção `fornecedores`, e o artigo guarda só o identificador do fornecedor:
+Uma **ligação** é o canal que um programa abre para falar com a base de dados, como faz a tua aplicação quando está a correr. Este ano usas o plano gratuito, com um cluster gratuito por projeto. Os limites dele chegam folgadamente: 0,5 GB de dados, 500 ligações ao mesmo tempo e 100 operações por segundo. Uma operação é cada pedido de um programa à base de dados, como inserir um documento ou fazer uma consulta. Se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa, o que pode acontecer nas férias.
 
-```js
-{
-  nome: "Caderno A4 quadriculado",
-  categoria: "Papel",
-  fornecedorId: ObjectId('66fb1c2a9d3e4f5a6b7c8d01')
-}
-```
+Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster serve para o resto do ano. Para o professor acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto. Os passos estão no [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
 
-O campo `fornecedorId` é uma **referência**: guarda o `_id` de outro documento. O nome do campo segue uma convenção que vais ver muitas vezes: o nome da coisa referida, seguido de `Id`. Não é uma regra do MongoDB, que aceitaria qualquer outro nome. É uma ajuda para quem lê o documento: percebe logo que aquele valor é o `_id` de um fornecedor, e que é na coleção `fornecedores` que o deve procurar.
+<details>
+<summary>Para ires mais longe: um cluster tem três servidores</summary>
 
-Ler uma referência obriga a um passo a mais. Para mostrar um artigo com o nome e o telefone do fornecedor, a aplicação faz duas perguntas à base de dados. Primeiro lê o artigo, e encontra nele o `fornecedorId`. Depois procura, na coleção `fornecedores`, o documento cujo `_id` é igual a esse valor. A isto chama-se **seguir a referência**.
+A palavra cluster quer dizer agrupamento. No plano gratuito, o Atlas guarda os mesmos dados em três servidores ao mesmo tempo, com cópias iguais. Se um deles avariar, os outros continuam a responder, e não se perde nada. Pela página do Atlas isto não se vê: o cluster funciona como se fosse um só servidor.
 
-A pergunta também se pode fazer no sentido contrário. Para saber que artigos tem um fornecedor, procuram-se na coleção `artigos` os documentos cujo `fornecedorId` é igual ao `_id` desse fornecedor. É esta segunda pergunta que vais fazer no laboratório.
+</details>
 
-### Como decidir
+## Parte 2: As consultas no Atlas
 
-Há duas perguntas que ajudam a decidir: "que ecrã vai ler estes dados?" e "que dados mudam ao mesmo tempo?". A partir delas chega-se a duas regras.
+No Atlas, as perguntas à base de dados escrevem-se na barra de consulta do Data Explorer, a página onde vês as coleções e os documentos. A barra fica por cima da lista dos documentos.
 
-Embute-se quando a informação é sempre lida juntamente com o documento principal e não pode crescer sem limite. A localização de um artigo aparece sempre que se mostra o artigo, e cada artigo tem uma só localização. Embutir é a escolha natural. Com uma só leitura tens tudo o que o ecrã precisa.
-
-Referencia-se quando a informação é reutilizada por muitos documentos ou é alterada de forma independente. O mesmo fornecedor fornece dezenas de artigos. Se o contacto do fornecedor mudar e estiver embutido em cada artigo, tens de o alterar em dezenas de sítios, e basta esquecer um para a informação ficar contraditória. Referenciado, o contacto está num só documento e altera-se uma vez.
-
-A condição de não crescer sem limite, que faz parte da regra de embutir, tem uma razão concreta. Cada documento tem um tamanho máximo de 16 MiB, cerca de 17 milhões de bytes. Nenhum artigo chega perto disso, mas uma lista que cresce sempre, como todas as vendas de um artigo desde que a papelaria abriu, acabaria por chegar. Uma lista assim nunca se embute. Cada venda é um documento da sua coleção.
-
-### Copiar de propósito
-
-Há um caso em que se guarda uma cópia de propósito, e percebê-lo evita um erro frequente. Numa venda, cada linha diz que artigo se vendeu. Podias guardar só a referência ao artigo. Mas imagina que, em janeiro, o preço do caderno sobe de 2,50 € para 2,80 €. As vendas de outubro passariam a mostrar o preço novo, e a faturação de outubro deixaria de bater certo.
-
-Por isso, cada linha da venda guarda a referência ao artigo e também uma cópia do nome e do preço no momento da venda. Esta cópia é o registo do que aconteceu naquele dia, e esse registo não deve mudar quando o artigo mudar.
-
-### O MongoDB não verifica as referências
-
-Quando um artigo guarda `fornecedorId`, o MongoDB não confirma que existe mesmo um fornecedor com esse `_id`. Aceita qualquer ObjectId. E se um fornecedor for apagado, os artigos que o referiam continuam a apontar para um documento que já não existe.
-
-A regra simples é esta. É a tua aplicação que tem de confirmar que o documento referido existe, antes de guardar a referência. E é também a aplicação que decide o que acontece às referências quando um documento é apagado. Vais ver isto na prática no laboratório.
-
-## No Atlas, cada aluno tem o seu cluster
-
-O Atlas tem vários planos. Este ano usas o plano gratuito, que dá a cada projeto um cluster gratuito. Os limites deste cluster chegam folgadamente para o que vais fazer: 0,5 GB de dados, até 500 ligações ao mesmo tempo e até 100 operações por segundo. Uma **ligação** é um programa ligado à base de dados, como a tua aplicação quando estiver a correr. Uma **operação** é cada pedido que esse programa lhe faz, por exemplo inserir um documento ou fazer uma consulta.
-
-Há uma regra a lembrar. Se o cluster passar 30 dias sem nenhuma ligação, o Atlas põe-no em pausa. Isso pode acontecer nas férias.
-
-Na turma, cada um cria a sua conta, o seu projeto e o seu cluster. Assim, os teus dados são só teus, ninguém os estraga por engano, e o mesmo cluster serve para o resto do ano. Para o professor poder ver e acompanhar o teu trabalho, dás-lhe acesso de leitura ao teu projeto. Os passos para criar a conta e o cluster e para dar acesso ao professor estão na fase 1 do [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md).
-
-## Uma consulta descreve os documentos que queres
-
-Pedir informação a uma base de dados chama-se fazer uma **consulta**. No MongoDB, uma consulta descreve os documentos que queres com um documento chamado **filtro**, escrito com a mesma forma de um objeto de JavaScript. No laboratório vais escrever estas consultas na **barra de consulta** do Atlas, por cima da lista dos documentos. Aqui fica o que cada uma quer dizer e porque se escreve assim.
-
-### Os oito artigos dos exemplos
-
-Os exemplos desta secção usam os oito artigos da papelaria que vais inserir no laboratório. Cada artigo tem o nome, a categoria, o stock, o stock mínimo, o preço em cêntimos e a localização: o corredor e a prateleira onde está arrumado. O stock mínimo é a quantidade abaixo da qual a papelaria tem de encomendar mais.
+Os exemplos desta parte usam os oito artigos da papelaria que inseres no início do laboratório, antes de lhes juntares um nono. Cada artigo tem o nome, a categoria, o stock, o stock mínimo, o preço em cêntimos e a localização, que diz o corredor e a prateleira onde está arrumado. O stock mínimo é o número de unidades abaixo do qual é preciso encomendar mais.
 
 | Artigo | Categoria | Stock | Stock mínimo | Preço (cêntimos) | Corredor e prateleira |
 | --- | --- | ---: | ---: | ---: | --- |
@@ -230,148 +161,218 @@ Os exemplos desta secção usam os oito artigos da papelaria que vais inserir no
 | Régua de 30 cm | Desenho | 6 | 3 | 120 | C, 1 |
 | Compasso escolar | Desenho | 1 | 2 | 450 | C, 1 |
 
-Na base de dados, cada linha da tabela é um documento da coleção `artigos`, com a localização guardada dentro dele, como um documento embutido. A primeira linha, por exemplo, é este documento:
+Cada linha da tabela é um documento da coleção `artigos`, com a localização guardada dentro dele. A primeira linha é este documento:
 
 ```js
 { nome: "Caderno A4 quadriculado", categoria: "Papel", stock: 12, stockMinimo: 5, precoCentimos: 250, localizacao: { corredor: "A", prateleira: 1 } }
 ```
 
-### As quatro partes de uma consulta
+### Um filtro escolhe os documentos
 
-Uma consulta pode ter até quatro partes. O **filtro** diz que documentos queres. A **projeção** diz que campos de cada documento queres ver. A **ordenação** diz por que ordem os queres. O **limite** diz quantos queres no máximo. Só o filtro é sempre usado. As outras três são opcionais.
+Até aqui, a papelaria vê todos os artigos. Mas quem lá trabalha quer só alguns, como os de papel. Pedir informação a uma base de dados é fazer uma **consulta**. No MongoDB, a consulta diz que documentos queres com um **filtro**: um documento com as condições que eles têm de cumprir, escrito com a forma de um objeto de JavaScript.
 
-O filtro mais simples de todos é o filtro vazio, `{}`. Não impõe nenhuma condição, e por isso todos os documentos da coleção o cumprem. Usa-se quando não queres escolher documentos, mas queres fazer alguma coisa a todos eles, por exemplo ordená-los. Na barra de consulta do Atlas, deixar o campo do filtro vazio tem o mesmo efeito que escrever `{}`.
+O filtro faz o mesmo que o `filter` de um array. A diferença é onde se faz o trabalho. Com o array, o programa tem primeiro de receber todos os artigos, e só depois os percorre. Com o filtro, só os documentos que interessam saem da base de dados. Com oito artigos não se nota, mas com cem mil já se sente.
 
-Estas partes fazem na base de dados o que já fazias com arrays em JavaScript:
-
-| Parte da consulta | Em JavaScript, com um array |
-| --- | --- |
-| Filtro | `filter` |
-| Projeção | `map`, a escolher só alguns campos |
-| Ordenação | `sort` |
-| Limite | `slice(0, n)`, que fica só com os primeiros `n` elementos |
-
-A diferença é quem faz o trabalho. Com um array, é o teu programa que percorre os dados. Com a base de dados, é ela que procura e devolve só o resultado. Com oito artigos não se nota. Com cem mil, é a diferença entre esperar um instante e esperar minutos.
-
-### Igualdade
-
-O filtro mais simples pede documentos em que um campo tem um valor exato. Antes de leres o resultado, prevê, olhando para a tabela dos oito artigos: que artigos devolve este filtro?
+O filtro mais simples pede os documentos em que um campo tem um valor exato. Prevê, com a tabela dos oito artigos: que artigos devolve este filtro?
 
 ```js
 { categoria: "Papel" }
 ```
 
-Lê-se "documentos cujo campo `categoria` é igual a `Papel`". O resultado são três artigos: o Caderno A4 quadriculado, o Bloco de notas A5 e a Resma de papel A4.
+Devolve três: o Caderno A4 quadriculado, o Bloco de notas A5 e a Resma de papel A4. O filtro lê-se "os documentos cujo campo `categoria` é igual a `Papel`".
 
-O MongoDB compara o texto exatamente como está escrito. Por isso `{ categoria: "papel" }`, com minúscula, não encontra nenhum dos artigos de papel, e não dá nenhum erro. Para a base de dados, `papel` e `Papel` são textos diferentes.
+O MongoDB compara o texto exatamente como está escrito. Por isso `{ categoria: "papel" }`, com minúscula, não encontra nenhum artigo, e não dá erro. Para a base de dados, `papel` e `Papel` são textos diferentes, e uma consulta que não encontra nada dá uma resposta vazia.
 
-### Operadores de comparação
+O filtro vazio, `{}`, não tem condições, e todos os documentos o cumprem. Usa-se quando queres todos os documentos, por exemplo para os ordenar. Na barra de consulta, deixar o filtro em branco é o mesmo que escrever `{}`.
 
-Para perguntar "menor do que", "maior do que" e semelhantes, usa-se um **operador**. Os operadores começam sempre por `$` e escrevem-se como um documento dentro do filtro. Antes de leres o resultado, prevê: que artigos devolve este filtro?
+### Um operador compara um campo com um valor
+
+Para encontrar os artigos com pouco stock, a igualdade não chega, porque a pergunta é "menor do que". Para isso usa-se um **operador**, uma palavra começada por `$`, escrita como um documento dentro do filtro. Prevê quais dos oito artigos têm menos de 5 unidades, com este filtro:
 
 ```js
 { stock: { $lt: 5 } }
 ```
 
-Lê-se "documentos cujo campo `stock` é menor do que 5". O `$` é o que diz ao MongoDB que `lt` é um operador e não o nome de um campo. O resultado são quatro artigos: a Esferográfica azul (3), o Bloco de notas A5 (0), a Resma de papel A4 (4) e o Compasso escolar (1).
+Devolve quatro: a Esferográfica azul (3), o Bloco de notas A5 (0), a Resma de papel A4 (4) e o Compasso escolar (1). O filtro lê-se "stock menor do que 5". O `$` é o que diz ao MongoDB que `lt` é um operador, e não o nome de um campo.
 
-Os operadores de comparação mais usados são estes:
+Os operadores de comparação mais usados são estes. Os nomes são abreviaturas do inglês, e saber de onde vêm ajuda a não os trocar:
 
-| Operador | Significado | Exemplo |
-| --- | --- | --- |
-| `$eq` | igual a | `{ stock: { $eq: 0 } }` |
-| `$ne` | diferente de | `{ categoria: { $ne: "Papel" } }` |
-| `$gt` | maior do que | `{ stock: { $gt: 10 } }` |
-| `$gte` | maior ou igual a | `{ stock: { $gte: 10 } }` |
-| `$lt` | menor do que | `{ stock: { $lt: 5 } }` |
-| `$lte` | menor ou igual a | `{ stock: { $lte: 5 } }` |
-| `$in` | igual a um dos valores da lista | `{ categoria: { $in: ["Papel", "Desenho"] } }` |
+| Operador | Significado | Vem de | Exemplo |
+| --- | --- | --- | --- |
+| `$eq` | igual a | *equal* | `{ stock: { $eq: 0 } }` |
+| `$ne` | diferente de | *not equal* | `{ categoria: { $ne: "Papel" } }` |
+| `$gt` | maior do que | *greater than* | `{ stock: { $gt: 10 } }` |
+| `$gte` | maior ou igual a | *greater than or equal* | `{ stock: { $gte: 10 } }` |
+| `$lt` | menor do que | *less than* | `{ stock: { $lt: 5 } }` |
+| `$lte` | menor ou igual a | *less than or equal* | `{ stock: { $lte: 5 } }` |
+| `$in` | igual a um dos valores da lista | *in*, em | `{ categoria: { $in: ["Papel", "Desenho"] } }` |
 
-O `$eq` raramente se escreve, porque `{ stock: 0 }` quer dizer o mesmo que `{ stock: { $eq: 0 } }`.
+O `$eq` quase nunca se escreve, porque `{ stock: 0 }` quer dizer o mesmo que `{ stock: { $eq: 0 } }`.
 
-Os nomes dos operadores são abreviaturas de palavras inglesas, e saber de onde vêm ajuda a não os trocar. `eq` vem de *equal*, igual. `ne` vem de *not equal*, diferente. `gt` vem de *greater than*, maior do que. `lt` vem de *less than*, menor do que. O `e` que aparece no fim de `gte` e de `lte` vem de *or equal*, ou igual. Assim, `$gte` lê-se "maior ou igual" e `$lt` lê-se "menor do que", sem o igual.
+Ter ou não ter o igual só se nota na fronteira, e é aí que nascem muitos erros. `{ stock: { $lt: 5 } }` deixa de fora um artigo com exatamente 5 unidades, e `{ stock: { $lte: 5 } }` inclui-o. Com os oito artigos, os dois filtros dão o mesmo resultado, porque nenhum tem 5 unidades. No dia em que um artigo tiver 5, já não dão. Antes de escolheres o operador, pergunta-te se o valor da fronteira deve aparecer no resultado.
 
-A diferença entre ter ou não ter o igual só se nota na fronteira, mas é aí que nascem muitos erros. `{ stock: { $lt: 5 } }` deixa de fora um artigo que tenha exatamente 5 unidades, e `{ stock: { $lte: 5 } }` inclui-o. Com os oito artigos da tabela, os dois filtros dão o mesmo resultado, porque nenhum artigo tem exatamente 5 unidades. No dia em que um artigo tiver 5, já não dão. Antes de escolheres o operador, pergunta-te se o valor da fronteira deve aparecer no resultado ou não.
+O `$in` recebe uma lista, entre parênteses retos, como um array. O filtro `{ categoria: { $in: ["Papel", "Desenho"] } }` lê-se "categoria é Papel ou Desenho", e um documento aparece se o campo for igual a qualquer um dos valores. Devolve cinco artigos: os três de papel e os dois de desenho.
 
-O `$in` é o único operador da tabela que recebe uma lista, escrita entre parênteses retos, como um array de JavaScript. O filtro `{ categoria: { $in: ["Papel", "Desenho"] } }` lê-se "categoria é Papel ou é Desenho". Um documento fica no resultado se o valor desse campo for igual a qualquer um dos valores da lista. Antes de leres o resultado, prevê quantos artigos aparecem. São cinco: os três de papel e os dois de desenho. Ficam de fora os três de escrita.
+### Todas as condições de um filtro têm de se cumprir
 
-### Várias condições ao mesmo tempo
-
-Quando o filtro tem vários campos, o documento tem de cumprir todos. Antes de leres o resultado, prevê: que artigos devolve este filtro?
+Quando o filtro tem vários campos, um documento só aparece se cumprir todas as condições. Prevê quantos artigos aparecem com este filtro, e quais.
 
 ```js
 { categoria: "Escrita", stock: { $lt: 10 } }
 ```
 
-Lê-se "categoria é Escrita e stock é menor do que 10". O resultado são dois artigos: a Esferográfica azul (3) e o Marcador fluorescente (8). O Lápis HB é da categoria Escrita, mas tem 25 unidades. Cumpre a primeira condição, mas não a segunda, e fica de fora.
+Devolve dois: a Esferográfica azul (3) e o Marcador fluorescente (8). O filtro lê-se "categoria Escrita e stock menor do que 10". O Lápis HB é de escrita, mas as suas 25 unidades deixam-no de fora, porque cumpre a primeira condição e não a segunda. Quem esperava sete artigos leu o filtro como "ou", com todos os de escrita e mais todos os que têm menos de 10.
 
-Dois operadores no mesmo campo também têm de se cumprir os dois. É assim que se pede um intervalo. Prevê: que artigos devolve este filtro?
+Dois operadores no mesmo campo também se cumprem os dois, e é assim que se pede um intervalo:
 
 ```js
 { precoCentimos: { $gte: 100, $lte: 300 } }
 ```
 
-Lê-se "preço maior ou igual a 100 cêntimos e menor ou igual a 300 cêntimos", ou seja, entre 1,00 € e 3,00 €, com as duas fronteiras incluídas. O resultado são três artigos: o Caderno A4 quadriculado (250), o Bloco de notas A5 (180) e a Régua de 30 cm (120).
+O filtro lê-se "preço maior ou igual a 100 cêntimos e menor ou igual a 300", ou seja, entre 1,00 € e 3,00 €, com as duas fronteiras incluídas. Devolve três artigos: o Caderno A4 quadriculado (250), o Bloco de notas A5 (180) e a Régua de 30 cm (120).
 
-### Campos de um documento embutido
+### Um campo embutido escreve-se com um ponto
 
-Para chegar a um campo que está dentro de um documento embutido, junta-se o nome dos dois campos com um ponto, como em JavaScript. Prevê: que artigos devolve este filtro?
+A localização de cada artigo é um documento guardado dentro do artigo, com o corredor e a prateleira. A um documento dentro de outro chama-se **documento embutido**. É como um objeto dentro de outro, em JavaScript: se o documento do caderno estivesse numa variável `caderno`, `caderno.localizacao.corredor` dava `"A"`.
+
+Num filtro, chega-se a um campo de um documento embutido da mesma forma, com o nome dos dois campos ligados por um ponto:
 
 ```js
 { "localizacao.corredor": "C" }
 ```
 
-Lê-se "documentos cujo campo `corredor`, dentro de `localizacao`, é igual a `C`". O resultado são dois artigos: a Régua de 30 cm e o Compasso escolar.
+Devolve os dois artigos do corredor C: a Régua de 30 cm e o Compasso escolar. O nome fica entre aspas porque tem um ponto no meio. Sem as aspas, não é um nome válido num objeto de JavaScript, e a barra de consulta recusa o filtro.
 
-O nome tem de ficar entre aspas, porque tem um ponto no meio. Sem as aspas, o filtro não é aceite.
+Prevê: e se escreveres só `{ corredor: "C" }`?
 
-A razão vem do JavaScript, cuja forma o filtro segue. Num objeto, um nome de propriedade escrito sem aspas só pode ter letras, algarismos e os sinais `_` e `$`, e não pode começar por um algarismo. Um ponto no meio do nome faz com que o filtro deixe de ser um objeto bem escrito, e a barra de consulta não o aceita. Entre aspas, o nome passa a ser um texto como outro qualquer, e um texto pode ter pontos.
+A consulta volta vazia, e sem erro. Nenhum artigo tem um campo `corredor` no nível de cima, porque o corredor está dentro de `localizacao`.
 
-Também não chega escrever `{ corredor: "C" }`. Nenhum artigo tem um campo `corredor` no nível de cima, porque o corredor está dentro de `localizacao`. A consulta volta vazia, e sem erro.
+### A projeção escolhe os campos
 
-### Escolher os campos: a projeção
-
-A projeção é um documento em que cada campo recebe `1`, para aparecer, ou `0`, para ficar escondido. Prevê: com o filtro `{ stock: { $lt: 5 } }` e esta projeção, o que aparece?
+Cada documento do resultado aparece com todos os campos, mas para uma lista de encomendas chegam o nome e o stock. A **projeção** diz que campos aparecem. É um documento em que cada campo recebe `1`, para aparecer, ou `0`, para ficar escondido. Faz o mesmo que um `map` que fica só com alguns campos de cada objeto. Prevê: com o filtro `{ stock: { $lt: 5 } }` e esta projeção, o que aparece?
 
 ```js
 { nome: 1, stock: 1, _id: 0 }
 ```
 
-Aparecem os mesmos quatro artigos do filtro, cada um só com o nome e o stock, como `{ nome: "Esferográfica azul", stock: 3 }`. O `_id` aparece sempre, a não ser que o escondas com `_id: 0`.
+Aparecem os mesmos quatro artigos do filtro, cada um só com o nome e o stock, como `{ nome: "Esferográfica azul", stock: 3 }`. A projeção não muda que documentos aparecem, porque isso é trabalho do filtro. Muda só o que se vê de cada um. O `_id` aparece sempre, a não ser que o escondas com `_id: 0`.
 
-Numa projeção não se podem misturar campos a mostrar e campos a esconder, com uma única exceção, que é precisamente o `_id`. A projeção `{ nome: 1, stock: 0 }` dá erro.
+Numa projeção não se misturam campos a mostrar com campos a esconder. A projeção `{ nome: 1, stock: 0 }` dá o erro `Cannot do exclusion on field stock in inclusion projection`, que quer dizer "não se pode esconder o campo stock numa projeção de campos a mostrar". Os dois modos dizem coisas opostas sobre os campos que não escreveste: com `1`, ficam escondidos, e com `0`, aparecem. Misturados, o MongoDB não saberia o que fazer a um campo como `categoria`, e por isso recusa a projeção. A exceção é o `_id: 0`, porque o `_id` aparece sempre, e escondê-lo é tão frequente que o MongoDB o deixa fazer.
 
-A razão é que os dois modos dizem coisas opostas sobre os campos que não escreveste. Com `1`, a projeção diz "mostra só estes", e todos os outros ficam escondidos. Com `0`, diz "mostra tudo menos estes", e todos os outros aparecem. Se misturasses os dois, o MongoDB não saberia o que fazer a um campo como `categoria`, que não está na projeção. Escondia-o, como manda o `1`, ou mostrava-o, como manda o `0`? Em vez de adivinhar, recusa a projeção. O `_id` é a exceção porque aparece sempre, mesmo quando não o escreves, e escondê-lo numa projeção de campos a mostrar é tão frequente que o MongoDB o permite.
+### Ordenar e depois limitar
 
-A projeção não muda que documentos aparecem. Isso é trabalho do filtro. Muda só o que se vê de cada um.
-
-### Ordenar e limitar
-
-A ordenação é um documento em que cada campo recebe `1`, para ordem crescente, ou `-1`, para ordem decrescente. Prevê: com o filtro vazio, esta ordenação e um limite de 3, que artigos aparecem, e por que ordem?
+Para saber os três artigos mais caros, é preciso pôr os artigos por ordem de preço e ficar só com os primeiros. A **ordenação** é um documento em que cada campo recebe `1`, para ordem crescente, ou `-1`, para ordem decrescente, como o `sort` de um array. O **limite** é o número máximo de documentos do resultado, como o `slice(0, n)`, que fica só com os primeiros `n` elementos. Prevê: com o filtro vazio, esta ordenação e o limite 3, que artigos aparecem, e por que ordem?
 
 ```js
 { precoCentimos: -1 }
 ```
 
-Aparecem os três artigos mais caros, do mais caro para o mais barato: a Resma de papel A4 (520), o Compasso escolar (450) e o Caderno A4 quadriculado (250). A ordenação põe os oito do preço maior para o menor, e o limite deixa ficar só os três primeiros dessa ordem.
+Aparecem a Resma de papel A4 (520), o Compasso escolar (450) e o Caderno A4 quadriculado (250), do mais caro para o mais barato. O limite aplica-se depois de ordenar: a ordenação põe os oito do preço maior para o menor, e o limite fica com os três primeiros dessa ordem. Sem a ordenação, o limite ficava com três artigos quaisquer.
 
-A ordem importa. O limite aplica-se depois de ordenar, e é isso que garante que os três que ficam são os mais caros e não três quaisquer.
+```mermaid
+flowchart LR
+    C["coleção artigos"] --> F["filtro: que documentos"] --> O["ordenação: por que ordem"] --> L["limite: quantos"] --> P["projeção: que campos de cada um"] --> R["resultado"]
+```
 
-### O que uma consulta simples não consegue perguntar
+O diagrama mostra o caminho de uma consulta com as quatro partes. O filtro escolhe os documentos, a ordenação põe-nos por ordem e o limite fica com os primeiros. Só no fim a projeção escolhe os campos que se veem.
 
-"Que artigos estão abaixo do stock mínimo?" parece uma pergunta como as outras, mas os operadores desta secção não chegam para ela. Os operadores comparam um campo com um valor fixo, escrito no filtro. Esta pergunta compara dois campos do mesmo documento: `stock` com `stockMinimo`. No MongoDB isso faz-se com o operador `$expr`, e a barra de consulta do Atlas não o aceita. Esta pergunta vai ser respondida mais à frente, no código da aplicação. No laboratório vais responder-lhe à mão.
+### A pergunta que a barra de consulta não faz
 
-## Um modelo desenha-se a partir das perguntas
+"Que artigos estão abaixo do stock mínimo?" parece uma pergunta como as outras, mas os operadores desta parte não chegam para ela. Os operadores comparam um campo com um valor escrito no filtro, e esta pergunta compara dois campos do mesmo documento, o `stock` e o `stockMinimo`. No MongoDB, isso faz-se com o operador `$expr`, que a barra de consulta do Atlas não aceita. No laboratório, respondes-lhe à mão, com a tabela dos artigos; numa aplicação, responde-lhe o código.
 
-Um bom modelo não se desenha a pensar nas coisas que existem. Desenha-se a pensar nas perguntas que a aplicação vai ter de responder. O método tem cinco passos:
+## Parte 3: Desenhar os documentos de uma aplicação
+
+Já sabes como é um documento e como se pergunta por ele. Falta decidir a forma dos documentos de uma aplicação: o que fica dentro de cada um e o que fica noutro.
+
+### A informação relacionada embute-se ou referencia-se
+
+Um artigo tem uma localização e um fornecedor. Quando uma informação está relacionada com outra, o MongoDB deixa escolher entre duas formas de a guardar.
+
+**Embutir** é guardar a informação dentro do próprio documento, como um [documento embutido](#um-campo-embutido-escreve-se-com-um-ponto). É o que a papelaria faz com a localização do artigo:
+
+```js
+{
+  nome: "Caderno A4 quadriculado",
+  categoria: "Papel",
+  localizacao: { corredor: "A", prateleira: 1 }
+}
+```
+
+Também se pode embutir um array de documentos. Uma venda tem as suas linhas, que são o que aparece em cada linha do talão: que artigo se vendeu, quantas unidades e a que preço. Uma venda de três artigos diferentes tem três linhas, e cada linha é um pequeno documento dentro do array.
+
+**Referenciar** é guardar a informação num documento à parte, noutra coleção, e guardar no primeiro documento só o `_id` do segundo. O fornecedor de um artigo fica na coleção `fornecedores`, e o artigo guarda só o identificador dele:
+
+```js
+{
+  nome: "Caderno A4 quadriculado",
+  categoria: "Papel",
+  fornecedorId: ObjectId('66fb1c2a9d3e4f5a6b7c8d01')
+}
+```
+
+### Seguir uma referência pede uma segunda consulta
+
+O campo `fornecedorId` é uma **referência**: guarda o `_id` de outro documento. O nome segue uma convenção, o nome da coisa referida seguido de `Id`. O MongoDB aceitaria outro nome, mas este diz logo a quem lê que o valor é o `_id` de um fornecedor, a procurar na coleção `fornecedores`.
+
+Ler uma referência obriga a um passo a mais. Com os filtros que já conheces, mostrar o artigo com o telefone do fornecedor pede duas consultas, e a isto chama-se **seguir a referência**. Primeiro lê o artigo, e encontra nele o `fornecedorId`. Depois procura, na coleção `fornecedores`, o documento cujo `_id` é igual a esse valor.
+
+```mermaid
+sequenceDiagram
+    participant App as A aplicação
+    participant A as coleção artigos
+    participant F as coleção fornecedores
+    App->>A: o artigo com o nome Caderno A4 quadriculado
+    A-->>App: o artigo, com o fornecedorId
+    App->>F: o documento com esse _id
+    F-->>App: o fornecedor, com o telefone
+```
+
+O diagrama mostra as duas consultas, uma em cada coleção. A segunda só se pode fazer com o valor que a primeira devolveu, e é esse o preço de referenciar.
+
+A pergunta também se faz ao contrário. Para saber que artigos tem um fornecedor, procuram-se na coleção `artigos` os documentos cujo `fornecedorId` é igual ao `_id` desse fornecedor. É esta a consulta que fazes no laboratório.
+
+<details>
+<summary>Para ires mais longe: seguir a referência numa só operação</summary>
+
+O MongoDB também consegue juntar o artigo e o fornecedor numa só operação, como o `JOIN` do SQL. Faz-se com uma agregação e o operador `$lookup`, que a barra de consulta não aceita. Por isso, na barra de consulta, seguir uma referência pede sempre as duas consultas.
+
+</details>
+
+### Duas perguntas decidem entre embutir e referenciar
+
+Para decidir, faz duas perguntas sobre a informação: "que ecrã vai ler estes dados?" e "que dados mudam ao mesmo tempo?".
+
+Da primeira pergunta vem a regra de embutir. Se a informação aparece sempre no ecrã que mostra o documento, e não cresce sem limite, embute-se. A localização aparece sempre que se mostra o artigo, e cada artigo tem uma só. Com ela embutida, basta ler o artigo para o ecrã ter tudo o que mostra.
+
+Da segunda pergunta vem a regra de referenciar. Se a informação muda sem que o documento mude, ou se é a mesma em muitos documentos e teria de mudar em todos ao mesmo tempo, referencia-se. O mesmo fornecedor fornece dezenas de artigos. Se o contacto dele estivesse embutido em cada artigo e mudasse, tinhas de o alterar em dezenas de sítios, e bastava esquecer um para a informação ficar contraditória. Referenciado, o contacto fica num só documento e muda-se uma vez.
+
+A condição de não crescer sem limite tem uma razão concreta: um documento não pode passar de 16 MiB, um pouco mais de 16 MB. Nenhum artigo chega perto disso, mas uma lista que cresce sempre, como todas as vendas de um artigo desde que a papelaria abriu, acabava por chegar. Uma lista assim nunca se embute, e cada venda é um documento da coleção `vendas`.
+
+Nenhuma das duas formas é sempre a melhor. Decide-se informação a informação, com as duas perguntas.
+
+### Uma venda guarda uma cópia do preço, de propósito
+
+Numa venda, cada linha diz que artigo se vendeu, e podia guardar só a referência ao artigo. Mas imagina que, em janeiro, o preço do caderno sobe de 2,50 € para 2,80 €. As vendas de outubro passavam a mostrar o preço novo, e a faturação de outubro deixava de bater certo.
+
+Por isso, cada linha da venda guarda a referência ao artigo e também uma cópia do nome e do preço no momento da venda. A cópia é o registo do que aconteceu nesse dia, e esse registo não deve mudar quando o artigo muda.
+
+### O MongoDB não verifica as referências
+
+Quando um artigo guarda um `fornecedorId`, o MongoDB não confirma que existe mesmo um fornecedor com esse `_id`, e aceita qualquer ObjectId. Se um fornecedor for apagado, os artigos que o referiam continuam a apontar para um documento que já não existe.
+
+No MariaDB, uma chave estrangeira impede uma referência destas. No MongoDB, é a aplicação que tem de confirmar que o documento referido existe, antes de guardar a referência. É também ela que decide o que acontece às referências quando um documento é apagado. No laboratório, vês o MongoDB aceitar uma referência que não leva a lado nenhum.
+
+### Um modelo desenha-se a partir das perguntas
+
+Um bom modelo não se desenha a pensar nas coisas que existem, mas nas perguntas a que a aplicação vai ter de responder. O método tem cinco passos:
 
 1. Escrever as perguntas que a aplicação tem de responder, tal como quem a usa as faria.
 2. Para cada pergunta, identificar a informação necessária.
 3. Agrupar essa informação em coleções, uma por tipo de coisa.
-4. Para cada informação relacionada, decidir se se embute ou se se referencia, com as regras de "Como decidir".
+4. Para cada informação relacionada, decidir se se embute ou se se referencia, com [as duas perguntas](#duas-perguntas-decidem-entre-embutir-e-referenciar).
 5. Escrever um documento de exemplo de cada coleção e confirmar, pergunta a pergunta, que a resposta está lá.
 
-O quinto passo é o mais importante e o mais esquecido. Um modelo que não responde a uma das perguntas está errado, por mais arrumado que pareça.
+O quinto passo é o mais esquecido e o que apanha os modelos errados. Um modelo que não responde a uma das perguntas está errado, por mais arrumado que pareça.
 
 ## Exemplo guiado: modelar o inventário da papelaria
 
@@ -390,9 +391,9 @@ Depois de falar com quem trabalha na papelaria, chegámos a estas perguntas:
 
 ### Passo 2: a informação de que cada pergunta precisa
 
-As perguntas 1 e 2 precisam da categoria e do stock de cada artigo. A pergunta 3 precisa de uma informação que ainda não tínhamos: o stock mínimo de cada artigo, abaixo do qual é preciso encomendar.
+As perguntas 1 e 2 precisam da categoria e do stock de cada artigo. A pergunta 3 precisa de mais uma informação: o stock mínimo de cada artigo, abaixo do qual é preciso encomendar.
 
-Repara que "pouco stock" e "abaixo do mínimo" são perguntas diferentes. Cinco resmas de papel podem ser poucas, e cinco compassos podem ser muitos. O mínimo depende do artigo, por isso tem de ficar guardado em cada artigo. É também por isso que, como viste nas consultas, esta pergunta compara dois campos de cada artigo.
+"Pouco stock" e "abaixo do mínimo" são perguntas diferentes. Cinco esferográficas são poucas, porque o mínimo delas é 10, e cinco compassos são muitos, porque o mínimo é 2. O mínimo depende do artigo, e por isso tem de ficar guardado em cada artigo. É também por isso que esta pergunta compara dois campos de cada artigo, como viste em [A pergunta que a barra de consulta não faz](#a-pergunta-que-a-barra-de-consulta-não-faz).
 
 A pergunta 4 precisa do corredor e da prateleira. A pergunta 5 precisa do nome e do contacto do fornecedor. A pergunta 6 precisa da data de cada venda, dos artigos vendidos, das quantidades e dos preços.
 
@@ -406,9 +407,26 @@ A localização do artigo embute-se no artigo. É sempre lida com o artigo, cada
 
 O fornecedor referencia-se a partir do artigo. Um fornecedor fornece muitos artigos, e o seu contacto muda sem que os artigos mudem.
 
-As linhas de uma venda embutem-se na venda. São sempre lidas com a venda, pertencem só àquela venda, e uma venda tem um número limitado de linhas. Cada linha referencia o artigo vendido e guarda uma cópia do nome e do preço no momento da venda, pela razão explicada em "Copiar de propósito".
+As linhas de uma venda embutem-se na venda. São sempre lidas com a venda, pertencem só àquela venda, e uma venda tem um número limitado de linhas. Cada linha referencia o artigo vendido e guarda uma cópia do nome e do preço no momento da venda. A razão está em [Uma venda guarda uma cópia do preço, de propósito](#uma-venda-guarda-uma-cópia-do-preço-de-propósito).
 
 As vendas não se embutem nos artigos. Um artigo vende-se todos os dias, e a lista cresceria sem limite.
+
+```mermaid
+flowchart LR
+    subgraph artigos["coleção artigos"]
+        AR["artigo: nome, categoria, stock, stockMinimo, precoCentimos e a localização embutida"]
+    end
+    subgraph fornecedores["coleção fornecedores"]
+        FO["fornecedor: nome, telefone e email"]
+    end
+    subgraph vendas["coleção vendas"]
+        VE["venda: data, totalCentimos e as linhas embutidas"]
+    end
+    AR -- "fornecedorId" --> FO
+    VE -- "artigoId, em cada linha" --> AR
+```
+
+O diagrama mostra as três coleções. A localização está dentro do artigo, e as linhas estão dentro da venda. As setas são as referências: o `fornecedorId` de cada artigo e o `artigoId` de cada linha da venda.
 
 ### Passo 5: os documentos de exemplo
 
@@ -462,11 +480,11 @@ Um documento da coleção `vendas`:
 }
 ```
 
-Os valores de `_id` são exemplos para leres o modelo. Na base de dados verdadeira é o MongoDB que os cria. O `fornecedorId` do artigo é igual ao `_id` do fornecedor. O `artigoId` da primeira linha da venda é igual ao `_id` do artigo. É assim que se lê uma referência. O telefone e o email do fornecedor são fictícios.
+Os valores de `_id` são exemplos para leres o modelo, porque na base de dados verdadeira é o MongoDB que os cria. O `fornecedorId` do artigo é igual ao `_id` do fornecedor. O `artigoId` da primeira linha da venda é igual ao `_id` do artigo. É assim que se lê uma referência.
 
 O total da venda confere: duas vezes 250 cêntimos dá 500, três vezes 60 dá 180, e 500 mais 180 dá 680 cêntimos, ou seja, 6,80 €.
 
-Repara que o total podia ser calculado a partir das linhas sempre que fosse preciso, e mesmo assim ficou guardado na venda. Guardar um valor que se pode calcular traz uma vantagem e uma obrigação. A vantagem é que quem lê a venda tem logo o valor que o cliente pagou, sem fazer contas. A obrigação é que o valor guardado tem de bater sempre certo com aquilo de onde se calcula. Se as linhas disserem uma coisa e o total disser outra, o documento contradiz-se, e quem o ler não sabe qual das duas informações está certa. Neste modelo, uma venda registada não volta a ser alterada, por isso a obrigação cumpre-se uma só vez, no momento em que a venda é guardada. É por isso que vale a pena conferir o total, como acabámos de fazer.
+O total podia ser calculado a partir das linhas sempre que fosse preciso, e mesmo assim ficou guardado. Guardar um valor que se pode calcular traz uma vantagem e uma obrigação. A vantagem é que quem lê a venda tem logo o valor que o cliente pagou. A obrigação é que o valor guardado tem de bater sempre certo com as linhas, senão o documento contradiz-se. Uma venda registada não volta a ser alterada, e a obrigação cumpre-se uma só vez, quando a venda é guardada. É por isso que vale a pena conferir o total, como acabámos de fazer.
 
 Agora, a confirmação pergunta a pergunta:
 
@@ -479,82 +497,49 @@ Agora, a confirmação pergunta a pergunta:
 | 5. Quem fornece um artigo | `fornecedorId` do artigo, que leva ao documento do fornecedor |
 | 6. O que se vendeu num dia e quanto se faturou | Campos `data`, `linhas` e `totalCentimos` das vendas desse dia |
 
-Todas as perguntas têm resposta. O modelo serve.
+Todas as perguntas têm resposta, e por isso o modelo serve.
 
 ## Erros frequentes
 
-### Uma consulta que não devolve nada, sem erro
+### Uma consulta volta vazia, e não dá erro
 
-É o erro mais comum, e tem quase sempre uma de três causas:
+É o erro mais comum. A causa é quase sempre uma destas, e as três primeiras estão explicadas nas secções:
 
-- o nome do campo mal escrito, como `categria`: o MongoDB procura um campo que nenhum documento tem;
-- uma diferença de maiúsculas e minúsculas no valor, como `"papel"` em vez de `"Papel"`;
-- o tipo do valor: se um documento tiver `stock: "12"`, com aspas, o valor é texto e não número. O filtro `{ stock: { $lt: 20 } }` não o encontra, porque o MongoDB não compara números com texto.
+- o nome do campo mal escrito, como `categria` ([Os documentos de uma coleção não têm de ser iguais](#os-documentos-de-uma-coleção-não-têm-de-ser-iguais));
+- uma maiúscula diferente no valor, como `"papel"` ([Um filtro escolhe os documentos](#um-filtro-escolhe-os-documentos));
+- o campo embutido sem o caminho, como `{ corredor: "C" }` ([Um campo embutido escreve-se com um ponto](#um-campo-embutido-escreve-se-com-um-ponto));
+- o tipo do valor. Se um documento tiver `stock: "12"`, com aspas, o valor é texto, e `{ stock: { $lt: 20 } }` não o encontra, porque o MongoDB não compara números com texto;
+- o operador sem o `$`. O filtro `{ stock: { lt: 5 } }` procura um stock que seja o próprio documento `{ lt: 5 }`, e não há nenhum.
 
-Quando uma consulta não devolve o que esperavas, abre um documento que devia aparecer e compara, campo a campo, o nome, a escrita e o tipo.
-
-### O operador sem o `$`
-
-`{ stock: { lt: 5 } }`, sem o `$`, procura documentos em que `stock` seja exatamente o documento `{ lt: 5 }`. Não há nenhum, e a consulta volta vazia sem erro. Sem o `$`, o MongoDB lê `lt` como o nome de um campo, e não como um operador.
+Para encontrar a causa, abre um documento que devia aparecer e compara-o com o filtro: o nome de cada campo, a escrita de cada valor e o seu tipo.
 
 ## Palavras novas deste guia
 
-- Base de dados: os dados de uma aplicação, guardados por um programa especializado, como o MongoDB; no MongoDB, é um conjunto de coleções, como a `papelaria`.
-- MongoDB: um programa especializado em guardar dados de forma segura e em encontrá-los depressa, que organiza a informação em documentos.
-- Servidor: um computador sempre ligado, que presta um serviço a outros computadores através da rede, ou o programa que, nesse computador, presta o serviço.
-- Nuvem (*cloud*): servidores num centro de dados de uma empresa, a que chegas pela internet.
-- MongoDB Atlas: o MongoDB a funcionar na nuvem, em servidores geridos pela empresa que o faz.
 - Modelo documental: a forma de organizar a informação do MongoDB, em documentos.
-- Documento: um conjunto de campos, cada um com um nome e um valor, que descreve uma coisa; tem a forma de um objeto de JavaScript.
-- Campo: cada par nome e valor de um documento, como uma propriedade de um objeto.
-- Coleção: um conjunto de documentos do mesmo tipo, como a coleção `artigos`.
-- Cluster: o conjunto de servidores onde o MongoDB está a correr e onde vivem as tuas bases de dados.
-- Projeto: no Atlas, o que agrupa clusters.
-- Organização: no Atlas, o que agrupa projetos.
+- Nuvem (*cloud*): servidores num centro de dados de uma empresa, a que chegas pela internet.
+- Documento: um conjunto de pares nome e valor, os campos, que descreve uma coisa; tem a forma de um objeto de JavaScript.
+- Coleção: um conjunto de documentos do mesmo tipo; a papelaria tem as coleções `artigos`, `fornecedores` e `vendas`.
+- `_id` e ObjectId: cada documento tem um `_id` diferente do de todos os outros da coleção. Quando não o escreves, o MongoDB cria-o, do tipo ObjectId, com 24 carateres, de 0 a 9 e de `a` a `f`.
 - BSON: o formato binário em que o MongoDB guarda os documentos, com mais tipos de valores do que o JSON, como as datas.
-- ISO 8601: a norma internacional para escrever datas e horas, como `2026-10-01T10:15:00Z`.
-- UTC: o tempo universal coordenado, a hora de referência usada no mundo inteiro; a letra `Z` no fim de uma data diz que a hora está em UTC.
-- `_id`: o campo que todos os documentos têm, com um valor diferente em cada documento da coleção.
-- ObjectId: o tipo do `_id` que o MongoDB cria, escrito com 24 carateres hexadecimais.
-- Byte: a unidade de memória que guarda um número de 0 a 255.
-- Hexadecimal: o sistema de base 16, com os algarismos de 0 a 9 e as letras de `a` a `f`.
+- UTC: a hora de referência usada no mundo inteiro; o `Z` no fim de uma data diz que a hora está em UTC.
 - Esquema flexível: os documentos da mesma coleção podem ter campos diferentes.
-- Embutir: guardar uma informação dentro do próprio documento.
-- Documento embutido: um documento guardado dentro de outro, como a `localizacao` de um artigo.
-- Linha de uma venda: o que aparece numa linha do talão: que artigo se vendeu, quantas unidades e a que preço.
-- Referenciar: guardar uma informação num documento à parte, noutra coleção, e guardar no primeiro documento só o `_id` do segundo.
-- Referência: o campo que guarda o `_id` de outro documento, como o `fornecedorId`.
-- Seguir uma referência: procurar o documento cujo `_id` é igual ao valor guardado na referência.
-- Ligação: um programa ligado à base de dados.
-- Operação: cada pedido que um programa faz à base de dados, como inserir um documento ou fazer uma consulta.
+- Cluster: os servidores onde o MongoDB corre e onde vivem as tuas bases de dados.
+- Ligação: o canal que um programa abre para falar com a base de dados.
 - Consulta: um pedido de informação a uma base de dados.
 - Filtro: o documento que diz que documentos queres; o filtro vazio, `{}`, aceita todos.
-- Operador: uma palavra começada por `$` que, dentro de um filtro, faz uma comparação, como `$lt`, menor do que.
-- Projeção: o documento que diz que campos de cada documento queres ver, com `1` para mostrar e `0` para esconder.
-- Ordenação: o documento que diz por que ordem queres os documentos, com `1` para crescente e `-1` para decrescente.
-- Limite: o número máximo de documentos que queres no resultado.
-- Barra de consulta: a barra do Atlas, por cima da lista dos documentos, onde se escrevem o filtro, a projeção, a ordenação e o limite.
-
-## Verificar o que aprendeste
-
-1. Qual é a diferença entre um documento, uma coleção e uma base de dados? Dá um exemplo que não seja da papelaria.
-2. O que é o `_id`, e quem o cria quando inseres um documento sem ele?
-3. Num problema novo, que duas perguntas fazes para decidir se uma informação se embute ou se referencia?
-4. Porque é que as linhas de uma venda guardam uma cópia do preço?
-5. Porque é que `{ categoria: "papel" }` não encontra os artigos de papel, e não dá erro?
-6. Porque é que `{ stock: { $lt: 5 } }` e `{ stock: { $lte: 5 } }` podem dar resultados diferentes?
-7. Uma projeção pode mudar quantos documentos aparecem no resultado? Porquê?
-8. Porque é que "que artigos estão abaixo do stock mínimo?" não se pergunta na barra de consulta do Atlas?
+- Operador: uma palavra começada por `$`, como o `$lt`, que faz uma comparação dentro de um filtro.
+- Documento embutido: um documento guardado dentro de outro, como a `localizacao` de um artigo.
+- Projeção: o documento que diz que campos de cada documento aparecem, com `1` para mostrar e `0` para esconder.
+- Ordenação: o documento que diz por que ordem aparecem os documentos, com `1` para crescente e `-1` para decrescente.
+- Limite: o número máximo de documentos do resultado.
+- Embutir: guardar uma informação dentro do próprio documento.
+- Referenciar: guardar uma informação num documento à parte, noutra coleção, e guardar no primeiro só o `_id` do segundo.
+- Referência: o campo que guarda o `_id` de outro documento, como o `fornecedorId`.
+- Seguir uma referência: procurar o documento cujo `_id` é igual ao valor guardado na referência.
 
 ## O que vem a seguir
 
-Para praticar este tema, faz o [laboratório](laboratorios/02-modelo-documental-e-consultas-no-atlas-laboratorio.md) e depois a [ficha de exercícios](exercicios/02-modelo-documental-e-consultas-no-atlas-exercicios.md). O tema seguinte é Arquitetura e setup Node.
-
-No próximo tema vais preparar o Node.js, que corre JavaScript fora do browser, e perceber o papel de um servidor. O servidor é o programa que recebe os pedidos da aplicação e fala com a base de dados. Depois vais escrever uma API, o servidor a que a aplicação faz os pedidos, com o Express, uma biblioteca do Node.js para escrever servidores. Só então ligas o servidor à base de dados que criaste no laboratório, com o utilizador e a palavra-passe que guardaste.
-
-Quando lá chegares, as consultas vão ser quase iguais às da barra de consulta. O filtro `{ stock: { $lt: 5 } }` escreve-se no código da mesma forma. A diferença é que o código espera pela resposta com `await`, como no `fetch` do 11.º ano.
-
-O método deste guia serve para qualquer aplicação que venhas a desenhar. Começa sempre pelas perguntas a que ela tem de responder. Se a aplicação da tua PAP vai guardar dados, vale a pena ires pensando nessas perguntas.
+O tema seguinte é Arquitetura e setup Node, em que preparas o projeto do servidor que vai falar com esta base de dados.
 
 ## Para saber mais
 
