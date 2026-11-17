@@ -1,53 +1,14 @@
 ![Cabeçalho](../imagens/cabecalho.png)
 
-# Diagnóstico inicial de Linguagens de Programação
+# Diagnóstico inicial das bases do 11.º ano: a papelaria da escola
 
-12.º ano, Curso Profissional de Técnico/a de Informática de Gestão. Duração: 60 minutos. Nos primeiros 5, o professor explica o diagnóstico; ficam 55 para responderes.
+Este ano, nas aulas, constróis peça a peça uma aplicação. Uma parte corre num servidor e guarda os dados numa base de dados, e outra usa-se no browser. No fim do ano, nas horas da PAP, fazes a tua própria aplicação, sobre um problema que escolhes. Tudo isto usa as bases do 11.º ano, e este diagnóstico mostra quais estão firmes e quais precisas de rever. Não tem nota. As tuas respostas decidem o que fazes nas duas aulas seguintes: quem precisa de rever uma parte trabalha essa parte, e quem já a domina faz um desafio.
 
-## Para que serve este diagnóstico
+## A papelaria da escola
 
-Este ano, nas aulas, vais construir peça a peça uma aplicação completa, a da papelaria. Vai ter uma parte que corre num servidor e guarda os dados numa base de dados, e uma parte que o utilizador vê e usa no browser. Vai ter também relatórios com números úteis para quem gere, testes e documentação. No fim do ano, nas horas da PAP, fazes a tua própria aplicação, sobre um problema que escolhes.
+Várias perguntas usam o inventário da papelaria da escola. Cada artigo é um objeto com um identificador (`id`), o nome, a categoria, a quantidade em armazém (`stock`) e o preço em cêntimos (`precoCentimos`).
 
-Tudo isto assenta no que aprendeste no 11.º ano: JavaScript, objetos e arrays, módulos, pedidos assíncronos e React. Se uma destas bases estiver frágil, as aulas seguintes tornam-se muito mais difíceis, porque cada matéria nova usa as anteriores ao mesmo tempo. É por isso que se faz este diagnóstico: para saber que bases precisam de revisão antes de a matéria nova as usar.
-
-Um diagnóstico não é um teste. Não tem nota e não conta para a classificação. Serve para o professor saber, parte a parte, o que ainda dominas, o que consegues fazer com alguma ajuda e o que precisas de rever. É com as tuas respostas que se decide o que se faz nas duas aulas seguintes. Quem precisar de rever um tema trabalha esse tema, e quem já o domina avança para um desafio. Por isso, uma resposta copiada ou adivinhada prejudica-te. Faz com que revejas o que não precisavas e que saltes o que precisavas.
-
-Também é normal não te lembrares de tudo. Passaram as férias de verão, e alguns destes temas foram dados há quase um ano. Escrever "não me lembro" é uma resposta útil, porque mostra exatamente onde está a lacuna. Uma resposta em branco não mostra nada. Quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta sem querer.
-
-## O que precisas de saber antes
-
-- Nada para estudar. O diagnóstico mede o que trazes do 11.º ano:
-  - o terminal e o npm;
-  - os objetos e os arrays;
-  - os módulos, com `import` e `export`;
-  - os pedidos assíncronos, com `fetch` e `await`, e os erros;
-  - o React e os formulários.
-
-## Como está organizado
-
-Respondes numa folha, à mão, e não precisas de computador. Escreve o teu nome e o teu número no topo da folha de respostas, e escreve o número de cada pergunta antes da resposta.
-
-Não podes consultar apontamentos, a internet nem ferramentas de inteligência artificial. O objetivo é ver o que sabes agora, e não o que consegues procurar.
-
-O diagnóstico tem cinco partes, com estes tempos:
-
-- A, terminal e npm: 10 minutos;
-- B, objetos e arrays: 10 minutos;
-- C, módulos: 10 minutos;
-- D, pedidos assíncronos e erros: 15 minutos;
-- E, React e formulários: 10 minutos.
-
-O tempo de cada parte serve para te orientares e não é um limite rígido. Se ficares preso numa pergunta, escreve o que pensas e avança para a seguinte; se sobrar tempo, voltas a ela.
-
-Quase todas as perguntas pedem uma explicação, e a explicação conta mais do que o resultado. Uma resposta certa sem explicação diz pouco, porque pode ter sido um palpite. Uma resposta errada mas bem explicada mostra exatamente onde está o engano, e isso é o mais útil para preparar a revisão. Escreve por palavras tuas, em frases completas, como explicarias a um colega que faltou à aula.
-
-Quando se pede código, não tens de acertar em todos os pormenores de sintaxe. Interessa que a ideia esteja certa e que expliques o que o código faz.
-
-## Os dados usados nas perguntas
-
-Várias perguntas usam o mesmo exemplo: o inventário de uma papelaria escolar. Cada artigo é um objeto com cinco propriedades: um identificador (`id`), um nome, uma categoria, a quantidade que existe em armazém (`stock`) e o preço em cêntimos (`precoCentimos`).
-
-O preço está guardado em cêntimos, como número inteiro: `250` quer dizer 2,50 €. Guarda-se assim porque os números com casas decimais nem sempre dão contas exatas em JavaScript. Por exemplo, `0.1 + 0.2` dá `0.30000000000000004` e não `0.3`. Com cêntimos inteiros, as somas e as subtrações de dinheiro dão sempre o valor certo, e só se converte para euros no momento de mostrar o preço.
+O preço é um número inteiro de cêntimos: `250` quer dizer 2,50 €. Guarda-se assim porque as contas com casas decimais nem sempre dão certo em JavaScript: `0.1 + 0.2` dá `0.30000000000000004`, e não `0.3`. Com cêntimos inteiros, as somas e as subtrações de dinheiro dão sempre o valor certo, e só se passa a euros para mostrar o preço.
 
 ```js
 const artigos = [
@@ -60,9 +21,32 @@ const artigos = [
 ];
 ```
 
+## O que precisas de saber antes
+
+Nada para estudar. O diagnóstico mede o que trazes do 11.º ano.
+
+## Como está organizado
+
+Respondes numa folha, à mão, sem computador. Escreve o teu nome e o teu número no topo da folha, e o número de cada pergunta antes da resposta. Não podes consultar apontamentos, a internet nem ferramentas de inteligência artificial. O que interessa é o que sabes agora: uma resposta copiada ou adivinhada pode fazer-te saltar a revisão de que precisas.
+
+O diagnóstico dura 60 minutos:
+
+| Tempo | O que fazes |
+| --- | --- |
+| 5 minutos | O professor explica o diagnóstico |
+| 10 minutos | Parte A: terminal e npm |
+| 10 minutos | Parte B: objetos e arrays |
+| 10 minutos | Parte C: módulos |
+| 15 minutos | Parte D: pedidos assíncronos e erros |
+| 10 minutos | Parte E: React e formulários |
+
+Os tempos servem para te orientares e não são um limite rígido. É normal não te lembrares de tudo. Se ficares preso numa pergunta, escreve o que te lembras, ou "não me lembro", que mostra onde está a lacuna. Depois avança para a seguinte; se sobrar tempo, voltas a ela. Uma resposta em branco não mostra nada, porque quem a lê não sabe se não sabias, se te faltou tempo ou se saltaste a pergunta.
+
+Quase todas as perguntas pedem uma explicação. Escreve-a por palavras tuas, em frases completas: uma resposta certa sem explicação pode ter sido um palpite, e uma errada bem explicada mostra onde está o engano. Quando se pede código, não tens de acertar em todos os pormenores de sintaxe. Interessa que a ideia esteja certa.
+
 ## Parte A: terminal e npm (10 minutos)
 
-Nesta parte trabalhas com um projeto chamado `inventario-web`. É um projeto React criado com Vite, do mesmo tipo dos que usaste no 11.º ano. Está numa pasta chamada `inventario-web`, dentro de uma pasta `projetos`, que por sua vez está dentro da tua pasta pessoal.
+Nesta parte trabalhas com um projeto chamado `inventario-web`. É um projeto React criado com Vite, do mesmo tipo dos que usaste no 11.º ano. Está numa pasta chamada `inventario-web`, dentro de uma pasta `projetos`, que está dentro da tua pasta pessoal.
 
 O ficheiro `package.json` do projeto é este:
 
@@ -87,7 +71,7 @@ O ficheiro `package.json` do projeto é este:
 }
 ```
 
-Além do `package.json`, a pasta do projeto tem um ficheiro chamado `package-lock.json`. Não tem a pasta `node_modules`, porque o projeto foi descarregado do GitHub e essa pasta nunca se envia para o GitHub.
+Além do `package.json`, a pasta do projeto tem um ficheiro chamado `package-lock.json`. Não tem a pasta `node_modules`, porque o projeto foi descarregado do GitHub, e essa pasta nunca se envia para o GitHub.
 
 ### Pergunta 1: chegar à pasta do projeto
 
@@ -99,15 +83,15 @@ Que comando escreves para instalar as dependências do projeto? Explica o que ac
 
 ### Pergunta 3: dois erros ao arrancar o projeto
 
-Dois colegas tentaram arrancar o projeto e tiveram erros diferentes. Para cada um, explica o que correu mal, como percebeste isso a partir da mensagem de erro, e o que cada um devia ter feito.
+Dois colegas tentaram arrancar o projeto e tiveram erros diferentes. Para cada um, explica o que correu mal, como o percebeste pela mensagem de erro e o que devia ter feito. Das mensagens, mostram-se só as linhas que interessam.
 
-a) Uma colega escreveu `npm start` dentro da pasta do projeto e apareceu esta mensagem (mostram-se só as linhas que interessam):
+a) Uma colega escreveu `npm start` dentro da pasta do projeto e apareceu esta mensagem:
 
 ```text
 npm error Missing script: "start"
 ```
 
-b) Um colega escreveu `npm run dev` e apareceu esta mensagem (mostram-se só as linhas que interessam):
+b) Um colega escreveu `npm run dev` e apareceu esta mensagem:
 
 ```text
 npm error code ENOENT
@@ -118,7 +102,7 @@ npm error enoent Could not read package.json: Error: ENOENT: no such file or dir
 
 ### Pergunta 4: prever o resultado de um filtro
 
-Lê este código, que usa o array `artigos` apresentado no início.
+Lê este código, que usa o array `artigos` da papelaria.
 
 ```js
 const alerta = artigos
@@ -171,9 +155,9 @@ Quando se executa o `app.js`, aparece este erro:
 SyntaxError: The requested module './precos.js' does not provide an export named 'default'
 ```
 
-a) Explica o que esta mensagem de erro quer dizer. Para isso, explica a diferença entre exportar uma função com nome e exportar por omissão (`export default`).
+a) Explica o que esta mensagem de erro quer dizer. Para isso, explica a diferença entre uma exportação com nome (`export function`) e uma exportação por omissão (`export default`).
 
-b) Corrige o programa de duas maneiras diferentes: uma em que só alteras o `app.js`, e outra em que só alteras o `precos.js`.
+b) Corrige o programa de duas maneiras diferentes: uma em que só alteras o `app.js`, e outra em que só alteras o `precos.js`. Em cada uma, basta escreveres as linhas que mudam.
 
 c) Depois de corrigido, o que aparece na consola?
 
@@ -210,15 +194,15 @@ Com a função já corrigida, há duas situações em que o pedido corre mal:
 - Situação 1: o servidor está desligado.
 - Situação 2: o servidor está ligado, mas o endereço escrito no `fetch` tem um erro, por exemplo `/api/artigo`. O servidor responde com o código 404, que quer dizer "não encontrado", e com o corpo `{"erro":"Rota não encontrada"}`.
 
-a) Numa destas situações, o `fetch` não lança nenhum erro e a função continua como se o pedido tivesse corrido bem. Qual é essa situação? Explica porquê.
+a) Em cada uma das situações, o `fetch` lança um erro? Explica o que acontece na função em cada uma.
 
-b) Acrescenta à função o código necessário para que a situação da alínea a) passe a ser tratada como um erro. A mensagem do erro diz o código que o servidor enviou.
+b) Acrescenta à função as linhas que lançam um erro sempre que o servidor não responde ou responde com um código de erro, como o 404 ou o 500. A mensagem do erro diz o código de estado que o servidor enviou, quando ele respondeu. Basta escreveres as linhas novas e dizeres onde ficam na função.
 
 c) Escreve o código que chama a função `carregarArtigos` e mostra os artigos na consola quando tudo corre bem. Quando acontece qualquer uma das duas situações, o código mostra uma mensagem de erro compreensível.
 
 ## Parte E: React e formulários (10 minutos)
 
-Este componente React deveria permitir escrever o nome de um artigo numa caixa de texto e, ao carregar no botão, acrescentá-lo a uma lista mostrada por baixo. Tem dois erros, que vais descobrir nas perguntas 9 e 10. Lê o componente todo antes de começares.
+Este componente React deveria permitir escrever o nome de um artigo numa caixa de texto e, ao carregar no botão, acrescentá-lo a uma lista mostrada por baixo. Tem dois erros, que vais descobrir nas perguntas 9 e 10.
 
 ```jsx
 import { useState } from "react";
@@ -255,7 +239,7 @@ Na página, clica-se na caixa de texto e escreve-se, mas nada aparece. A caixa f
 
 ### Pergunta 10: a lista que não se atualiza
 
-Depois da correção anterior, já se consegue escrever na caixa. Escreve-se "Régua 30 cm", carrega-se em "Adicionar", e a lista continua vazia no ecrã. Explica porque é que isto acontece e reescreve a função `adicionar` corrigida. Na tua versão, a caixa de texto deve ficar vazia depois de o artigo ser adicionado.
+Depois da correção anterior, já se consegue escrever na caixa. Escreve-se "Régua de 30 cm", carrega-se em "Adicionar", e a lista continua vazia no ecrã. Explica porque é que isto acontece e reescreve a função `adicionar` corrigida. Na tua versão, a caixa de texto deve ficar vazia depois de o artigo ser adicionado.
 
 ### Pergunta 11: a mensagem de lista vazia
 
@@ -263,17 +247,17 @@ Quando ainda não há nenhum artigo, a página deve mostrar a frase "Ainda não 
 
 ## Como é avaliado
 
-Não tem nota. O professor dá a cada parte um de quatro níveis:
+O professor dá a cada parte um de quatro níveis:
 
 - não demonstrado: a resposta ainda não mostra a ideia;
 - com apoio: mostras parte da ideia;
 - funcional: resolves e explicas, mesmo com pequenos erros;
 - autónomo: resolves, explicas e vais além do que se pede.
 
-A explicação pesa mais do que o resultado. "Não me lembro" fica em não demonstrado, mas é uma resposta útil, porque mostra onde está a lacuna. É com esses níveis que se organiza a revisão das aulas seguintes.
+A explicação pesa mais do que o resultado, e "não me lembro" fica em não demonstrado.
 
 ## Entrega
 
-Entregas a folha de respostas no fim da aula. Antes de a entregares, confirma que escreveste o número de cada resposta e que deste uma explicação em todas as perguntas que a pedem. Se não souberes responder a uma pergunta, escreve o que te lembras ou "não me lembro", em vez de a deixares em branco.
+Entregas a folha de respostas no fim da aula. Antes de a entregares, confirma que escreveste o número de cada resposta e uma explicação em todas as perguntas que a pedem.
 
 ![Rodapé](../imagens/rodape.png)

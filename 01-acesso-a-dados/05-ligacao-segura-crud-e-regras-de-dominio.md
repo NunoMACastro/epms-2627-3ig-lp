@@ -4,7 +4,7 @@
 
 Neste guia, a API da papelaria deixa de ler os artigos de um array e passa a criá-los, lê-los, alterá-los e apagá-los no MongoDB, com o Mongoose. Vês o que um pedido pode trazer, em que camada fica cada regra da papelaria e como a API recusa o que não as cumpre, sem estragar os dados.
 
-Usa a API da papelaria com camadas, a ligação ao Atlas com o modelo, o seed e o `_id` dos documentos. Rever: [As camadas em código](04-api-express-e-contratos.md#as-camadas-em-código), [a API ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md), [o seed da ficha do cinema](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/exercicios/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md#exercício-2-a-ligação-o-modelo-e-o-seed) e [O campo _id e o ObjectId](02-modelo-documental-e-consultas-no-atlas.md#o-campo-_id-e-o-objectid). Para praticar: [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md).
+Usa a API da papelaria com camadas, a ligação ao Atlas com o modelo, o seed e o `_id` dos documentos. Rever: [As camadas em código](04-api-express-e-contratos.md#parte-3-as-camadas-em-código), [a API ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md), [o seed da ficha do cinema](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/exercicios/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md#exercício-2-a-ligação-o-modelo-e-o-seed) e [O campo _id e o ObjectId](02-modelo-documental-e-consultas-no-atlas.md#o-campo-_id-e-o-objectid). Para praticar: [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md).
 
 ## Neste guia
 
@@ -182,7 +182,7 @@ O `mongoose.connection.name` é o nome da base a que a ligação chegou, o mesmo
 
 ### O repository troca o array pela base de dados
 
-No tema anterior, a pasta `src/dados` ocupava o lugar do repository, com os oito artigos num array. Agora entra o repository, em `src/repositories/artigos.repository.js`, a única camada que usa o modelo `Artigo` e escreve consultas do MongoDB. É o mesmo papel do repository das cenas, no passo 2 do jogo ([o repository, a camada que fala com a base de dados](laboratorios/04-api-express-e-contratos-laboratorio.md#fase-4-o-repository-a-camada-que-fala-com-a-base-de-dados)).
+No tema anterior, a pasta `src/dados` ocupava o lugar do repository, com os oito artigos num array. Agora entra o repository, em `src/repositories/artigos.repository.js`, a única camada que usa o modelo `Artigo` e escreve consultas do MongoDB. É o mesmo papel do repository das cenas, no passo 2 do jogo ([a fase 4, onde crias o repository das cenas](laboratorios/04-api-express-e-contratos-laboratorio.md#fase-4-as-camadas-ligam-se-com-export-e-import)).
 
 O modelo `Artigo` é o da aula em que ligaste a papelaria ao Atlas, com duas diferenças. Perdeu a localização e o fornecedor, que nenhum pedido do contrato usa. E ganhou as regras de cada campo, que estão em [As regras de cada campo ficam no schema](#as-regras-de-cada-campo-ficam-no-schema).
 
