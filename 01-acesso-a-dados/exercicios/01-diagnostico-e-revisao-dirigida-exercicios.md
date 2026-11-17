@@ -2,34 +2,11 @@
 
 # Ficha de exercícios: Diagnóstico e revisão dirigida
 
-Ficha do tema Diagnóstico e revisão dirigida, do módulo M14, Acesso a Bases de Dados. Revês as bases do 11.º ano que as aulas deste ano usam a toda a hora. São o terminal e o npm, os objetos e os arrays, as funções, os módulos e os pedidos assíncronos e, no fim, o React. Fazes sozinho, ao teu ritmo: o que não acabares na aula, acabas em casa ou na aula seguinte.
+Revês as bases do 11.º ano, e o npm de Sistemas de Informação, que as aulas deste ano usam a toda a hora. São o terminal e o npm, os objetos e os arrays, as funções, os módulos e os pedidos assíncronos. A parte obrigatória são as partes A e B, os exercícios 1 a 8, por esta ordem; a parte C, o React, é opcional. As respostas escritas ficam em comentários `//` nos ficheiros da pasta `revisao-js`, que crias no exercício 1. Sem computador, respondes numa folha, a partir do que a ficha mostra; sem internet para instalar o Express, os exercícios 7 e 8 fazem-se também em papel. Podes consultar os teus apontamentos e os capítulos do 11.º ano. Para rever: os capítulos de [JavaScript](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/README.md) e de [React](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/README.md).
 
-## O que precisas de saber
+## O cenário
 
-O que aprendeste no 11.º ano. Podes consultar os teus apontamentos e estes capítulos do 11.º ano:
-
-- os objetos: [Objetos e this](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/08-Objetos-e-this.md);
-- as funções: [Funções](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/10-Funcoes.md);
-- o `filter`, o `map`, o `find` e o `reduce`: [Arrays de ordem superior](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md);
-- os erros, com o `try`, o `catch` e o `throw`: [Exceções](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/12-Excecoes.md);
-- os módulos: [Módulos ES](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/13-Modulos-ES.md);
-- o `async` e o `await`: [Assíncrono e event loop](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/15-Assincrono-EventLoop.md);
-- o `fetch`: [Fetch e AJAX](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/17-Fetch-AJAX.md);
-- o React, para a parte opcional: [Estado e eventos](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/04_estado_e_eventos.md), [Listas e condicionais](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/05_listas_e_condicionais.md) e [Formulários controlados](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/06_formularios_controlados.md).
-
-Não precisas de nenhum trabalho anterior. Tudo o que os exercícios usam está nesta ficha.
-
-## Como trabalhar
-
-A parte obrigatória são as partes A e B, os exercícios 1 a 8, por esta ordem. A parte C, sobre o React, é opcional, como o desafio do fim.
-
-Esta ficha é de revisão, e podes consultar os apontamentos e os capítulos indicados acima. Tenta primeiro sozinho, e consulta quando ficares preso. Assim percebes, e o professor também, onde precisas de rever.
-
-Com o computador, as respostas escritas ficam em comentários `//` nos ficheiros da pasta `revisao-js`; sem ele, resolve numa folha. Nos exercícios com código, pensa primeiro no que esperas que aconteça, e só depois experimenta. Cada exercício constrói-se só com o que está na ficha. O exercício 1 cria a pasta `revisao-js`, onde experimentas os exercícios 2 a 8, se tiveres o computador. Os exercícios 7 e 8 precisam também de um servidor de teste, que a ficha dá antes do exercício 7 e se instala com internet; sem ele, responde em papel. A parte C faz-se em papel. Se precisares de ajuda, o [Apoio](#apoio) dá uma pista para cada exercício.
-
-## O cenário: o clube de videojogos
-
-O clube de videojogos da escola empresta jogos aos alunos. Cada jogo tem um número (`id`), o título, o género, o número máximo de jogadores (`jogadoresMax`), quantas vezes já foi requisitado (`requisicoes`) e se está disponível agora (`disponivel`).
+Cada jogo do clube de videojogos da escola tem um número (`id`), o título, o género e o número máximo de jogadores (`jogadoresMax`). Tem também quantas vezes já foi requisitado (`requisicoes`) e se está disponível agora (`disponivel`).
 
 ```js
 // jogos.js: os jogos que o clube de videojogos da escola empresta.
@@ -47,9 +24,7 @@ export const jogos = [
 
 ### Exercício 1: a pasta da revisão
 
-Neste exercício crias, do zero, a pasta onde vais experimentar os exercícios seguintes. Se não tiveres o computador, responde a partir do que a ficha mostra.
-
-a) Abre um terminal na tua pasta de trabalho, fora de qualquer outro projeto. Escreve os três comandos que criam uma pasta `revisao-js`, entram nela e criam lá dentro um projeto Node com as respostas por omissão. Explica para que serve cada um, e depois corre-os. O `package.json` que aparece é este:
+a) Abre um terminal na tua pasta de trabalho, fora de qualquer outro projeto. Escreve e corre os três comandos que criam uma pasta `revisao-js`, entram nela e criam lá dentro um projeto Node com as respostas por omissão. O `package.json` que aparece é este:
 
 ```json
 {
@@ -67,7 +42,7 @@ a) Abre um terminal na tua pasta de trabalho, fora de qualquer outro projeto. Es
 }
 ```
 
-b) Prepara o projeto para os exercícios seguintes. Muda o `"type"` para `"module"`, que é o que deixa usar o `import` e o `export`. Cria o ficheiro `ola.js`, com uma linha que escreve na consola `A pasta da revisão está pronta.`. Acrescenta aos scripts do `package.json` um script `ola` que corre esse ficheiro. Confirma com `npm run ola`. Sem computador, escreve na folha as linhas do `package.json` que mudarias ou acrescentarias.
+b) Prepara o projeto para os exercícios seguintes. Muda o `"type"` para `"module"`, que é o que deixa usar o `import` e o `export`. Cria o ficheiro `ola.js`, com uma linha que escreve na consola a frase `A pasta da revisão está pronta.` Acrescenta aos scripts do `package.json` um script `ola` que corre esse ficheiro. Confirma com `npm run ola`.
 
 c) Provoca dois erros. Para cada um, explica o que correu mal e como o percebes pela mensagem (mostram-se só as linhas que interessam).
 
@@ -86,17 +61,28 @@ c) Provoca dois erros. Para cada um, explica o que correu mal e como o percebes 
   npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/home/aluno/package.json'
   ```
 
-No fim, volta à pasta `revisao-js`, com `cd revisao-js`. Os exercícios seguintes correm-se todos nesta pasta.
+No fim, volta à pasta `revisao-js`, com `cd revisao-js`.
+
+As respostas escritas deste exercício vão em comentários no `ola.js`, porque o `package.json` não aceita comentários.
+
+Rever: [Primeiro servidor, de Sistemas de Informação: o npm e o ficheiro package.json](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/02-primeiro-servidor.md#o-npm-e-o-ficheiro-packagejson).
+
+<details>
+<summary>Pista</summary>
+
+Escreve o teu script como o `test`, que já lá está. Em cada erro, compara a mensagem com o que escreveste no terminal.
+
+</details>
 
 ## Parte B: JavaScript
 
-Na pasta `revisao-js`, cria o ficheiro `jogos.js` com o conteúdo do cenário. Escreve cada exercício num ficheiro próprio, como `exercicio2.js`, que começa por esta linha:
+Na pasta `revisao-js`, cria o ficheiro `jogos.js` com o conteúdo do cenário. Nos exercícios 2 a 5, cada exercício vai num ficheiro próprio, como `exercicio2.js`, que começa por esta linha:
 
 ```js
 import { jogos } from "./jogos.js";
 ```
 
-Corre-o com `node exercicio2.js`, na pasta `revisao-js`.
+Corre-o com `node exercicio2.js`.
 
 ### Exercício 2: as propriedades de um jogo
 
@@ -114,35 +100,71 @@ b) Escreve o código que mostra na consola esta frase, construída a partir do o
 Minecraft (Construção): até 8 jogadores
 ```
 
-Depois, troca o `jogos[0]` por `jogos[4]` e confirma que a frase muda sozinha.
+Com `jogos[4]` no lugar de `jogos[0]`, o mesmo código mostra `Among Us (Festa): até 10 jogadores`.
 
 c) O que mostra `console.log(jogo.preco)`? Dá erro? Explica.
+
+Rever: [Objetos e `this`: o que é um objeto](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/08-Objetos-e-this.md#0-o-que-é-um-objeto) e [Strings: template literals](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/04-Strings.md#1-concatenar-e-usar-template-literals).
+
+<details>
+<summary>Pista</summary>
+
+Uma template literal escreve-se entre acentos graves, e cada valor entra com `${...}`.
+
+</details>
 
 ### Exercício 3: um jogo para quatro amigos
 
 Quatro amigos querem um jogo para jogarem juntos, agora. Escreve o código que dá a lista dos títulos dos jogos que lhes servem: os que estão disponíveis e deixam jogar quatro pessoas, ou mais.
 
-Antes de o correres, prevê os títulos que vão aparecer. Depois, escreve o que mostra `console.log(jogos.length)` a seguir ao teu código, e porquê.
+Com estes dados, devem aparecer três títulos. Escreve também o que mostra `console.log(jogos.length)` a seguir ao teu código, e porquê.
+
+Rever: [Funções de alto nível em arrays: o `filter`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#2-filter---selecionar), [o `map`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#1-map---transformar) e [encadear com clareza](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#8-encadear-com-clareza).
+
+<details>
+<summary>Pista</summary>
+
+O `filter` fica com os jogos que servem, e o `map` fica com o título de cada um. Para a condição, diz primeiro por palavras quando é que um jogo serve aos quatro amigos, e confere-a com cada jogo da lista.
+
+</details>
 
 ### Exercício 4: procurar um jogo
 
 Escreve a função `procurarJogo(lista, id)`, que devolve o jogo da lista com esse `id`, ou `null` se não houver nenhum. Experimenta com o `id` 3 e com o `id` 9.
 
-Responde: o que devolvia a tua função com o `id` 9 se tivesse só a linha `return lista.find((jogo) => jogo.id === id);`?
+Responde: com o `id` 9, o que dá o `find`, e porque é que a tua função não pode devolver isso tal e qual?
+
+Rever: [Funções: parâmetros e `return`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/10-Funcoes.md#2-parâmetros-e-return) e [Funções de alto nível em arrays: o `find`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#4-find-e-findindex---primeiro-que-passa).
+
+<details>
+<summary>Pista</summary>
+
+Experimenta o `find` sozinho, com o `id` 9, e vê o que aparece na consola.
+
+</details>
 
 ### Exercício 5: o total de requisições
 
 Escreve a função `totalDeRequisicoes(lista)`, que devolve quantas vezes, ao todo, os jogos da lista já foram requisitados. Podes usar um ciclo ou o `reduce`.
 
-Antes de experimentares, prevê o que dão estas três chamadas, e depois confirma:
+Experimenta-a com estas três listas, que devem dar estes resultados:
 
-- com a lista `jogos`;
-- com uma lista vazia, `[]`;
-- com os jogos do género `"Festa"`, que obténs com um `filter`.
+- a lista `jogos` dá 53;
+- uma lista vazia, `[]`, dá 0;
+- os jogos do género `"Festa"`, que obténs com um `filter`, dão 6.
+
+Rever: [Ciclos: somar valores](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/06-Ciclos.md#somar-valores) e [Funções de alto nível em arrays: o `reduce`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/11-Arrays-HighOrder.md#3-reduce---acumular).
+
+<details>
+<summary>Pista</summary>
+
+Uma variável que cresce a cada jogo da lista, como um contador.
+
+</details>
 
 ### Exercício 6: um import que falha
 
-Um programa está dividido em dois ficheiros, na pasta `revisao-js`. O `estatisticas.js` tem uma função que conta os jogos disponíveis:
+Cria na pasta `revisao-js` estes dois ficheiros novos. O `estatisticas.js` tem uma função que conta os jogos disponíveis:
 
 ```js
 // estatisticas.js: contas sobre os jogos do clube.
@@ -179,17 +201,26 @@ b) Corrige o programa mudando um só ficheiro. Diz qual, e porque é esse.
 
 c) Depois da correção, o que aparece na consola?
 
+Rever: [Módulos ES: exportar e importar](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/13-Modulos-ES.md#2-exportar-e-importar).
+
+<details>
+<summary>Pista</summary>
+
+Compara o `estatisticas.js` com o `jogos.js`, que o `import` consegue usar. O que tem um que o outro não tem?
+
+</details>
+
 ### O servidor de teste dos exercícios 7 e 8
 
-Para experimentares os exercícios 7 e 8, a pasta `revisao-js` precisa de um servidor de teste, que responde com os jogos do clube. Se não tiveres internet para o instalar, faz os dois exercícios em papel.
+Para experimentares os exercícios 7 e 8, a pasta `revisao-js` precisa de um servidor de teste, que responde com os jogos do clube.
 
-1. Na pasta `revisao-js`, instala o Express. Precisa de internet.
+1. Na pasta `revisao-js`, instala o Express.
 
    ```bash
    npm install express
    ```
 
-2. Cria o ficheiro `servidor.js` com este conteúdo. Não faz parte de nenhum exercício: só responde aos pedidos dos exercícios 7 e 8.
+2. Cria o ficheiro `servidor.js` com este conteúdo.
 
    ```js
    // servidor.js: um servidor de teste, que responde com os jogos do clube.
@@ -209,16 +240,20 @@ Para experimentares os exercícios 7 e 8, a pasta `revisao-js` precisa de um ser
      res.status(404).json({ erro: "Rota não encontrada" });
    });
 
-   app.listen(3000, () => {
+   app.listen(3000, (erro) => {
+     if (erro) {
+       console.error(`Não foi possível ligar o servidor de teste: ${erro.message}`);
+       return;
+     }
      console.log("Servidor de teste em http://localhost:3000");
    });
    ```
 
-3. Num segundo terminal, também na pasta `revisao-js`, liga-o com `node servidor.js`. Deve aparecer `Servidor de teste em http://localhost:3000`. Para o desligar, carrega em Ctrl+C nesse terminal.
+3. Num segundo terminal, também na pasta `revisao-js`, liga-o com `node servidor.js`. Deve aparecer `Servidor de teste em http://localhost:3000`. Se aparecer `Não foi possível ligar o servidor de teste`, outro servidor teu está a usar a porta 3000: desliga-o com Ctrl+C no terminal dele e volta a ligar este. Para desligar o servidor de teste, carrega em Ctrl+C no terminal dele.
 
 ### Exercício 7: o que devolve uma função async
 
-Esta função vai buscar os jogos ao servidor de teste:
+Cria o `exercicio7.js` com este código, que vai buscar os jogos ao servidor de teste:
 
 ```js
 // exercicio7.js: o que devolve uma função async.
@@ -232,15 +267,22 @@ const resultado = carregarJogos();
 console.log(resultado);
 ```
 
-a) Antes de experimentares, o que mostra a última linha? Explica, por palavras tuas, o que devolve uma função `async`.
+a) O que mostra a última linha? Explica, por palavras tuas, o que devolve uma função `async`.
 
 b) Muda as duas últimas linhas para a consola mostrar quantos jogos vieram.
 
-Se tiveres o servidor de teste ligado, experimenta as duas versões. Se não, responde em papel.
+Rever: [Assíncrono e event loop: as promessas](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/15-Assincrono-EventLoop.md#4-promises), [o `async` e o `await`](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/15-Assincrono-EventLoop.md#5-asyncawait---ler-código-assíncrono-como-se-fosse-passo-a-passo) e [Módulos ES: o `await` fora de funções](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/13-Modulos-ES.md#5-top-level-await).
+
+<details>
+<summary>Pista</summary>
+
+O `await` espera pela promessa e dá o que veio dentro dela.
+
+</details>
 
 ### Exercício 8: os três finais de um pedido
 
-Esta versão da função verifica a resposta, e quem a chama trata os erros:
+Cria o `exercicio8.js` com este código. Esta versão da função verifica a resposta, e quem a chama trata os erros:
 
 ```js
 // exercicio8.js: os três finais possíveis de um pedido.
@@ -261,21 +303,28 @@ try {
 }
 ```
 
-a) Completa a última coluna desta tabela. Para a situação 2, o pedido muda para `carregarJogos("/api/jogo")`.
+a) Escreve, num comentário no `exercicio8.js`, o que a consola mostra em cada situação:
 
-| Situação | O que a consola mostra |
-| --- | --- |
-| 1. O servidor está ligado, e o pedido é a `/api/jogos` | |
-| 2. O servidor está ligado, e o pedido é a `/api/jogo`, sem o `s` | |
-| 3. O servidor está desligado | |
+1. o servidor ligado e o pedido a `/api/jogos`;
+2. o servidor ligado e o pedido a `/api/jogo`, sem o `s`, com `carregarJogos("/api/jogo")`;
+3. o servidor desligado, com Ctrl+C no terminal dele.
 
-b) Nas situações 2 e 3, o erro vai parar ao `catch`. Em cada uma, quem o lança: o `fetch`, ou o teu código?
+b) Nas situações 2 e 3, o erro vai parar ao `catch`. Em cada uma, quem o lança: o `fetch`, ou a própria função `carregarJogos`?
 
 c) Imagina que apagavas as três linhas do `if (!resposta.ok)`. O que mostrava a consola na situação 2, e porquê?
 
+Rever: [Fetch e AJAX: tratar erros](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/17-Fetch-AJAX.md#4-tratar-erros-rede-vs-http), [Exceções: erros assíncronos](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/12-Excecoes.md#7-erros-assíncronos-promessas-e-asyncawait) e [Módulos ES: o `await` fora de funções](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/JavaScript/13-Modulos-ES.md#5-top-level-await).
+
+<details>
+<summary>Pista</summary>
+
+Em cada situação, pergunta-te se chegou alguma resposta do servidor.
+
+</details>
+
 ## Parte C, opcional: React e formulários
 
-Esta parte faz-se em papel: lês o componente e escreves as correções numa folha. Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros, que vais encontrar nos exercícios 9 e 10. Lê o componente todo antes de começares.
+Esta parte faz-se em papel: lês o componente e escreves as correções numa folha. Os três exercícios usam este componente, que devia deixar escrever o nome de um jogo e acrescentá-lo a uma lista de desejos. Tem dois erros que se notam quando o usas, e que vais encontrar nos exercícios 9 e 10.
 
 ```jsx
 import { useState } from "react";
@@ -314,43 +363,52 @@ a) O que é que o `push` devolve? Depois do `setDesejos`, o que fica guardado no
 
 b) Reescreve a linha do `setDesejos` corrigida.
 
+Rever: [Estado e eventos: imutabilidade](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/04_estado_e_eventos.md#33-imutabilidade-não-alterar-diretamente-o-estado).
+
+<details>
+<summary>Pista</summary>
+
+Se tiveres o computador, corre esta linha num ficheiro, com o `node`: `console.log([].push("Tetris"))`.
+
+</details>
+
 ### Exercício 10: a caixa que não se esvazia
 
 Com a linha corrigida, a lista já mostra o Tetris. Mas a caixa de texto continua a dizer "Tetris", apesar do `setTitulo("")`. Explica porquê, e reescreve a linha do `input` corrigida.
+
+Rever: [Formulários controlados: o estado manda no input](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/06_formularios_controlados.md#11-a-ideia-central-o-estado-manda-no-input).
+
+<details>
+<summary>Pista</summary>
+
+Pergunta-te de onde é que a caixa vai buscar o texto que mostra.
+
+</details>
 
 ### Exercício 11: a lista vazia
 
 Enquanto a lista não tem nenhum jogo, a página deve mostrar a frase "Ainda não escolheste nenhum jogo." no lugar da lista. Escreve o JSX que faz isto e diz em que sítio do componente o pões.
 
-## Apoio
+Rever: [Listas e condicionais: renderização condicional](https://github.com/NunoMACastro/edu-docs-2ig-js-guias-2526/blob/8cf6ade3cf3d4508ea0fb4fbc5b2bedb29869a8f/React/05_listas_e_condicionais.md#3-essencial-renderização-condicional-no-jsx).
 
-- Exercício 1: um script é uma linha dentro de `"scripts"`, com o nome entre aspas, os dois pontos e o comando, e uma vírgula a separá-la da linha anterior. Nas mensagens, lê o que o npm procurou e onde.
-- Exercício 2: uma template string escreve-se entre acentos graves, e cada valor entra com `${...}`.
-- Exercício 3: o `filter` recebe uma condição com duas partes. Repara no "ou mais".
-- Exercício 4: experimenta o `find` sozinho, com o `id` 9, e vê o que aparece na consola.
-- Exercício 5: uma variável que começa num valor e cresce a cada jogo. Pensa no valor com que começa.
-- Exercício 6: num módulo, o que não leva `export` fica fechado dentro do ficheiro.
-- Exercício 7: o `await` espera pela promessa e dá o que veio dentro dela.
-- Exercício 8: a resposta tem o `ok` e o `status`. Um 404 também é uma resposta.
-- Exercício 9: no Node, experimenta `console.log([].push("Tetris"))`.
-- Exercício 10: num campo controlado, o estado e a caixa estão ligados nos dois sentidos.
-- Exercício 11: o operador `? :` ou o `&&`, dentro do JSX.
+<details>
+<summary>Pista</summary>
 
-## Desafio opcional
+O operador `? :` ou o `&&`, dentro do JSX.
 
-**O jogo mais requisitado.** Escreve a função `maisRequisitado(lista)`, que devolve o jogo da lista com mais requisições. Decide, e escreve num comentário por cima da função, o que ela devolve com uma lista vazia, e o que acontece se dois jogos tiverem o mesmo número de requisições. Experimenta com a lista `jogos` e com duas listas inventadas por ti, uma para cada caso.
+</details>
+
+## Desafios
+
+### O jogo mais requisitado
+
+Escreve a função `maisRequisitado(lista)`, que devolve o jogo da lista com mais requisições. Decide, e escreve num comentário por cima da função, o que ela devolve com uma lista vazia, e o que acontece se dois jogos tiverem o mesmo número de requisições. Experimenta com a lista `jogos` e com duas listas inventadas por ti, uma para cada caso.
 
 ## Critérios de conclusão
 
-- Os exercícios 1 a 8 têm resposta, nos comentários dos ficheiros ou na folha.
+- Os exercícios 1 a 8 têm resposta.
 - Nos exercícios 4 e 5, as funções dão o valor certo também com o `id` que não existe e com a lista vazia.
-- No exercício 8, sabes dizer, em cada situação, quem lançou o erro.
-- Se tiveste o computador, o `npm run ola` escreve a frase do exercício 1, e os exercícios 2 a 6 correm na pasta `revisao-js`.
-
-## Autoavaliação
-
-1. Que exercício te obrigou a consultar mais? O que foste procurar?
-2. Que parte do 11.º ano sentes que ainda não dominas, e precisas de rever?
-3. Nos exercícios 7 e 8, consegues explicar a um colega a diferença entre o servidor desligado e um 404?
+- No exercício 8, sabes dizer quem lançou o erro nas situações 2 e 3.
+- O `npm run ola` escreve a frase do exercício 1, e os exercícios 2 a 6 correm.
 
 ![Rodapé](../../imagens/rodape.png)

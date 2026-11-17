@@ -2,70 +2,28 @@
 
 # Ligação segura, CRUD e regras de domínio
 
-Módulo M14, Acesso a Bases de Dados. Este guia explica como a API da papelaria passa a guardar os artigos no MongoDB Atlas. Mostra como os cria, lê, altera e apaga, e como recusa o que não cumpre as regras da papelaria. Lês o guia ao teu ritmo, e não precisa de ser de uma vez. Para praticar, há a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md) deste tema. O laboratório deste tema vai ser o passo 4 do jogo Fechado na escola, e ainda não está publicado.
+Neste guia, a API da papelaria deixa de ler os artigos de um array e passa a criá-los, lê-los, alterá-los e apagá-los no MongoDB, com o Mongoose. Vês o que um pedido pode trazer, em que camada fica cada regra da papelaria e como a API recusa o que não as cumpre, sem estragar os dados.
 
-No tema anterior, a API da papelaria ficou com um contrato escrito e com as camadas separadas, mas os artigos estavam num array, dentro do servidor. Já ligaste uma API ao Atlas com o Mongoose duas vezes. A primeira foi na aula em que a papelaria foi buscar os artigos à base; a segunda, na ficha do cinema da escola, que juntou um seed. Este tema junta as duas coisas e dá o passo que faltava. A API deixa de só ler: passa a escrever na base de dados.
-
-Escrever numa base de dados é mais delicado do que ler. Uma leitura mal feita mostra uma lista errada, e basta corrigir o código. Uma escrita mal feita fica guardada: um preço negativo, um artigo sem nome, uma categoria inventada, um artigo apagado por engano. Por isso, este tema trata tanto do que a API aceita como do que ela recusa, e de onde fica cada regra.
+Usa a API da papelaria com camadas, a ligação ao Atlas com o modelo, o seed e o `_id` dos documentos. Rever: [As camadas em código](04-api-express-e-contratos.md#as-camadas-em-código), [a API ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md), [o seed da ficha do cinema](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/exercicios/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md#exercício-2-a-ligação-o-modelo-e-o-seed) e [O campo _id e o ObjectId](02-modelo-documental-e-consultas-no-atlas.md#o-campo-_id-e-o-objectid). Para praticar: [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md).
 
 ## Neste guia
 
-1. O que vais aprender
-2. O que já sabes e vais usar
-3. O contrato cresce: criar, alterar e apagar
-4. Uma só ligação, aberta no arranque e só no servidor
-5. A base de teste
-6. O repository: os artigos passam a vir da base
-7. O _id e a forma de um ObjectId
-8. O corpo do pedido
-9. Uma lista fechada de campos
-10. As regras de cada campo, no schema
-11. Alterar só o que vem no pedido
-12. Apagar, e a regra que precisa da base
-13. Ver o que vai mudar antes de mudar muitos
-14. Os dados pessoais e o RGPD
-15. Exemplo guiado: registar uma venda
-16. Erros frequentes
-17. Palavras novas deste guia
-18. Verificar o que aprendeste
-19. O que vem a seguir
-20. Para saber mais
+1. [Parte 1: O contrato e a leitura na base de dados](#parte-1-o-contrato-e-a-leitura-na-base-de-dados)
+2. [Parte 2: Criar e alterar só o que cumpre as regras](#parte-2-criar-e-alterar-só-o-que-cumpre-as-regras)
+3. [Parte 3: Apagar com cuidado e guardar só o necessário](#parte-3-apagar-com-cuidado-e-guardar-só-o-necessário)
+4. [Exemplo guiado: registar uma venda](#exemplo-guiado-registar-uma-venda)
 
-## O que vais aprender
+## Parte 1: O contrato e a leitura na base de dados
 
-No fim deste guia, consegues:
+Antes de escrever na base, a API precisa de um contrato novo e de uma base onde possa errar à vontade. Precisa também de um repository que vá buscar os artigos ao MongoDB.
 
-- explicar porque é que a API abre uma só ligação à base de dados, no arranque, e porque é que a cadeia de ligação nunca chega ao browser;
-- trabalhar numa base de teste, que um script reconstrói, sem tocar nos dados que interessam;
-- responder 400 a um identificador mal escrito e 404 a um que não existe, com o `_id` do MongoDB;
-- receber os dados de um artigo no corpo de um pedido e aceitar só os campos de uma lista, cada um com o tipo certo;
-- escrever as regras da papelaria no schema e no service, e responder 400 ou 409 quando falham;
-- criar, ler, alterar e apagar artigos com o Mongoose, e ver o que vai mudar antes de apagar vários de uma vez;
-- dizer o que é um dado pessoal e porque é que a tua aplicação usa dados fictícios.
+### O contrato ganha criar, alterar e apagar
 
-## O que já sabes e vais usar
+No tema anterior, o contrato da papelaria só tinha pedidos para ler. Mas uma papelaria também recebe artigos novos, muda o stock depois de uma entrega e tira do catálogo o que deixou de vender. Estas quatro operações têm um nome: **CRUD**, as iniciais, em inglês, de criar (create), ler (read), alterar (update) e apagar (delete). Quase todas as aplicações que guardam dados fazem estas quatro coisas.
 
-- O contrato da API, as camadas (rotas, controller e service), o formato único dos erros, a função `paraInteiro` e o middleware final, explicados no guia [04 API Express e contratos](04-api-express-e-contratos.md). Este tema continua na API da papelaria com camadas.
-- O repository, a camada que fala com a base de dados, e o segredo que só vive no `.env`, do guia [03 Arquitetura e setup Node](03-arquitetura-e-setup-node.md).
-- O documento, a coleção, o `_id`, o ObjectId com os seus 24 carateres hexadecimais, os filtros e o `$lte`, do guia [02 Modelo documental e primeiras consultas no Atlas](02-modelo-documental-e-consultas-no-atlas.md).
-- A ligação com o Mongoose aberta no arranque, com a `MONGODB_URI` e o `DB_NAME` no `.env`. Vem da [ficha do cinema da escola](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/04-ejs-e-reutilizacao-no-servidor-exercicios-cinema.md), de Sistemas de Informação, e do exemplo [a API ligada ao Atlas](../exemplos/acesso-a-dados/papelaria-api-com-atlas/README.md).
-- O modelo e o seu schema, a descrição da forma dos documentos de uma coleção, com o nome da coleção escrito à mão, da mesma ficha e do mesmo exemplo.
-- O seed, com o `deleteMany` e o `insertMany`, da mesma ficha.
-- Os métodos HTTP, como o GET e o POST, e o middleware registado com `app.use`, do tema "HTTP, rotas e middleware" de Sistemas de Informação.
-- O `async`, o `await`, o `try`, o `catch` e o `fetch`, do 11.º ano e da [ficha de revisão](exercicios/01-diagnostico-e-revisao-dirigida-exercicios.md).
-- O `typeof`, o ciclo `for...of` e os métodos `filter`, `map` e `includes` dos arrays, do mesmo ano e da mesma ficha.
+Como no tema anterior, o contrato vem antes do código. Muda em três sítios: o identificador, os métodos e os códigos de estado.
 
-O corpo de um pedido viste-o em Sistemas de Informação só como ideia. Lê-lo com o `express.json()`, os códigos 201, 204 e 409, e o middleware de erros, ainda não os usaste. Este guia explica-os no sítio onde aparecem. O código 500 já o viste no tema anterior, quando um erro no código fazia a API falhar.
-
-## O contrato cresce: criar, alterar e apagar
-
-No tema anterior, o contrato da papelaria só tinha pedidos para ler: a lista, um artigo e os artigos a encomendar. Uma aplicação de gestão também cria, altera e apaga. A papelaria recebe um artigo novo, muda o stock de outro depois de uma entrega, e tira do catálogo um que deixou de vender.
-
-Estas quatro operações têm um nome. **CRUD** são as iniciais, em inglês, de criar (create), ler (read), alterar (update) e apagar (delete). Quase todas as aplicações que guardam dados fazem estas quatro coisas, e o resto do módulo constrói-se em cima delas.
-
-Como no tema anterior, o contrato vem antes do código. É ele que diz o que cada pedido aceita e o que responde, incluindo quando corre mal. Muda em três sítios.
-
-O primeiro é o identificador. Até aqui, cada artigo tinha um `id` inteiro, de 1 a 8, que tinhas escrito no array. Agora os artigos vêm da base, e cada um tem o `_id` que o MongoDB lhe deu quando o inseriu. É por ele que se pede um artigo. O artigo passa a ter esta forma:
+O identificador deixa de ser o `id` de 1 a 8 que estava no array. Passa a ser o `_id` que o MongoDB deu a cada artigo quando o inseriu, e é por ele que se pede um artigo:
 
 ```json
 { "_id": "6ae50cc456457b28519e9054", "nome": "Caderno A4 quadriculado", "categoria": "Papel", "stock": 12, "stockMinimo": 5, "precoCentimos": 250, "__v": 0 }
@@ -73,20 +31,19 @@ O primeiro é o identificador. Até aqui, cada artigo tinha um `id` inteiro, de 
 
 O `__v` é o número de versão que o Mongoose acrescenta a cada documento que insere, como viste na ficha do cinema. Não o escreves nem o lês.
 
-O segundo são três pedidos novos, com três métodos HTTP. O `POST` cria um artigo. O `PATCH` altera alguns campos de um artigo. O `DELETE` apaga um artigo. O `PATCH` é diferente do `PUT`, que também existe. O `PUT` substitui o documento inteiro, e obriga a enviar todos os campos. O `PATCH` muda só os campos que vierem no pedido, e é o que a papelaria precisa para mudar o stock sem reescrever o resto.
+Os pedidos novos usam três métodos HTTP. O `POST` cria um artigo, o `PATCH` altera alguns campos de um artigo e o `DELETE` apaga um artigo. Existe também o `PUT`, que substitui o documento inteiro e obriga a enviar todos os campos. A papelaria usa o `PATCH`, porque o que mais faz é mudar o stock sem reescrever o resto.
 
-O terceiro são quatro códigos de estado novos:
+Os códigos de estado novos são três:
 
 | Código | Nome | Quando |
 | --- | --- | --- |
-| 201 | Created (criado) | O pedido criou um recurso novo. O corpo da resposta é esse recurso |
+| 201 | Created (criado) | O pedido criou um recurso novo, e o corpo da resposta é esse recurso |
 | 204 | No Content (sem conteúdo) | O pedido correu bem e não há nada a devolver, como depois de apagar |
 | 409 | Conflict (conflito) | O pedido está bem escrito, mas choca com o estado dos dados, como apagar um artigo que ainda tem stock |
-| 500 | Internal Server Error (erro interno do servidor) | O problema é do servidor, e não de quem pediu |
 
-O 409 merece uma comparação com o 400. Um 400 diz que o pedido está mal escrito: um stock em texto, um campo que não existe. Repetir o mesmo pedido dá sempre 400. Um 409 diz que o pedido está bem escrito, mas que os dados, como estão agora, não o deixam fazer. O mesmo pedido pode passar mais tarde, quando o stock do artigo chegar a 0.
+O 409 não é um 400. Um 400 diz que o pedido está mal escrito, como um stock em texto, e repetir o mesmo pedido dá sempre 400. Um 409 diz que o pedido está certo, mas que os dados, como estão agora, não o deixam passar. O mesmo `DELETE` passa mais tarde, quando o stock do artigo chegar a 0.
 
-O contrato fica assim. Os pedidos de leitura são os do tema anterior, com o `_id` no lugar do `id`.
+O contrato fica assim, com os pedidos de leitura do tema anterior e o `_id` no lugar do `id`:
 
 | Pedido | O que faz | Respostas |
 | --- | --- | --- |
@@ -110,43 +67,63 @@ O corpo de um `POST` e de um `PATCH` leva os campos de um artigo, com estes tipo
 | `stockMinimo` | inteiro | obrigatório; 0 ou mais |
 | `precoCentimos` | inteiro | obrigatório; 1 ou mais |
 
-Num `POST`, os cinco são obrigatórios. Num `PATCH`, vem pelo menos um, e os que vierem cumprem as mesmas regras. Qualquer outro campo, como o `_id`, é recusado com 400. O resto do guia constrói, camada a camada, o código que cumpre este contrato.
+Num `POST`, os cinco são obrigatórios. Num `PATCH`, vem pelo menos um, e os que vierem cumprem as mesmas regras. Qualquer outro campo, como o `_id`, é recusado com 400. O contrato completo, pedido a pedido, está no exemplo [a API com o CRUD](../exemplos/acesso-a-dados/papelaria-api-com-crud/contrato-da-api.md).
 
-## Uma só ligação, aberta no arranque e só no servidor
+### A ligação abre-se uma vez, no arranque
 
-Já escreveste a função `ligarBaseDeDados` duas vezes, e o `server.js` chama-a antes do `app.listen`. Este tema volta a ela para explicar duas coisas que ficaram por dizer. Porque é que a ligação é uma só, e porque é que a cadeia de ligação tem de ficar no servidor.
+Já escreveste a `ligarBaseDeDados`, e o `server.js` chama-a antes do `app.listen`. Falta dizer porquê.
 
-Ligar-se ao Atlas demora. O teu computador encontra o cluster na internet, os dois combinam como vão cifrar a conversa, e o Atlas confirma o utilizador e a palavra-passe. Isto leva algumas centenas de milissegundos, mais do que a própria consulta. Se a API abrisse uma ligação nova em cada pedido, cada pedido pagava esse tempo. E o cluster gratuito aceita um número limitado de ligações ao mesmo tempo: uma API com muitos pedidos chegava a esse limite e começava a ser recusada.
+Ligar ao Atlas demora. O computador encontra o cluster na internet, os dois combinam como vão cifrar a conversa e o Atlas confirma o utilizador e a palavra-passe. Leva algumas centenas de milissegundos, mais do que a própria consulta. E o cluster gratuito aceita um número limitado de ligações ao mesmo tempo. Por isso, a API liga-se uma vez, no arranque, e o Mongoose usa essa ligação em todos os pedidos.
 
-Por isso, a ligação abre-se uma vez, no arranque, e fica aberta enquanto a API corre. O Mongoose guarda-a e usa-a em todos os pedidos. Quando um repository chama o `Artigo.find`, não abre nada: usa a ligação que já existe. A mesma ideia aparece no dia a dia: um café não chama o fornecedor ao telefone de cada vez que vende um bolo. Combina as entregas uma vez, e depois só vende.
+```mermaid
+sequenceDiagram
+    participant API as A API
+    participant M as Mongoose
+    participant A as Atlas
+    participant B as Browser
+    API->>M: ligarBaseDeDados()
+    M->>A: liga-se, uma só vez
+    A-->>M: ligação aberta
+    API->>API: app.listen(PORTA)
+    loop Cada pedido
+        B->>API: GET /api/artigos
+        API->>M: Artigo.find(filtro), no repository
+        M->>A: a consulta, pela mesma ligação
+        A-->>M: os artigos
+        M-->>API: os artigos
+        API-->>B: 200 com os artigos
+    end
+```
 
-A ligação abre-se antes do `app.listen` por uma razão diferente. Uma API que aceitasse pedidos antes de chegar aos dados deixava-os à espera. O Mongoose guarda as consultas até haver ligação e, ao fim de 10 segundos sem ela, falha com um erro. Se o Atlas não responder, é melhor a API não arrancar e dizer porquê no terminal.
+O diagrama mostra a ordem do arranque: primeiro a ligação, depois o `app.listen`, e só então os pedidos, todos pela mesma ligação. A ligação vem antes do `app.listen` porque uma API que aceitasse pedidos antes de chegar aos dados deixava-os à espera. Se o Atlas não responder, é melhor a API não arrancar e dizer porquê no terminal.
 
-A segunda razão é o segredo. A cadeia de ligação, a `MONGODB_URI`, tem o utilizador e a palavra-passe da base de dados. Quem a tiver entra na base como a tua API entra: lê, altera e apaga tudo. O ficheiro `.env` guarda-a no computador onde a API corre, e o `.gitignore` impede que vá para o Git.
+### A cadeia de ligação fica só no servidor
 
-O browser nunca a pode receber. Tudo o que chega ao browser pode ser lido por quem o usa: o HTML, o JSON das respostas e o código JavaScript da interface. No tema da integração com o React, a interface vai ser um conjunto de ficheiros que o browser descarrega, o **bundle**. Uma linha com a cadeia de ligação num ficheiro do React ficava dentro do bundle, à vista de toda a gente que abrisse a aplicação. É por isso que o React nunca fala com a base de dados: fala com a API, por HTTP, e só a API conhece a cadeia.
+A cadeia de ligação, a `MONGODB_URI`, leva o utilizador e a palavra-passe da base de dados, e quem a tiver lê, altera e apaga tudo. Por isso vive no `.env` do servidor, que o `.gitignore` deixa fora do Git. E nunca chega ao browser, porque tudo o que o browser recebe pode ser lido por quem o usa: o HTML, o JSON das respostas e o código da interface.
 
-Há uma terceira proteção, que se escolhe no Atlas. O utilizador da base de dados que a API usa deve ter só os privilégios de que precisa. Para a papelaria, chega ler e escrever nas bases da papelaria. Não precisa de criar outros utilizadores nem de mudar a configuração do cluster. Se a cadeia escapar, um utilizador com menos privilégios faz menos estragos.
+A interface feita com o React chega ao browser como um conjunto de ficheiros que ele descarrega, o **bundle**. Uma cadeia de ligação escrita num ficheiro do React, ou numa variável `VITE_` do `.env` do React, ia dentro do bundle, à vista de quem abrisse a aplicação. Rever: [O .env do React não guarda segredos](03-arquitetura-e-setup-node.md#o-env-do-react-não-guarda-segredos). É por isso que o React fala com a API, por HTTP, e só a API conhece a cadeia.
 
-Para confirmar que a cadeia não escapou, há duas verificações simples. No Git, nenhum ficheiro guardado tem o endereço do cluster, que acaba em `mongodb.net`. No browser, nenhuma resposta da API o tem. Faz as duas no fim do tema.
+Pela mesma razão, o utilizador da base de dados que a API usa não deve poder mais do que ler e escrever dados. Não precisa de criar outros utilizadores nem de mudar o cluster, e se a cadeia escapar, faz menos estragos.
 
-## A base de teste
+### A base de teste reconstrói-se com o seed
 
-Neste tema vais criar artigos, mudar stocks e apagar artigos, muitas vezes, para ver o que acontece. Algumas experiências vão correr mal de propósito. Se as fizesses na base `papelaria`, a do laboratório do Atlas, perdias o que lá inseriste à mão, como a Cola em bastão e o fornecedor dela.
+Neste tema vais criar, alterar e apagar artigos muitas vezes, e algumas experiências vão correr mal de propósito. Na base `papelaria`, a do laboratório do Atlas, perdias o que lá puseste à mão, como a Cola em bastão e o fornecedor dela.
 
-A solução é ter uma base só para as experiências. Uma **base de teste** é uma base de dados com dados conhecidos, que se pode estragar à vontade, porque um script a reconstrói. Fica no mesmo cluster, com outro nome: `papelaria-teste`. Para a API passar a usá-la, muda uma linha do `.env`:
+Por isso, as experiências fazem-se numa **base de teste**: uma base de dados com dados conhecidos, que se pode estragar à vontade, porque um script a reconstrói. Fica no mesmo cluster, com o nome `papelaria-teste`, e a API passa a usá-la com esta linha do `.env`:
 
 ```text
 DB_NAME=papelaria-teste
 ```
 
-A base `papelaria` continua no cluster, sem mudar. O MongoDB cria a `papelaria-teste` sozinho, na primeira vez que alguém lá escreve.
+A API e o seed usam só a `papelaria-teste`, e a `papelaria` fica no cluster sem mudar. O MongoDB cria a base de teste sozinho, na primeira vez que alguém lá escreve. A `ligarBaseDeDados` também muda numa linha: sem o `DB_NAME`, usa a `papelaria-teste`, e nunca a `papelaria`.
 
-O script que reconstrói a base de teste é um seed, como o do cinema. Apaga todos os artigos e insere os oito do início. Depois de qualquer experiência, corres o seed e a base volta a estar como no princípio, com os mesmos oito artigos. É isso que torna os resultados previsíveis: se o teu colega correr o seed e fizer os mesmos pedidos, obtém as mesmas respostas, menos nos `_id`. Cada seed dá `_id` novos a todos os artigos, e por isso, depois de cada seed, o `_id` de um artigo volta a ler-se na lista de `/api/artigos`.
+```js
+  await mongoose.connect(uri, { dbName: process.env.DB_NAME || "papelaria-teste" });
+```
 
-O seed tem um perigo, que no cinema não se notava, porque a base `cinema` só tinha os filmes do próprio seed. O `deleteMany({})` apaga todos os artigos da base onde está ligado. Se o `.env` disser `DB_NAME=papelaria`, apagava os da base do laboratório do Atlas. Por isso, o seed da papelaria verifica primeiro o nome da base, e só continua se acabar em `-teste`.
+O script que reconstrói a base de teste é um seed, como o do cinema: apaga todos os artigos e insere os oito do início. Depois de qualquer experiência, corres o seed e a base volta ao princípio. Assim os resultados são previsíveis: quem correr o seed e fizer os mesmos pedidos obtém as mesmas respostas, menos nos `_id`, que o MongoDB dá de novo em cada seed.
 
-Antes de leres o seed, prevê: se o `.env` disser `DB_NAME=papelaria` e correres `npm run seed`, o que escreve o terminal, e o que acontece aos artigos da base `papelaria`?
+O perigo está no `deleteMany({})`, que apaga todos os artigos da base onde o seed está ligado. No cinema não se notava, porque a base só tinha os filmes do próprio seed. Na papelaria, bastava um `DB_NAME` errado para apagar a base do laboratório do Atlas. Por isso, o seed da papelaria tem uma verificação a mais: só continua se o nome da base acabar em `-teste`. Corre-se com `npm run seed`, como no cinema, pelo script `"seed": "node --env-file=.env src/seed.js"` do `package.json`:
 
 ```js check
 // src/seed.js: reconstrói a base de teste da papelaria com os oito artigos.
@@ -194,26 +171,22 @@ try {
 await mongoose.disconnect();
 ```
 
-O resultado, com `DB_NAME=papelaria`, é este, e os artigos da base `papelaria` ficam como estavam:
+Com `DB_NAME=papelaria`, o terminal escreve isto, e os artigos da base `papelaria` ficam como estavam:
 
 ```text
 Ligada à base de dados papelaria
 O seed só corre numa base de teste, e esta é a papelaria. Muda o DB_NAME no .env.
 ```
 
-Com `DB_NAME=papelaria-teste`, o seed escreve `Apagados 0 artigos` e `Inseridos 8 artigos` da primeira vez, e `Apagados 8 artigos` e `Inseridos 8 artigos` das seguintes.
+O `mongoose.connection.name` é o nome da base a que a ligação chegou, o mesmo que a `ligarBaseDeDados` escreve na primeira linha. O `endsWith("-teste")` diz se esse nome acaba em `-teste`, e como não acaba, o seed não apaga nada. Com `DB_NAME=papelaria-teste`, escreve `Apagados 0 artigos` e `Inseridos 8 artigos` da primeira vez, e `Apagados 8 artigos` das seguintes.
 
-Leitura guiada: o seed é o do cinema, com os artigos da papelaria no lugar dos filmes e uma verificação a mais. O `mongoose.connection.name` é o nome da base a que a ligação chegou, o mesmo que a `ligarBaseDeDados` escreve no terminal. O `endsWith("-teste")` diz se um texto acaba em `-teste`. Só nesse caso o seed apaga e insere. Repara que o seed não escreve `_id` nenhum: o MongoDB dá um a cada artigo, e por isso os teus `_id` são diferentes dos do teu colega.
+### O repository troca o array pela base de dados
 
-O seed corre-se com o script `seed` do `package.json`, como no cinema: `"seed": "node --env-file=.env src/seed.js"`.
+No tema anterior, a pasta `src/dados` ocupava o lugar do repository, com os oito artigos num array. Agora entra o repository, em `src/repositories/artigos.repository.js`, a única camada que usa o modelo `Artigo` e escreve consultas do MongoDB. É o mesmo papel do repository das cenas, no passo 2 do jogo ([o repository, a camada que fala com a base de dados](laboratorios/04-api-express-e-contratos-laboratorio.md#fase-4-o-repository-a-camada-que-fala-com-a-base-de-dados)).
 
-## O repository: os artigos passam a vir da base
+O modelo `Artigo` é o da aula em que ligaste a papelaria ao Atlas, com duas diferenças. Perdeu a localização e o fornecedor, que nenhum pedido do contrato usa. E ganhou as regras de cada campo, que estão em [As regras de cada campo ficam no schema](#as-regras-de-cada-campo-ficam-no-schema).
 
-No tema anterior, a pasta `src/dados` ocupava o lugar do repository, com os oito artigos num array. O service lia o array diretamente. Agora os artigos estão na base, e entra a camada que faltava: o **repository**, a única camada que fala com o MongoDB. Recebe valores já verificados, escreve as consultas com o Mongoose e devolve o que a base respondeu.
-
-O modelo `Artigo`, que o repository usa, é o da aula em que ligaste a papelaria ao Atlas. Tem duas diferenças. Perdeu a localização e o fornecedor, que nenhum pedido do contrato usa, e que os artigos da base de teste não têm. E ganhou regras, que a secção "As regras de cada campo, no schema" explica. Por agora, basta saber que o modelo diz ao Mongoose a forma dos artigos e o nome da coleção.
-
-O repository fica em `src/repositories/artigos.repository.js`, numa pasta nova, e começa pelo `import` do modelo, `import { Artigo } from "../models/artigo.model.js";`. As primeiras funções são as dos pedidos de leitura:
+O repository começa pelo `import { Artigo } from "../models/artigo.model.js";`, e as primeiras funções são as dos pedidos de leitura:
 
 ```js
 /**
@@ -248,26 +221,9 @@ export async function procurarPorId(id) {
 }
 ```
 
-Leitura guiada: a `procurarArtigos` recebe condições com nomes da papelaria, como `stockAte`, e transforma-as no filtro do MongoDB, o mesmo que escreverias na barra do Atlas. É o único sítio da API onde aparece o `$lte`. A `procurarPorId` usa o `findById`, que procura o documento com aquele `_id` e devolve `null` quando nenhum o tem. Não sabe o que é um 404: diz só "não há", como a `obterArtigo` do tema anterior.
+A `procurarArtigos` recebe condições com nomes da papelaria, como `stockAte`, e transforma-as no filtro do MongoDB. É o único sítio da API onde aparece o `$lte`. A `procurarPorId` devolve `null` quando nenhum artigo tem aquele `_id`. Tal como a `obterArtigo` do tema anterior, não sabe o que é um 404: diz só que não há.
 
-Há uma diferença em relação ao array, e ela muda as outras camadas. Ler um array é imediato. Perguntar ao Atlas demora, e as funções do Mongoose devolvem uma **promessa**: um objeto que representa uma resposta que ainda não chegou. Por isso, o repository é `async` e usa o `await`. E quem o chama também tem de esperar. O service passa a ser `async`, com um `await` antes de cada chamada ao repository, e o controller também, com um `await` antes de cada chamada ao service.
-
-Antes de continuares, prevê: se te esquecesses do `await` na `listar` do controller, e escrevesses `const artigos = listarArtigos(filtros);`, o que respondia `/api/artigos`?
-
-```js
-/** GET /api/artigos, com os filtros opcionais ?categoria= e ?stockMaximo= */
-export async function listar(req, res) {
-  // ... as verificações dos filtros, como no tema anterior ...
-  const artigos = listarArtigos(filtros); // sem o await: um erro de propósito
-  res.json(artigos);
-}
-```
-
-O resultado é um 200 com `{}`, e nenhum erro no terminal. Sem o `await`, a variável `artigos` guarda a promessa, e não a lista. O `res.json` escreve a promessa em JSON, e uma promessa escrita em JSON é um objeto vazio. A lista chega da base um instante depois, mas já ninguém está à espera dela.
-
-Leitura guiada: é o erro mais traiçoeiro deste tema, porque não há mensagem nenhuma. A pista é a resposta ter a forma errada: um objeto vazio, em vez de uma lista. Quando vires `{}` onde esperavas `[...]`, procura o `await` que falta no controller. No service, o mesmo esquecimento dá outro sintoma, quando a função usa o resultado, como a `artigosAbaixoDoMinimo` com o `filter`. A API responde 500, e o terminal diz `artigos.filter is not a function`, porque uma promessa não tem `filter`.
-
-O service muda pouco. A `listarArtigos` deixa de filtrar o array e passa as condições ao repository. A `artigosAbaixoDoMinimo` pede todos os artigos ao repository e aplica a regra da papelaria, como antes:
+As funções do Mongoose devolvem uma promessa, porque perguntar à base demora. Por isso, o repository é `async`, e o service e o controller também passam a ser, com um `await` antes de cada chamada à camada de baixo. O service muda pouco. A `listarArtigos` passa as condições ao repository, a `obterArtigo` pede-lhe o artigo, e a `artigosAbaixoDoMinimo` pede-lhe todos os artigos e aplica a regra da papelaria, como antes:
 
 ```js
 /**
@@ -290,6 +246,16 @@ export async function listarArtigos(filtros) {
 }
 
 /**
+ * Procura um artigo pelo _id.
+ * @param {string} id um identificador já verificado pelo controller
+ * @returns {Promise<object | null>} o artigo, ou null se não existir
+ */
+export async function obterArtigo(id) {
+  const artigo = await procurarPorId(id);
+  return artigo;
+}
+
+/**
  * Regra da papelaria: um artigo está abaixo do mínimo quando o stock é
  * menor do que o stock mínimo definido para ele, e é preciso encomendá-lo.
  * @returns {Promise<object[]>} os artigos a encomendar, possivelmente nenhum
@@ -300,49 +266,46 @@ export async function artigosAbaixoDoMinimo() {
 }
 ```
 
-A `obterArtigo` passa a esperar pelo repository, como as outras:
+O `stockMaximo`, que é o nome do contrato, passa a `stockAte`, o nome que o repository entende, para o repository não depender dos nomes do contrato. A regra dos artigos a encomendar continua no service, porque é uma regra da papelaria, e não uma consulta. A base devolve os artigos, e quem decide quais estão abaixo do mínimo é o service.
+
+O `await` esquecido é o erro mais traiçoeiro desta mudança. Prevê: se a `listar` do controller ficasse sem o `await`, o que respondia `/api/artigos`?
 
 ```js
-/**
- * Procura um artigo pelo _id.
- * @param {string} id um identificador já verificado pelo controller
- * @returns {Promise<object | null>} o artigo, ou null se não existir
- */
-export async function obterArtigo(id) {
-  const artigo = await procurarPorId(id);
-  return artigo;
+/** GET /api/artigos, com os filtros opcionais ?categoria= e ?stockMaximo= */
+export async function listar(req, res) {
+  // ... as verificações dos filtros, como no tema anterior ...
+  const artigos = listarArtigos(filtros); // sem o await: um erro de propósito
+  res.json(artigos);
 }
 ```
 
-Leitura guiada: na documentação das funções, `Promise<object[]>` quer dizer que a função devolve uma promessa que, quando chega, traz uma lista de objetos. A `listarArtigos` traduz os filtros do pedido para as condições do repository. O `stockMaximo`, que é o nome do contrato, passa a `stockAte`, que é o nome que o repository entende. A regra dos artigos a encomendar continua no service, porque é uma regra da papelaria, e não uma consulta. A base só devolve os artigos; quem decide quais estão abaixo do mínimo é o service.
+Responde 200 com `{}`, e o terminal não mostra erro nenhum. Sem o `await`, a variável `artigos` guarda a promessa, e não a lista, e uma promessa escrita em JSON é um objeto vazio. O diagrama mostra o que acontece, pela ordem:
 
-### Os filtros que chegam ao MongoDB
-
-No controller, a `listar` ganha uma verificação nova. Com os artigos num array, `?categoria=Papel&categoria=Escrita` não fazia mal: o parâmetro chegava como um array, e a comparação com o texto da categoria falhava sempre. Agora a categoria vai parar a um filtro do MongoDB. Com um array, o Mongoose procura os artigos das duas categorias, e quem faz o pedido passa a decidir a forma da consulta. O contrato diz que a categoria é um texto, e o controller confirma-o:
-
-```js
-  if (req.query.categoria !== undefined) {
-    // Repetido, como ?categoria=Papel&categoria=Escrita, o parâmetro chega
-    // como um array, e não como um texto.
-    if (typeof req.query.categoria !== "string") {
-      res.status(400).json({ erro: "O parâmetro categoria tem de ser um texto, e só pode vir uma vez" });
-      return;
-    }
-    filtros.categoria = req.query.categoria;
-  }
+```mermaid
+sequenceDiagram
+    participant C as controller
+    participant S as service e repository
+    participant BD as MongoDB
+    C->>S: listarArtigos(filtros), sem await
+    S->>BD: Artigo.find(filtro)
+    S-->>C: uma promessa, ainda sem a lista
+    C->>C: res.json(promessa) responde {}
+    BD-->>S: os artigos, quando já ninguém espera
 ```
 
-É a regra do tema anterior, levada à letra: os filtros constroem-se no servidor, com valores verificados, e nunca com o que o pedido trouxer tal e qual.
+A pista é a forma da resposta: um objeto vazio onde se esperava uma lista. No service, o mesmo esquecimento dá outro sintoma quando a função usa o resultado. Na `artigosAbaixoDoMinimo`, a API responde 500, e o terminal diz `artigos.filter is not a function`, porque uma promessa não tem `filter`.
 
-## O _id e a forma de um ObjectId
+### A forma do `_id` verifica-se antes de ir à base
 
-O contrato diz que `GET /api/artigos/:id` responde 400 quando o `id` não tem a forma de um ObjectId, e 404 quando tem a forma certa, mas nenhum artigo o tem. São dois erros diferentes, e o controller tem de os distinguir.
+O contrato diz que `GET /api/artigos/:id` responde 400 quando o `id` não tem a forma de um ObjectId, e 404 quando tem a forma certa mas nenhum artigo o tem.
 
-Do guia do modelo documental, sabes que um ObjectId se escreve com 24 carateres, cada um de 0 a 9 ou de `a` a `f`. O `6ae50cc456457b28519e9054` tem essa forma. O `abc` não tem, porque é curto. O `zzzzzzzzzzzzzzzzzzzzzzzz` também não, porque o `z` não é um algarismo hexadecimal. E o `000000000000000000000000` tem a forma certa, mas não é o `_id` de nenhum artigo da papelaria.
+Sem verificação, o `findById("abc")` não devolve `null`. O Mongoose tenta converter `"abc"` num ObjectId, não consegue e lança um erro de conversão, o `CastError`. A API responde 500, como se a culpa fosse do servidor, numa página HTML do Express, como no tema anterior. O terminal mostra o erro, que começa por esta linha:
 
-O que acontece se o controller não verificar? O `findById("abc")` não devolve `null`. O Mongoose tenta converter `"abc"` num ObjectId, não consegue, e lança um erro chamado `CastError`, de conversão. A API responde 500, como se a culpa fosse do servidor. Para quem pediu, a mensagem não ajuda nada, e a culpa era do pedido.
+```text
+CastError: Cast to ObjectId failed for value "abc" (type string) at path "_id" for model "Artigo"
+```
 
-Por isso, o controller verifica a forma antes de chamar o service, com uma função pequena:
+Um ObjectId escrito em texto tem 24 carateres, cada um de 0 a 9 ou de `a` a `f`. O controller verifica essa forma antes de chamar o service, com uma função pequena:
 
 ```js check
 /**
@@ -365,13 +328,11 @@ function eIdentificador(texto) {
 }
 ```
 
-Antes de continuares, prevê o que a `eIdentificador` devolve para `"abc"`, para `"6AE50CC456457B28519E9054"`, com letras maiúsculas, e para `"zzzzzzzzzzzzzzzzzzzzzzzz"`.
+Prevê o que a `eIdentificador` devolve para `"abc"`, para `"6AE50CC456457B28519E9054"`, com letras maiúsculas, e para `"zzzzzzzzzzzzzzzzzzzzzzzz"`.
 
-O resultado é `false`, `true` e `false`. O `"abc"` não tem 24 carateres. O texto em maiúsculas passa, porque o `toLowerCase()` o põe em minúsculas antes de comparar, e o MongoDB aceita as duas formas. Os 24 `z` têm o comprimento certo, mas o primeiro `z` não está no texto `"0123456789abcdef"`, e a função devolve `false` logo aí.
+Devolve `false`, `true` e `false`. O `"abc"` não tem 24 carateres, e a função para logo na primeira verificação. O texto em maiúsculas passa, porque o `toLowerCase()` o põe em minúsculas antes de comparar, e o MongoDB aceita as duas formas. Os 24 `z` têm o comprimento certo. O `for...of` percorre o texto um carater de cada vez, e o `includes`, que também existe nos textos, diz que o primeiro `z` não está em `"0123456789abcdef"`.
 
-Leitura guiada: a função verifica primeiro o tipo e o comprimento, porque é o mais rápido. Depois percorre o texto, um carater de cada vez, com o `for...of`, e procura cada um no texto dos dezasseis símbolos hexadecimais, com o `includes`. O `includes` também existe nos textos, e diz se um texto contém outro. Ao primeiro carater que não está lá, devolve `false`. Se chegar ao fim, todos estavam, e devolve `true`. A função não sabe se o artigo existe. Diz só se o texto pode ser um `_id`.
-
-Com esta função, a `obter` faz as duas verificações pela ordem do contrato:
+Com esta função, a `obter` faz as duas verificações pela ordem do contrato. Primeiro a forma, que o controller vê sem ir à base, com 400. Depois a existência, que só a base sabe, com 404 quando o service devolve `null`:
 
 ```js
 /** GET /api/artigos/:id */
@@ -390,15 +351,32 @@ export async function obter(req, res) {
 }
 ```
 
-Primeiro a forma, com 400. Depois a existência, com 404, quando o service devolve `null`. O Mongoose tem uma função parecida, a `mongoose.isValidObjectId`. O controller não a usa, porque assim não precisa de importar o Mongoose. A regra do tema anterior continua de pé: só o repository conhece a base de dados.
+<details>
+<summary>Para ires mais longe: a função do Mongoose</summary>
 
-## O corpo do pedido
+O Mongoose tem uma função parecida, a `mongoose.isValidObjectId`. O controller não a usa, porque assim não precisa de importar o Mongoose: só o repository conhece a base de dados.
 
-Até aqui, os pedidos traziam dados em dois sítios: no caminho, como o `id` de `/api/artigos/:id`, e na pesquisa, como o `?categoria=`. Para criar um artigo, são precisos cinco campos, alguns com espaços e acentos. Pô-los no endereço seria desajeitado, e o endereço não é sítio para dados que se vão guardar. Os endereços ficam no histórico do browser e nos registos dos servidores.
+</details>
 
-Os pedidos `POST` e `PATCH` levam os dados no **corpo do pedido**, uma parte do pedido que vem depois do endereço e dos cabeçalhos, e que pode ser grande. Os **cabeçalhos** são linhas de informação que acompanham o pedido. Um deles, o `Content-Type`, diz em que formato vem o corpo. Na API da papelaria, o corpo vem em JSON, como as respostas.
+## Parte 2: Criar e alterar só o que cumpre as regras
 
-O Express não lê o corpo sozinho. Quem o lê é um middleware, o `express.json()`, que se regista no `server.js`, antes das rotas:
+Escrever na base é mais delicado do que ler. Uma leitura mal feita mostra uma lista errada, e corrige-se no código; uma escrita mal feita fica guardada, como um preço negativo ou um artigo sem nome. Esta parte mostra como os dados chegam no pedido e quem recusa os que não servem.
+
+### O corpo do pedido chega em `req.body`
+
+Para criar um artigo são precisos cinco campos, alguns com espaços e acentos. No endereço ficavam desajeitados, e os endereços ficam guardados no histórico do browser e nos registos dos servidores. Por isso, os pedidos `POST` e `PATCH` levam os dados no **corpo do pedido**, uma parte do pedido que vem depois do endereço e dos **cabeçalhos**. Os cabeçalhos são as linhas de informação que acompanham o pedido. Um `POST` que cria um artigo viaja assim:
+
+```text
+POST /api/artigos HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{ "nome": "Cola", "categoria": "Desenho", "stock": 1, "stockMinimo": 1, "precoCentimos": 150 }
+```
+
+A primeira linha é o método e o caminho, as duas seguintes são cabeçalhos, e o corpo vem depois da linha em branco. O cabeçalho `Content-Type` diz em que formato vem o corpo, e na papelaria o corpo vem em JSON, como as respostas.
+
+O Express não lê o corpo sozinho. Quem o lê é um middleware, o `express.json()`, registado no `server.js` antes das rotas:
 
 ```js
 // Lê o corpo dos pedidos que chegam em JSON e põe-no em req.body, já como
@@ -406,9 +384,9 @@ O Express não lê o corpo sozinho. Quem o lê é um middleware, o `express.json
 app.use(express.json());
 ```
 
-O `express.json()` faz três coisas. Lê o texto do corpo, quando o `Content-Type` diz `application/json`. Converte-o num objeto JavaScript, como o `JSON.parse`. E guarda-o em `req.body`, para o controller o usar. Sem esta linha, o `req.body` ficava `undefined`. Se o texto não for JSON válido, o `express.json()` não chega a chamar a rota: passa um erro ao Express, que a secção das regras do schema trata.
+Quando o `Content-Type` diz `application/json`, o `express.json()` lê o texto do corpo, converte-o num objeto e guarda-o em `req.body`.
 
-Para fazer um pedido com corpo, o browser não chega: a barra de endereço só faz pedidos `GET`. Usa-se o `fetch`, que conheces do 11.º ano, na consola das ferramentas de programador. O `fetch` aceita um segundo argumento, com o método, os cabeçalhos e o corpo. Para não escreveres isso em cada pedido, usa esta função, `pedir`:
+A barra de endereço do browser só faz pedidos `GET`. Os outros fazem-se na consola das ferramentas de programador, com o `fetch` que conheces do 11.º ano. O `fetch` aceita um segundo argumento, com o método, os cabeçalhos e o corpo. A função `pedir` junta isso e escreve na consola o código e o corpo da resposta:
 
 ```js check
 // Faz um pedido à API e escreve na consola o código e o corpo da resposta.
@@ -426,23 +404,21 @@ async function pedir(metodo, caminho, corpo) {
 }
 ```
 
-Leitura guiada: a função recebe o método, o caminho e, se houver, o corpo, como objeto. Sem corpo, como num `DELETE`, só envia o método. Com corpo, junta o cabeçalho e o texto JSON. Depois espera pela resposta, lê-a como texto e escreve o código e o texto. Lê como texto, e não com o `.json()`, porque uma resposta 204 não tem corpo, e o `.json()` falhava com ela. O caminho começa por `/api`, sem o `http://localhost:3000`, porque o `fetch` o completa com o endereço da página aberta. Por isso, a consola tem de estar numa página da tua API, como a `/api/estado`.
+Sem corpo, como num `DELETE`, a função só envia o método. A resposta lê-se como texto, e não com o `.json()`, porque uma resposta 204 não tem corpo, e o `.json()` falhava com ela.
 
-Antes de continuares, prevê o que a consola escreve com `await pedir("GET", "/api/estado")`.
+O caminho começa em `/api`, sem `http://localhost:3000`, porque o `fetch` o completa com o endereço da página aberta. Por isso, a consola tem de estar numa página da tua API, como `/api/estado`. Cola-se lá a função, e depois `await pedir("GET", "/api/estado")` escreve `200 {"estado":"ok","aplicacao":"API da papelaria"}`.
 
-O resultado é `200 {"estado":"ok","aplicacao":"API da papelaria"}`. É o mesmo pedido que fazias na barra de endereço, agora pela consola, com o código à vista.
+### Só passam os campos de uma lista fechada
 
-## Uma lista fechada de campos
+O controller recebe o corpo em `req.body`, já como objeto. Passá-lo tal e qual ao service, e daí ao `Artigo.create`, escreve-se numa linha e funciona com os pedidos bem feitos. O problema são os outros, porque o `req.body` traz o que quem pediu quiser:
 
-O controller recebe o corpo em `req.body`, já como objeto. A tentação é passá-lo tal e qual ao service, e daí ao `Artigo.create`. Escreve-se numa linha, e funciona com os pedidos bem feitos. O problema são os outros. O `req.body` é o que quem pediu quiser que seja, e há três formas de isto correr mal.
+| O corpo traz | O que acontecia se seguisse inteiro |
+| --- | --- |
+| `"_id": "000000000000000000000001"` | Quem pediu escolhia o identificador do artigo |
+| `"precoCentimo": 250`, sem o `s`, num `PATCH` | Nada dava erro: o preço ficava como estava, e quem pediu achava que o tinha mudado |
+| `"nome": { "$ne": null }` | Numa rota que procurasse pelo nome, como `Artigo.find({ nome: req.body.nome })`, o objeto era lido como o operador `$ne`, "diferente de", e escolhia todos os artigos com nome |
 
-A primeira é um campo que não devia vir. Um pedido com `"_id": "000000000000000000000001"` escolhia o identificador do artigo. Noutra aplicação, um pedido com `"administrador": true` no registo de um utilizador dava-lhe poderes que ninguém lhe quis dar. Guardar tudo o que vem num pedido é um erro tão conhecido que tem nome em inglês: **mass assignment** (atribuição em massa).
-
-A segunda é um campo com o nome errado. Um pedido com `"precoCentimo": 250`, sem o `s`, não dá erro nenhum se for ignorado. O artigo fica sem preço, ou com o antigo, e quem pediu acha que correu tudo bem.
-
-A terceira é um valor com a forma errada. O que vem num corpo JSON não é sempre texto. Pode ser um objeto, como `{ "$ne": null }`. Imagina que esse valor chegava a um filtro do MongoDB, como `Artigo.find({ nome: req.body.nome })`. Já não era um nome: era o operador `$ne`, "diferente de". O filtro escolhia todos os artigos cujo nome não é `null`. Ou seja, todos os que têm nome. Quem fez o pedido passava a escrever a consulta.
-
-A solução para as três é a mesma. O controller tem uma **lista fechada** de campos aceites, e só esses passam, cada um com o tipo do contrato. Tudo o que não está na lista é recusado com 400, com uma mensagem que diz qual é o campo. Recusar, em vez de ignorar, é o que apanha o `precoCentimo`. Os campos copiam-se um a um para um objeto novo, e o `req.body` nunca segue inteiro:
+A solução para os três é a mesma. O controller tem uma **lista fechada** dos campos aceites, e cada um tem de vir com o tipo do contrato. Um campo que não está na lista é recusado com 400, com uma mensagem que diz qual é. Recusar, em vez de ignorar, é o que apanha o `precoCentimo`. Os campos copiam-se um a um para um objeto novo, e o `req.body` nunca segue inteiro:
 
 ```js
 // Os campos que o corpo de um pedido pode trazer, para criar ou alterar um
@@ -486,21 +462,42 @@ function lerCamposDoArtigo(corpo) {
 }
 ```
 
-Antes de continuares, prevê o que a `lerCamposDoArtigo` devolve para estes três corpos: `{ "nome": "Cola", "stock": "10" }`, `{ "nome": "Cola", "_id": "x" }` e `{ "nome": { "$ne": null } }`.
+Prevê o que a `lerCamposDoArtigo` devolve para estes três corpos: `{ "nome": "Cola", "stock": "10" }`, `{ "nome": "Cola", "_id": "x" }` e `{ "nome": { "$ne": null } }`.
 
-O resultado é `{ erro: "O campo stock tem de ser um número inteiro" }`, `{ erro: "O campo _id não é aceite" }` e `{ erro: "O campo nome tem de ser um texto" }`. No primeiro, o `"10"` entre aspas é um texto, e o `Number.isInteger` de um texto é sempre `false`. No segundo, o `_id` não está em nenhuma das duas listas. No terceiro, o valor é um objeto, e o `typeof` de um objeto é `"object"`, e não `"string"`.
+A função começa por confirmar que o corpo é um objeto. O `typeof` de `null` e o de um array também dão `"object"`, e por isso há mais duas condições: o `Array.isArray` diz se um valor é um array. Depois percorre os nomes dos campos que vieram, que o `Object.keys(corpo)` dá numa lista, e devolve `{ erro }` ao primeiro problema:
 
-Leitura guiada: começa pelas duas listas, no topo do ficheiro, com os cinco campos do contrato divididos pelo tipo. A função verifica primeiro que o corpo é um objeto: não `undefined`, que é o que fica quando não vem JSON, nem `null`, nem um array. As duas últimas verificações fazem falta porque o `typeof null` e o `typeof` de um array também dão `"object"`. O `Array.isArray` diz se um valor é um array. Na documentação da função, o `{unknown}` quer dizer que o corpo pode ser qualquer coisa. O `Object.keys(corpo)` dá a lista dos nomes dos campos que vieram, e o `for...of` percorre-os. Cada campo tem de estar numa das listas e ter o tipo dela. Ao primeiro problema, a função devolve `{ erro }`, com a mensagem. Se todos passarem, devolve `{ dados }`, com a cópia. O controller só tem de ver qual das duas propriedades veio.
+- no primeiro corpo, `{ erro: "O campo stock tem de ser um número inteiro" }`, porque o `"10"` entre aspas é um texto, e o `Number.isInteger` de um texto é sempre `false`;
+- no segundo, `{ erro: "O campo _id não é aceite" }`, porque o `_id` não está em nenhuma das duas listas;
+- no terceiro, `{ erro: "O campo nome tem de ser um texto" }`, porque o valor é um objeto, e o `typeof` de um objeto é `"object"`, e não `"string"`.
 
-Repara no que a função não verifica: se o stock é negativo, se a categoria existe, se o nome é demasiado comprido. Isso já não é a forma do pedido. São regras da papelaria, e ficam noutro sítio.
+Se todos os campos passarem, devolve `{ dados }`, com a cópia, e o controller só tem de ver qual das duas propriedades veio.
 
-## As regras de cada campo, no schema
+A mesma ideia vale para a pesquisa. Repetido, como em `?categoria=Papel&categoria=Escrita`, o parâmetro chega como um array. Com os artigos no array do tema anterior, a comparação com o texto da categoria falhava sempre. Com a base, o Mongoose devolve os artigos das duas categorias, uma pesquisa que o contrato não prevê e que quem fez o pedido escolheu. Por isso, a `listar` confirma que a categoria é um texto:
 
-Um stock de -3 é um inteiro, e passa a lista fechada. Mas uma papelaria não tem -3 cadernos. Uma categoria `Mochilas` é um texto, e também passa. Mas a papelaria não vende mochilas. Estas regras são do **domínio**, o assunto de que a aplicação trata: dizem o que faz sentido para a papelaria, e não como se escreve um pedido.
+```js
+  if (req.query.categoria !== undefined) {
+    // Repetido, como ?categoria=Papel&categoria=Escrita, o parâmetro chega
+    // como um array, e não como um texto.
+    if (typeof req.query.categoria !== "string") {
+      res.status(400).json({ erro: "O parâmetro categoria tem de ser um texto, e só pode vir uma vez" });
+      return;
+    }
+    filtros.categoria = req.query.categoria;
+  }
+```
 
-Onde ficam? A estratégia é pô-las onde podem ser garantidas. Uma regra escrita no controller só protege os pedidos que passam por aquele controller. O seed, um script de experiências ou uma rota nova que alguém esqueça de verificar escreviam artigos sem ela. Uma regra escrita no schema do modelo protege tudo o que cria artigos, porque tudo passa pelo modelo. Nas alterações, também, com uma opção que a secção "Alterar só o que vem no pedido" mostra.
+<details>
+<summary>Para ires mais longe: os nomes destes ataques</summary>
 
-O schema da papelaria passa a dizer, campo a campo, o tipo e as regras:
+Guardar tudo o que vem num pedido é um erro tão conhecido que tem nome em inglês: mass assignment, atribuição em massa. Noutra aplicação, um campo `"administrador": true` no registo de um utilizador dava-lhe poderes que ninguém lhe quis dar. Pôr um operador como o `$ne` no lugar de um valor chama-se injeção de operadores, uma forma de NoSQL injection. Com estes nomes, encontras muita informação sobre os dois.
+
+</details>
+
+### As regras de cada campo ficam no schema
+
+Um stock de -3 é um inteiro, e passa a lista fechada. Uma categoria `Mochilas` é um texto, e também passa. Mas uma papelaria não tem -3 cadernos, nem vende mochilas. Estas regras são do **domínio**, o assunto de que a aplicação trata: dizem o que faz sentido para a papelaria, e não como se escreve um pedido.
+
+As regras ficam onde podem ser garantidas. Escritas no controller, só protegiam os pedidos que passam por ele, e o seed ou um script de experiências escreviam artigos sem elas. Escritas no schema do modelo, protegem tudo o que cria artigos, porque tudo passa pelo modelo. O schema da papelaria passa a dizer, campo a campo, o tipo e as regras:
 
 ```js check
 // src/models/artigo.model.js: o modelo dos artigos da papelaria, no Mongoose.
@@ -550,25 +547,25 @@ const artigoSchema = new mongoose.Schema({
 export const Artigo = mongoose.model("Artigo", artigoSchema, "artigos");
 ```
 
-Leitura guiada: cada campo deixou de ter só o tipo, como `nome: String`, e passou a ser um objeto com o tipo e as regras. São cinco opções, quatro regras e uma limpeza:
+Cada campo deixou de ter só o tipo, como `nome: String`, e passou a ser um objeto com o tipo e as regras. São cinco opções:
 
-- O `required` diz que o campo é obrigatório. Num texto, um texto vazio também conta como em falta.
-- O `trim` não é uma regra, é uma limpeza: tira os espaços do princípio e do fim antes de verificar e de guardar. Com ele, `"  Cola  "` fica `"Cola"`, e `"   "` fica vazio, e o `required` recusa-o.
-- O `maxlength` é o comprimento máximo de um texto.
-- O `min` é o valor mínimo de um número, e o `max`, que aqui não aparece, o máximo.
-- O `enum` é a lista dos valores possíveis.
+| Opção | O que faz | Na papelaria |
+| --- | --- | --- |
+| `required` | O campo é obrigatório; num texto, um texto vazio também conta como em falta | Os cinco campos |
+| `trim` | Não é uma regra, é uma limpeza: tira os espaços do início e do fim antes de verificar e de guardar | O `nome`: `"  Cola  "` fica `"Cola"`, e `"   "` fica vazio, e o `required` recusa-o |
+| `maxlength` | O comprimento máximo de um texto | O `nome`, até 60 |
+| `min` | O valor mínimo de um número | O `stock` e o `stockMinimo`, 0; o `precoCentimos`, 1 |
+| `enum` | A lista dos valores possíveis | A `categoria` |
 
-Cada regra tem uma mensagem em português. É essa mensagem que a API vai devolver, e por isso escreve-se para quem usa a aplicação.
+Cada regra leva uma mensagem em português, que é a que a API vai devolver, e por isso escreve-se para quem usa a aplicação. Antes de criar um documento, o Mongoose verifica as regras. Se alguma falhar, não escreve nada e lança um erro de validação, o `ValidationError`, com as mensagens das regras que falharam.
 
-O Mongoose verifica estas regras antes de criar um documento na base. Se alguma falhar, não escreve nada e lança um erro chamado `ValidationError`, de validação. O erro traz, em `erro.errors`, um objeto com uma entrada por cada campo recusado, e cada entrada tem a mensagem do schema.
+A divisão fica assim: o controller vê a forma do pedido, os campos da lista e o tipo de cada um, e o schema vê os valores. Um corpo `{ "stock": "dez" }` é recusado pelo controller, porque não é um inteiro. Um corpo `{ "stock": -3 }` passa o controller e é recusado pelo schema.
 
-A divisão fica clara. O controller vê a forma do pedido: os campos da lista e o tipo de cada um. O schema vê os valores: se fazem sentido para a papelaria. Um corpo `{ "stock": "dez" }` é recusado pelo controller, porque não é um inteiro. Um corpo `{ "stock": -3 }` passa o controller, e é recusado pelo schema.
+O tipo fica no controller porque o schema converte antes de verificar. O `type: Number` transforma o texto `"10"` no número 10, sem dizer nada, e aceita 2.5, que não é um stock. Só o controller vê o valor como veio no pedido, e por isso é ele que sabe se veio um inteiro.
 
-Porque é que o tipo fica no controller, e não no schema? Porque o schema converte antes de verificar. O `type: Number` transforma o texto `"10"` no número 10, sem dizer nada, e aceita 2.5, que não é um stock. Só o controller vê o valor tal como veio no pedido, e por isso é ele que sabe se veio um inteiro.
+### O POST cria o documento e responde 201
 
-### Criar um artigo
-
-Com a lista fechada e o schema, criar um artigo é curto. O repository usa o `create`, que verifica as regras e insere:
+Com a lista fechada e o schema, criar um artigo é curto. No repository, o `create` verifica as regras do schema e insere:
 
 ```js
 /**
@@ -583,7 +580,7 @@ export async function inserirArtigo(dados) {
 }
 ```
 
-O service passa os dados ao repository. É uma função fina, que existe para o controller só conhecer o service:
+O service passa os dados ao repository. É uma função curta, que existe para o controller só conhecer o service:
 
 ```js
 /**
@@ -597,7 +594,7 @@ export async function criarArtigo(dados) {
 }
 ```
 
-E o controller lê o corpo, chama o service e responde 201, com o artigo criado:
+O controller lê o corpo com a lista fechada, chama o service e responde 201, com o artigo criado. A rota junta-se ao router com `router.post("/", criar);`.
 
 ```js
 /** POST /api/artigos, com o artigo novo no corpo, em JSON */
@@ -614,17 +611,25 @@ export async function criar(req, res) {
 }
 ```
 
-A rota junta-se ao router, com o método `post`:
+### O middleware de erros responde em JSON
 
-```js
-router.post("/", criar);
+O comentário do `criar` fala de uma peça que o `server.js` ainda não tem. Sem ela, um artigo com stock -1 fica sem a resposta do contrato. O `create` rejeita a promessa, o `await` do controller lança o `ValidationError`, e nenhuma linha do controller o apanha. Com o `server.js` do tema anterior, o Express responde 500, numa página HTML com as linhas do erro e os caminhos dos teus ficheiros.
+
+No Express 5, um erro lançado dentro de uma função `async` de uma rota não se perde: o Express apanha-o e passa-o ao **middleware de erros**. É um middleware com quatro parâmetros, `(erro, req, res, next)`, em vez de três, e é pelos quatro que o Express o reconhece. Só é chamado quando um pedido acaba num erro, e por isso regista-se no fim do `server.js`, depois das rotas e do middleware final:
+
+```mermaid
+flowchart TD
+    P["Um pedido"] --> J["express.json()<br/>lê o corpo"]
+    J --> E["GET /api/estado"]
+    E --> A["O router dos artigos<br/>/api/artigos"]
+    A --> F["O middleware final<br/>404 Rota não encontrada"]
+    J -. "o corpo não é JSON" .-> ME["O middleware de erros<br/>400 ou 500, em JSON"]
+    A -. "um erro numa função do controller" .-> ME
 ```
 
-### O middleware de erros
+O diagrama mostra a ordem do `server.js`. Um pedido percorre-o de cima para baixo e para na primeira peça que responde. O que nenhuma rota atende chega ao middleware final, com 404. O que acaba num erro salta as peças normais e vai direito ao middleware de erros. O `server.js` completo está no exemplo [a API com o CRUD](../exemplos/acesso-a-dados/papelaria-api-com-crud/README.md).
 
-Falta uma peça. Quando o schema recusa um artigo, o `create` rejeita a promessa, e o `await` do controller lança o erro. Nenhuma linha do controller o apanha. No Express 5, um erro lançado dentro de uma função `async` de uma rota não fica perdido: o Express apanha-o e passa-o ao **middleware de erros**.
-
-Um middleware de erros é um middleware com quatro parâmetros, `(erro, req, res, next)`, em vez de três. É pelos quatro parâmetros que o Express o reconhece. Só é chamado quando um pedido acabou num erro, e os pedidos normais passam-lhe ao lado. Regista-se no `server.js`, depois de todas as rotas:
+O middleware de erros da papelaria trata três casos: o corpo que não é JSON, as regras do schema e todos os outros erros.
 
 ```js
 // Middleware de erros: o Express só o chama quando um pedido acabou num erro,
@@ -651,99 +656,24 @@ app.use((erro, req, res, next) => {
 });
 ```
 
-Antes de continuares, prevê o que a API responde a um `POST /api/artigos` com `{ "nome": "Cola", "categoria": "Desenho", "stock": -1, "stockMinimo": 1, "precoCentimos": 150 }`. E com o mesmo corpo, mas com `"categoria": "Mochilas"` e o stock a -1?
+Prevê o que a API responde a um `POST /api/artigos` com `{ "nome": "Cola", "categoria": "Desenho", "stock": -1, "stockMinimo": 1, "precoCentimos": 150 }`. E com o mesmo corpo, mas com `"categoria": "Mochilas"`?
 
-O resultado é 400 com `{"erro":"O stock não pode ser negativo"}`. No segundo, 400 com `{"erro":"A categoria tem de ser Papel, Escrita ou Desenho. O stock não pode ser negativo"}`. Os dois corpos passam a lista fechada, porque os campos e os tipos estão certos. O schema recusa-os, o `create` rejeita a promessa, e o middleware de erros junta as mensagens dos campos recusados.
+O primeiro dá 400 com `{"erro":"O stock não pode ser negativo"}`, e o segundo 400 com `{"erro":"A categoria tem de ser Papel, Escrita ou Desenho. O stock não pode ser negativo"}`. Os dois corpos passam a lista fechada, porque os campos e os tipos estão certos. O schema recusa-os, e o middleware reconhece o erro pelo nome, `ValidationError`. O `Object.values(erro.errors)` dá a lista das entradas, uma por campo recusado, o `map` tira de cada uma a mensagem e o `join(". ")` junta-as num só texto.
 
-Leitura guiada: o middleware trata três casos, por esta ordem. O primeiro é o corpo que não é JSON: o `express.json()` marca esse erro com `type` igual a `"entity.parse.failed"`. O segundo é a recusa do schema, que se reconhece pelo nome, `ValidationError`. O `Object.values(erro.errors)` dá a lista das entradas, uma por campo recusado, e o `map` tira de cada uma a mensagem. O `join(". ")` junta-as num só texto. O terceiro é tudo o resto. Se o Atlas falhar a meio de um pedido, por exemplo, a culpa não é de quem pediu. A API responde 500, sem pormenores, e escreve a razão no terminal, para quem programa.
+A resposta 500 não leva a mensagem do erro. Uma mensagem interna pode ter o nome de uma coleção, de um ficheiro ou um pedaço de uma consulta. Quem usa a aplicação não precisa disso, e quem a quer atacar agradece.
 
-O `server.js` fica assim, com as peças pela ordem em que o Express as percorre:
+<details>
+<summary>Para ires mais longe: a ordem das mensagens</summary>
 
-```js check
-// src/server.js: o ponto de arranque da API da papelaria.
-// Cria a aplicação Express, monta as rotas, liga-se à base de dados e só
-// depois à porta. As regras e as consultas estão nas camadas.
-import express from "express";
-import { ligarBaseDeDados } from "./db/mongoose.js";
-import artigosRotas from "./rotas/artigos.rotas.js";
+Quando várias regras falham, a ordem das mensagens é a que o Mongoose escolhe, e nem sempre é a dos campos do schema. Com o corpo `{}`, a resposta começa por `O preço é obrigatório` e acaba em `O nome é obrigatório`. O texto tem as mensagens todas, e é isso que interessa a quem pediu.
 
-// A porta vem do ambiente: em desenvolvimento, do ficheiro .env.
-// Se não estiver definida, a API usa a 3000.
-const PORTA = process.env.PORT || 3000;
+</details>
 
-const app = express();
+### Alterar um documento pede duas opções
 
-// Lê o corpo dos pedidos que chegam em JSON e põe-no em req.body, já como
-// objeto. Sem esta linha, o req.body ficava undefined em todos os pedidos.
-app.use(express.json());
+A papelaria contou os cadernos na prateleira e tem 7. O `PATCH /api/artigos/:id` do caderno leva só `{ "stock": 7 }`, e os outros campos ficam como estão.
 
-// Rota de estado: serve para confirmar que a API está ligada e a responder.
-app.get("/api/estado", (req, res) => {
-  res.json({ estado: "ok", aplicacao: "API da papelaria" });
-});
-
-// Todos os pedidos começados por /api/artigos seguem para o router dos artigos.
-app.use("/api/artigos", artigosRotas);
-
-// Middleware final: nenhuma rota respondeu. Responde em JSON, como o resto
-// da API, para quem a usa encontrar sempre o erro no mesmo sítio.
-app.use((req, res) => {
-  res.status(404).json({ erro: "Rota não encontrada" });
-});
-
-// Middleware de erros: o Express só o chama quando um pedido acabou num erro,
-// e reconhece-o pelos quatro parâmetros. Responde sempre em JSON, sem
-// pormenores internos.
-app.use((erro, req, res, next) => {
-  // O express.json() não conseguiu ler o corpo: o texto não era JSON.
-  if (erro.type === "entity.parse.failed") {
-    res.status(400).json({ erro: "O corpo do pedido não é JSON válido" });
-    return;
-  }
-  // Uma ou mais regras do schema falharam. O erro traz, em erro.errors, um
-  // objeto com um campo por cada regra que falhou, e cada um tem a mensagem
-  // que escreveste no schema. A resposta junta-as todas num só texto.
-  if (erro.name === "ValidationError") {
-    const mensagens = Object.values(erro.errors).map((falha) => falha.message);
-    res.status(400).json({ erro: mensagens.join(". ") });
-    return;
-  }
-  // Qualquer outro erro é um problema do servidor, e não de quem pediu.
-  // A razão fica no terminal, para quem programa; o cliente recebe só o 500.
-  console.error(`Erro interno: ${erro.message}`);
-  res.status(500).json({ erro: "Erro interno do servidor" });
-});
-
-// Primeiro a ligação à base, e só depois o servidor: uma API que não chega aos
-// dados não deve começar a aceitar pedidos. Se a ligação falhar, a API termina
-// com a razão escrita no terminal.
-try {
-  await ligarBaseDeDados();
-} catch (erro) {
-  console.error(`Não foi possível ligar à base de dados: ${erro.message}`);
-  process.exit(1);
-}
-
-app.listen(PORTA, (erro) => {
-  if (erro) {
-    console.error(`Não foi possível ligar a API: ${erro.message}`);
-    return;
-  }
-  console.log(`API a correr em http://localhost:${PORTA}`);
-});
-```
-
-Leitura guiada: lê-se de cima para baixo, que é a ordem por que um pedido passa. Primeiro, o `express.json()`, que lê o corpo de todos os pedidos. Depois, a rota de estado e o router dos artigos. A seguir, o middleware final, para os pedidos a que nenhuma rota respondeu, e o middleware de erros, para os que acabaram num erro. No fim, fora do caminho dos pedidos, a ligação à base e só depois o `app.listen`. O ficheiro completo, com o resto da API, está no exemplo [a API com o CRUD](../exemplos/acesso-a-dados/papelaria-api-com-crud/README.md).
-
-Repara que a resposta 500 não leva a mensagem do erro. Uma mensagem interna pode ter o nome de uma coleção, de um ficheiro, ou um pedaço de uma consulta. Quem usa a aplicação não precisa disso, e quem a quer atacar agradece. O tema da robustez vai voltar a estes erros, com os que vêm da base de dados.
-
-Quando há várias regras a falhar, a ordem das mensagens é a que o Mongoose escolhe, e nem sempre é a dos campos do schema. Com o corpo `{}`, a resposta começa por `O preço é obrigatório` e acaba em `O nome é obrigatório`. O texto tem as mensagens todas, e é isso que interessa a quem pediu.
-
-## Alterar só o que vem no pedido
-
-O `PATCH /api/artigos/:id` muda os campos que vierem no corpo e deixa os outros como estão. A papelaria recebeu sete cadernos e quer mudar o stock: o corpo é só `{ "stock": 7 }`.
-
-O controller faz as verificações que já conheces, pela ordem do contrato: a forma do `id`, a lista fechada, e uma nova. Um corpo sem campos nenhuns, `{}`, passa a lista fechada, porque não traz nenhum campo errado. Mas também não traz nada para alterar, e o contrato diz que vem pelo menos um. O `Object.keys(leitura.dados).length === 0` apanha-o.
+O controller faz as verificações que já conheces, pela ordem do contrato: a forma do `id` e a lista fechada. Junta uma nova. Um corpo `{}` passa a lista fechada, porque não traz nenhum campo errado, mas também não traz nada para alterar, e o contrato pede pelo menos um:
 
 ```js
 /** PATCH /api/artigos/:id, com os campos a alterar no corpo, em JSON */
@@ -771,13 +701,13 @@ export async function alterar(req, res) {
 }
 ```
 
-O repository usa o `findByIdAndUpdate`, que procura o artigo pelo `_id` e muda os campos recebidos. Escrito só com os dois primeiros argumentos, `Artigo.findByIdAndUpdate(id, dados)`, tem duas surpresas, e as duas veem-se num pedido.
+O repository usa o `findByIdAndUpdate`, que procura o artigo pelo `_id` e muda os campos recebidos. Escrito só com os dois primeiros argumentos, `Artigo.findByIdAndUpdate(id, dados)`, tem duas surpresas, e cada uma vê-se num pedido.
 
-A primeira: depois de `{ "stock": 7 }`, a resposta mostra o stock antigo, 12. No Atlas, o stock já é 7. Por omissão, o `findByIdAndUpdate` devolve o documento como estava antes da alteração.
+A primeira: depois de `{ "stock": 7 }`, a resposta mostra o stock antigo, 12, mas no Atlas o stock já é 7. Por omissão, a função devolve o documento como estava antes da alteração.
 
-A segunda: um `PATCH` com `{ "stock": -5 }` responde 200, e no Atlas o stock fica mesmo -5. A regra do `min` não correu. Por omissão, o Mongoose só verifica as regras do schema quando um documento é criado, e não quando é alterado assim.
+A segunda: um `PATCH` com `{ "stock": -5 }` responde 200, e no Atlas o stock fica mesmo -5. Por omissão, o Mongoose só verifica as regras do schema quando cria um documento.
 
-As duas resolvem-se com opções, num terceiro argumento. Para as encontrar, abre-se a documentação do Mongoose, na página do `Model.findByIdAndUpdate()`. A lista das opções tem as duas que fazem falta. O `returnDocument`, com o valor `'after'`, devolve o documento depois da alteração. O `runValidators`, com `true`, faz correr as regras do schema sobre os campos alterados.
+As duas resolvem-se com opções, num terceiro argumento. Para as encontrar, abre-se a documentação do Mongoose na página do `Model.findByIdAndUpdate()`, a da versão que tens instalada. O comando `npm ls mongoose`, na pasta do projeto, mostra qual é. A lista das opções tem as duas que fazem falta. O `returnDocument`, com o valor `"after"`, devolve o documento depois da alteração. O `runValidators`, com `true`, faz correr as regras do schema sobre os campos alterados.
 
 ```js
 /**
@@ -798,9 +728,7 @@ export async function alterarPorId(id, dados) {
 }
 ```
 
-A documentação mostra também uma opção mais antiga, `new: true`, que faz o mesmo do que o `returnDocument: "after"`. Muitos tutoriais na internet usam-na. No Mongoose 9, está marcada como obsoleta, e usá-la faz aparecer um aviso no terminal a recomendar o `returnDocument`. Ler a documentação da versão que tens instalada evita estas surpresas. O `package.json` diz só um intervalo de versões, como `^9.11.4`. A versão instalada vê-se no `package-lock.json`, ou com o comando `npm ls mongoose`.
-
-O service passa os dados ao repository, como na criação:
+O service passa os dados ao repository, como na criação, e a rota junta-se ao router com `router.patch("/:id", alterar);`:
 
 ```js
 /**
@@ -815,19 +743,17 @@ export async function alterarArtigo(id, dados) {
 }
 ```
 
-E a rota junta-se ao router com o método `patch`:
+Com as duas opções, o `PATCH` com `{ "stock": -5 }` responde 400, com `{"erro":"O stock não pode ser negativo"}`, pelo mesmo middleware de erros do `POST`, e o stock no Atlas não muda.
 
-```js
-router.patch("/:id", alterar);
-```
+## Parte 3: Apagar com cuidado e guardar só o necessário
 
-Com as duas opções, um `PATCH` com `{ "stock": -5 }` responde 400, com `{"erro":"O stock não pode ser negativo"}`, e o stock no Atlas não muda. A mensagem é a do schema, pelo mesmo middleware de erros do `POST`.
+Um artigo apagado não volta. Esta parte trata da regra que decide se um artigo pode sair, de como se apagam muitos sem surpresas e dos cuidados com os dados das pessoas.
 
-## Apagar, e a regra que precisa da base
+### Uma regra que precisa da base fica no service
 
-A papelaria tem uma regra para apagar: um artigo só sai do catálogo quando já não há unidades na loja. Enquanto houver stock, ainda há o que vender, e apagar o artigo perdia a informação dessas unidades.
+A papelaria só tira um artigo do catálogo quando já não há unidades na loja. Enquanto houver stock, ainda há o que vender, e apagar o artigo perdia a informação dessas unidades.
 
-Esta regra não cabe no schema. O schema verifica os valores que se vão escrever, e um `DELETE` não escreve nada. Para saber se o artigo tem stock, é preciso ir à base ver como ele está agora. Uma regra que precisa do estado dos dados fica no service, que pode pedir esse estado ao repository.
+Esta regra não cabe no schema, que verifica os valores que se vão escrever, e um `DELETE` não escreve nada. Para a aplicar, é preciso ir à base ver o stock de agora. Uma regra que precisa do estado dos dados fica no service, que pede esse estado ao repository:
 
 ```js
 /**
@@ -850,7 +776,7 @@ export async function apagarArtigo(id) {
 }
 ```
 
-Leitura guiada: o service pede o artigo ao repository. Se não existe, devolve `"nao-existe"`. Se existe e tem stock, devolve `"tem-stock"`, sem apagar. Só no terceiro caso pede ao repository que o apague, e devolve `"apagado"`. O service não escolhe códigos HTTP: diz o que aconteceu, com uma palavra, e o controller traduz cada palavra num código.
+O service só apaga no terceiro caso, e não escolhe códigos HTTP: diz o que aconteceu com uma palavra, `"nao-existe"`, `"tem-stock"` ou `"apagado"`. O controller traduz cada palavra num código:
 
 ```js
 /** DELETE /api/artigos/:id */
@@ -874,11 +800,9 @@ export async function apagar(req, res) {
 }
 ```
 
-Antes de continuares, prevê o que respondem estes dois pedidos, na base de teste acabada de reconstruir. O primeiro é o `DELETE` do Caderno A4 quadriculado, que tem 12 unidades; o segundo, o do Bloco de notas A5, que tem 0. E se repetires o segundo?
+Prevê o que respondem estes dois pedidos, na base de teste acabada de reconstruir. O primeiro é o `DELETE` do Caderno A4 quadriculado, que tem 12 unidades; o segundo, o do Bloco de notas A5, que tem 0. E se repetires o segundo?
 
-O resultado é 409 com `{"erro":"Não se pode apagar um artigo que ainda tem stock"}`, depois 204 sem corpo, e depois 404 com `{"erro":"Não existe o artigo ..."}`, com o `_id` do bloco. O bloco foi apagado da primeira vez, e da segunda já não existe.
-
-Leitura guiada: o controller verifica a forma do `id` e chama o service. As três palavras dão três respostas. O `res.status(204).end()` responde sem corpo, porque não há nada a devolver depois de apagar. O `end()` termina a resposta sem escrever nada, ao contrário do `json`, que escreveria um corpo.
+O caderno dá 409 com `{"erro":"Não se pode apagar um artigo que ainda tem stock"}`, e continua na base. O bloco dá 204, sem corpo: o `end()` termina a resposta sem escrever nada, ao contrário do `json`. Repetido, dá 404 com `{"erro":"Não existe o artigo ..."}`, com o `_id` do bloco, que já foi apagado.
 
 No repository, o `findByIdAndDelete` apaga o documento com aquele `_id`:
 
@@ -893,7 +817,7 @@ export async function apagarPorId(id) {
 }
 ```
 
-A rota junta-se ao router com o método `delete`. Com as três rotas novas, o router fica assim:
+Com as três rotas novas, o router fica assim:
 
 ```js check
 // src/rotas/artigos.rotas.js: que pedido vai para que função do controller.
@@ -916,15 +840,30 @@ router.delete("/:id", apagar);
 export default router;
 ```
 
-Há um caso que este código não trata. Entre o `procurarPorId` e o `apagarPorId` passa um instante. Se, nesse instante, outro pedido mudasse o stock do artigo, o service apagava um artigo que já tinha stock. Numa papelaria com uma pessoa ao balcão, não acontece. Numa aplicação com muitos utilizadores ao mesmo tempo, faz-se a verificação e o apagar numa só operação da base de dados.
+Com o service, as regras do tema ficam repartidas por três sítios, cada um com o que pode garantir:
 
-## Ver o que vai mudar antes de mudar muitos
+| Onde | O que verifica | Na papelaria | Quando falha |
+| --- | --- | --- | --- |
+| Controller | A forma do pedido, sem ir à base | O `_id` com 24 carateres, os campos da lista e o tipo de cada um | 400 |
+| Schema do modelo | Os valores de cada campo, quando se cria um artigo e nas alterações com o `runValidators` | O nome obrigatório, as três categorias, o stock 0 ou mais | 400, pelo middleware de erros |
+| Service | As regras que precisam do estado dos dados | Um artigo com stock não se apaga | 409 |
 
-O `findByIdAndDelete` apaga um artigo, escolhido pelo `_id`. O `deleteMany`, que viste no seed, apaga todos os que cumprirem um filtro. O `updateMany` faz o mesmo para alterar. Mudam muitos documentos de uma vez, e um filtro errado faz estragos. O `deleteMany({})`, com o filtro vazio, apaga a coleção inteira.
+Cada regra fica num só sítio. Duas cópias da mesma regra, em camadas diferentes, acabam por ficar diferentes uma da outra.
 
-A regra para estas operações é simples. Antes de mudar ou apagar vários documentos, corre o mesmo filtro num `find`, ou num `countDocuments`, que só os conta, e vê o que ele escolhe. Só depois corres o `deleteMany` ou o `updateMany`, com o mesmo filtro. E faz a experiência na base de teste, que o seed reconstrói, para um filtro errado não estragar nada que interesse.
+<details>
+<summary>Para ires mais longe: dois pedidos ao mesmo tempo</summary>
 
-Imagina que a papelaria deixou de vender artigos de desenho e quer apagar essa categoria. Não é um pedido da API: é uma operação que se faz uma vez, à parte, como o seed. Faz-se com um script, que primeiro mostra e só depois apaga:
+Entre o `procurarPorId` e o `apagarPorId` passa um instante. Se, nesse instante, outro pedido mudasse o stock do artigo, o service apagava um artigo que já tinha stock. Numa papelaria com uma pessoa ao balcão, não acontece. Numa aplicação com muitos utilizadores ao mesmo tempo, a verificação e o apagar fazem-se numa só operação da base de dados.
+
+</details>
+
+### Antes de apagar muitos, vê o que o filtro escolhe
+
+O `deleteMany`, que usaste no seed, apaga todos os documentos que cumprem um filtro, e o `updateMany` faz o mesmo para alterar. Um filtro errado faz estragos, e o `deleteMany({})`, com o filtro vazio, apaga a coleção inteira.
+
+Por isso, antes de mudar ou apagar vários documentos, o mesmo filtro corre primeiro num `find`, ou num `countDocuments`, que só os conta, e vê-se o que ele escolhe. Só depois corre o `deleteMany` ou o `updateMany`, com o mesmo filtro, e na base de teste, que o seed reconstrói.
+
+Imagina que a papelaria deixou de vender artigos de desenho. Apagar uma categoria inteira não é um pedido da API: é uma operação que se faz uma vez, à parte, como o seed. Faz-se com um script que primeiro mostra e só apaga quando se lhe junta `--apagar` no fim do comando. A categoria também vem do comando, pelo `process.argv`:
 
 ```js check
 // src/apagar-categoria.js: apaga da base de teste os artigos de uma categoria.
@@ -970,9 +909,9 @@ try {
 await mongoose.disconnect();
 ```
 
-Antes de continuares, prevê o que o script escreve com `node --env-file=.env src/apagar-categoria.js Desenho`, na base de teste reconstruída. E se correres o mesmo comando com `--apagar` no fim, e depois outra vez sem ele?
+Prevê o que o script escreve com `node --env-file=.env src/apagar-categoria.js Desenho`, na base de teste reconstruída. E se correres o mesmo comando com `--apagar` no fim, e depois outra vez sem ele?
 
-O resultado da primeira vez é este, e nada é apagado:
+Da primeira vez, escreve isto, e nada é apagado:
 
 ```text
 Ligada à base de dados papelaria-teste
@@ -982,39 +921,37 @@ O filtro escolhe 2 artigos.
 Nada foi apagado. Para apagar, corre o mesmo comando com --apagar no fim.
 ```
 
-Com o `--apagar`, as mesmas linhas, até aos dois nomes, e no fim `Apagados 2 artigos`. Da terceira vez, `O filtro escolhe 0 artigos.` A contagem do `find` e o `deletedCount` do `deleteMany` dão o mesmo número, e é isso que confirma que o filtro apagou o que mostrou.
+Com o `--apagar`, as mesmas linhas até aos dois nomes, e no fim `Apagados 2 artigos`. Da terceira vez, `O filtro escolhe 0 artigos.` O número que o `find` mostrou e o `deletedCount` do `deleteMany` são iguais, e é isso que confirma que se apagou o que se viu. O filtro está numa só variável, `filtro`, para os dois usarem exatamente o mesmo.
 
-Leitura guiada: o `process.argv` é a lista das palavras do comando que escreveste. As duas primeiras são o caminho do `node` e o do script, e por isso a categoria é a terceira, `process.argv[2]`. O `includes("--apagar")` procura essa palavra em qualquer posição. O script confirma primeiro que está numa base de teste, como o seed. Depois corre o filtro num `find` e mostra os nomes. Só com o `--apagar` corre o `deleteMany`, com o mesmo objeto `filtro`, que não se escreve duas vezes. Se se escrevesse duas vezes, podia sair diferente da segunda.
+Repara que a régua e o compasso têm stock, e o script apaga-os. O script fala com o modelo e não passa pelo service, onde está a regra do stock: as regras do service só protegem os pedidos que passam por ele. Por isso, um script destes corre na base de teste, e numa papelaria a sério primeiro vendia-se o que restava.
 
-Repara que a régua e o compasso têm stock, e o script apaga-os. A regra do stock ao apagar está no service, e o script não passa pelo service: fala com o modelo diretamente. As regras do service só protegem os pedidos da API; as do schema protegem tudo o que cria artigos. Um script destes faz-se com essa consciência, e na base de teste. Numa papelaria a sério, primeiro vendia-se o que restava.
+### Só se guarda o dado pessoal que um ecrã usa
 
-## Os dados pessoais e o RGPD
+A papelaria guarda artigos, mas muitas aplicações guardam também informação sobre pessoas: clientes, alunos, jogadores. Essa informação tem regras próprias, que valem também para ti, enquanto programas.
 
-A papelaria guarda artigos. Muitas aplicações guardam também informação sobre pessoas: clientes, alunos, jogadores. Essa informação tem regras próprias, que valem também para ti, enquanto programas.
+Um **dado pessoal** é qualquer informação sobre uma pessoa identificada, ou que se pode identificar. O nome e o email são dados pessoais, e também uma fotografia, a morada, o número de telefone ou o endereço IP de um computador. O número de aluno também é, mesmo sem o nome ao lado, porque quem tiver a lista da turma descobre de quem é.
 
-Um **dado pessoal** é qualquer informação sobre uma pessoa identificada, ou que se pode identificar. O nome é um dado pessoal, e o email também. O número de aluno também é, mesmo sem o nome ao lado, porque quem tiver a lista da turma descobre de quem é. Uma fotografia, uma morada, um número de telefone e o endereço IP de um computador também são.
+O **RGPD**, o Regulamento Geral sobre a Proteção de Dados, é a lei da União Europeia que diz como se podem recolher e guardar dados pessoais. Em Portugal, quem verifica se é cumprido é a Comissão Nacional de Proteção de Dados, a CNPD. Para quem programa, há três ideias do RGPD que mudam o código.
 
-O **RGPD**, o Regulamento Geral sobre a Proteção de Dados, é a lei da União Europeia que diz como se podem recolher e guardar dados pessoais. Aplica-se desde maio de 2018, em todos os países da União. Em Portugal, quem verifica se é cumprido é a Comissão Nacional de Proteção de Dados, a CNPD. Para quem programa, há três ideias do RGPD que mudam o código que escreves.
+A primeira é guardar só o necessário. Antes de pôr um campo num schema, pergunta que ecrã ou que relatório o vai usar, e se nenhum o usa, não se guarda. As reservas da sala de estudo da biblioteca precisam do nome e da turma de quem reserva, para o funcionário confirmar à porta. Não precisam da morada nem da data de nascimento. Um dado que não se guarda não se perde, não se rouba e não se tem de proteger.
 
-A primeira é guardar só o necessário. Antes de pôr um campo num schema, pergunta que ecrã ou que relatório o vai usar. Se nenhum o usa, não se guarda. Uma aplicação que regista as reservas da sala de estudo da biblioteca precisa do nome e da turma de quem reserva, para o funcionário confirmar à porta. Não precisa da morada nem da data de nascimento. Um dado que não se guarda não se perde, não se rouba e não se tem de proteger.
+A segunda é saber quem acede. Quem tem a cadeia de ligação entra na base. Quem tem acesso ao teu projeto do Atlas vê os dados: tu e o professor, com o papel de leitura que lhe deste. Uma resposta da API também é um acesso. Se o ecrã só mostra o nome de um jogador, a API não devolve o email dele, mesmo que o tenha guardado.
 
-A segunda é saber quem acede. Quem tem a cadeia de ligação entra na base, e por isso ela fica no `.env`. Quem tem acesso ao teu projeto do Atlas vê os dados: tu e o professor, que tem o papel de leitura que lhe deste. Uma resposta da API também é um acesso. Se o ecrã só mostra o nome de um jogador, a API não deve devolver o email dele, mesmo que o tenha guardado. O tema seguinte trata da projeção, que escolhe os campos de uma resposta.
-
-A terceira é o motivo dos dados fictícios. Num projeto da escola, a base de dados está num cluster gratuito, a palavra-passe passa pelo teu computador, e o ecrã vê-se no projetor. Nada disto é um sistema preparado para guardar dados de pessoas verdadeiras. Por isso, a tua aplicação usa dados inventados, ou nomes que toda a gente conhece, como os títulos de filmes do cinema. Se a base de teste aparecer onde não devia, não expõe ninguém. Nunca uses os nomes, os números ou os emails dos teus colegas nos dados de teste.
+A terceira é o motivo dos dados fictícios. Num projeto da escola, a base está num cluster gratuito, a palavra-passe passa pelo teu computador e o ecrã vê-se no projetor. Não é um sistema preparado para dados de pessoas verdadeiras. Por isso, a tua aplicação usa dados inventados, ou nomes que toda a gente conhece, como títulos de filmes. Nunca usa os nomes, os números ou os emails dos teus colegas.
 
 ## Exemplo guiado: registar uma venda
 
-O problema: a papelaria quer registar as vendas no balcão. Quando um cliente leva duas esferográficas, o stock da esferográfica azul tem de descer duas unidades. E uma venda nunca pode deixar o stock negativo: se só há uma esferográfica, uma venda de duas é recusada.
+O problema: a papelaria quer registar as vendas no balcão. Quando um cliente leva duas esferográficas, o stock da esferográfica azul desce duas unidades. E uma venda nunca deixa o stock negativo: se só há uma esferográfica, uma venda de duas é recusada.
 
 ### Passo 1: o contrato
 
-Antes do código, decide-se o pedido. Uma venda não é alterar um artigo à mão: é uma ação, com uma regra própria. Um `PATCH` com `{ "stock": 1 }` mudaria o stock, mas quem pede teria de fazer a conta, e de saber o stock no momento exato. Fica melhor um pedido próprio, que recebe só a quantidade, e é a API que faz a conta e aplica a regra.
+Antes do código, decide-se o pedido. Uma venda não é alterar um artigo à mão, é uma ação com uma regra própria. Um `PATCH` com `{ "stock": 1 }` mudava o stock, mas quem pede tinha de fazer a conta e de saber o stock nesse momento. Fica melhor um pedido próprio, que recebe só a quantidade, e é a API que faz a conta e aplica a regra.
 
 | Pedido | Corpo | Respostas |
 | --- | --- | --- |
 | `POST /api/artigos/:id/vendas` | `{ "quantidade": 2 }`, com a quantidade inteira, 1 ou mais, e nenhum outro campo | 200 com o artigo depois da venda; 400 se o `id` ou o corpo não forem válidos; 404 se o artigo não existir; 409 se não houver stock que chegue |
 
-É um `POST`, porque cada venda é um acontecimento novo, e duas vendas iguais tiram o dobro do stock. Responde 200, e não 201, porque a API não guarda a venda como um documento novo: altera o artigo que já existe. Repara no 409. O pedido de duas esferográficas está bem escrito, e passa noutro dia, com mais stock. É o estado dos dados que não o deixa passar agora.
+É um `POST`, porque cada venda é um acontecimento novo, e duas vendas iguais tiram o dobro do stock. Responde 200, e não 201, porque a API não guarda a venda como um documento novo: altera o artigo que já existe. E o 409 é o do contrato: o pedido de duas esferográficas está bem escrito, e passa noutro dia, com mais stock.
 
 ### Passo 2: em que camada fica cada parte
 
@@ -1027,9 +964,11 @@ Antes de escrever, reparte-se o trabalho:
 | O stock tem de chegar para a venda | É uma regra da papelaria, e precisa do stock de agora | Service |
 | Ler o artigo e mudar o stock | É uma consulta e uma alteração na base | Repository |
 
-O repository não precisa de nada de novo. A `procurarPorId` lê o artigo, e a `alterarPorId` muda o stock, com as regras do schema a correr. É a recompensa das camadas: uma regra nova reutiliza o acesso à base que já existe.
+O repository não precisa de nada de novo. A `procurarPorId` lê o artigo, e a `alterarPorId` muda o stock, com as regras do schema a correr. É a vantagem das camadas: uma regra nova reutiliza o acesso à base que já existe.
 
 ### Passo 3: o service
+
+No `artigos.service.js`, a seguir à `apagarArtigo`:
 
 ```js
 /**
@@ -1054,9 +993,11 @@ export async function registarVenda(id, quantidade) {
 }
 ```
 
-O service precisa de dizer três coisas diferentes e, numa delas, de devolver o artigo, e noutra, o stock que havia. Uma só palavra já não chega, por isso devolve um objeto, com a palavra em `resultado` e os dados que fizerem falta.
+O service precisa de dizer três coisas diferentes e, em duas delas, de devolver dados: o artigo depois da venda, ou o stock que havia. Uma só palavra já não chega, por isso devolve um objeto, com a palavra em `resultado` e os dados que fizerem falta.
 
 ### Passo 4: o controller e a rota
+
+No `artigos.controller.js`, a `registarVenda` junta-se ao `import` do service, e a função `vender` vai a seguir à `apagar`:
 
 ```js
 /** POST /api/artigos/:id/vendas, com a quantidade vendida no corpo, em JSON */
@@ -1097,7 +1038,7 @@ export async function vender(req, res) {
 }
 ```
 
-A lista fechada, aqui, tem um só nome, e por isso a verificação escreve-se diretamente: um só campo, e esse campo é a `quantidade`. A rota junta-se ao router com o caminho `/:id/vendas`:
+No router, a `vender` junta-se ao `import` do controller, e a rota fica com o caminho `/:id/vendas`:
 
 ```js
 router.post("/:id/vendas", vender);
@@ -1105,7 +1046,7 @@ router.post("/:id/vendas", vender);
 
 ### Passo 5: verificar
 
-Reconstrói-se a base de teste com o seed, e liga-se a API. Na consola do browser, numa página da API, cola-se primeiro a função `pedir`, da secção "O corpo do pedido". Depois, guarda-se o `_id` da esferográfica azul, que tem 3 unidades, numa variável, para não o escrever em cada pedido. O `_id` lê-se na lista de `/api/artigos`, e o teu é diferente deste:
+Reconstrói-se a base de teste com o seed, e liga-se a API. Na consola do browser, numa página da API, cola-se primeiro a função `pedir`, de [O corpo do pedido chega em `req.body`](#o-corpo-do-pedido-chega-em-reqbody). Depois, guarda-se numa variável o `_id` da esferográfica azul, que tem 3 unidades, para não o escrever em cada pedido. O `_id` lê-se na lista de `/api/artigos`, e o teu é diferente deste:
 
 ```js
 const esferografica = "6ae50e2d85dbd5b39ccc134a";
@@ -1124,7 +1065,7 @@ await pedir("POST", "/api/artigos/000000000000000000000000/vendas", { quantidade
 await pedir("POST", "/api/artigos/abc/vendas", { quantidade: 1 });
 ```
 
-Antes de cada pedido, escreve-se a previsão. Depois, compara-se:
+Prevê o código de cada pedido antes de o fazer, e compara com esta tabela:
 
 | Pedido | O que se experimenta | Código e resposta |
 | ---: | --- | --- |
@@ -1145,75 +1086,47 @@ A última verificação faz-se no Atlas, e não na API. Na base `papelaria-teste
 
 ## Erros frequentes
 
-### A lista vem {} e não aparece nenhum erro
+### Um pedido com um `_id` que funcionava dá 404
 
-Falta o `await` antes da chamada ao service, no controller. Sem ele, a variável guarda a promessa, e o `res.json` de uma promessa é `{}`. Um `await` em falta no service dá outro sintoma, um 500 com `is not a function`, quando o service usa o resultado.
-
-### Um artigo pedido dá 500, e o terminal fala de Cast to ObjectId
-
-O terminal mostra `Erro interno: Cast to ObjectId failed for value "abc"`, ou, sem o middleware de erros, uma linha que começa por `CastError`. O `id` chegou ao `findById` sem ser verificado. O Mongoose não conseguiu convertê-lo num ObjectId. Confirma que a função do controller chama a `eIdentificador` antes de chamar o service, e que responde 400 com `return`.
+A resposta é `{"erro":"Não existe o artigo ..."}`, com um `_id` que usaste há pouco. Entretanto correste o seed, que apaga os artigos e os insere outra vez, com `_id` novos. Lê os `_id` outra vez na lista de `/api/artigos`.
 
 ### O POST responde que o corpo tem de ser um objeto JSON, e o corpo está certo
 
-O corpo chegou, mas o `req.body` ficou `undefined`. Há duas causas. Uma é faltar o `app.use(express.json())` no `server.js`, ou estar depois do `app.use` das rotas. O middleware só lê o corpo dos pedidos que passam por ele antes de chegarem às rotas. A outra é o pedido não trazer o cabeçalho `Content-Type: application/json`. Sem ele, o `express.json()` não lê o corpo. A função `pedir` junta-o sempre que há corpo.
-
-### O PATCH responde com os valores antigos
-
-Falta a opção `returnDocument: "after"` no `findByIdAndUpdate`. A base foi alterada, mas a função devolveu o documento como estava antes. Confirma no Atlas: o valor novo está lá.
-
-### O PATCH aceita um stock negativo
-
-Falta a opção `runValidators: true` no `findByIdAndUpdate`. Sem ela, as regras do schema só correm quando o documento é criado. Corrige, e corre o seed para limpar o stock negativo da base de teste.
+O corpo chegou, mas o `req.body` ficou `undefined`. Há duas causas. Uma é faltar o `app.use(express.json())` no `server.js`, ou estar depois do `app.use` das rotas. O middleware só lê o corpo dos pedidos que passam por ele antes de chegarem às rotas. A outra é o pedido não trazer o cabeçalho `Content-Type: application/json`, e sem ele o `express.json()` não lê o corpo. A função `pedir` junta-o sempre que há corpo.
 
 ### Aparece no terminal um aviso sobre a opção new
 
-O repository usa `new: true`, que o Mongoose 9 marca como obsoleta. Troca-a por `returnDocument: "after"`, que faz o mesmo.
+O terminal mostra este aviso depois de um `PATCH`:
 
-### A resposta 400 vem em HTML, e não em JSON
+```text
+[MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+```
 
-Um corpo que não é JSON válido chegou ao Express, e o middleware de erros não o apanhou. Ou o middleware de erros não existe, ou não tem os quatro parâmetros. Com três, o Express trata-o como um middleware normal, e o erro vai para o tratamento do próprio Express, que responde em HTML.
+O teu repository usa `new: true`, uma opção mais antiga, que muitos tutoriais na internet ainda mostram. Faz o mesmo que o `returnDocument: "after"`, mas o Mongoose 9 marca-a como obsoleta, e o aviso fala do `findOneAndUpdate` porque o `findByIdAndUpdate` o usa por dentro. Troca-a pelo `returnDocument: "after"`.
 
-### O seed diz que só corre numa base de teste
+### Uma resposta de erro vem numa página HTML, e não em JSON
 
-O `DB_NAME` do `.env` não acaba em `-teste`. É a verificação do seed a fazer o seu trabalho. Muda a linha para `DB_NAME=papelaria-teste` e volta a correr.
+Um corpo que não é JSON dá 400, e uma regra do schema que falha dá 500. Os dois vêm numa página HTML, com as linhas do erro e os caminhos dos teus ficheiros. O middleware de erros não existe, ou não tem os quatro parâmetros. Com três, `(erro, req, res)`, o Express trata-o como um middleware normal, e os erros vão para o tratamento do próprio Express. Confirma que o middleware tem os quatro, `(erro, req, res, next)`, mesmo sem usar o `next`, e que está depois das rotas.
 
 ## Palavras novas deste guia
 
 - CRUD: as quatro operações de quem guarda dados: criar, ler, alterar e apagar.
+- Bundle: o conjunto de ficheiros da interface que o browser descarrega, e que qualquer pessoa pode ler.
 - Base de teste: uma base de dados com dados conhecidos, só para experiências, que um script reconstrói.
-- Bundle: o conjunto de ficheiros da interface que o browser descarrega e que qualquer pessoa pode ler.
-- Promessa: o objeto que uma função `async` devolve logo, e que representa uma resposta que ainda não chegou. O `await` espera por ela.
-- Corpo do pedido: a parte de um pedido que leva dados, depois do endereço e dos cabeçalhos.
+- Corpo do pedido: a parte de um pedido que leva dados, depois do endereço e dos cabeçalhos; o `express.json()` lê-o e guarda-o em `req.body`.
 - Cabeçalho: uma linha de informação que acompanha um pedido ou uma resposta, como o `Content-Type`.
-- `express.json()`: o middleware que lê o corpo em JSON e o guarda, como objeto, em `req.body`.
-- Mass assignment (atribuição em massa): guardar tudo o que vem num pedido, incluindo campos que ninguém quis deixar mudar.
 - Lista fechada: a lista dos campos que um pedido pode trazer; tudo o resto é recusado.
 - Domínio: o assunto de que a aplicação trata. As regras de domínio dizem o que faz sentido para ele.
-- `ValidationError`: o erro que o Mongoose lança quando uma regra do schema falha.
 - Middleware de erros: um middleware com quatro parâmetros, que o Express só chama quando um pedido acabou num erro.
-- 201, 204, 409 e 500: criado; correu bem, sem corpo; conflito com o estado dos dados; erro interno do servidor.
-- Dado pessoal: qualquer informação sobre uma pessoa identificada ou que se pode identificar.
+- 201, 204 e 409: criado; correu bem, sem corpo; conflito com o estado dos dados.
+- Dado pessoal: qualquer informação sobre uma pessoa identificada, ou que se pode identificar.
 - RGPD: o Regulamento Geral sobre a Proteção de Dados, a lei da União Europeia sobre os dados pessoais.
-
-## Verificar o que aprendeste
-
-1. Porque é que a API abre a ligação ao Atlas no arranque, e não em cada pedido? Dá duas razões.
-2. Um colega pôs a cadeia de ligação num ficheiro do React, "só para experimentar". O que pode acontecer?
-3. Que dois erros diferentes distingue o controller num `GET /api/artigos/:id`, e com que códigos?
-4. O que responde a API a um `POST` com `{ "nome": "Cola", "categoria": "Desenho", "stock": 1, "stockMinimo": 1, "precoCentimos": 150, "desconto": 10 }`? E porque é que é melhor recusar do que ignorar o `desconto`?
-5. Diz em que camada fica cada uma destas regras, no controller, no schema ou no service. O stock é um inteiro. O stock é 0 ou mais. Um artigo com stock não se apaga.
-6. Sem o `runValidators`, o que acontece a um `PATCH` com um preço de 0 cêntimos?
-7. Qual é a diferença entre um 400 e um 409? Dá um exemplo de cada na papelaria.
-8. Antes de um `deleteMany`, o que se faz, e onde?
-9. Uma aplicação de inscrições num torneio guarda o nome, a turma, o email e a data de nascimento de cada jogador. O ecrã só mostra o nome e a turma. Que campos são dados pessoais, e quais deixarias de guardar?
 
 ## O que vem a seguir
 
-Para praticar este tema, faz a [ficha de exercícios](exercicios/05-ligacao-segura-crud-e-regras-de-dominio-exercicios.md). O laboratório deste tema vai ser o passo 4 do jogo Fechado na escola, e ainda não está publicado. O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
+O tema seguinte é Queries e paginação, em que a lista dos artigos ganha pesquisa, ordenação e páginas, sem aceitar operadores que ninguém previu.
 
 ## Para saber mais
-
-Consultados a 30 de outubro de 2026:
 
 - [Validação no Mongoose](https://mongoosejs.com/docs/validation.html), em inglês: todas as regras que um schema aceita, e as validações nas alterações, com o `runValidators`.
 - [A página do Model, na documentação do Mongoose](https://mongoosejs.com/docs/api/model.html), em inglês: o `create`, o `findById`, o `findByIdAndUpdate` e o `findByIdAndDelete`, cada um com as suas opções.
