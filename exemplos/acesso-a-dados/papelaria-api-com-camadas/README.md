@@ -2,9 +2,9 @@
 
 # API da papelaria, com camadas
 
-A API da papelaria com o contrato escrito e as rotas, o controller e o service dos artigos em ficheiros separados. É usada no tema [04 API Express e contratos](../../../01-acesso-a-dados/04-api-express-e-contratos.md). Os artigos ainda estão num array, em `src/dados/`; no tema da ligação segura passam a vir do MongoDB Atlas.
+A API da papelaria com o contrato escrito e as rotas, o controller e o service dos artigos em ficheiros separados. É usada no tema [04 API Express e contratos](../../../01-acesso-a-dados/04-api-express-e-contratos.md), e a pasta `src` é a do fim do passo 6 do exemplo guiado do guia. Os artigos ainda estão num array, em `src/dados/`. A versão do tema 05, que os lê do MongoDB Atlas, está em [papelaria-api-com-crud](../papelaria-api-com-crud/README.md).
 
-O esqueleto do tema anterior, só com a rota de estado, continua em [papelaria-api](../papelaria-api/README.md). A primeira versão deste tema, que cumpre o mesmo contrato com tudo no `server.js` e é o ponto de partida destas camadas, está em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md).
+O esqueleto do tema anterior, só com a rota de estado, está em [papelaria-api](../papelaria-api/README.md). A primeira versão deste tema, com tudo no `server.js`, está em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md). Dá as mesmas respostas, menos a do caminho que não existe, que ainda vem em HTML.
 
 ## O que está nesta pasta
 
@@ -29,10 +29,10 @@ npm run dev
 
 No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, experimenta os pedidos do contrato, com o separador Rede das ferramentas de programador aberto, para veres o código. A tabela do [passo 7 do exemplo guiado do guia](../../../01-acesso-a-dados/04-api-express-e-contratos.md#passo-7-verificar-o-contrato) diz o que cada um deve responder. Para parar, Ctrl+C.
+O que deves ver: o terminal mostra as duas linhas do npm e `API a correr em http://localhost:3000`. No browser, faz os pedidos do contrato, com o separador Rede das ferramentas de programador aberto e "Disable cache" marcado, para veres o código de cada resposta. A tabela do [passo 7 do exemplo guiado do guia](../../../01-acesso-a-dados/04-api-express-e-contratos.md#passo-7-verificar-o-contrato) diz o que cada um deve responder. Para parar, Ctrl+C.
 
-## Versões com que foi testado
+## Versões e compatibilidade
 
-Node.js 26.11.1, npm 11.20.0 e Express 5.3.0, em macOS, a 14 de outubro de 2026. Antes, no Node.js 24.17.0: com o Express 5.2.1, a 7 e a 9 de outubro, e com o Express 5.3.0, a 12.
+As versões usadas são o Node.js 26 e o npm 11. O `package-lock.json` fixa o Express 5.3.0.
 
 ![Rodapé](../../../imagens/rodape.png)

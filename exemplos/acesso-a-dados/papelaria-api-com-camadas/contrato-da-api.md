@@ -81,6 +81,6 @@ Mostra um artigo.
 
 ## Verificação
 
-Todas as linhas deste contrato foram verificadas com a API ligada, com os oito artigos dos dados temporários. A verificação foi feita a 9 de outubro de 2026, e outra vez a 14 de outubro, no Node.js 26. A tabela dos pedidos e das respostas está no passo 7 do exemplo guiado do guia.
+Cada linha deste contrato verifica-se com os pedidos da tabela do passo 7 do exemplo guiado do guia.
 
 ![Rodapé](../../../imagens/rodape.png)

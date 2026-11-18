@@ -1,10 +1,10 @@
 ![Cabeçalho](../../../imagens/cabecalho.png)
 
-# API da papelaria
+# API da papelaria, o esqueleto
 
-O esqueleto da API da papelaria: um projeto Node com módulos ES, os scripts `start` e `dev`, a configuração num `.env` e uma só rota, a de estado. É usado no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md), e é o projeto pronto a correr, para comparares com o teu.
+O esqueleto da API da papelaria: um projeto Node com módulos ES, os scripts `start` e `dev`, a configuração num `.env` e uma só rota, a de estado. É usado no tema [03 Arquitetura e setup Node](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md). É o projeto do [exemplo guiado do guia](../../../01-acesso-a-dados/03-arquitetura-e-setup-node.md#exemplo-guiado-o-esqueleto-da-api-da-papelaria), pronto a correr. O desafio da ficha 03 e os exercícios 3 e 4 da ficha 04 fazem-se numa cópia dele.
 
-A versão seguinte, do tema 04, existe em dois passos. A primeira versão, com as rotas do contrato todas no `server.js`, está em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md). A versão com as camadas está em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md).
+No tema 04, a API cresce em duas versões: com as rotas do contrato todas no `server.js`, em [papelaria-api-sem-camadas](../papelaria-api-sem-camadas/README.md), e com as camadas, em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md).
 
 ## O que está nesta pasta
 
@@ -13,8 +13,6 @@ A versão seguinte, do tema 04, existe em dois passos. A primeira versão, com a
 - `package-lock.json`: as versões exatas dos pacotes.
 - `.env.example`: os nomes da configuração, sem segredos.
 - `.gitignore`: o que o Git ignora, a `node_modules` e o `.env`.
-
-Não estão aqui, de propósito, a pasta `node_modules`, que se recria com `npm install`, nem o ficheiro `.env`, que é de cada computador e nunca se publica.
 
 ## Como correr
 
@@ -28,10 +26,10 @@ npm run dev
 
 No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-O que deves ver: o terminal mostra `API a correr em http://localhost:3000`. No browser, `http://localhost:3000/api/estado` mostra `{"estado":"ok","aplicacao":"API da papelaria"}`, com o código 200, que vês no separador Rede das ferramentas de programador. Qualquer outro caminho, como `/api/artigos`, dá 404, porque ainda não há essas rotas. Para parar, Ctrl+C no terminal.
+O que deves ver: o terminal mostra as duas linhas do npm e `API a correr em http://localhost:3000`. No browser, `http://localhost:3000/api/estado` mostra `{"estado":"ok","aplicacao":"API da papelaria"}`. No separador Rede das ferramentas de programador, com "Disable cache" marcado, o pedido tem o código 200. Qualquer outro caminho, como `/api/artigos`, dá 404, com a página de erro do Express, `Cannot GET /api/artigos`, porque ainda não há essas rotas. Para parar, Ctrl+C no terminal.
 
-## Versões com que foi testado
+## Versões e compatibilidade
 
-Node.js 26.11.1, npm 11.20.0 e Express 5.3.0, em macOS, a 14 de outubro de 2026. Antes, no Node.js 24.17.0, com o Express 5.2.1, a 7 de outubro, e com o Express 5.3.0, a 12 de outubro.
+As versões usadas são o Node.js 26 e o npm 11. O `package-lock.json` fixa o Express 5.3.0.
 
 ![Rodapé](../../../imagens/rodape.png)

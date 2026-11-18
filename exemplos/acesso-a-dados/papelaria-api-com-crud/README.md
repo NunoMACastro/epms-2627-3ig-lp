@@ -2,7 +2,7 @@
 
 # API da papelaria, com o CRUD
 
-A API da papelaria a criar, ler, alterar e apagar os artigos numa base de teste do MongoDB Atlas, com o Mongoose. Recusa o que não cumpre o contrato. São os campos que não estão na lista fechada, os valores que não cumprem as regras do schema e o apagamento de um artigo que ainda tem stock. É a API como fica no fim do tema [05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md).
+A API da papelaria a criar, ler, alterar e apagar os artigos numa base de teste do MongoDB Atlas, com o Mongoose. Recusa os campos que não estão na lista fechada, os valores que não cumprem as regras do schema e o apagamento de um artigo que ainda tem stock. É usada no tema [05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md): tem o código das três partes do guia, sem a venda do exemplo guiado.
 
 A versão anterior, com o contrato e as camadas e os artigos ainda num array, está em [papelaria-api-com-camadas](../papelaria-api-com-camadas/README.md).
 
@@ -23,10 +23,10 @@ A versão anterior, com o contrato e as camadas e os artigos ainda num array, es
 
 ## Como correr
 
-Precisas do Node.js 22 ou mais recente e de internet. No Atlas, precisas do teu cluster, do utilizador da base de dados com a sua palavra-passe e do endereço IP do computador onde estás autorizado.
+Precisas do Node.js 22 ou mais recente e de internet. No Atlas, precisas do teu cluster, do utilizador da base de dados com a sua palavra-passe e de ter autorizado o endereço IP da rede onde estás.
 
 1. Copia esta pasta para fora do repositório e abre um terminal dentro dela.
-2. Instala o Express e o Mongoose, e cria o `.env` a partir do exemplo:
+2. Instala o Express e o Mongoose, e cria o `.env` a partir do `.env.example`:
 
    ```bash
    npm install
@@ -35,7 +35,7 @@ Precisas do Node.js 22 ou mais recente e de internet. No Atlas, precisas do teu 
 
    No Windows, na linha de comandos clássica (cmd), o segundo comando é `copy .env.example .env`.
 
-3. No `.env`, põe na linha `MONGODB_URI=` a cadeia de ligação ao teu cluster, a que começa por `mongodb+srv://`, com a palavra-passe do utilizador da base de dados. No Atlas, encontra-se em "Connect" (ligar), na ligação por "Drivers". A partir deste momento, o `.env` tem um segredo. Não o copies para mais lado nenhum. Deixa o `DB_NAME=papelaria-teste`.
+3. No `.env`, põe na linha `MONGODB_URI=` a cadeia de ligação ao teu cluster, a que começa por `mongodb+srv://`, com a palavra-passe do utilizador da base de dados. Encontras a cadeia no Atlas como no passo 5 da [fase 2 do laboratório do tema 03](../../../01-acesso-a-dados/laboratorios/03-arquitetura-e-setup-node-laboratorio.md#fase-2-o-segredo-fica-só-no-servidor). A partir deste momento, o `.env` tem um segredo. Não o copies para mais lado nenhum. Deixa o `DB_NAME=papelaria-teste`.
 4. Põe os oito artigos na base de teste, e arranca a API:
 
    ```bash
@@ -43,14 +43,21 @@ Precisas do Node.js 22 ou mais recente e de internet. No Atlas, precisas do teu 
    npm run dev
    ```
 
-   O que deves ver: o seed escreve `Ligada à base de dados papelaria-teste` e `Inseridos 8 artigos`; a API escreve outra vez a linha da base e, a seguir, `API a correr em http://localhost:3000`.
+   O que deves ver: o seed escreve `Ligada à base de dados papelaria-teste`, uma linha com os artigos apagados e `Inseridos 8 artigos`. A API escreve outra vez a linha da base e, a seguir, `API a correr em http://localhost:3000`.
 
-5. No browser, abre `/api/artigos`. Os pedidos com corpo, como o `POST`, o `PATCH` e o `DELETE`, fazem-se na consola das ferramentas de programador. Usa a função `pedir` da secção "O corpo do pedido" do [guia do tema](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md). O `contrato-da-api.md` diz o que cada pedido deve responder. Para parar, Ctrl+C.
+5. No browser, `http://localhost:3000/api/artigos` mostra os oito artigos do seed, cada um com o `_id` que o MongoDB lhe deu. Os pedidos `POST`, `PATCH` e `DELETE` fazem-se na consola das ferramentas de programador, numa página da API, como `/api/estado`. Usa a função `pedir`, que está no guia em [O corpo do pedido chega em `req.body`](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md#o-corpo-do-pedido-chega-em-reqbody). O `contrato-da-api.md` diz o que cada pedido deve responder. Depois das experiências, o `npm run seed` põe a base como estava no início. Para parar, Ctrl+C.
 
-A base `papelaria`, a do laboratório do Atlas, não é usada. Se o `DB_NAME` disser `papelaria`, o seed recusa-se a correr.
+O script `src/apagar-categoria.js` corre-se à parte, como o seed, com a categoria no fim do comando. Sem o `--apagar`, só mostra os artigos que o filtro escolhe; com ele, apaga-os:
+
+```bash
+node --env-file=.env src/apagar-categoria.js Desenho
+node --env-file=.env src/apagar-categoria.js Desenho --apagar
+```
+
+O que cada comando escreve está no guia, em [Antes de apagar muitos, vê o que o filtro escolhe](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md#antes-de-apagar-muitos-vê-o-que-o-filtro-escolhe). Depois de apagares, o `npm run seed` repõe os artigos.
 
 ## Versões e compatibilidade
 
-Node.js 26.11.1, npm 11.20.0, Express 5.3.0 e Mongoose 9.11.4. O Mongoose 9 marca a opção `new: true` como obsoleta, e a API usa o `returnDocument: "after"`, que a substitui.
+As versões usadas são o Node.js 26 e o npm 11. O `package-lock.json` fixa o Express 5.3.0 e o Mongoose 9.11.4.
 
 ![Rodapé](../../../imagens/rodape.png)

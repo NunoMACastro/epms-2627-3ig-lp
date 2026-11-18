@@ -2,19 +2,32 @@
 
 # Linguagens de Programação · 12.º IG
 
-Materiais de Linguagens de Programação do 12.º ano do curso de Técnico/a de Informática de Gestão. Podes estudar os materiais ao teu ritmo e lê-los antes de serem dados na aula.
+Materiais de Linguagens de Programação do 12.º ano do curso de Técnico/a de Informática de Gestão. Podes lê-los antes de serem dados na aula.
 
 ## Por onde começar
 
-Abre a área [Acesso a dados](01-acesso-a-dados/README.md), que apresenta a ordem de leitura dos temas. Cada tema tem três tipos de documento:
+Começa pela área [Acesso a dados](01-acesso-a-dados/README.md). Cada tema tem estes documentos:
 
-- o guia, para ler e estudar;
-- o laboratório, para seguir passo a passo no computador, sem precisares de abrir o guia;
-- a ficha de exercícios, para praticares sozinho.
+- o guia, com a matéria por escrito, para estudares;
+- o laboratório, para fazeres no computador, passo a passo;
+- a ficha de exercícios, para treinares sozinho.
 
-Em cada área, os guias estão na pasta da área. Os laboratórios estão na pasta `laboratorios` e as fichas na pasta `exercicios`. Cada uma destas pastas tem um índice que explica o que é esse tipo de documento. Se tinhas guardado a ligação para um laboratório ou uma ficha, procura o documento nessas pastas.
+Em cada área, os guias estão na pasta da área, os laboratórios na pasta `laboratorios` e as fichas na pasta `exercicios`. Cada uma destas pastas tem um índice que explica o que é esse tipo de documento.
 
-Para teres os materiais no teu computador, clona este repositório uma vez, numa pasta tua:
+## As áreas
+
+| Área | Módulo |
+| --- | --- |
+| [Acesso a dados](01-acesso-a-dados/README.md) | M14, Acesso a Bases de Dados |
+
+## Outras pastas
+
+- [Exemplos](exemplos/): código para ler e correr.
+- [Avaliações](avaliacoes/): os enunciados já divulgados, como o diagnóstico inicial das bases do 11.º ano.
+
+## Os materiais no teu computador
+
+A tua pasta de trabalho de Linguagens de Programação é uma pasta tua, no computador, só para esta disciplina. Clona este repositório dentro dela, uma vez:
 
 ```bash
 git clone https://github.com/NunoMACastro/epms-2627-3ig-lp.git
@@ -26,23 +39,6 @@ Antes de cada aula, entra na pasta `epms-2627-3ig-lp` e traz os materiais novos:
 git pull
 ```
 
-Quando um exemplo te pedir para copiares uma pasta, copia-a para fora da pasta clonada, para o teu trabalho não se misturar com o que o `git pull` traz. Se o computador não tiver o Git, descarrega o repositório em ZIP, no botão "Code" do GitHub, e volta a descarregá-lo quando houver materiais novos.
-
-## As áreas
-
-| Área | Módulo |
-| --- | --- |
-| [Acesso a dados](01-acesso-a-dados/README.md) | M14, Acesso a Bases de Dados |
-
-## Como estudar
-
-Lê o guia antes de escrever código: primeiro a explicação, depois o exemplo guiado. Antes de correres um exemplo, tenta prever o resultado. É aí que percebes se a ideia ficou entendida. As resoluções dos exercícios não estão aqui, porque se trabalham na aula.
-
-Se alguma coisa faltar ou estiver errada, avisa na aula.
-
-## Outras pastas
-
-- [Exemplos](exemplos/): código para ler e correr.
-- [Avaliações](avaliacoes/): enunciados já divulgados.
+O teu trabalho fica na pasta de trabalho, ao lado da pasta clonada e nunca dentro dela: os projetos dos laboratórios, as respostas das fichas e as cópias dos exemplos. Assim, não se mistura com o que o `git pull` traz. Se o computador não tiver o Git, descarrega o repositório no botão "Code" do GitHub, com "Download ZIP", e volta a descarregá-lo quando houver materiais novos.
 
 ![Rodapé](imagens/rodape.png)
