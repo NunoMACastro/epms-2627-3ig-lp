@@ -4,7 +4,7 @@
 
 Este é o jogo Fechado na escola como fica no fim do passo 2, o [laboratório do tema 04 API Express e contratos](../../../01-acesso-a-dados/laboratorios/04-api-express-e-contratos-laboratorio.md). Tem o contrato da API e a escolha que leva de uma cena à seguinte, com as rotas, o controller, o service e o repository em ficheiros separados.
 
-É o ponto de partida do passo 3, em Sistemas de Informação. Se faltaste ao passo 2, ou se o teu projeto não arranca, copia esta pasta e continua daqui.
+É o ponto de partida do [passo 3](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/laboratorios/04-ejs-e-reutilizacao-no-servidor-laboratorio.md), em Sistemas de Informação. Se faltaste ao passo 2, ou se o teu projeto não arranca, copia esta pasta e continua daqui.
 
 ## O que está nesta pasta
 
