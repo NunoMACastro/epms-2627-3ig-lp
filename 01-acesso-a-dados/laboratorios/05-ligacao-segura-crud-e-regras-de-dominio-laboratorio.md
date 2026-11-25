@@ -1663,7 +1663,7 @@ Confirmas que a cadeia de ligação não está em nenhum ficheiro que vai para o
 
 ### Paragem 9
 
-O passo 4 está guardado no Git, o jogo está parado, e o teu projeto está igual à pasta [fechado-na-escola-passo-04](../../exemplos/acesso-a-dados/fechado-na-escola-passo-04/README.md), o ponto de partida do passo 5. O passo 5 faz-se em Sistemas de Informação, e continua este projeto. O professor vê o que este passo entrega na sala, no teu projeto, no commit e na base de teste.
+O passo 4 está guardado no Git, o jogo está parado, e o teu projeto está igual à pasta [fechado-na-escola-passo-04](../../exemplos/acesso-a-dados/fechado-na-escola-passo-04/README.md), o ponto de partida do passo 5. O [passo 5](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/laboratorios/05-formularios-e-validacao-laboratorio.md) faz-se em Sistemas de Informação, e continua este projeto. O professor vê o que este passo entrega na sala, no teu projeto, no commit e na base de teste.
 
 Pensa antes de continuares: o `.env.example` foi no commit, com `DB_NAME=fechado-na-escola-teste`, e o `.env` não. Um colega copia o teu projeto: o que tem de fazer para o jogo arrancar ligado à base de teste? A resposta: copia o `.env.example` para `.env`, como no "Como correr" dos exemplos, e escreve a sua cadeia de ligação na linha `MONGODB_URI=`. O `DB_NAME` já vem com a base de teste.
 
