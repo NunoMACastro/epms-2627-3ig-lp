@@ -4,7 +4,7 @@
 
 Este é o jogo Fechado na escola como fica no fim do passo 4, o [laboratório do tema 05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/laboratorios/05-ligacao-segura-crud-e-regras-de-dominio-laboratorio.md). A API das cenas cria, altera e apaga cenas, numa base de teste, e recusa o que partiria a história. A cena do arquivo não está no seed: cria-se com os pedidos da fase 8 do laboratório. É usado no tema [05 Ligação segura, CRUD e regras de domínio](../../../01-acesso-a-dados/05-ligacao-segura-crud-e-regras-de-dominio.md).
 
-Parte do [passo 3](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/exemplos/aplicacoes-em-browser/fechado-na-escola-passo-03/README.md), feito em Sistemas de Informação, e é o ponto de partida do passo 5, em Sistemas de Informação. Se faltaste ao passo 4, ou se o teu projeto não arranca, copia esta pasta e continua daqui.
+Parte do [passo 3](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/exemplos/aplicacoes-em-browser/fechado-na-escola-passo-03/README.md), feito em Sistemas de Informação, e é o ponto de partida do [passo 5](https://github.com/NunoMACastro/epms-2627-3ig-si/blob/main/01-aplicacoes-em-browser/laboratorios/05-formularios-e-validacao-laboratorio.md), em Sistemas de Informação. Se faltaste ao passo 4, ou se o teu projeto não arranca, copia esta pasta e continua daqui.
 
 ## O que está nesta pasta
 
